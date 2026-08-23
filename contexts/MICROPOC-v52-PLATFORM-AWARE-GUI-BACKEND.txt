@@ -1,0 +1,39 @@
+RumiAI portability micro-PoC v52 — Platform-Aware GUI Backend Boundary
+
+Status
+------
+EXPERIMENTAL / PHYSICAL TEST PENDING.
+
+Goal
+----
+Make a Linux clone diagnostically correct without pretending that GUI Computer Control is already supported there.
+
+Upstream boundary
+-----------------
+agent-ctrl v0.1.x distributes native binaries for macOS/Windows. Linux AT-SPI currently provides observation/read functionality, while the action vocabulary required by RumiAI Computer Control is not implemented.
+
+Changes
+-------
+- cmd/agent-ctrl-install remains #!/bin/sh and downloads the v0.1.4 Darwin ARM64 binary only on macOS ARM64.
+- On Linux ARM64/x64, agent-ctrl-install exits explicitly with status 2 instead of downloading a macOS binary.
+- cmd/doctor reports PLATFORM instead of "macOS target".
+- On Linux, a missing agent-ctrl action backend is a WARN with GUI Computer Control skipped, not a false installation failure.
+- cmd/agent-ctrl-start-cu-test exits explicitly on Linux before trying to install or start the unsupported GUI backend.
+- macOS behavior remains strict: missing/broken agent-ctrl is still a FAIL.
+
+Shell policy
+------------
+All changed scripts remain #!/bin/sh and pass /bin/sh -n.
+
+Expected Linux ARM64 test
+-------------------------
+git pull
+./cmd/doctor
+./cmd/agent-ctrl-install; echo "exit=$?"
+./cmd/agent-ctrl-start-cu-test; echo "exit=$?"
+
+Expected result
+---------------
+- doctor recognizes Linux/aarch64 and reports portable runtime components normally.
+- doctor reports the unavailable Linux GUI action backend as WARN rather than FAIL.
+- both agent-ctrl commands stop cleanly with an explicit unsupported-backend message and exit status 2.
