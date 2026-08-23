@@ -1,0 +1,255 @@
+diff -ruN '--exclude=.DS_Store' /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/app/agent-loop.js /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/app/agent-loop.js
+--- /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/app/agent-loop.js	2026-08-23 06:17:01.000000000 +0000
++++ /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/app/agent-loop.js	2026-08-23 06:27:33.000000000 +0000
+@@ -551,7 +551,7 @@
+   }
+ 
+   console.log("");
+-  console.log("RumiAI local Computer Control PoC v13 + Literal Payload Fidelity micro-PoC v45");
++  console.log("RumiAI local Computer Control PoC v13 + Strict setText Equality micro-PoC v46");
+   console.log(
+     `computer-control backend: ${backend.id}` +
+     `${backend.path ? ` | ${backend.path}` : ""}`
+diff -ruN '--exclude=.DS_Store' /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/app/computer-control/operations.js /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/app/computer-control/operations.js
+--- /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/app/computer-control/operations.js	2026-08-23 05:55:10.000000000 +0000
++++ /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/app/computer-control/operations.js	2026-08-23 06:27:33.000000000 +0000
+@@ -42,16 +42,35 @@
+   return {ok:true, provider, identity};
+ }
+ 
++function decodeObservedText(raw) {
++  // agent-ctrl writes command output to stdout. Remove only the transport line
++  // ending added by the CLI; do not trim or normalize the observed value.
++  let value = String(raw == null ? "" : raw).replace(/\r?\n$/, "");
++
++  // AX scalar values may be emitted as JSON-style quoted strings. Decode only
++  // the transport representation so the comparison below remains literal.
++  if (value.length >= 2 && value.startsWith('"') && value.endsWith('"')) {
++    try {
++      const decoded = JSON.parse(value);
++      if (typeof decoded === "string") return decoded;
++    } catch (_) {
++      // Fall through: an unparseable quoted value is still observable data.
++    }
++  }
++
++  return value;
++}
++
+ function verifyTextByElement(ref, text) {
+-  const wanted = normText(text);
++  const requested = String(text == null ? "" : text);
+ 
+   const gotValue = agentCtrl.getElementValue(ref);
+   if (gotValue.ok) {
+-    const value = unquote(gotValue.stdout);
+-    if (normText(value).includes(wanted)) {
++    const value = decodeObservedText(gotValue.stdout);
++    if (value === requested) {
+       return {
+         ok:true,
+-        method:"ax-value",
++        method:"ax-value-exact",
+         observed:value,
+         seconds:gotValue.seconds,
+       };
+@@ -60,11 +79,11 @@
+ 
+   const gotText = agentCtrl.getElementText(ref);
+   if (gotText.ok) {
+-    const value = unquote(gotText.stdout);
+-    if (normText(value).includes(wanted)) {
++    const value = decodeObservedText(gotText.stdout);
++    if (value === requested) {
+       return {
+         ok:true,
+-        method:"ax-text",
++        method:"ax-text-exact",
+         observed:value,
+         seconds:(gotValue.seconds || 0) + gotText.seconds,
+       };
+@@ -79,30 +98,6 @@
+   };
+ }
+ 
+-function verifyTextOnSnapshotLine(snapshot, ref, text) {
+-  const wanted = normText(text);
+-  if (!wanted || !ref) {
+-    return {ok:false, method:"none", observed:"", seconds:0};
+-  }
+-
+-  const line = String(snapshot || "")
+-    .split("\n")
+-    .find(raw => new RegExp(
+-      `(?:^|\\s)${ref.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:\\s|$)`
+-    ).test(raw));
+-
+-  if (line && normText(line).includes(wanted)) {
+-    return {
+-      ok:true,
+-      method:"snapshot-element-line",
+-      observed:line.trim(),
+-      seconds:0,
+-    };
+-  }
+-
+-  return {ok:false, method:"none", observed:"", seconds:0};
+-}
+-
+ function verifyFocusedElementByClipboard(ref, text) {
+   let seconds = 0;
+ 
+@@ -146,10 +141,10 @@
+         seconds += readBack.seconds || 0;
+ 
+         if (readBack.ok) {
+-          copiedText = String(readBack.stdout || "").trim();
++          copiedText = decodeObservedText(readBack.stdout);
+           verified =
+-            normText(copiedText) !== normText(sentinel) &&
+-            normText(copiedText).includes(normText(text));
++            copiedText !== sentinel &&
++            copiedText === String(text == null ? "" : text);
+         }
+       }
+     }
+@@ -166,7 +161,7 @@
+ 
+   return {
+     ok:verified,
+-    method:verified ? "focused-element-clipboard-sentinel" : "none",
++    method:verified ? "focused-element-clipboard-exact" : "none",
+     observed:copiedText,
+     seconds,
+   };
+@@ -175,13 +170,14 @@
+ function verifySetTextPostcondition(providerResolved, ref, text) {
+   let seconds = 0;
+ 
+-  // Strongest: explicit value/text exposed by accessibility.
++  // Strongest evidence: the exact value/text exposed by accessibility.
+   const direct = verifyTextByElement(ref, text);
+   seconds += direct.seconds || 0;
+   if (direct.ok) return {...direct, seconds};
+ 
+-  // Refresh the target application's accessibility snapshot and inspect the
+-  // exact element line, not the whole UI, to avoid unrelated text matches.
++  // Keep a fresh target snapshot for diagnostics only. A serialized snapshot
++  // line contains structural metadata and therefore cannot prove exact SET
++  // equality without backend-specific parsing.
+   const snapshot = agentCtrl.snapshotApplication(
+     providerResolved.provider,
+     providerResolved.identity,
+@@ -189,19 +185,8 @@
+   );
+   seconds += snapshot.seconds || 0;
+ 
+-  if (snapshot.ok) {
+-    const lineEvidence = verifyTextOnSnapshotLine(snapshot.stdout, ref, text);
+-    if (lineEvidence.ok) {
+-      return {
+-        ...lineEvidence,
+-        snapshot:snapshot.stdout,
+-        seconds,
+-      };
+-    }
+-  }
+-
+   // Some controls (notably browser-like fields) accept input but do not expose
+-  // the value through AX get/text. Bind clipboard verification to the exact ref.
++  // the value through AX get/text. Bind exact clipboard verification to ref.
+   const copied = verifyFocusedElementByClipboard(ref, text);
+   seconds += copied.seconds || 0;
+ 
+@@ -1345,7 +1330,7 @@
+  *
+  * Contract:
+  *   PRE:  `element.ref` identifies an actionable editable surface.
+- *   POST: requested text is present in that surface when ok=true.
++ *   POST: surface value equals requested text exactly when ok=true.
+  *
+  * The caller does not know whether the backend used AX fill, clipboard paste,
+  * or keyboard typing. Backend strategy and verification are internal.
+diff -ruN '--exclude=.DS_Store' /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/contexts/MICROPOC-v46-STRICT-SETTEXT-EQUALITY.txt /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/contexts/MICROPOC-v46-STRICT-SETTEXT-EQUALITY.txt
+--- /mnt/data/rumiai_v45/ComputerUse_agent-ctrl_MacOS_Silicon/contexts/MICROPOC-v46-STRICT-SETTEXT-EQUALITY.txt	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/rumiai_v46/ComputerUse_agent-ctrl_MacOS_Silicon/contexts/MICROPOC-v46-STRICT-SETTEXT-EQUALITY.txt	2026-08-23 06:27:33.000000000 +0000
+@@ -0,0 +1,79 @@
++Computer Control — Strict setText Equality micro-PoC v46
++
++Observed issue
++--------------
++Some setText() verification paths used normalized substring matching:
++
++  observed.includes(requested)
++
++This can report success when the editable surface contains extra or modified
++text, which is incompatible with SET/REPLACE semantics.
++
++v46
++---
++When setText(..., verify=true) returns ok=true, the observed editable value must
++equal the requested string exactly.
++
++Verification sources allowed to prove success:
++  1. exact AX element value
++  2. exact AX element text
++  3. exact clipboard readback bound to the explicitly focused element
++
++The refreshed AX snapshot remains diagnostic evidence only. A serialized
++snapshot element line contains role/ref/structural metadata and cannot by itself
++prove exact string equality without backend-specific parsing.
++
++Transport decoding
++------------------
++The comparison does not trim, lowercase, normalize Unicode, collapse spaces or
++remove punctuation. It only removes the single stdout line ending added by the
++CLI and decodes a JSON-style quoted scalar when agent-ctrl emits one.
++
++Invariant
++---------
++SET success means:
++
++  observed === requested
++
++not:
++
++  observed contains requested
++
++Scope
++-----
++No planner behavior, literal-payload extraction, resolver behavior, Provider
++selection, recovery policy, application state, backend selection, clear()
++semantics, or runtime lifecycle is changed.
++
++Static regression
++-----------------
++Requested:
++
++  Ciao RumiAI.
++
++Must PASS only for:
++
++  Ciao RumiAI.
++
++Must FAIL for examples such as:
++
++  Ciao RumiAI
++  Prefix Ciao RumiAI.
++  Ciao  RumiAI.
++  ciao RumiAI.
++
++Physical retest
++---------------
++Recommended task:
++
++  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
++
++Expected evidence includes an exact verification method, for example:
++
++  verification=ax-text-exact
++
++and TextEdit physically contains exactly:
++
++  Ciao RumiAI.
++
++The build remains NOT VALIDATED until the physical Mac test passes.
