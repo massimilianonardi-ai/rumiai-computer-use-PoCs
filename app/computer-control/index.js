@@ -8,7 +8,6 @@ const {
 } = require("../provider-manager");
 
 const agentCtrl = require("./backends/agent-ctrl");
-const macosNative = require("./backends/macos-native");
 const operations = require("./operations");
 const {loadDesktopPlugin} = require("./desktop");
 
@@ -93,6 +92,64 @@ function resolveApplicationProvider(app) {
   return providerForApplication(app, providers);
 }
 
+function resolveDesktopApplication(provider) {
+  const exactPath = providerResolvedPath(provider);
+  const resolved = desktop.resolveApplication({provider, exactPath});
+
+  if (!resolved?.ok || !resolved.identity) {
+    return {
+      ok:false,
+      error:resolved?.error || "APP_RESOLVE_FAILED",
+      detail:resolved?.detail ||
+        `Desktop plugin "${desktop.id}" could not resolve "${provider?.name || "application"}"`,
+      exactPath,
+      desktopPlugin:desktop.id,
+    };
+  }
+
+  const identity = resolved.identity;
+
+  return {
+    ok:true,
+    exactPath,
+    identity,
+    application:{
+      ...resolved,
+      provider,
+      identity,
+      exactPath,
+    },
+  };
+}
+
+function getForeground() {
+  const started = performance.now();
+  const observed = desktop.getForegroundApplication();
+
+  if (!observed?.ok) {
+    return {
+      ok:false,
+      error:"FOREGROUND_OBSERVATION_FAILED",
+      detail:observed?.error || observed?.detail || "frontmost application unavailable",
+      state:"FAILED",
+      method:observed?.method || `desktop plugin ${desktop.id} foreground observation`,
+      observeSeconds:observed?.seconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"OBSERVED",
+    name:observed.name,
+    bundle:observed.bundle || null,
+    asn:observed.asn || null,
+    method:observed.method || `desktop plugin ${desktop.id} foreground observation`,
+    observeSeconds:observed.seconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 async function ensureReady(providerOrApp, opts = {}) {
   const started = performance.now();
   const timeoutMs = Number(opts.timeoutMs || DEFAULT_READY_TIMEOUT_MS);
@@ -126,29 +183,25 @@ async function ensureReady(providerOrApp, opts = {}) {
     );
   }
 
-  const exactPath = providerResolvedPath(provider);
-  const resolved = desktop.resolveApplication({provider, exactPath});
+  const desktopResolved = resolveDesktopApplication(provider);
 
-  if (!resolved?.ok || !resolved.identity) {
+  if (!desktopResolved.ok) {
     return resultError(
-      resolved?.error || "APP_RESOLVE_FAILED",
-      resolved?.detail ||
-        `Desktop plugin "${desktop.id}" could not resolve "${provider.name}"`,
+      desktopResolved.error,
+      desktopResolved.detail,
       {
         provider:provider.id,
-        exactPath,
+        exactPath:desktopResolved.exactPath,
         desktopPlugin:desktop.id,
       }
     );
   }
 
-  const identity = resolved.identity;
-  const application = {
-    ...resolved,
-    provider,
-    identity,
+  const {
     exactPath,
-  };
+    identity,
+    application,
+  } = desktopResolved;
 
   const processName =
     identity.executable ||
@@ -233,7 +286,7 @@ async function ensureReady(providerOrApp, opts = {}) {
       if (observed.ok) {
         snapshot = observed;
 
-        const front = desktop.getForegroundApplication();
+        const front = getForeground();
         diagnostics.foreground = front.ok
           ? {name:front.name, bundle:front.bundle}
           : {error:front.error || front.detail || "foreground unavailable"};
@@ -328,8 +381,20 @@ async function waitUntilSnapshotCondition(providerOrApp, predicate, opts = {}) {
     );
   }
 
-  const exactPath = providerResolvedPath(provider);
-  const identity = macosNative.resolveApplicationIdentity(provider, exactPath);
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return resultError(
+      desktopResolved.error,
+      desktopResolved.detail,
+      {
+        provider:provider.id,
+        exactPath:desktopResolved.exactPath,
+        desktopPlugin:desktop.id,
+      }
+    );
+  }
+
+  const identity = desktopResolved.identity;
   const deadline = performance.now() + timeoutMs;
 
   let attempts = 0;
@@ -391,7 +456,7 @@ async function waitUntilSnapshotCondition(providerOrApp, predicate, opts = {}) {
           attempts,
           detail:
             `snapshot condition ready; provider="${provider.name}"; ` +
-            `compact=${compact}; attempts=${attempts}`,
+            `desktop=${desktop.id}; compact=${compact}; attempts=${attempts}`,
         };
       }
     } else {
@@ -407,6 +472,7 @@ async function waitUntilSnapshotCondition(providerOrApp, predicate, opts = {}) {
     `Required interaction condition did not become true within ${timeoutMs}ms`,
     {
       provider:provider.id,
+      desktopPlugin:desktop.id,
       attempts,
       lastSnapshotError,
       elapsedSeconds:(performance.now() - started) / 1000,
@@ -468,7 +534,7 @@ module.exports = {
   waitUntilSnapshotCondition,
   waitUntil,
   waitUntilChanged,
-  getForeground:operations.getForeground,
+  getForeground,
   waitStable:operations.waitStable,
   getCurrentWindow:operations.getCurrentWindow,
   snapshot:operations.snapshot,
