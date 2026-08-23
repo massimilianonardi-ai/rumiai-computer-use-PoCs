@@ -1,0 +1,58 @@
+# RumiAI Computer Control — micro-PoC v55
+
+## Desktop Plugin Application Readiness Boundary
+
+Status: WIP / PHYSICAL TEST PENDING
+Date: 2026-08-23
+
+### Goal
+
+Route the OS-specific parts of `ComputerControl.ensureReady()` through the selected Desktop Plugin while preserving the already validated macOS behavior.
+
+### Boundary
+
+`ensureReady()` must use the Desktop Plugin for:
+
+- application identity resolution
+- application activation
+- application launch
+- foreground application observation
+
+Accessibility/UI observation remains owned by the UI backend:
+
+- settled application snapshot stays `agent-ctrl` / accessibility backend responsibility
+
+This deliberately keeps Desktop/OS lifecycle separate from generic UI-control observation.
+
+### Invariant
+
+The generic readiness path must not directly call:
+
+- `macosNative.resolveApplicationIdentity`
+- `macosNative.launchApplicationBundle`
+- `agentCtrl.switchApplication`
+- `operations.getForeground`
+
+Instead it calls the common Desktop Plugin contract:
+
+- `desktop.resolveApplication()`
+- `desktop.activateApplication()`
+- `desktop.launchApplication()`
+- `desktop.getForegroundApplication()`
+
+### Scope
+
+Only `ensureReady()` is migrated in v55.
+
+Other existing Computer Control operations may still contain direct macOS dependencies and are intentionally deferred to later isolated micro-PoCs.
+
+No new semantic intent, provider behavior, UI operation, Linux GUI claim, or Windows GUI claim is introduced.
+
+### Validation
+
+1. Static boundary test must PASS.
+2. Existing macOS v48 EXACT physical task must PASS unchanged:
+   `NEW_DOCUMENT -> INPUT("PROVA") -> CLEAR`.
+3. Evidence must show `desktop=macos` in readiness diagnostics.
+4. No recovery inference is expected.
+5. Runtime cleanup must remain idempotent.
