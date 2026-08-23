@@ -1,0 +1,48 @@
+# RumiAI Computer Control micro-PoC v56 — Desktop Facade Boundary
+
+Status: EXPERIMENTAL / PHYSICAL TEST PENDING
+Date: 2026-08-23
+
+## Goal
+
+Complete the Desktop Plugin boundary inside the public Computer Control facade without adding new capabilities or changing semantic behavior.
+
+## Invariant
+
+The public Computer Control facade must not know macOS-specific lifecycle/foreground mechanisms.
+
+Desktop/OS responsibilities in this slice:
+- resolve application identity
+- activate application
+- launch application
+- observe foreground application
+
+UI-backend responsibility retained:
+- accessibility snapshot observation
+
+## Changes
+
+`app/computer-control/index.js`:
+- removes direct `macos-native` dependency
+- centralizes Provider -> Desktop application resolution through `desktop.resolveApplication()`
+- routes public foreground observation through `desktop.getForegroundApplication()`
+- reuses the same Desktop resolution in `ensureReady()` and `waitUntilSnapshotCondition()`
+- retains `agentCtrl.snapshotApplication()` as UI/accessibility observation
+
+## Explicitly unchanged
+
+- semantic planner
+- executors
+- Providers
+- Skills
+- exact payload semantics
+- CLEAR semantics
+- UI interaction implementation
+- `operations.js` internals (next boundary, not part of v56)
+
+## Required physical validation
+
+1. `cmd/desktop-facade-boundary-test`
+2. existing v48/v55 end-to-end TextEdit task
+
+PASS requires no regression in observed behavior.
