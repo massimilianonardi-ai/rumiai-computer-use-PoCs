@@ -1,0 +1,53 @@
+Resource Readiness micro-PoC v22
+
+Goal
+----
+Validate synchronization between a successful operation and a later operation
+whose required resource is not immediately interactable.
+
+Observed Pulsar lifecycle:
+  NEW_DOCUMENT -> document exists immediately
+               -> editor initializes asynchronously
+               -> editor becomes interactable several seconds later
+
+No fixed sleep is introduced.
+
+New Computer Control primitive
+------------------------------
+waitUntilSnapshotCondition(provider, predicate, options)
+
+Computer Control owns:
+  - repeated Provider observation
+  - target process identity
+  - polling cadence
+  - timeout
+  - normalized RESOURCE_NOT_READY result
+
+The caller owns:
+  - the semantic condition that must become true
+
+This preserves the boundary:
+  Computer Control = HOW to wait/observe
+  Skill/Executor    = WHAT must be ready
+
+INPUT precondition
+------------------
+Before INPUT acts, it requires one of:
+  1. an accessible editable control; or
+  2. an AX-derived non-chrome content region with usable bounds.
+
+If neither exists immediately, INPUT waits through Computer Control until the
+condition appears (12s max, 300ms polling for this micro-PoC).
+
+If the condition never appears:
+  INPUT_PRECONDITION_NOT_READY
+
+Crucially, INPUT no longer falls through to blind `cg-type focused control`
+when no interaction surface was observed.
+
+NEW_DOCUMENT remains unchanged:
+  Cmd+N success means the create command was issued and the document can exist,
+  but readiness of the resource required by the next Skill is checked by that
+  next Skill.
+
+No Pulsar-specific branch and no fixed multi-second sleep were added.

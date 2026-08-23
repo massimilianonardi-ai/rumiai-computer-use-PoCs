@@ -1,0 +1,31 @@
+Full AX Diagnostics micro-PoC v24
+
+Purpose
+-------
+Before adding any native Electron-specific accessibility activation, verify
+whether agent-ctrl's default compact-tree filtering is hiding the relevant
+Pulsar editor structure.
+
+Change
+------
+Resource-readiness polling now requests:
+
+  agent-ctrl snapshot --target-process <process> --compact false
+
+Application lifecycle/ensureReady remains unchanged.
+
+The readiness trace now counts both:
+  actionable-content = @e* content nodes
+  structural-content = @s* content nodes
+
+This is diagnostic only. INPUT's actual readiness/action policy is unchanged.
+
+Interpretation
+--------------
+If full-tree snapshots expose editor/content roles:
+  agent-ctrl compact filtering was hiding useful structure and we can decide
+  how Computer Control should consume full snapshots.
+
+If the full tree still exposes only a few buttons and no editor/web content:
+  the next generic macOS backend experiment is AXManualAccessibility=true,
+  which Electron explicitly supports for third-party assistive technology.

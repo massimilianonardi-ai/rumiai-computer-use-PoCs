@@ -1,0 +1,54 @@
+Bounds Diagnostics micro-PoC v26
+
+Finding from v25
+----------------
+After the AXManualAccessibility experiment the Pulsar AX tree changed from:
+
+  button=3, window=1
+
+to:
+
+  region=15, group=11, document=1, ...
+  actionable-content=15
+
+However INPUT still did not consider any content region interactable.
+
+This means the next unknown is not whether the tree exists, but why
+findLargestContentRegion() rejects all actionable content nodes.
+
+v26 adds diagnostics only.
+
+1. AXManualAccessibility result
+-------------------------------
+The ACTIVATE_APP PASS line now includes:
+  ax-manual=<true|false>
+  ax-output="<helper stdout>"
+  ax-error="<helper stderr/error>"
+
+The helper stdout contains the PID and raw AXError numeric result.
+
+2. Candidate bounds
+-------------------
+Whenever the AX structure changes and actionable content exists, the terminal
+prints [bounds-trace] lines for up to 12 candidates:
+
+  ref
+  role
+  name
+  bounds or bounds error
+  whether width>=120 and height>=80
+
+No readiness rule, timeout, click policy or Pulsar-specific behavior changed.
+
+Interpretation
+--------------
+If candidates have valid large bounds:
+  findLargestContentRegion has another filtering/cache issue.
+
+If get bounds fails on every @e ref:
+  the snapshot refs are not usable with the current get-bounds path/session.
+
+If candidates have valid but small/zero bounds:
+  the current >=120x80 heuristic is wrong for this accessibility tree.
+
+This diagnostic should identify exactly which case we have.

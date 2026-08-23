@@ -1,0 +1,44 @@
+Computer Control micro-PoC v21
+
+Root cause found
+----------------
+The portable RumiAI launcher intentionally sets:
+
+  HOME=<RumiAI>/home
+  XDG_CACHE_HOME=<RumiAI>/home/cache
+
+That environment is correct for isolating RumiAI itself, but it must not be
+inherited by external desktop application Providers.
+
+Pulsar normally stores configuration under ~/.pulsar. Therefore a GUI app
+started with RumiAI's portable HOME can behave like a different/new profile.
+
+Fix
+---
+Cold-start of macOS .app Providers still goes through the exact installed
+bundle path and LaunchServices, but the /usr/bin/open process now receives a
+small clean desktop-user environment:
+
+  HOME    = real account home from os.userInfo()
+  USER    = real account username
+  LOGNAME = real account username
+  PATH    = /usr/bin:/bin:/usr/sbin:/sbin
+
+Normal session variables such as TMPDIR, SHELL, LANG, LC_* and
+__CF_USER_TEXT_ENCODING are retained when present.
+
+RumiAI-private variables are intentionally not propagated:
+  portable HOME
+  XDG_*
+  model paths
+  Ollama variables
+  micromamba/conda variables
+  agent-ctrl variables
+  RumiAI-specific variables
+  ATOM_HOME or other shell-only overrides
+
+This is a generic Computer Control boundary rule:
+external desktop Providers must not inherit the private runtime environment
+of RumiAI.
+
+The agent-ctrl daemon cleanup introduced in v20 is unchanged.

@@ -1,0 +1,49 @@
+Readiness Diagnostics micro-PoC v23
+
+Purpose
+-------
+Do not change the readiness principle or add a Pulsar workaround.
+Measure what the AX surface actually does while Pulsar's new editor becomes
+usable.
+
+INPUT readiness observation
+---------------------------
+When no input surface is immediately available:
+
+  timeout: 45 seconds
+  poll:    500 ms
+
+The terminal emits [readiness-trace] lines:
+  t=<seconds>
+  attempt=<n>
+  snapshot-changed=<true|false>
+  editable=<count>
+  content-candidates=<count>
+  focused=<refs/roles or none>
+  roles=<top AX role counts>
+
+A line is emitted when:
+  - the snapshot changes;
+  - the readiness summary changes; or
+  - at least ~5 seconds passed since the last trace line.
+
+No interaction is attempted until the existing INPUT precondition becomes true.
+
+Interpretation
+--------------
+If a usable AX signal appears late:
+  condition-based synchronization is validated; the old 12s timeout was simply
+  too short.
+
+If the editor becomes manually clickable/writable but the trace never changes
+in a way that satisfies the condition:
+  AX is insufficient to observe that readiness state and Computer Control
+  needs another generic observation primitive/backend.
+
+Recovery policy
+---------------
+INPUT_PRECONDITION_NOT_READY now returns recoveryPolicy=NONE.
+The agent loop bypasses LLM recovery for this deterministic failure, preventing
+speculative actions such as clicking invented consent dialogs.
+
+No Pulsar-specific branch and no fixed readiness sleep were added.

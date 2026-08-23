@@ -14,8 +14,9 @@
       "/System/Library/CoreServices/Finder.app"
     ]
   },
-  "contexts": [
-    "macos"
-  ],
-  "capabilities": {}
+  "contexts": [],
+  "identity": {
+    "process": "Finder",
+    "bundle": "com.apple.finder"
+  }
 }

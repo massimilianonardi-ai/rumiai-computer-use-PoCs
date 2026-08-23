@@ -15,8 +15,9 @@
       "/System/Applications/Safari.app"
     ]
   },
-  "contexts": [
-    "macos"
-  ],
-  "capabilities": {}
+  "contexts": [],
+  "identity": {
+    "process": "Safari",
+    "bundle": "com.apple.Safari"
+  }
 }

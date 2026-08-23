@@ -1,0 +1,50 @@
+AX Manual Accessibility micro-PoC v25
+
+Finding from v24
+----------------
+Pulsar remained manually usable while full non-compact AX snapshots exposed
+only:
+  button=3
+  window=1
+  editable=0
+  actionable-content=0
+
+Therefore agent-ctrl compact filtering was not the cause.
+
+Experiment
+----------
+Electron documents a native macOS mechanism for third-party assistive software:
+set AXManualAccessibility=true on the running Electron application's top-level
+AXUIElement.
+
+v25 adds a generic macOS helper:
+  tools/enable-ax-manual.swift
+
+The Computer Control layer:
+  1. starts/activates the exact Provider as before;
+  2. resolves its real bundle id and process identity;
+  3. invokes AXManualAccessibility=true once;
+  4. continues with agent-ctrl snapshot/readiness observation.
+
+The helper is compiled lazily using:
+  /usr/bin/xcrun swiftc
+
+and cached as:
+  bin/rumiai-enable-ax-manual
+
+This is a diagnostic backend capability, not a Pulsar-specific branch.
+
+Interpretation
+--------------
+If [intent 1] reports:
+  ax-manual=true
+
+and later readiness-trace begins exposing Chromium content/editor roles,
+then the accessibility tree was lazy/disabled and the backend can generically
+activate it for compatible Electron/Chromium applications.
+
+If ax-manual=false, inspect diagnostics: the helper may lack Accessibility
+permission or the attribute may not be supported.
+
+If ax-manual=true but the AX tree remains empty, AXManualAccessibility alone
+is insufficient for this application/backend combination.
