@@ -2,6 +2,12 @@
 
 . "${0%/*}/env"
 
+if [ "$(uname -s)" = "Linux" ]
+then
+  echo "RumiAI Computer Control GUI is not yet supported on Linux: agent-ctrl v0.1.4 has no Linux action backend." >&2
+  exit 2
+fi
+
 check_bin "$NODEJS_BIN" nodejs-install
 check_bin "$AGENT_CTRL_BIN" agent-ctrl-install
 
