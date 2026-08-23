@@ -2,11 +2,19 @@
 
 . "${0%/*}/env"
 
-# AGENT_CTRL_URL="https://raw.githubusercontent.com/k4cper-g/agent-ctrl/main/scripts/install-macos.sh"
-#
-# curl -fsSL "$AGENT_CTRL_URL" | sh -s -- --install-dir "$ROOT/bin" --no-path
-# curl -fsSL "$AGENT_CTRL_URL" | sh -s -- --install-dir "$ROOT/bin" --no-path --version "v${AGENT_CTRL_VERSION}"
+case "$(uname -s)/$(uname -m)" in
+  Darwin/arm64)
+    AGENT_CTRL_URL="https://github.com/k4cper-g/agent-ctrl/releases/download/v0.1.4/agent-ctrl-v0.1.4-aarch64-apple-darwin.tar.gz"
+    ;;
+  Linux/aarch64|Linux/arm64|Linux/x86_64|Linux/amd64)
+    echo "agent-ctrl action backend is not available on Linux in v0.1.4; Computer Control GUI remains unsupported on this platform." >&2
+    exit 2
+    ;;
+  *)
+    echo "Unsupported platform: $(uname -s)/$(uname -m)" >&2
+    exit 1
+    ;;
+esac
 
-AGENT_CTRL_URL="https://github.com/k4cper-g/agent-ctrl/releases/download/v0.1.4/agent-ctrl-v0.1.4-aarch64-apple-darwin.tar.gz"
-curl -Ls "$AGENT_CTRL_URL" | tar -xvj - -C "$ROOT/bin" agent-ctrl
-agent-ctrl --version
+curl -fLs "$AGENT_CTRL_URL" | tar -xzf - -C "$ROOT/bin" agent-ctrl
+"$AGENT_CTRL_BIN" --version
