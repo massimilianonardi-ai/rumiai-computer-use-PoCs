@@ -1,0 +1,143 @@
+diff -ruN v47/app/agent-loop.js v48/app/agent-loop.js
+--- v47/app/agent-loop.js
++++ v48/app/agent-loop.js
+@@ -28,7 +28,7 @@
+ const { OLLAMA_URL, MODEL, warmOllama, planTask, executionMode } = require("./llm");
+ const { createContextSession, contextSummary } = require("./context-manager");
+ const { selectCapabilityTool } = require("./capability-manager");
+-const { executeIntent } = require("./executors");
++const { executeIntent, executeActivateIntent } = require("./executors");
+ const {
+   strongBlockerEvidence,
+   locateOrdinalResult,
+@@ -246,6 +246,68 @@
+     let passed = false;
+     let lastFailure = null;
+ 
++    // Application readiness is an execution precondition, not a semantic user
++    // intent. EXACT preserves the requested operation order while the executor
++    // guarantees that the selected provider is actually foreground and has a
++    // current observable snapshot before application-dependent operations run.
++    if (intent.intent !== "ACTIVATE_APP" && intent.app) {
++      const foreground = getForeground();
++      const workingMatches = Boolean(
++        state.currentApp &&
++        sameApplication(intent.app, {name:state.currentApp, bundle:null})
++      );
++      const foregroundMatches = Boolean(
++        foreground.ok && sameApplication(intent.app, foreground)
++      );
++      const applicationReady = workingMatches && foregroundMatches && Boolean(state.snapshot);
++
++      if (!applicationReady) {
++        let readiness;
++        try {
++          readiness = await executeActivateIntent(
++            {intent:"ACTIVATE_APP", app:intent.app},
++            state
++          );
++        } catch (e) {
++          readiness = {
++            ok:false,
++            recoveryPolicy:"NONE",
++            error:`application readiness exception: ${e.message}`,
++          };
++        }
++
++        if (!readiness.ok) {
++          console.log(
++            `[intent ${i + 1}] precondition FAIL: application-ready ${intent.app}: ` +
++            `${readiness.error || "provider did not become ready"}`
++          );
++          if (readiness.detail) {
++            console.log(`[intent ${i + 1}] precondition detail: ${readiness.detail}`);
++          }
++          console.log(`[intent ${i + 1}] FAIL: application readiness precondition not satisfied`);
++          return;
++        }
++
++        state = {
++          currentApp: readiness.currentApp ?? state.currentApp,
++          snapshot: readiness.snapshot ?? state.snapshot,
++          changed: readiness.changed ?? null,
++        };
++        computerSessionState = { ...state };
++
++        if (state.currentApp) {
++          const active = contextSession.observeApp(state.currentApp);
++          console.log(`[context-session] active: ${contextSummary(active)}`);
++        }
++
++        console.log(
++          `[intent ${i + 1}] precondition PASS | application-ready=${state.currentApp}` +
++          ` | source=executor` +
++          `${readiness.detail ? ` | ${readiness.detail}` : ""}`
++        );
++      }
++    }
++
+     for (let attempt = 0; attempt <= MAX_RECOVERY_PER_INTENT; attempt++) {
+       let result;
+ 
+@@ -551,7 +613,7 @@
+   }
+ 
+   console.log("");
+-  console.log("RumiAI local Computer Control PoC v13 + Explicit Clear Semantics micro-PoC v47");
++  console.log("RumiAI local Computer Control PoC v13 + Application Readiness Invariant micro-PoC v48");
+   console.log(
+     `computer-control backend: ${backend.id}` +
+     `${backend.path ? ` | ${backend.path}` : ""}`
+diff -ruN v47/contexts/MICROPOC-v48-APPLICATION-READINESS-INVARIANT.txt v48/contexts/MICROPOC-v48-APPLICATION-READINESS-INVARIANT.txt
+--- v47/contexts/MICROPOC-v48-APPLICATION-READINESS-INVARIANT.txt
++++ v48/contexts/MICROPOC-v48-APPLICATION-READINESS-INVARIANT.txt
+@@ -0,0 +1,49 @@
++Computer Control — Application Readiness Invariant micro-PoC v48
++
++Observed issue
++--------------
++The first physical v47 CLEAR test used EXACT mode and produced the semantic
++sequence NEW_DOCUMENT -> INPUT -> CLEAR, but no ACTIVATE_APP semantic intent.
++NEW_DOCUMENT then failed because no application was active. CLEAR was never run.
++
++v48
++---
++Treat selected application readiness as a deterministic execution precondition,
++not as a semantic user intent. Before any non-ACTIVATE_APP intent carrying app=X,
++the agent loop verifies both:
++
++  - working state identifies X and has a current snapshot;
++  - the actual foreground application is X.
++
++If either condition is false, the executor uses the existing deterministic
++ACTIVATE_APP/ComputerControl.ensureReady() path for X before executing the
++original semantic intent.
++
++EXACT semantics
++---------------
++No ACTIVATE_APP step is injected into the LLM plan. The user-requested semantic
++order remains unchanged. Provider readiness belongs to HOW, not WHAT.
++
++Recovery boundary
++-----------------
++Failure to establish application readiness is a deterministic precondition
++failure. It does not authorize GUI recovery or application substitution.
++
++Physical regression / validation test
++-------------------------------------
++Repeat the exact blocked v47 task unchanged:
++
++  Fai esattamente così: crea un nuovo documento di testo, inserisci PROVA e poi cancella tutto il testo.
++
++Expected plan:
++  NEW_DOCUMENT -> INPUT(PROVA) -> CLEAR
++
++Expected runtime evidence before NEW_DOCUMENT:
++  precondition PASS | application-ready=TextEdit | source=executor
++
++Expected final CLEAR evidence:
++  computer-control.clear ... verified=true ... verification=...-exact
++
++The final TextEdit document must be physically empty. A PASS simultaneously
++validates the application-readiness invariant and completes the pending v47
++clear() physical validation.
