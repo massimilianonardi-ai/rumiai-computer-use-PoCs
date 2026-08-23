@@ -1,0 +1,25 @@
+RumiAI portability micro-PoC v50 — POSIX Shell Portability
+
+Status
+------
+EXPERIMENTAL / PHYSICAL TEST PENDING.
+
+Rules
+-----
+- Shell scripts use #!/bin/sh by default.
+- Bash is allowed only when a concrete requirement would make POSIX sh impractical.
+- cmd/env uses set -eu; pipefail is deliberately not required.
+
+Changes
+-------
+- cmd/nodejs-install restored to #!/bin/sh.
+- cmd/ollama-install restored to #!/bin/sh.
+- cmd/micromamba-install runs macOS quarantine cleanup with xattr only on Darwin.
+- cmd/env removes pipefail and keeps set -eu.
+
+Static validation
+-----------------
+The four changed shell scripts pass /bin/sh -n.
+The Node.js/Ollama platform-selection case statements remain POSIX sh syntax.
+
+The last physically validated portability result remains v49 on Linux ARM64 for Node.js and Ollama installation.

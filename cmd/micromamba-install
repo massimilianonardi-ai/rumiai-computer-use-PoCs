@@ -6,7 +6,10 @@ MICROMAMBA_URL="https://micro.mamba.pm/api/micromamba/$(uname)-$(uname -m)/lates
 
 curl -Ls "$MICROMAMBA_URL" | tar -xvj - -C "$ROOT" "bin/micromamba"
 chmod +x "$MICROMAMBA_BIN"
-xattr -dr com.apple.quarantine "$MICROMAMBA_BIN"
+if [ "$(uname -s)" = "Darwin" ]
+then
+  xattr -dr com.apple.quarantine "$MICROMAMBA_BIN"
+fi
 micromamba --version
 
 mkdir -p "$MICROMAMBA_ENV"
