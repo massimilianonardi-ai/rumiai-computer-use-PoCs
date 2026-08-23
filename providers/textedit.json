@@ -1,0 +1,35 @@
+{
+  "id": "textedit",
+  "name": "TextEdit",
+  "kind": "application",
+  "aliases": [
+    "TextEdit"
+  ],
+  "activation": {
+    "application": "TextEdit"
+  },
+  "availability": {
+    "type": "paths",
+    "paths": [
+      "/System/Applications/TextEdit.app",
+      "/Applications/TextEdit.app"
+    ]
+  },
+  "contexts": [
+    "text-editing",
+    "textedit"
+  ],
+  "capabilities": {
+    "text.edit": {
+      "requires_skills": [
+        "application.activate",
+        "document.new",
+        "text.insert"
+      ]
+    }
+  },
+  "identity": {
+    "process": "TextEdit",
+    "bundle": "com.apple.TextEdit"
+  }
+}
