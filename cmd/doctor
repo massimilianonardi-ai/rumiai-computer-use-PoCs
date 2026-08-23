@@ -5,6 +5,8 @@
 PASS=0
 WARN=0
 FAIL=0
+PLATFORM="$(uname -s 2>/dev/null || echo unknown)"
+ARCH="$(uname -m 2>/dev/null || echo unknown)"
 
 pass()
 {
@@ -65,7 +67,7 @@ echo
 echo "RumiAI Computer Use test stack - doctor"
 echo "========================================"
 echo "ROOT:          $ROOT"
-echo "macOS target:  $(uname -s 2>/dev/null || echo unknown) / $(uname -m 2>/dev/null || echo unknown)"
+echo "PLATFORM:      $PLATFORM / $ARCH"
 echo "MODEL_ROOT:    $MODEL_ROOT"
 echo "MODELS_DIR:    $MODELS_DIR"
 echo "OLLAMA_MODELS: $OLLAMA_MODELS"
@@ -91,17 +93,28 @@ fi
 if [ -x "$AGENT_CTRL_BIN" ]
 then
   AGENT_CTRL_VERSION="$($AGENT_CTRL_BIN --version 2>/dev/null || true)"
-  pass "agent-ctrl ${AGENT_CTRL_VERSION:-present} ($AGENT_CTRL_BIN)"
 
-  echo "-- agent-ctrl doctor --"
-  if "$AGENT_CTRL_BIN" doctor
+  if [ "$PLATFORM" = "Darwin" ]
   then
-    pass "agent-ctrl doctor"
+    pass "agent-ctrl ${AGENT_CTRL_VERSION:-present} ($AGENT_CTRL_BIN)"
+
+    echo "-- agent-ctrl doctor --"
+    if "$AGENT_CTRL_BIN" doctor
+    then
+      pass "agent-ctrl doctor"
+    else
+      fail "agent-ctrl doctor reported a problem"
+    fi
   else
-    fail "agent-ctrl doctor reported a problem"
+    warn "agent-ctrl ${AGENT_CTRL_VERSION:-present} present, but the Linux action backend required by RumiAI Computer Control is not available in v0.1.4"
   fi
 else
-  fail "agent-ctrl missing: $AGENT_CTRL_BIN"
+  if [ "$PLATFORM" = "Linux" ]
+  then
+    warn "agent-ctrl action backend unavailable on Linux; GUI Computer Control test skipped"
+  else
+    fail "agent-ctrl missing: $AGENT_CTRL_BIN"
+  fi
 fi
 
 if [ -x "$OLLAMA_BIN" ]
