@@ -1,0 +1,33 @@
+RumiAI portability micro-PoC v51 — Direct Micromamba Binary
+
+Status
+------
+EXPERIMENTAL / PHYSICAL TEST PENDING.
+
+Finding from v50
+----------------
+The official micro.mamba.pm package endpoint returns a bzip2-compressed tar archive. On the Ubuntu 26.04 ARM64 VM, GNU tar attempted to execute an external `bzip2` program which was not installed.
+
+Decision
+--------
+Do not add a mandatory system dependency for bzip2. Use the direct static micromamba binaries published by the official mamba-org/micromamba-releases GitHub releases, matching the approach used by the current official installer.
+
+Targets
+-------
+- macOS Apple Silicon: micromamba-osx-arm64
+- Linux ARM64: micromamba-linux-aarch64
+- Linux x64: micromamba-linux-64
+
+Shell policy
+------------
+The installer remains `#!/bin/sh`. The macOS quarantine cleanup remains guarded by a simple Darwin-only `if`.
+
+Static validation
+-----------------
+`cmd/micromamba-install` passes `/bin/sh -n`.
+
+Expected Linux ARM64 test
+-------------------------
+`git pull && ./cmd/micromamba-install`
+
+Expected result: direct executable download, micromamba version output, and successful creation of the Python 3.12 environment without requiring the host `bzip2` command.
