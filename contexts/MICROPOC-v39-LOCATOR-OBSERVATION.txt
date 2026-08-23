@@ -57,6 +57,7 @@ was internally observing FULL snapshots.
 
 Therefore the first comparison could report "changed" merely because:
   compact representation != full representation
+
 even if the UI itself had not changed.
 
 v39 makes observation depth explicit.
