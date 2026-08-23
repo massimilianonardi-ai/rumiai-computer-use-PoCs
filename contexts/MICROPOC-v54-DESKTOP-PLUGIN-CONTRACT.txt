@@ -1,0 +1,65 @@
+RumiAI Computer Control micro-PoC v54
+Desktop Plugin Contract
+
+STATUS
+EXPERIMENTAL / PHYSICAL TEST PENDING
+
+GOAL
+Define a strong OS/Desktop plugin boundary before adding more Computer Control
+operations.
+
+INVARIANT
+RumiAI defines WHAT through one stable Desktop contract. The selected OS plugin
+owns HOW that contract is implemented. Native APIs, accessibility APIs, hotkeys,
+helper processes and other platform-specific mechanisms must remain private to
+the plugin.
+
+PLATFORM SELECTION
+process.platform:
+  darwin -> macos
+  win32  -> windows
+  linux  -> linux
+
+CONTRACT
+All three plugins expose the same method set:
+  capabilities
+  findApplications
+  resolveApplication
+  launchApplication
+  activateApplication
+  getForegroundApplication
+  getSystemSettingsApplication
+  listWindows
+  getCurrentWindow
+  focusWindow
+  closeWindow
+  minimizeWindow
+  maximizeWindow
+  restoreWindow
+  moveWindow
+  resizeWindow
+
+CAPABILITY HONESTY
+A method existing in the contract does not imply that a platform currently
+supports it. Unsupported operations return DESKTOP_CAPABILITY_UNAVAILABLE and
+the plugin capability map declares IMPLEMENTED, UNIMPLEMENTED or DEFERRED explicitly.
+IMPLEMENTED does not mean that the new plugin wrapper has been physically validated.
+
+MACOS
+The plugin delegates only already validated behavior:
+  application identity -> macos-native
+  launch               -> macos-native LaunchServices
+  activate             -> agent-ctrl switch-app
+  foreground           -> macos-native lsappinfo
+  current window       -> agent-ctrl get window
+No existing Computer Control call path is rerouted in v54.
+
+WINDOWS / LINUX
+Contract-complete placeholders only. No capability is claimed as implemented.
+Later micro-PoCs can fill each plugin independently without changing callers.
+
+SCOPE
+v54 adds the contract, loader, three plugins and a contract test. It deliberately
+does not modify app/computer-control/index.js or operations.js yet. The next
+micro-PoC may migrate one existing macOS path behind this boundary after v54 is
+validated.
