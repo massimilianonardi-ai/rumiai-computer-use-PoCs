@@ -1,0 +1,33 @@
+RumiAI portability micro-PoC v49 — Platform Installer URLs
+
+Status
+------
+EXPERIMENTAL / PHYSICAL TEST PENDING.
+Committed early on explicit request so the repository can be cloned and tested on Linux.
+The last fully physically validated runtime remains v48.
+
+Scope
+-----
+Only the Node.js and Ollama portable installers are changed.
+
+Targets
+-------
+- macOS Apple Silicon: Darwin/arm64
+- Linux ARM64: Linux/aarch64 (Linux/arm64 accepted as alias)
+- Linux x64: Linux/x86_64 (Linux/amd64 accepted as alias)
+
+Node.js
+-------
+Node.js remains pinned to v26.7.0 for reproducibility.
+The installer selects the official tar.gz for the detected target.
+Extraction uses gzip explicitly (-xzf), avoiding the previous bzip2 flag.
+
+Ollama
+------
+macOS keeps the official latest ollama-darwin.tgz asset.
+Linux selects the official latest arm64/amd64 tar.zst asset.
+Linux archives contain bin/ and lib/; extraction preserves that layout and a
+relative symlink $OLLAMA_ROOT/ollama -> bin/ollama preserves the existing
+OLLAMA_BIN contract.
+
+No Computer Control Linux backend behavior is added in this micro-PoC.

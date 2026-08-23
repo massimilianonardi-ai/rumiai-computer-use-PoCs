@@ -1,11 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
 . "${0%/*}/env"
 
-OLLAMA_URL="https://github.com/ollama/ollama/releases/latest/download/ollama-darwin.tgz"
+case "$(uname -s)/$(uname -m)" in
+  Darwin/arm64)              OLLAMA_URL="https://github.com/ollama/ollama/releases/latest/download/ollama-darwin.tgz" ;;
+  Linux/aarch64|Linux/arm64) OLLAMA_URL="https://github.com/ollama/ollama/releases/latest/download/ollama-linux-arm64.tar.zst" ;;
+  Linux/x86_64|Linux/amd64)  OLLAMA_URL="https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64.tar.zst" ;;
+  *) echo "Unsupported platform: $(uname -s)/$(uname -m)" >&2; exit 1 ;;
+esac
 
 rm -rf "$OLLAMA_ROOT"
 mkdir -p "$OLLAMA_ROOT"
-curl -fL "$OLLAMA_URL" | tar -xzf - -C "$OLLAMA_ROOT"
+
+case "$OLLAMA_URL" in
+  *.tgz)     curl -fL "$OLLAMA_URL" | tar -xzf - -C "$OLLAMA_ROOT" ;;
+  *.tar.zst) curl -fL "$OLLAMA_URL" | tar --zstd -xf - -C "$OLLAMA_ROOT"; ln -sfn bin/ollama "$OLLAMA_BIN" ;;
+esac
 
 HOME="$OLLAMA_HOME" "$OLLAMA_BIN" --version

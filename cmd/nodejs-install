@@ -1,10 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
 . "${0%/*}/env"
 
-NODEJS_URL="https://nodejs.org/download/release/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz"
+case "$(uname -s)/$(uname -m)" in
+  Darwin/arm64)              NODEJS_URL="https://nodejs.org/download/release/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz" ;;
+  Linux/aarch64|Linux/arm64) NODEJS_URL="https://nodejs.org/download/release/v26.7.0/node-v26.7.0-linux-arm64.tar.gz" ;;
+  Linux/x86_64|Linux/amd64)  NODEJS_URL="https://nodejs.org/download/release/v26.7.0/node-v26.7.0-linux-x64.tar.gz" ;;
+  *) echo "Unsupported platform: $(uname -s)/$(uname -m)" >&2; exit 1 ;;
+esac
 
 rm -rf "$NODEJS_ROOT"
 mkdir -p "$NODEJS_ROOT"
-curl -Ls "$NODEJS_URL" | tar -xvj - -C "$NODEJS_ROOT" --strip-components=1
-node --version
+curl -fLs "$NODEJS_URL" | tar -xzf - -C "$NODEJS_ROOT" --strip-components=1
+"$NODEJS_BIN" --version
