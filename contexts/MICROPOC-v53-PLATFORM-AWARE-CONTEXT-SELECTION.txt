@@ -1,0 +1,36 @@
+RumiAI portability micro-PoC v53 — Platform-Aware Context Selection
+
+Status
+------
+EXPERIMENTAL / PHYSICAL TEST PENDING.
+
+Finding from Linux ARM64 v52
+----------------------------
+The headless context/cache test passed, but the Linux session incorrectly selected:
+generic-gui -> macos
+
+Root cause
+----------
+Context Manager treated every context with trigger.always=true as a base context without considering the current operating system.
+
+Change
+------
+- Add optional trigger.platforms to context files.
+- Context Manager filters the available context set using Node process.platform before base/task/app selection and dependency expansion.
+- macos context is restricted to platform "darwin".
+- system-settings context is restricted to platform "darwin".
+- TextEdit application context is restricted to platform "darwin".
+- Add a minimal Linux base context restricted to platform "linux".
+- Generic GUI and genuinely cross-platform contexts remain unchanged.
+
+Invariant
+---------
+Platform filtering changes contextual knowledge only. It does not claim a Linux GUI action backend and does not alter providers, executors or Computer Control.
+
+Expected Linux ARM64 base
+-------------------------
+generic-gui -> linux
+
+Expected macOS base
+-------------------
+generic-gui -> macos

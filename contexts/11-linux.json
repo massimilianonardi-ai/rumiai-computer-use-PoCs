@@ -1,0 +1,25 @@
+{
+  "id": "linux",
+  "name": "Linux",
+  "scope": "General Linux desktop conventions without assuming a specific desktop environment or GUI action backend.",
+  "priority": 20,
+  "trigger": {
+    "always": true,
+    "platforms": [
+      "linux"
+    ]
+  },
+  "competence": {
+    "level": "generic",
+    "confidence": 0.8
+  },
+  "knowledge": [
+    "The current operating system is Linux.",
+    "Application names, desktop controls and keyboard conventions must not be assumed to match macOS.",
+    "GUI action backend availability is independent from the portable runtime."
+  ],
+  "planning_rules": [
+    "Do not apply macOS-specific application names, paths or shortcuts unless an explicit provider or skill supplies them."
+  ],
+  "planner_delta": []
+}

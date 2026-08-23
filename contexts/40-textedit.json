@@ -8,6 +8,9 @@
     "text-editing"
   ],
   "trigger": {
+    "platforms": [
+      "darwin"
+    ],
     "app_names": [
       "TextEdit"
     ]

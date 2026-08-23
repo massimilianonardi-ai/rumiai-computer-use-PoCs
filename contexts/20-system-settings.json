@@ -4,6 +4,9 @@
   "scope": "Navigation and search inside macOS System Settings.",
   "priority": 30,
   "trigger": {
+    "platforms": [
+      "darwin"
+    ],
     "task_contains_any": [
       "System Settings",
       "System Preferences",

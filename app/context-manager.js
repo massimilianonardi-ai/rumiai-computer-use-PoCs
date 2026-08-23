@@ -7,8 +7,8 @@
  *   - context selection for the current plan;
  *   - session-active application context, retained across user tasks.
  *
- * Base contexts (e.g. generic-gui, macos) are always active. Application
- * contexts become session-active after the runtime actually observes that app.
+ * Base contexts (e.g. generic-gui plus the current OS context) are always active.
+ * Application contexts become session-active after the runtime actually observes that app.
  * A task may preview a relevant app context before activation so the planner
  * can use its competence to create the plan that opens the app.
  */
@@ -43,6 +43,15 @@ function loadContexts() {
     .filter(name => name.endsWith(".json"))
     .sort()
     .map(readContextFile);
+}
+
+function platformTriggerMatches(context) {
+  const trigger = context.trigger || {};
+  const platforms = Array.isArray(trigger.platforms)
+    ? trigger.platforms.map(norm).filter(Boolean)
+    : [];
+  if (platforms.length === 0) return true;
+  return platforms.includes(norm(process.platform));
 }
 
 function taskTriggerMatches(context, task) {
@@ -137,7 +146,8 @@ function contextSummary(selectionOrContexts) {
 
 function createContextSession() {
   const all = loadContexts();
-  const base = uniqueSorted(all.filter(c => c.trigger?.always === true));
+  const available = all.filter(platformTriggerMatches);
+  const base = uniqueSorted(available.filter(c => c.trigger?.always === true));
   let currentApp = null;
   let appActive = [];
 
@@ -146,9 +156,9 @@ function createContextSession() {
   }
 
   function select(task, extraContextIds = []) {
-    const taskSelected = all.filter(c => taskTriggerMatches(c, task));
-    const extraSelected = all.filter(c => extraContextIds.includes(c.id));
-    const selected = expandDependencies([...base, ...appActive, ...taskSelected, ...extraSelected], all);
+    const taskSelected = available.filter(c => taskTriggerMatches(c, task));
+    const extraSelected = available.filter(c => extraContextIds.includes(c.id));
+    const selected = expandDependencies([...base, ...appActive, ...taskSelected, ...extraSelected], available);
     const persistedIds = new Set(activeContexts().map(c => c.id));
     return {
       task,
@@ -165,7 +175,7 @@ function createContextSession() {
   function observeApp(app) {
     currentApp = app || null;
     appActive = currentApp
-      ? expandDependencies(all.filter(c => appTriggerMatches(c, currentApp)), all)
+      ? expandDependencies(available.filter(c => appTriggerMatches(c, currentApp)), available)
           .filter(c => !base.some(b => b.id === c.id))
       : [];
     return activeContexts();

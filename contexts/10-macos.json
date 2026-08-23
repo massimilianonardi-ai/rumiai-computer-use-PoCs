@@ -4,7 +4,10 @@
   "scope": "General macOS desktop conventions and application naming.",
   "priority": 20,
   "trigger": {
-    "always": true
+    "always": true,
+    "platforms": [
+      "darwin"
+    ]
   },
   "competence": {
     "level": "expert",
