@@ -1,0 +1,24 @@
+diff -ruN app/agent-loop.js app/agent-loop.js
+--- v46/app/agent-loop.js
++++ v47/app/agent-loop.js
+@@
+-  console.log("RumiAI local Computer Control PoC v13 + Strict setText Equality micro-PoC v46");
++  console.log("RumiAI local Computer Control PoC v13 + Explicit Clear Semantics micro-PoC v47");
+
+diff -ruN app/computer-control/index.js app/computer-control/index.js
+--- v46/app/computer-control/index.js
++++ v47/app/computer-control/index.js
+@@
+   setText:operations.setText,
++  clear:operations.clear,
+ };
+
+# Full v46→v47 source delta summary
+# - app/computer-control/operations.js: factor exact text verification, reject setText("") with EMPTY_TEXT_REQUIRES_CLEAR, add deterministic clear() strategies and exact-empty verification.
+# - app/executors.js: import clear(), add executeClearIntent(), dispatch CLEAR.
+# - app/llm.js: allow CLEAR semantic intent and planner schema/prompt support.
+# - contexts/MICROPOC-v47-EXPLICIT-CLEAR-SEMANTICS.txt: micro-PoC contract and physical test.
+#
+# Artifact under physical test:
+# ComputerUse_agent-ctrl_MacOS_Silicon_explicit-clear-semantics-v47.zip
+# Status after first physical run: BLOCKED before CLEAR execution because EXACT plan omitted application activation.
