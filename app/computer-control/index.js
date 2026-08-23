@@ -10,6 +10,9 @@ const {
 const agentCtrl = require("./backends/agent-ctrl");
 const macosNative = require("./backends/macos-native");
 const operations = require("./operations");
+const {loadDesktopPlugin} = require("./desktop");
+
+const desktop = loadDesktopPlugin();
 
 const DEFAULT_READY_TIMEOUT_MS = Number(
   process.env.RUMIAI_APP_READY_TIMEOUT_MS || "12000"
@@ -124,7 +127,29 @@ async function ensureReady(providerOrApp, opts = {}) {
   }
 
   const exactPath = providerResolvedPath(provider);
-  const identity = macosNative.resolveApplicationIdentity(provider, exactPath);
+  const resolved = desktop.resolveApplication({provider, exactPath});
+
+  if (!resolved?.ok || !resolved.identity) {
+    return resultError(
+      resolved?.error || "APP_RESOLVE_FAILED",
+      resolved?.detail ||
+        `Desktop plugin "${desktop.id}" could not resolve "${provider.name}"`,
+      {
+        provider:provider.id,
+        exactPath,
+        desktopPlugin:desktop.id,
+      }
+    );
+  }
+
+  const identity = resolved.identity;
+  const application = {
+    ...resolved,
+    provider,
+    identity,
+    exactPath,
+  };
+
   const processName =
     identity.executable ||
     provider?.identity?.process ||
@@ -136,6 +161,7 @@ async function ensureReady(providerOrApp, opts = {}) {
     exactPath,
     identity,
     processName,
+    desktopPlugin:desktop.id,
     launchAttempted:false,
     launchMethod:null,
     switchAttempts:0,
@@ -148,28 +174,29 @@ async function ensureReady(providerOrApp, opts = {}) {
   let actionSeconds = 0;
   let observeSeconds = 0;
 
-  // Phase 1: if already running, switch-app should be enough.
-  let switched = agentCtrl.switchApplication(provider, identity);
+  // Phase 1: ask the selected Desktop Plugin to activate the application.
+  // Computer Control owns the lifecycle contract; the plugin owns the OS HOW.
+  let switched = desktop.activateApplication(application);
   diagnostics.switchAttempts += 1;
-  actionSeconds += switched.seconds;
+  actionSeconds += switched.seconds || 0;
 
-  // Phase 2: if switch fails, launch the exact Provider path through the
-  // backend. No `open -a <name>` guessing is allowed at this layer.
+  // Phase 2: if activation fails, launch through the Desktop Plugin and retry.
+  // No OS-specific launch mechanism is exposed at this layer.
   if (!switched.ok) {
     diagnostics.launchAttempted = true;
 
-    const launched = macosNative.launchApplicationBundle(exactPath);
-    actionSeconds += launched.seconds;
-    diagnostics.launchMethod = launched.method;
+    const launched = desktop.launchApplication(application);
+    actionSeconds += launched.seconds || 0;
+    diagnostics.launchMethod = launched.method || null;
     diagnostics.launchEnvironment = launched.launchEnvironment || null;
 
     if (!launched.ok) {
       return resultError(
         "APP_LAUNCH_FAILED",
-        `Could not launch "${provider.name}" through macOS LaunchServices`,
+        `Could not launch "${provider.name}" through desktop plugin "${desktop.id}"`,
         {
           ...diagnostics,
-          backendError:(launched.stderr || launched.stdout || "").trim(),
+          backendError:(launched.stderr || launched.stdout || launched.detail || "").trim(),
           elapsedSeconds:(performance.now() - started) / 1000,
         }
       );
@@ -177,24 +204,24 @@ async function ensureReady(providerOrApp, opts = {}) {
   }
 
   // Phase 3: STARTING is an internal lifecycle state, not an LLM recovery
-  // condition. Poll until we can activate, obtain a settled interactive AX
-  // surface, and verify the real macOS foreground app.
+  // condition. Desktop activation/foreground observation stay behind the
+  // platform plugin; accessibility snapshotting stays behind the UI backend.
   const deadline = performance.now() + timeoutMs;
   let snapshot = null;
   let finalSwitchMethod = switched.ok ? switched.method : null;
 
   while (performance.now() < deadline) {
     if (!switched.ok) {
-      switched = agentCtrl.switchApplication(provider, identity);
+      switched = desktop.activateApplication(application);
       diagnostics.switchAttempts += 1;
-      actionSeconds += switched.seconds;
+      actionSeconds += switched.seconds || 0;
 
       if (switched.ok) {
         finalSwitchMethod = switched.method;
         diagnostics.lastSwitchError = "";
       } else {
         diagnostics.lastSwitchError =
-          (switched.stderr || switched.stdout || "").trim();
+          (switched.stderr || switched.stdout || switched.detail || "").trim();
       }
     }
 
@@ -206,10 +233,10 @@ async function ensureReady(providerOrApp, opts = {}) {
       if (observed.ok) {
         snapshot = observed;
 
-        const front = operations.getForeground();
+        const front = desktop.getForegroundApplication();
         diagnostics.foreground = front.ok
           ? {name:front.name, bundle:front.bundle}
-          : {error:front.error};
+          : {error:front.error || front.detail || "foreground unavailable"};
 
         if (sameForeground(provider, front, identity)) {
           return {
@@ -223,9 +250,11 @@ async function ensureReady(providerOrApp, opts = {}) {
             observeSeconds,
             detail:
               `ensureReady provider="${provider.name}"; ` +
+              `desktop=${desktop.id}; ` +
               `path="${exactPath}"; executable="${identity.executable || ""}"; ` +
               `bundle="${identity.bundle || ""}"; launch=${diagnostics.launchAttempted}; ` +
-              `switch=${finalSwitchMethod || "none"}; ` +              `snapshot=settled; foreground=${front.name}; ` +
+              `switch=${finalSwitchMethod || "none"}; ` +
+              `snapshot=settled; foreground=${front.name}; ` +
               `switchAttempts=${diagnostics.switchAttempts}; ` +
               `snapshotAttempts=${diagnostics.snapshotAttempts}`,
             diagnostics:{
