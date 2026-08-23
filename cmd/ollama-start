@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$OLLAMA_BIN" ollama-install
+
+export HOME="$OLLAMA_HOME"
+
+exec "$OLLAMA_BIN" serve

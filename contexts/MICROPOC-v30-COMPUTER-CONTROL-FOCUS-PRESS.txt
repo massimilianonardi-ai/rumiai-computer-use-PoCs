@@ -1,0 +1,53 @@
+Computer Control API v0 — focus + press micro-PoC v30
+
+Validated entering this version
+-------------------------------
+ensureReady()  VALIDATED
+setText()      VALIDATED
+click()        VALIDATED, including AXRaise -> deterministic AX-bounds pointer fallback
+waitUntil()    condition-synchronization PoC
+
+New public operations
+---------------------
+focus({ app, element, verify=true })
+
+  PRE:
+    already-resolved actionable @e element.
+
+  POST:
+    backend focus operation delivered successfully.
+
+  Optional generic evidence:
+    if the accessibility snapshot exposes [focused], Computer Control returns
+    verified=true with ref/semantic evidence. Some toolkits may not expose this
+    marker, so delivered focus and independently observed focus are reported
+    separately.
+
+press({ app, keys, settle=true })
+
+  PRE:
+    target app is the current working/active app.
+
+  POST:
+    requested key/chord delivered successfully.
+
+  Semantic effects remain with caller/Skill:
+    Cmd+N -> document created
+    Enter -> search submitted
+    etc.
+
+Migrations
+----------
+SEARCH:
+  direct fill         -> setText()
+  direct focus        -> focus()
+  direct Enter press  -> press()
+
+NEW_DOCUMENT:
+  direct Cmd+N        -> press()
+
+The SEARCH semantic rule remains outside Computer Control:
+  a search-box may be dynamic;
+  a search/address text-field may require Enter.
+
+No application-specific semantics were moved into the driver.

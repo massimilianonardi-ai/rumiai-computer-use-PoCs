@@ -1,0 +1,27 @@
+Capability / Competence Selection micro-PoC v15
+
+Fixes a real false-positive observed in TextEdit.
+
+INPUT action hierarchy:
+1. AX `fill <ref> <text>` (preferred for native editable controls)
+2. focus + clipboard write/paste, restoring the user's clipboard
+3. synthetic Unicode `type` only as last resort
+
+INPUT verification hierarchy:
+1. get value
+2. get text
+3. semantic snapshot
+4. sentinel clipboard verification:
+   - save clipboard
+   - overwrite with a unique sentinel
+   - select-all on the refreshed editable ref
+   - clipboard copy
+   - read clipboard
+   - PASS only if sentinel was replaced AND copied text contains requested text
+   - restore user's clipboard
+
+This prevents a failed copy or pre-existing clipboard contents from validating
+an input that never reached the document.
+
+Capability selection, competence ranking, Context Session, prefix cache and
+planner behavior are unchanged.

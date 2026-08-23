@@ -1,0 +1,99 @@
+#!/bin/sh
+
+set -euo pipefail
+
+add_path()
+{
+  while [ "$#" -gt 0 ]
+  do
+    export PATH="$ROOT/$1:$PATH"
+    shift
+  done
+}
+
+add_path_abs()
+{
+  while [ "$#" -gt 0 ]
+  do
+    export PATH="$1:$PATH"
+    shift
+  done
+}
+
+add_path_existing()
+{
+  while [ "$#" -gt 0 ]
+  do
+    if [ -d "$ROOT/$1" ]
+    then
+      export PATH="$ROOT/$1:$PATH"
+    fi
+
+    shift
+  done
+}
+
+add_path_existing_abs()
+{
+  while [ "$#" -gt 0 ]
+  do
+    if [ -d "$ROOT/$1" ]
+    then
+      export PATH="$1:$PATH"
+    fi
+
+    shift
+  done
+}
+
+check_dir()
+{
+  while [ "$#" -gt 0 ]
+  do
+    if [ ! -d "$ROOT/$1" ]
+    then
+      mkdir -p "$ROOT/$1"
+    fi
+
+    shift
+  done
+}
+
+check_bin()
+{
+  if [ ! -f "$1" ]
+  then
+    "$2"
+  fi
+}
+
+ROOT="$(cd "$(dirname "$0")"; cd ..; pwd)"
+cd "$ROOT"
+
+check_dir app bin cmd srv
+check_dir etc home log run data models
+
+export HOME="$ROOT/home"
+export XDG_CACHE_HOME="$ROOT/home/cache"
+
+# TODO review in the future for best model management and stack local + external volume based on future products choosen to be part of this stack
+# right now for testing, works fine this way
+export MODEL_ROOT="$ROOT/models"
+
+export MODEL_VOL="/Volumes/AI-Models"
+if [ -d "$MODEL_VOL" ]
+then
+  export MODEL_ROOT="$MODEL_VOL/models"
+fi
+
+export MODELS_DIR="$MODEL_ROOT"
+
+add_path bin cmd
+
+. micromamba-env
+. nodejs-env
+. ollama-env
+. agent-ctrl-env
+. comfyui-env
+
+add_path cmd

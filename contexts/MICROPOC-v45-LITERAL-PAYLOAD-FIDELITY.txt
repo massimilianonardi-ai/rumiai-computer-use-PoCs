@@ -1,0 +1,82 @@
+Computer Control — Literal Payload Fidelity micro-PoC v45
+
+Observed issue
+--------------
+The semantic planner can correctly choose INPUT while rewriting the INPUT text.
+A physically relevant example is terminal punctuation loss:
+
+  task payload:  Ciao RumiAI.
+  planner text:  Ciao RumiAI
+
+The executor and ComputerControl.setText() already pass intent.text without
+trimming it. The loss therefore occurs before the executor, at the semantic
+planner boundary.
+
+v45
+---
+Separate semantic intent from literal payload data.
+
+For an explicit terminal payload introduced by a colon, for example:
+
+  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+
+RumiAI now:
+
+  1. lets the LLM decide that INPUT is required;
+  2. extracts the explicit payload deterministically from the original task;
+  3. after plan normalization, replaces INPUT.text with the original payload
+     only when the plan contains exactly one unambiguous INPUT;
+  4. sends that preserved text unchanged to the existing executor/setText path.
+
+Supported explicit markers in this micro-PoC:
+
+  Italian: scrivi:, digita:, inserisci:, immetti:
+  English: write:, type:, enter:, input:
+
+Optional literal markers such as "scrivi esattamente:" and "write exactly:"
+are also recognized.
+
+Invariant
+---------
+The LLM decides WHAT. Explicit payload data is not semantic material and must
+not be paraphrased, normalized or repaired by the LLM.
+
+Safety boundary
+---------------
+If the normalized plan contains zero INPUT intents or more than one INPUT
+intent, v45 does not guess which step owns the payload and does not apply the
+repair.
+
+No Computer Control API, setText verification semantics, clear semantics,
+Provider behavior, recovery logic, backend selection, or runtime lifecycle is
+changed.
+
+Static regression
+-----------------
+Input raw planner output:
+
+  INPUT text = "Ciao RumiAI"
+
+Task:
+
+  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+
+Expected normalized INPUT:
+
+  text = "Ciao RumiAI."
+
+Physical retest
+---------------
+Recommended task:
+
+  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+
+Expected evidence:
+
+  [payload] kind=INPUT | source=task-literal | ... | applied=true
+  plan INPUT text contains the final period
+  TextEdit physically contains exactly:
+
+    Ciao RumiAI.
+
+The build remains NOT VALIDATED until the physical Mac test passes.

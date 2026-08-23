@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$MICROMAMBA_BIN" micromamba-install
+micromamba run -p "$MICROMAMBA_ENV" "$@"

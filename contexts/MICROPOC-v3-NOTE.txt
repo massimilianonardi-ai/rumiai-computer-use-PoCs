@@ -1,0 +1,13 @@
+Context micro-PoC compressed v3
+
+Purpose:
+Recover the general planning invariants lost by compressed-v2 without returning
+to the long prompt.
+
+Added only four general invariants:
+1. ACTIVATE_APP already opens the app; do not add OPEN for same app.
+2. Preserve exact order; do not add unrequested intermediate steps.
+3. OPEN_RESULT only for explicit ordinal language.
+4. Named destination/result -> OPEN(target=name), unless specialized context overrides.
+
+The system-settings planner_delta remains unchanged and compact.

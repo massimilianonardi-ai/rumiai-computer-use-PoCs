@@ -1,0 +1,40 @@
+Computer Control micro-PoC v19
+
+Scope
+-----
+Only ACTIVATE_APP is migrated.
+
+Old:
+  executor -> activateApp() -> switch-app/open -a|b/sleep/snapshot
+
+New:
+  executor -> ComputerControl.ensureReady(provider)
+
+Computer Control contract
+-------------------------
+ensureReady(provider) returns SUCCESS only when:
+  - the registered Provider exists and is available;
+  - an exact Provider path is resolved;
+  - the app is running;
+  - the app can be activated;
+  - a settled AX snapshot is available;
+  - the real macOS foreground app matches the Provider.
+
+STARTING / no-AX-window during launch is handled internally with polling.
+It is not sent to LLM recovery unless the readiness timeout expires.
+
+Backend boundary
+----------------
+app/computer-control/backends/agent-ctrl.js
+  - switchApplication
+  - launchApplication exact path
+  - snapshotApplication --settle
+  - foregroundApplication
+
+The executor no longer knows launch/switch/readiness details.
+
+Important:
+- no `open -a Pulsar` is used by Computer Control;
+- cold launch uses agent-ctrl `launch <exact-path> --wait 500`;
+- provider identity is explicit in providers/*.json;
+- INPUT and other executor behavior are intentionally unchanged.

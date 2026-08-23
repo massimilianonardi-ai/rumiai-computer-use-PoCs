@@ -1,0 +1,20 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$NODEJS_BIN" nodejs-install
+check_bin "$AGENT_CTRL_BIN" agent-ctrl-install
+
+trap 'srv-stop ollama' EXIT INT QUIT TERM HUP PIPE ABRT TSTP
+
+srv-start ollama
+
+# Give Ollama a moment to bind its API socket before the first warmup request.
+sleep 2
+
+# exec node "$ROOT/app/agent-loop.js"
+node "$ROOT/app/agent-loop.js"
+
+srv-stop ollama
+
+trap - EXIT INT QUIT TERM HUP PIPE ABRT TSTP

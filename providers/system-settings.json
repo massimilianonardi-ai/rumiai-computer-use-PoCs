@@ -1,0 +1,28 @@
+{
+  "id": "system-settings",
+  "name": "System Settings",
+  "kind": "application",
+  "aliases": [
+    "System Settings",
+    "System Preferences",
+    "Impostazioni di Sistema",
+    "Preferenze di Sistema"
+  ],
+  "activation": {
+    "application": "System Settings"
+  },
+  "availability": {
+    "type": "paths",
+    "paths": [
+      "/System/Applications/System Settings.app",
+      "/Applications/System Settings.app"
+    ]
+  },
+  "contexts": [
+    "system-settings"
+  ],
+  "identity": {
+    "process": "System Settings",
+    "bundle": "com.apple.systempreferences"
+  }
+}

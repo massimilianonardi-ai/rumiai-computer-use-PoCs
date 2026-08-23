@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export COMFYUI_ROOT="$ROOT/srv/comfyui"
+export COMFYUI_BIN="$COMFYUI_ROOT/main.py"
+export COMFYUI_DATA="$ROOT/data/comfyui"

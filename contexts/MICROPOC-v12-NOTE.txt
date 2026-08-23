@@ -1,0 +1,29 @@
+Capability / Competence Selection micro-PoC v12
+
+Goal:
+task -> required capability -> installed candidate apps -> competence ranking
+-> selected app -> domain/app contexts -> planner -> execution.
+
+Capability:
+  text.edit
+
+Candidates:
+  TextEdit 0.95
+  Pulsar   0.75
+
+Installed-app detection is filesystem-based and non-invasive.
+New generic intent: NEW_DOCUMENT -> Cmd+N.
+Generic targetless INPUT focuses an editable control when visible, then uses
+agent-ctrl `type`, avoiding application-specific coordinates.
+
+Test:
+  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+
+Expected:
+  [capability] required: text.edit
+  TextEdit and Pulsar installation/competence lines
+  [capability] selected-app: TextEdit
+  contexts include generic-gui -> macos -> text-editing -> textedit
+  plan should contain ACTIVATE_APP TextEdit, NEW_DOCUMENT, INPUT.
+
+No save operation is part of this micro-PoC.

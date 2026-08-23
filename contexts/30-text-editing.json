@@ -1,0 +1,30 @@
+{
+  "id": "text-editing",
+  "name": "Text Editing",
+  "type": "domain",
+  "scope": "Creation and editing of plain textual documents independent of a specific editor.",
+  "priority": 30,
+  "requires": [
+    "generic-gui",
+    "macos"
+  ],
+  "trigger": {
+    "task_contains_any": [
+      "documento di testo",
+      "text document",
+      "nuovo documento",
+      "new document"
+    ]
+  },
+  "knowledge": [
+    "A text-editing task requires an editable document surface.",
+    "Creating a new document and entering text are distinct semantic operations.",
+    "Clearing all text is a distinct semantic operation from setting non-empty text."
+  ],
+  "planning_rules": [
+    "Use NEW_DOCUMENT when the user asks to create a new document.",
+    "Use INPUT(text=...) for text the user explicitly asks to enter.",
+    "Use CLEAR when the user explicitly asks to erase or clear all text from the editable surface."
+  ],
+  "planner_delta": []
+}

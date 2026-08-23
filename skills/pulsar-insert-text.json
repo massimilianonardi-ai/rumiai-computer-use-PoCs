@@ -1,0 +1,13 @@
+{
+  "id": "pulsar.text.insert",
+  "provider": "pulsar",
+  "realizes": "text.insert",
+  "status": "FAILED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "FAIL",
+      "note": "No reliable editable AX target/caret was obtained."
+    }
+  ]
+}

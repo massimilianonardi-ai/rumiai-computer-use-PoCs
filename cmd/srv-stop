@@ -1,0 +1,82 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+FORCE=0
+if [ "${1:-}" = "--force" ]
+then
+  FORCE=1
+  shift
+fi
+
+SRV_NAME="${1:-}"
+
+if [ -z "$SRV_NAME" ]
+then
+  echo "usage: srv-stop [--force] <server-name>" >&2
+  exit 2
+fi
+
+PID_FILE="$ROOT/run/${SRV_NAME}.pid"
+OWNER_FILE="$ROOT/run/${SRV_NAME}.owner"
+
+if [ ! -f "$PID_FILE" ]
+then
+  echo "srv-stop: [INFO] SERVER '$SRV_NAME' is not running"
+  rm -f "$OWNER_FILE"
+  exit 0
+fi
+
+PID="$(cat "$PID_FILE" 2>/dev/null || true)"
+
+case "$PID" in
+  ''|*[!0-9]*)
+    echo "srv-stop: [WARN] invalid PID file for SERVER '$SRV_NAME'; cleaning stale state"
+    rm -f "$PID_FILE" "$OWNER_FILE"
+    exit 0
+    ;;
+esac
+
+if ! kill -0 "$PID" 2>/dev/null
+then
+  echo "srv-stop: [WARN] SERVER '$SRV_NAME' has stale PID=$PID; cleaning state"
+  rm -f "$PID_FILE" "$OWNER_FILE"
+  exit 0
+fi
+
+OWNER=""
+if [ -f "$OWNER_FILE" ]
+then
+  OWNER="$(cat "$OWNER_FILE" 2>/dev/null || true)"
+fi
+
+if [ "$FORCE" -ne 1 ]
+then
+  if [ -z "$OWNER" ] || [ "$OWNER" = "external" ] || [ "$OWNER" != "$PPID" ]
+  then
+    echo "srv-stop: [INFO] SERVER '$SRV_NAME' PID=$PID was not started by this caller; leaving it running"
+    echo "srv-stop:        use 'srv-stop --force $SRV_NAME' to stop it explicitly"
+    exit 0
+  fi
+fi
+
+echo "srv-stop: stopping SERVER '$SRV_NAME' PID=$PID${FORCE:+}"
+kill "$PID" 2>/dev/null || true
+
+# Give the process a short opportunity to terminate cleanly. We deliberately
+# avoid SIGKILL here: service-specific hard shutdown is outside this wrapper.
+I=0
+while kill -0 "$PID" 2>/dev/null && [ "$I" -lt 20 ]
+do
+  sleep 0.1
+  I=$((I + 1))
+done
+
+if kill -0 "$PID" 2>/dev/null
+then
+  echo "srv-stop: [WARN] SERVER '$SRV_NAME' PID=$PID is still alive after SIGTERM" >&2
+  exit 1
+fi
+
+rm -f "$PID_FILE" "$OWNER_FILE"
+echo "srv-stop: SERVER '$SRV_NAME' stopped"

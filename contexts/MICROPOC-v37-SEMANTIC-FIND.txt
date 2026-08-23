@@ -1,0 +1,84 @@
+Computer Control API v0 — Semantic Find micro-PoC v37
+
+Finding from v36 physical test
+------------------------------
+The task passed, but find() itself was NOT validated:
+
+  resolver=snapshot-semantic + hierarchy-promotion
+  locator=snapshot
+
+The semantic resolver had bypassed Computer Control after the backend locator
+failed to resolve the query "Wi-Fi".
+
+The observed UI label uses a typographic Unicode dash ("Wi‑Fi"), while the
+query uses ASCII "-". The resolver already normalized those forms, but that
+normalization lived outside Computer Control.
+
+Architectural correction
+------------------------
+find() is a RumiAI semantic observation operation, not a thin alias for:
+
+  agent-ctrl find
+
+v37 contract:
+
+  find({
+    app,
+    query,
+    role,
+    first,
+    snapshot
+  })
+
+Search order:
+
+  1. normalized semantic search over the caller's exact observed snapshot
+  2. backend semantic locator fallback
+
+Computer Control now absorbs representation differences such as:
+
+  Wi-Fi
+  Wi‑Fi
+  Wi–Fi
+
+The resolver no longer owns the normal snapshot fallback when an app identity
+is available.
+
+Normal path
+-----------
+Semantic Resolver
+      |
+      v
+ComputerControl.find(snapshot, query)
+      |
+      +--> normalized snapshot lookup
+      |
+      +--> backend find fallback
+      |
+      v
+semantic @e reference
+      |
+      v
+generic hierarchy promotion (resolver, for CLICK only)
+
+The resolver still owns interaction-purpose semantics such as promoting a
+matched label region to its clickable parent cell.
+
+Physical test
+-------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected diagnostic:
+
+  resolver=computer-control.find + hierarchy-promotion
+  locator=snapshot-normalized-exact
+
+and the already validated:
+
+  selected=true
+  fallback=true
+  windowObserved=true
+  PASS
+
+This validates find() itself rather than merely validating that its caller can
+recover when find() fails.

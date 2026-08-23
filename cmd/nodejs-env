@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export NODEJS_ROOT="$ROOT/bin/nodejs"
+export NODEJS_BIN="$NODEJS_ROOT/bin/node"
+add_path bin/nodejs/bin

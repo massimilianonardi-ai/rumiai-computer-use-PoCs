@@ -1,0 +1,22 @@
+Capability / Competence Selection micro-PoC v17
+
+Problem isolated by Pulsar:
+- tool selection was correct;
+- NEW_DOCUMENT succeeded;
+- Pulsar exposed no editable AX node;
+- raw cg-type therefore had no reliable caret/focus target.
+
+Generic fix (NOT Pulsar-specific):
+1. If an editable AX node exists:
+   AX fill -> clipboard paste -> cg-type fallback.
+2. If no editable AX node exists:
+   - inspect semantic AX nodes with content-like roles;
+   - read each node's AX bounds;
+   - choose the largest non-chrome content region;
+   - click its deterministic AX-derived center;
+   - type with CGEvent.
+3. Verification:
+   AX value/text -> snapshot -> focused editor sentinel:
+   Cmd+A -> clipboard copy -> compare requested text.
+
+No LLM coordinates and no application-name branch are introduced.

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$NODEJS_BIN" nodejs-install
+
+trap 'srv-stop ollama' EXIT INT QUIT TERM HUP PIPE ABRT TSTP
+
+srv-start ollama
+sleep 2
+node "$ROOT/app/context-session-cache-test.js"
+
+srv-stop ollama
+trap - EXIT INT QUIT TERM HUP PIPE ABRT TSTP

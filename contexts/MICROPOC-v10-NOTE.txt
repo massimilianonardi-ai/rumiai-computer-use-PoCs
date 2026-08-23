@@ -1,0 +1,14 @@
+Context Session micro-PoC v10
+
+Only functional change from v9:
+- semantic-ui normText() now collapses common Unicode dash/minus characters to
+  ASCII '-'.
+
+Why:
+- macOS may expose labels such as Wi‑Fi using U+2011/U+2010 while the user types
+  Wi-Fi with ASCII U+002D.
+- NFKC alone does not make those strings equal.
+- The fix is generic semantic normalization; there is no Wi-Fi-specific rule.
+
+Context session, prefix-cache behavior, planner and execution semantics remain
+unchanged.

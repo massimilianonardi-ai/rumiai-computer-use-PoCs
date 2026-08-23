@@ -1,0 +1,61 @@
+Computer Control API v0 — Result-Driven setText micro-PoC v31
+
+Finding from Safari test
+------------------------
+setText() reported:
+  method=ax-fill
+  SET_TEXT_VERIFICATION_FAILED
+
+The previous implementation treated backend action success as sufficient to
+stop trying fallback strategies, then verified only once at the end.
+
+That violates the public Computer Control contract:
+  ok=true means the requested postcondition was achieved and verified.
+
+v31 rule
+--------
+Each strategy is now:
+
+  ACT
+   ↓
+  VERIFY POSTCONDITION
+   ↓
+  success? return VERIFIED
+   ↓ no
+  NEXT DETERMINISTIC STRATEGY
+
+Strategies:
+  1. AX fill
+  2. focus exact element + Cmd+A + clipboard paste
+  3. focus exact element + Cmd+A + keyboard type
+
+Cmd+A makes fallback semantics SET/REPLACE, not append.
+
+Verification order after EACH successful strategy:
+  1. AX get value
+  2. AX get text
+  3. refreshed snapshot exact element line
+  4. explicitly focus the exact element + clipboard sentinel
+
+Global snapshot text is deliberately NOT accepted as proof because the same
+text may exist elsewhere in the UI.
+
+Recovery
+--------
+A fully exhausted deterministic setText operation returns recoveryPolicy=NONE
+through SEARCH/INPUT.
+
+Therefore generic LLM recovery cannot invent unrelated blocker explanations or
+click arbitrary controls merely because a text postcondition was not verified.
+
+Target physical test
+--------------------
+  Apri Safari e cerca OpenAI.
+
+The important log is the setText strategy chain. Desired outcomes include:
+  ax-fill -> verified
+or
+  ax-fill -> unverified -> focus+select-all+clipboard-paste -> verified
+
+Only after setText succeeds will the existing SEARCH path reach focus() and
+press(Enter), allowing focus() validation to continue.

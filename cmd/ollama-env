@@ -1,0 +1,15 @@
+#!/bin/sh
+
+export OLLAMA_ROOT="$ROOT/srv/ollama"
+export OLLAMA_BIN="$OLLAMA_ROOT/ollama"
+export OLLAMA_HOME="$ROOT/home/ollama"
+
+export OLLAMA_MODELS="$MODELS_DIR/ollama"
+export OLLAMA_HOST="127.0.0.1:11434"
+
+export OLLAMA_NO_CLOUD=1
+export OLLAMA_FLASH_ATTENTION=1
+
+# export OLLAMA_CONTEXT_LENGTH=8192
+# export OLLAMA_CONTEXT_LENGTH=16384
+export OLLAMA_CONTEXT_LENGTH=32768

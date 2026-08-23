@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+OLLAMA_URL="https://github.com/ollama/ollama/releases/latest/download/ollama-darwin.tgz"
+
+rm -rf "$OLLAMA_ROOT"
+mkdir -p "$OLLAMA_ROOT"
+curl -fL "$OLLAMA_URL" | tar -xzf - -C "$OLLAMA_ROOT"
+
+HOME="$OLLAMA_HOME" "$OLLAMA_BIN" --version

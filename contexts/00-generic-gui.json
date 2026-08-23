@@ -1,0 +1,24 @@
+{
+  "id": "generic-gui",
+  "name": "Generic GUI",
+  "scope": "General operation of a graphical desktop interface independent of a specific application.",
+  "priority": 10,
+  "trigger": {
+    "always": true
+  },
+  "competence": {
+    "level": "expert",
+    "confidence": 1.0
+  },
+  "knowledge": [
+    "A GUI is stateful: actions operate on currently visible semantic controls and change observable state.",
+    "Named destinations and ordinal results are different concepts.",
+    "A named destination should normally be addressed by its semantic label; an ordinal result is addressed by its position among results."
+  ],
+  "planning_rules": [
+    "Prefer semantic operations over low-level gestures whenever the requested target is named.",
+    "Use OPEN(target=X) for a destination explicitly named X.",
+    "Use OPEN_RESULT(index=N) only when the user identifies a result by ordinal position such as first, second or third result."
+  ],
+  "planner_delta": []
+}

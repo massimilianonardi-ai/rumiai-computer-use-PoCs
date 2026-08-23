@@ -1,0 +1,45 @@
+Provider Registry micro-PoC v29
+
+Reason
+------
+v28 did not reach the click() test because Computer Control.ensureReady()
+correctly requires a registered Provider, while System Settings still existed
+only in the old agent-ctrl APP_ALIASES table.
+
+Fix
+---
+Register common built-in application Providers already known to the PoC:
+
+  System Settings
+  Finder
+  Safari
+
+Provider registry now owns:
+  canonical application name
+  aliases/localized historical names
+  exact installation paths
+  process identity
+  bundle identity
+  related Context ids
+
+This keeps Computer Control independent from executor/app hardcoding.
+
+Cleanup
+-------
+The AXManualAccessibility experiment from the Pulsar investigation is no
+longer invoked by ensureReady(). It is unsupported by TextEdit/Pulsar in the
+observed tests and was adding latency to every normal application activation.
+
+Experimental source/helper files are retained as evidence, but are outside the
+normal Computer Control path.
+
+Dead Pulsar readiness diagnostic helpers were also removed from executors after
+INPUT migrated to ComputerControl.setText().
+
+Target physical test
+--------------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected:
+  ACTIVATE_APP -> ensureReady(System Settings) PASS
+  OPEN         -> ComputerControl.click(...) + semantic OPEN verification PASS

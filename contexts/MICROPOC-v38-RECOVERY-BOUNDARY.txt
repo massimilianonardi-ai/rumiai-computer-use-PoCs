@@ -1,0 +1,88 @@
+Computer Control API v0 — Recovery Boundary micro-PoC v38
+
+Validated entering this version
+-------------------------------
+ensureReady()       VALIDATED
+setText()           VALIDATED
+click()             VALIDATED
+focus()             VALIDATED
+press()             VALIDATED
+snapshot()          VALIDATED
+find()              VALIDATED
+get(text)           VALIDATED
+getCurrentWindow()  VALIDATED
+waitUntilChanged()  VALIDATED
+waitStable()        VALIDATED
+
+Problem
+-------
+recovery.js still bypassed Computer Control with direct agent-ctrl calls:
+
+  press
+  click
+  focus
+  fill
+  deterministic pointer fallback
+  wait-for stable
+
+It also still contained fixed 350ms sleeps.
+
+v38 boundary
+------------
+Recovery decision logic is unchanged.
+
+Execution now uses only public Computer Control operations:
+
+  PRESS -> press()
+  CLICK -> click()
+  FOCUS -> focus()
+  FILL  -> setText()
+
+The recovery layer no longer knows:
+  agent-ctrl command syntax
+  AXRaise failure details
+  deterministic pointer mechanics
+
+Those belong entirely to Computer Control.
+
+Synchronization
+---------------
+Generic recovery action:
+  Computer Control operation
+    -> waitStable()
+    -> retry original intent
+
+We intentionally do NOT require waitUntilChanged() for every generic recovery:
+FOCUS can be a valid corrective action without changing the whole snapshot.
+
+Result locator:
+  click(settle=false)
+    -> waitUntilChanged()
+    -> waitStable()
+
+All fixed 350ms sleeps are removed.
+
+Safety
+------
+This does not broaden LLM authority. The existing rules still decide whether
+recovery is permitted at all. v38 changes HOW an approved corrective action is
+executed, not WHEN the LLM may propose one.
+
+Physical regression test
+------------------------
+Recommended task:
+
+  Apri Safari, cerca OpenAI e apri il primo risultato.
+
+This should exercise SEARCH plus the result-locator path.
+
+Desired locator diagnostics include:
+
+  computer-control.click method=...
+  sync=changed+stable
+  changedAttempts=...
+
+No direct agent-ctrl recovery command should appear.
+
+A genuine blocker/recovery case can be validated separately when one occurs;
+we should not manufacture arbitrary GUI blockers merely to force a recovery.

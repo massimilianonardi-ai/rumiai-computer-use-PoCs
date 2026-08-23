@@ -1,0 +1,47 @@
+Computer Control API v0 — setText micro-PoC v27
+
+Purpose
+-------
+Start the systematic extraction of stable RumiAI Computer Control operations
+from intent executors.
+
+First public operation:
+  setText({ app, element, text, verify=true })
+
+Boundary
+--------
+Executor / Skill:
+  - resolves WHAT semantic editable element is intended
+  - waits for that semantic precondition when necessary
+
+Computer Control:
+  - decides HOW text is inserted
+  - owns backend fallback strategy
+  - owns mechanical verification
+  - returns success only when the requested postcondition is verified
+
+Current backend strategy:
+  1. agent-ctrl AX fill
+  2. focus explicit element + clipboard paste, preserving clipboard
+  3. focus explicit element + keyboard typing
+
+There is no blind typing fallback.
+
+Verification:
+  1. get element value
+  2. get element text
+  3. focused clipboard sentinel verification
+
+Public success semantics:
+  ok=true means requested text was observed after the operation.
+
+Important
+---------
+setText receives an already-resolved actionable @e element. It does not perform
+application/domain semantic resolution and it does not know TextEdit/Pulsar.
+
+This micro-PoC intentionally targets accessibility-rich editors such as
+TextEdit first. Browser/Electron-like surfaces remain a separate future class.
+
+The old Pulsar diagnostic helpers remain in the tree only as retained
+experimental evidence; v27 does not extend Pulsar-specific behavior.

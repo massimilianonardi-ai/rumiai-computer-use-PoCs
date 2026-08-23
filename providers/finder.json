@@ -1,0 +1,21 @@
+{
+  "id": "finder",
+  "name": "Finder",
+  "kind": "application",
+  "aliases": [
+    "Finder"
+  ],
+  "activation": {
+    "application": "Finder"
+  },
+  "availability": {
+    "type": "paths",
+    "paths": [
+      "/System/Library/CoreServices/Finder.app"
+    ]
+  },
+  "contexts": [
+    "macos"
+  ],
+  "capabilities": {}
+}

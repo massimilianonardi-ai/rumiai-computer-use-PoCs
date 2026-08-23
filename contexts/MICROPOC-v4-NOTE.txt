@@ -1,0 +1,18 @@
+Context micro-PoC compressed v4
+
+Planning has two execution modes.
+
+GOAL (default)
+- Optimize for the intended outcome.
+- Equivalent shorter paths are allowed.
+- An obviously wrong OS/application assumption may be repaired when the user's
+  intended result is clear.
+- Example concept: on macOS, a mistaken request mentioning Windows Explorer
+  does not have to be followed literally if Finder is clearly intended.
+
+EXACT (explicit)
+- Enabled only when the user clearly marks the requested method as binding,
+  e.g. "do exactly this", "follow these steps exactly", "fai esattamente così".
+- Explicitly requested operations and order are preserved unless impossible.
+
+Contexts remain compact; executor/runtime behavior is otherwise unchanged.

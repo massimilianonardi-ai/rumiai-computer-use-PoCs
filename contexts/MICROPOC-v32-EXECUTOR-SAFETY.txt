@@ -1,0 +1,57 @@
+Computer Control / Executor Safety micro-PoC v32
+
+Finding from v31 Safari test
+----------------------------
+The physical search flow reached setText/focus, but focus() threw:
+
+  executor exception: focusedEvidence is not defined
+
+This was a v31 refactor regression: focusedEvidence() was accidentally removed
+while focus() still referenced it.
+
+The generic recovery layer then incorrectly interpreted an INTERNAL SOFTWARE
+ERROR as a UI blocker and invented actions such as:
+
+  CLICK "Modifica"
+  reason="privacy warning ..."
+
+Those clicks were unrelated to the requested search.
+
+Fix 1 — restore focus evidence
+------------------------------
+focusedEvidence(snapshot, element) is restored.
+
+focus() can again distinguish:
+  FOCUSED_VERIFIED
+  FOCUS_DELIVERED
+
+Fix 2 — executor exceptions are non-recoverable GUI states
+-----------------------------------------------------------
+Any exception escaping executeIntent() now produces:
+
+  recoveryPolicy=NONE
+  executor exception: ...
+
+The agent loop therefore NEVER asks the recovery LLM to manipulate the UI in
+response to an internal code failure.
+
+Principle:
+  SOFTWARE FAULT != UI BLOCKER
+
+Only observed UI state may justify a UI recovery action.
+
+Fix 3 — richer SEARCH diagnostics
+---------------------------------
+SEARCH now logs:
+  setText method
+  verification method
+  strategy chain
+  focus verification
+  press Enter
+
+Target physical test
+--------------------
+  Apri Safari e cerca OpenAI.
+
+There must be no unsolicited click on "Modifica" or any other unrelated UI
+control. If an internal executor error occurs, execution must stop safely.

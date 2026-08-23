@@ -1,0 +1,454 @@
+"use strict";
+
+const {
+  loadProviders,
+  providerAvailable,
+  providerResolvedPath,
+  providerForApplication,
+} = require("../provider-manager");
+
+const agentCtrl = require("./backends/agent-ctrl");
+const macosNative = require("./backends/macos-native");
+const operations = require("./operations");
+
+const DEFAULT_READY_TIMEOUT_MS = Number(
+  process.env.RUMIAI_APP_READY_TIMEOUT_MS || "12000"
+);
+const READY_POLL_MS = Number(
+  process.env.RUMIAI_APP_READY_POLL_MS || "250"
+);
+
+const DEFAULT_RESOURCE_READY_TIMEOUT_MS = Number(
+  process.env.RUMIAI_RESOURCE_READY_TIMEOUT_MS || "12000"
+);
+const RESOURCE_READY_POLL_MS = Number(
+  process.env.RUMIAI_RESOURCE_READY_POLL_MS || "300"
+);
+
+
+function runtimeInfo() {
+  return agentCtrl.runtimeInfo();
+}
+
+function ensureRuntime() {
+  return agentCtrl.ensureRuntime();
+}
+
+function shutdownRuntime() {
+  return agentCtrl.shutdownRuntime();
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function norm(x) {
+  return String(x || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function sameForeground(provider, observed, identity = null) {
+  if (!provider || !observed?.ok) return false;
+
+  const providerBundle = String(
+    identity?.bundle || provider?.identity?.bundle || ""
+  ).trim();
+
+  if (providerBundle && observed.bundle) {
+    return providerBundle.toLowerCase() === observed.bundle.toLowerCase();
+  }
+
+  const names = [
+    identity?.displayName,
+    identity?.executable,
+    provider.name,
+    provider.activation?.application,
+    provider.identity?.process,
+    ...(Array.isArray(provider.aliases) ? provider.aliases : [])
+  ].map(norm).filter(Boolean);
+
+  return names.includes(norm(observed.name));
+}
+
+function resultError(error, detail, diagnostics = {}) {
+  return {
+    ok:false,
+    error,
+    detail,
+    state:error,
+    diagnostics,
+  };
+}
+
+function resolveApplicationProvider(app) {
+  const providers = loadProviders();
+  return providerForApplication(app, providers);
+}
+
+async function ensureReady(providerOrApp, opts = {}) {
+  const started = performance.now();
+  const timeoutMs = Number(opts.timeoutMs || DEFAULT_READY_TIMEOUT_MS);
+
+  const provider =
+    typeof providerOrApp === "string"
+      ? resolveApplicationProvider(providerOrApp)
+      : providerOrApp;
+
+  if (!provider) {
+    return resultError(
+      "PROVIDER_NOT_FOUND",
+      `No application Provider registered for "${providerOrApp}"`,
+      {provider:providerOrApp}
+    );
+  }
+
+  if (provider.kind !== "application") {
+    return resultError(
+      "UNSUPPORTED_PROVIDER_KIND",
+      `ensureReady only supports application Providers in this micro-PoC`,
+      {provider:provider.id, kind:provider.kind}
+    );
+  }
+
+  if (!providerAvailable(provider)) {
+    return resultError(
+      "PROVIDER_UNAVAILABLE",
+      `Application Provider "${provider.name}" is not installed at a registered path`,
+      {provider:provider.id}
+    );
+  }
+
+  const exactPath = providerResolvedPath(provider);
+  const identity = macosNative.resolveApplicationIdentity(provider, exactPath);
+  const processName =
+    identity.executable ||
+    provider?.identity?.process ||
+    provider?.activation?.application ||
+    provider.name;
+
+  const diagnostics = {
+    provider:provider.id,
+    exactPath,
+    identity,
+    processName,
+    launchAttempted:false,
+    launchMethod:null,
+    switchAttempts:0,
+    snapshotAttempts:0,
+    lastSwitchError:"",
+    lastSnapshotError:"",
+    foreground:null,
+  };
+
+  let actionSeconds = 0;
+  let observeSeconds = 0;
+
+  // Phase 1: if already running, switch-app should be enough.
+  let switched = agentCtrl.switchApplication(provider, identity);
+  diagnostics.switchAttempts += 1;
+  actionSeconds += switched.seconds;
+
+  // Phase 2: if switch fails, launch the exact Provider path through the
+  // backend. No `open -a <name>` guessing is allowed at this layer.
+  if (!switched.ok) {
+    diagnostics.launchAttempted = true;
+
+    const launched = macosNative.launchApplicationBundle(exactPath);
+    actionSeconds += launched.seconds;
+    diagnostics.launchMethod = launched.method;
+    diagnostics.launchEnvironment = launched.launchEnvironment || null;
+
+    if (!launched.ok) {
+      return resultError(
+        "APP_LAUNCH_FAILED",
+        `Could not launch "${provider.name}" through macOS LaunchServices`,
+        {
+          ...diagnostics,
+          backendError:(launched.stderr || launched.stdout || "").trim(),
+          elapsedSeconds:(performance.now() - started) / 1000,
+        }
+      );
+    }
+  }
+
+  // Phase 3: STARTING is an internal lifecycle state, not an LLM recovery
+  // condition. Poll until we can activate, obtain a settled interactive AX
+  // surface, and verify the real macOS foreground app.
+  const deadline = performance.now() + timeoutMs;
+  let snapshot = null;
+  let finalSwitchMethod = switched.ok ? switched.method : null;
+
+  while (performance.now() < deadline) {
+    if (!switched.ok) {
+      switched = agentCtrl.switchApplication(provider, identity);
+      diagnostics.switchAttempts += 1;
+      actionSeconds += switched.seconds;
+
+      if (switched.ok) {
+        finalSwitchMethod = switched.method;
+        diagnostics.lastSwitchError = "";
+      } else {
+        diagnostics.lastSwitchError =
+          (switched.stderr || switched.stdout || "").trim();
+      }
+    }
+
+    if (switched.ok) {
+      const observed = agentCtrl.snapshotApplication(provider, identity, true);
+      diagnostics.snapshotAttempts += 1;
+      observeSeconds += observed.seconds;
+
+      if (observed.ok) {
+        snapshot = observed;
+
+        const front = operations.getForeground();
+        diagnostics.foreground = front.ok
+          ? {name:front.name, bundle:front.bundle}
+          : {error:front.error};
+
+        if (sameForeground(provider, front, identity)) {
+          return {
+            ok:true,
+            state:"READY",
+            provider,
+            currentApp:processName,
+            snapshot:observed.stdout,
+            changed:true,
+            actionSeconds,
+            observeSeconds,
+            detail:
+              `ensureReady provider="${provider.name}"; ` +
+              `path="${exactPath}"; executable="${identity.executable || ""}"; ` +
+              `bundle="${identity.bundle || ""}"; launch=${diagnostics.launchAttempted}; ` +
+              `switch=${finalSwitchMethod || "none"}; ` +              `snapshot=settled; foreground=${front.name}; ` +
+              `switchAttempts=${diagnostics.switchAttempts}; ` +
+              `snapshotAttempts=${diagnostics.snapshotAttempts}`,
+            diagnostics:{
+              ...diagnostics,
+              elapsedSeconds:(performance.now() - started) / 1000,
+            },
+          };
+        }
+      } else {
+        diagnostics.lastSnapshotError =
+          (observed.stderr || observed.stdout || "").trim();
+      }
+    }
+
+    await sleep(READY_POLL_MS);
+  }
+
+  return resultError(
+    "APP_NOT_READY",
+    `Application "${provider.name}" did not reach verified READY state within ${timeoutMs}ms`,
+    {
+      ...diagnostics,
+      elapsedSeconds:(performance.now() - started) / 1000,
+    }
+  );
+}
+
+
+/*
+ * Generic resource synchronization primitive.
+ *
+ * Computer Control owns HOW to observe/poll a desktop Provider reliably.
+ * The caller owns WHAT condition makes its next operation possible.
+ *
+ * predicate(snapshot) may return:
+ *   - false/null: condition not satisfied yet
+ *   - true: condition satisfied
+ *   - any object/value: condition satisfied and returned as evidence
+ *
+ * This deliberately contains no document/editor/Pulsar semantics.
+ */
+async function waitUntilSnapshotCondition(providerOrApp, predicate, opts = {}) {
+  const started = performance.now();
+  const timeoutMs = Number(
+    opts.timeoutMs || DEFAULT_RESOURCE_READY_TIMEOUT_MS
+  );
+  const pollMs = Number(opts.pollMs || RESOURCE_READY_POLL_MS);
+  // Historical resource-readiness behavior uses a full snapshot. Callers that
+  // compare against an existing compact snapshot must explicitly request
+  // compact=true so representation depth itself cannot create a false change.
+  const compact = opts.compact === undefined
+    ? false
+    : Boolean(opts.compact);
+
+  if (typeof predicate !== "function") {
+    return resultError(
+      "INVALID_READY_CONDITION",
+      "waitUntilSnapshotCondition requires a predicate function"
+    );
+  }
+
+  const provider =
+    typeof providerOrApp === "string"
+      ? resolveApplicationProvider(providerOrApp)
+      : providerOrApp;
+
+  if (!provider) {
+    return resultError(
+      "PROVIDER_NOT_FOUND",
+      `No application Provider registered for "${providerOrApp}"`
+    );
+  }
+
+  const exactPath = providerResolvedPath(provider);
+  const identity = macosNative.resolveApplicationIdentity(provider, exactPath);
+  const deadline = performance.now() + timeoutMs;
+
+  let attempts = 0;
+  let observeSeconds = 0;
+  let lastSnapshotError = "";
+  let previousSnapshot = null;
+
+  while (performance.now() < deadline) {
+    const observed = agentCtrl.snapshotApplication(
+      provider,
+      identity,
+      false,
+      {compact}
+    );
+    attempts += 1;
+    observeSeconds += observed.seconds;
+
+    if (observed.ok) {
+      const elapsedMs = performance.now() - started;
+      const snapshotChanged =
+        previousSnapshot === null || observed.stdout !== previousSnapshot;
+
+      if (typeof opts.onObservation === "function") {
+        try {
+          opts.onObservation({
+            snapshot:observed.stdout,
+            attempt:attempts,
+            elapsedMs,
+            changed:snapshotChanged,
+          });
+        } catch {
+          // Diagnostics must never affect synchronization behavior.
+        }
+      }
+
+      previousSnapshot = observed.stdout;
+
+      let evidence = false;
+
+      try {
+        evidence = predicate(observed.stdout);
+      } catch (e) {
+        return resultError(
+          "READY_CONDITION_ERROR",
+          `Resource readiness predicate failed: ${e.message}`,
+          {attempts}
+        );
+      }
+
+      if (evidence) {
+        return {
+          ok:true,
+          state:"CONDITION_READY",
+          provider,
+          snapshot:observed.stdout,
+          evidence:evidence === true ? null : evidence,
+          observeSeconds,
+          waitSeconds:(performance.now() - started) / 1000,
+          attempts,
+          detail:
+            `snapshot condition ready; provider="${provider.name}"; ` +
+            `compact=${compact}; attempts=${attempts}`,
+        };
+      }
+    } else {
+      lastSnapshotError =
+        (observed.stderr || observed.stdout || "").trim();
+    }
+
+    await sleep(pollMs);
+  }
+
+  return resultError(
+    "RESOURCE_NOT_READY",
+    `Required interaction condition did not become true within ${timeoutMs}ms`,
+    {
+      provider:provider.id,
+      attempts,
+      lastSnapshotError,
+      elapsedSeconds:(performance.now() - started) / 1000,
+    }
+  );
+}
+
+
+/*
+ * Public synchronization alias.
+ * Kept separate from the legacy/internal name so Skills/Executors depend on
+ * the RumiAI contract rather than implementation naming.
+ */
+async function waitUntil(providerOrApp, predicate, opts = {}) {
+  return waitUntilSnapshotCondition(providerOrApp, predicate, opts);
+}
+
+/*
+ * Common result-oriented synchronization:
+ * wait until the Provider snapshot differs from a known previous state.
+ */
+async function waitUntilChanged(providerOrApp, previousSnapshot, opts = {}) {
+  const before = String(previousSnapshot || "");
+  const compact = opts.compact === undefined
+    ? true
+    : Boolean(opts.compact);
+
+  const result = await waitUntilSnapshotCondition(
+    providerOrApp,
+    snapshot => snapshot !== before
+      ? {changed:true}
+      : false,
+    {...opts, compact}
+  );
+
+  if (!result.ok) return result;
+
+  return {
+    ...result,
+    state:"CHANGED",
+    changed:true,
+    detail:
+      `snapshot changed; provider="${result.provider?.name || providerOrApp}"; ` +
+      `compact=${compact}; attempts=${result.attempts}`,
+  };
+}
+
+module.exports = {
+  runtimeInfo,
+  ensureRuntime,
+  shutdownRuntime,
+  DEFAULT_READY_TIMEOUT_MS,
+  READY_POLL_MS,
+  DEFAULT_RESOURCE_READY_TIMEOUT_MS,
+  RESOURCE_READY_POLL_MS,
+  resolveApplicationProvider,
+  sameForeground,
+  ensureReady,
+  waitUntilSnapshotCondition,
+  waitUntil,
+  waitUntilChanged,
+  getForeground:operations.getForeground,
+  waitStable:operations.waitStable,
+  getCurrentWindow:operations.getCurrentWindow,
+  snapshot:operations.snapshot,
+  getBounds:operations.getBounds,
+  find:operations.find,
+  get:operations.get,
+  focus:operations.focus,
+  press:operations.press,
+  click:operations.click,
+  setText:operations.setText,
+  clear:operations.clear,
+};

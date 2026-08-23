@@ -1,0 +1,90 @@
+Computer Control — Runtime Boundary micro-PoC v42
+
+Validated entering this version
+-------------------------------
+getForeground() was physically validated in v41:
+
+  foreground-app: Terminale
+  source=computer-control
+  method=macOS lsappinfo
+
+All high-level application semantics now avoid direct agent-ctrl dependency.
+
+Remaining bypass found
+----------------------
+agent-loop.js still imported agent-ctrl only for:
+
+  AGENT_CTRL path
+  ensureDaemon()
+  closeDaemon()
+
+Those are backend runtime lifecycle concerns.
+
+v42
+---
+The active backend now owns:
+
+  runtimeInfo()
+  ensureRuntime()
+  shutdownRuntime()
+
+through:
+  app/computer-control/backends/agent-ctrl.js
+
+Computer Control exposes the backend-neutral facade:
+
+  ComputerControl.runtimeInfo()
+  ComputerControl.ensureRuntime()
+  ComputerControl.shutdownRuntime()
+
+agent-loop.js imports only Computer Control for runtime lifecycle.
+
+It no longer imports app/agent-ctrl.js at all.
+
+Runtime flow
+------------
+RumiAI agent loop
+      |
+      v
+Computer Control runtime facade
+      |
+      v
+active backend
+      |
+      v
+agent-ctrl AX daemon/session
+
+Backend information remains diagnostic only:
+
+  computer-control backend: agent-ctrl | <path>
+
+This does not make RumiAI depend on agent-ctrl as an architectural API.
+agent-ctrl remains the currently selected backend implementation.
+
+Shutdown
+--------
+EOF / exit / SIGINT:
+  cleanupComputerControl()
+    -> shutdownRuntime()
+    -> backend shutdown
+
+Expected physical test
+----------------------
+Any normal task.
+
+Recommended:
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Startup should show:
+  computer-control backend: agent-ctrl | ...
+
+Task should PASS.
+
+Shutdown should show:
+  [computer-control] backend=agent-ctrl runtime closed.
+
+There should be no:
+  [agent-ctrl] daemon closed.
+
+After this validation, agent-loop / executors / semantic-ui / recovery / llm
+will all be free of direct agent-ctrl imports.

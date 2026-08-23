@@ -1,0 +1,13 @@
+{
+  "id": "textedit.text.insert",
+  "provider": "textedit",
+  "realizes": "text.insert",
+  "status": "VALIDATED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "PASS",
+      "verification": "AX text/snapshot"
+    }
+  ]
+}

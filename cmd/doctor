@@ -1,0 +1,167 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+PASS=0
+WARN=0
+FAIL=0
+
+pass()
+{
+  PASS=$((PASS + 1))
+  echo "[PASS] $*"
+}
+
+warn()
+{
+  WARN=$((WARN + 1))
+  echo "[WARN] $*"
+}
+
+fail()
+{
+  FAIL=$((FAIL + 1))
+  echo "[FAIL] $*"
+}
+
+section()
+{
+  echo
+  echo "== $* =="
+}
+
+service_status()
+{
+  NAME="$1"
+  PID_FILE="$ROOT/run/${NAME}.pid"
+  OWNER_FILE="$ROOT/run/${NAME}.owner"
+
+  if [ ! -f "$PID_FILE" ]
+  then
+    echo "[INFO] service $NAME: stopped"
+    return 0
+  fi
+
+  PID="$(cat "$PID_FILE" 2>/dev/null || true)"
+  OWNER="$(cat "$OWNER_FILE" 2>/dev/null || true)"
+
+  case "$PID" in
+    ''|*[!0-9]*)
+      warn "service $NAME: invalid PID file ($PID_FILE)"
+      return 0
+      ;;
+  esac
+
+  if kill -0 "$PID" 2>/dev/null
+  then
+    echo "[INFO] service $NAME: running PID=$PID owner=${OWNER:-unknown}"
+  else
+    warn "service $NAME: stale PID=$PID"
+  fi
+}
+
+echo
+
+echo "RumiAI Computer Use test stack - doctor"
+echo "========================================"
+echo "ROOT:          $ROOT"
+echo "macOS target:  $(uname -s 2>/dev/null || echo unknown) / $(uname -m 2>/dev/null || echo unknown)"
+echo "MODEL_ROOT:    $MODEL_ROOT"
+echo "MODELS_DIR:    $MODELS_DIR"
+echo "OLLAMA_MODELS: $OLLAMA_MODELS"
+echo "OLLAMA_HOST:   $OLLAMA_HOST"
+
+section "Computer Use core"
+
+if [ -x "$NODEJS_BIN" ]
+then
+  NODE_VERSION="$("$NODEJS_BIN" --version 2>/dev/null || true)"
+  pass "Node.js ${NODE_VERSION:-present} ($NODEJS_BIN)"
+
+  if "$NODEJS_BIN" --check "$ROOT/app/agent-loop.js" >/dev/null 2>&1
+  then
+    pass "agent-loop.js syntax"
+  else
+    fail "agent-loop.js syntax check failed"
+  fi
+else
+  fail "Node.js missing: $NODEJS_BIN"
+fi
+
+if [ -x "$AGENT_CTRL_BIN" ]
+then
+  AGENT_CTRL_VERSION="$($AGENT_CTRL_BIN --version 2>/dev/null || true)"
+  pass "agent-ctrl ${AGENT_CTRL_VERSION:-present} ($AGENT_CTRL_BIN)"
+
+  echo "-- agent-ctrl doctor --"
+  if "$AGENT_CTRL_BIN" doctor
+  then
+    pass "agent-ctrl doctor"
+  else
+    fail "agent-ctrl doctor reported a problem"
+  fi
+else
+  fail "agent-ctrl missing: $AGENT_CTRL_BIN"
+fi
+
+if [ -x "$OLLAMA_BIN" ]
+then
+  OLLAMA_VERSION="$(HOME="$OLLAMA_HOME" "$OLLAMA_BIN" --version 2>/dev/null || true)"
+  pass "Ollama ${OLLAMA_VERSION:-present} ($OLLAMA_BIN)"
+else
+  fail "Ollama missing: $OLLAMA_BIN"
+fi
+
+section "Services"
+service_status ollama
+service_status comfyui
+
+section "Ollama model"
+OLLAMA_API="http://$OLLAMA_HOST"
+if curl -fsS --max-time 2 "$OLLAMA_API/api/version" >/dev/null 2>&1
+then
+  pass "Ollama API reachable at $OLLAMA_API"
+
+  TAGS="$(curl -fsS --max-time 4 "$OLLAMA_API/api/tags" 2>/dev/null || true)"
+  if printf '%s' "$TAGS" | grep -F 'ministral-3:3b' >/dev/null 2>&1
+  then
+    pass "model ministral-3:3b available"
+  else
+    fail "model ministral-3:3b not reported by Ollama"
+  fi
+else
+  warn "Ollama API is not running at $OLLAMA_API"
+
+  if [ -d "$OLLAMA_MODELS/manifests" ] && find "$OLLAMA_MODELS/manifests" -type f 2>/dev/null | grep -E '/ministral-3(/|:).*3b|/ministral-3/3b$' >/dev/null 2>&1
+  then
+    pass "local Ollama manifest for ministral-3:3b found"
+  else
+    warn "cannot verify ministral-3:3b while Ollama is stopped"
+  fi
+fi
+
+section "Optional laboratory components"
+if [ -x "$MICROMAMBA_BIN" ]
+then
+  MM_VERSION="$("$MICROMAMBA_BIN" --version 2>/dev/null || true)"
+  pass "micromamba ${MM_VERSION:-present}"
+else
+  warn "micromamba not installed (optional for Computer Use)"
+fi
+
+if [ -f "$COMFYUI_BIN" ]
+then
+  pass "ComfyUI present: $COMFYUI_BIN"
+else
+  warn "ComfyUI not installed (optional for Computer Use)"
+fi
+
+section "Summary"
+echo "PASS=$PASS WARN=$WARN FAIL=$FAIL"
+
+if [ "$FAIL" -gt 0 ]
+then
+  exit 1
+fi
+
+exit 0

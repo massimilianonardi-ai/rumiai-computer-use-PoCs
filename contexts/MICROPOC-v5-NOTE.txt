@@ -1,0 +1,21 @@
+Context micro-PoC goal/exact v5
+
+Purpose:
+Keep GOAL mode flexible without allowing avoidable structural planner errors.
+
+GOAL remains outcome-oriented:
+- redundant user steps may be omitted;
+- equivalent shorter paths are allowed.
+
+EXACT remains method-oriented when explicitly requested.
+
+New deterministic post-plan invariants:
+1. ACTIVATE_APP(app) makes a subsequent OPEN of the same app redundant.
+   Known aliases are canonicalized, so System Preferences after activating
+   System Settings is removed.
+2. OPEN_RESULT requires an explicit ordinal request. If the user names a result
+   and the preceding SEARCH supplies that name, OPEN_RESULT is repaired to
+   OPEN(target=<search query>).
+
+The planner is no longer encouraged to invent platform/application corrections
+for names already recognized by the active context.

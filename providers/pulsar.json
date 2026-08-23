@@ -1,0 +1,36 @@
+{
+  "id": "pulsar",
+  "name": "Pulsar",
+  "kind": "application",
+  "aliases": [
+    "Pulsar"
+  ],
+  "activation": {
+    "application": "Pulsar"
+  },
+  "availability": {
+    "type": "paths",
+    "paths": [
+      "/Applications/Pulsar.app",
+      "~/Applications/Pulsar.app"
+    ]
+  },
+  "contexts": [
+    "text-editing",
+    "pulsar"
+  ],
+  "capabilities": {
+    "text.edit": {
+      "requires_skills": [
+        "application.activate",
+        "document.new",
+        "text.insert"
+      ]
+    }
+  },
+  "identity": {
+    "process": null,
+    "bundle": null,
+    "resolution": "macos-app-bundle"
+  }
+}

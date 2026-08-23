@@ -1,0 +1,36 @@
+Context Session micro-PoC v8
+
+Goal
+----
+Test whether rich operational context can behave as a stable model-session prefix
+instead of being placed after/rebuilt around every volatile task.
+
+Important API fact
+------------------
+Ollama /api/chat still requires the messages array on each HTTP request. There
+is no documented session/KV handle in the current Chat API. The optimization
+comes from Ollama prefix caching and model-state snapshots: identical prefixes
+can reuse previous prompt computation.
+
+PoC layout
+----------
+Stable prefix:
+  planner core -> generic-gui -> macos -> optional active app context
+Volatile suffix:
+  task + GOAL/EXACT mode + output schema
+
+The runtime now retains the currently active application context across tasks.
+A context can also be previewed for planning before its app has been activated.
+
+Measurement
+-----------
+The normal agent log now exposes Ollama prompt_eval_duration/prompt_eval_count
+and eval_duration/eval_count. cmd/context-session-cache-test runs a planner-only
+A/B sequence to make prefix reuse easier to observe without GUI execution.
+
+Computer session state
+----------------------
+The last observed current application and semantic snapshot are retained across
+interactive user tasks. This lets a follow-up task reuse an app context without
+requiring the user to name the application again. This is intentionally a
+minimal PoC; external UI changes between prompts are not yet reconciled.

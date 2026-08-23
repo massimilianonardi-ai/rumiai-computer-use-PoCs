@@ -1,0 +1,17 @@
+Capability / Competence Selection micro-PoC v13
+
+Only functional change from v12:
+- INPUT no longer passes merely because the UI snapshot changed.
+- After typing, the executor finds the refreshed editable control and asks
+  agent-ctrl `get text` for its actual value.
+- INPUT passes only if the requested text is observed either in that control
+  value or in the semantic snapshot.
+
+This strengthens deterministic verification without changing capability
+selection, competence ranking, contexts, planner, session or cache behavior.
+
+Recommended test sequence in one session:
+1. Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+2. Crea un altro nuovo documento di testo e scrivi: Secondo test.
+
+The second task also measures reuse of the text-editing/TextEdit context prefix.

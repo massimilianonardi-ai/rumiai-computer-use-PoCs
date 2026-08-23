@@ -1,0 +1,41 @@
+Computer Control API v0 — click micro-PoC v28
+
+Validated foundation entering this version
+------------------------------------------
+ensureReady() : validated
+setText()     : validated physically on TextEdit
+
+New public operation
+--------------------
+click({ app, element, settle=true, stableTimeoutMs, stablePollMs })
+
+Contract:
+  PRE:
+    element is an already-resolved actionable @e semantic element.
+
+  POST when ok=true:
+    an activation action was successfully delivered to that exact element.
+
+Important boundary:
+  click() verifies/delivers the generic interaction operation.
+  It does NOT claim application-specific semantic outcomes such as:
+    "Wi-Fi pane opened"
+    "search result page loaded"
+
+Those postconditions remain in the Skill/Executor that knows the intent.
+
+Backend strategy:
+  1. agent-ctrl AX click
+  2. only for the known macOS AXRaise failure:
+       Accessibility bounds -> deterministic pointer click
+
+The LLM never sees or generates coordinates.
+
+Migration:
+  OPEN        -> Computer Control click()
+  OPEN_RESULT -> Computer Control click()
+
+Both executors retain their existing semantic verification after click.
+
+This removes direct click/fallback mechanics from the migrated executors and
+keeps agent-ctrl as a backend rather than the RumiAI API contract.

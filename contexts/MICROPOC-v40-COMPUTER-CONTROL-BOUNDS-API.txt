@@ -1,0 +1,61 @@
+Computer Control API v0 — Bounds API micro-PoC v40
+
+Result of v39
+-------------
+The browser result-locator escalated to:
+
+  observationDepth=full
+  agent-ctrl snapshot --target-process Safari --compact false
+  candidates=0
+
+This does NOT mean "Safari is unsupported".
+
+It means:
+  for this OPEN_RESULT state, the current agent-ctrl AX backend did not expose
+  an actionable result-content surface even at full observation depth.
+
+v40 reports that explicitly as:
+
+  SURFACE_NOT_OBSERVABLE
+  capability=result-content.observe
+  backend=agent-ctrl
+
+No browser-specific heuristics, guessed coordinates, or blind clicks are added.
+
+New P0 operation
+----------------
+getBounds({ app, element })
+
+Returns:
+  {x, y, w, h}
+
+The element must already be an actionable semantic @e reference.
+
+Coordinates remain runtime-owned observational data. They are never invented
+by the LLM.
+
+Click fallback integration
+--------------------------
+The existing System Settings AXRaise fallback now becomes:
+
+  native click
+    -> known AXRaise limitation
+    -> ComputerControl.getBounds()
+    -> deterministic pointer click at runtime-computed center
+
+The backend pointer helper accepts the already-observed bounds instead of
+re-reading them outside the public Computer Control operation.
+
+Physical test
+-------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected:
+  fallback=true
+  boundsObserved=true
+  bounds=x,y,w,h
+  selected=true
+  PASS
+
+That validates getBounds() through a real operation rather than a synthetic
+inspection command.

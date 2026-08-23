@@ -1,0 +1,55 @@
+Skills / Competence micro-PoC v18
+
+Architectural separation
+------------------------
+Capability = what outcome/function is required.
+Provider   = what concrete resource can provide a Capability.
+Context    = what RumiAI knows.
+Skill      = what RumiAI knows how to execute.
+Competence = evidence-derived coverage of required Skills for a Capability
+             through a specific Provider.
+
+This revision intentionally does NOT add any new Pulsar fallback.
+
+Registries
+----------
+providers/
+  textedit.json
+  pulsar.json
+
+skills/
+  textedit-activate.json
+  textedit-new-document.json
+  textedit-insert-text.json
+  pulsar-activate.json
+  pulsar-new-document.json
+  pulsar-insert-text.json
+
+Evidence seeded from the already-observed micro-PoC results:
+
+TextEdit / text.edit
+  application.activate  VALIDATED
+  document.new          VALIDATED
+  text.insert           VALIDATED
+  => competence VALIDATED, coverage 3/3
+
+Pulsar / text.edit
+  application.activate  VALIDATED
+  document.new          VALIDATED
+  text.insert           FAILED
+  => competence PARTIAL, coverage 2/3
+
+Selection policy
+----------------
+No explicit provider:
+  choose the available Provider with the strongest derived competence.
+
+Explicit provider:
+  use the requested available Provider even if competence is PARTIAL.
+  GOAL may fall back only if the requested Provider is unavailable.
+  EXACT never substitutes an unavailable explicitly requested Provider.
+
+Contexts no longer contain competence scores, install paths or provider
+capability declarations. Those concerns now live in their own registries.
+
+No automatic learning/status mutation is implemented yet.

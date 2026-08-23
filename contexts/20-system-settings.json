@@ -1,0 +1,37 @@
+{
+  "id": "system-settings",
+  "name": "System Settings",
+  "scope": "Navigation and search inside macOS System Settings.",
+  "priority": 30,
+  "trigger": {
+    "task_contains_any": [
+      "System Settings",
+      "System Preferences",
+      "Impostazioni di Sistema",
+      "Preferenze di Sistema"
+    ],
+    "app_names": [
+      "System Settings",
+      "System Preferences",
+      "Impostazioni di Sistema",
+      "Preferenze di Sistema"
+    ]
+  },
+  "competence": {
+    "level": "expert",
+    "confidence": 0.95
+  },
+  "knowledge": [
+    "System Settings has a searchable collection of named settings destinations such as Bluetooth or Wi-Fi.",
+    "After a search, a result whose destination is explicitly named remains a named semantic destination, not merely an ordinal list item.",
+    "The search field produces dynamic results and does not normally require an additional submit step."
+  ],
+  "planning_rules": [
+    "For 'search for X, then open the X result', plan SEARCH(query=X) followed by OPEN(target=X).",
+    "Reserve OPEN_RESULT(index=N) for requests that explicitly say first result, second result, third result, or another ordinal result.",
+    "Do not replace a named System Settings destination with OPEN_RESULT merely because it appears after a search."
+  ],
+  "planner_delta": [
+    "After SEARCH(X), if the task says open the named X result, use OPEN(target=X); use OPEN_RESULT(index=N) only for an explicit ordinal result."
+  ]
+}

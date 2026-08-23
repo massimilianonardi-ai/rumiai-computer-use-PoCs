@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$COMFYUI_BIN" comfyui-install
+
+micromamba-python -c 'import torch; print("MPS built:", torch.backends.mps.is_built()); print("MPS available:", torch.backends.mps.is_available())'
+micromamba-python "$COMFYUI_BIN" --enable-manager "$@"

@@ -1,0 +1,79 @@
+Computer Control — Strict setText Equality micro-PoC v46
+
+Observed issue
+--------------
+Some setText() verification paths used normalized substring matching:
+
+  observed.includes(requested)
+
+This can report success when the editable surface contains extra or modified
+text, which is incompatible with SET/REPLACE semantics.
+
+v46
+---
+When setText(..., verify=true) returns ok=true, the observed editable value must
+equal the requested string exactly.
+
+Verification sources allowed to prove success:
+  1. exact AX element value
+  2. exact AX element text
+  3. exact clipboard readback bound to the explicitly focused element
+
+The refreshed AX snapshot remains diagnostic evidence only. A serialized
+snapshot element line contains role/ref/structural metadata and cannot by itself
+prove exact string equality without backend-specific parsing.
+
+Transport decoding
+------------------
+The comparison does not trim, lowercase, normalize Unicode, collapse spaces or
+remove punctuation. It only removes the single stdout line ending added by the
+CLI and decodes a JSON-style quoted scalar when agent-ctrl emits one.
+
+Invariant
+---------
+SET success means:
+
+  observed === requested
+
+not:
+
+  observed contains requested
+
+Scope
+-----
+No planner behavior, literal-payload extraction, resolver behavior, Provider
+selection, recovery policy, application state, backend selection, clear()
+semantics, or runtime lifecycle is changed.
+
+Static regression
+-----------------
+Requested:
+
+  Ciao RumiAI.
+
+Must PASS only for:
+
+  Ciao RumiAI.
+
+Must FAIL for examples such as:
+
+  Ciao RumiAI
+  Prefix Ciao RumiAI.
+  Ciao  RumiAI.
+  ciao RumiAI.
+
+Physical retest
+---------------
+Recommended task:
+
+  Crea un nuovo documento di testo e scrivi: Ciao RumiAI.
+
+Expected evidence includes an exact verification method, for example:
+
+  verification=ax-text-exact
+
+and TextEdit physically contains exactly:
+
+  Ciao RumiAI.
+
+The build remains NOT VALIDATED until the physical Mac test passes.

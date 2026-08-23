@@ -1,0 +1,17 @@
+Context micro-PoC goal/exact v7
+
+Validated semantics:
+- GOAL may reinterpret an incompatible method to reach the intended outcome.
+  Example: "on macOS open Explorer..." may become Finder.
+- EXACT preserves the literal application explicitly requested by the user.
+  Example: "fai esattamente così: ... apri Explorer..." keeps Explorer.
+- If ACTIVATE_APP fails in EXACT mode, generic recovery is not allowed to
+  silently substitute another application.
+
+The console now logs:
+  [execution-mode] GOAL
+or
+  [execution-mode] EXACT
+
+Note: the second user test that motivated v7 was truncated before the folder
+name, so it was not a valid comparison of the full requested task.

@@ -1,0 +1,73 @@
+Computer Control API v0 — Synchronization API micro-PoC v35
+
+Validated entering this version
+-------------------------------
+ensureReady()       VALIDATED
+setText()           VALIDATED
+click()             VALIDATED
+focus()             VALIDATED
+press()             VALIDATED
+snapshot()          VALIDATED
+get(text)           VALIDATED
+getCurrentWindow()  VALIDATED
+
+Public synchronization API
+--------------------------
+waitUntil(providerOrApp, predicate, opts)
+
+  Public alias over the generic condition-driven snapshot synchronization
+  mechanism already validated conceptually during resource readiness work.
+
+waitUntilChanged(providerOrApp, previousSnapshot, opts)
+
+  Common specialization:
+    wait until observed UI state differs from a known previous snapshot.
+
+waitStable({ app, timeoutMs, pollMs })
+
+  Wait until the backend reports a stable UI surface and return a fresh
+  Provider snapshot.
+
+Core principle
+--------------
+Synchronize on observed state, not elapsed time.
+
+Migrated in v35
+---------------
+SEARCH:
+  removed direct agent-ctrl wait-for
+  removed fixed 350ms post-submit sleep
+  now:
+    waitUntilChanged()
+    -> waitStable()
+
+OPEN_RESULT:
+  removed fixed 350ms browser-navigation sleep
+  click(settle=false)
+    -> waitUntilChanged()
+    -> waitStable()
+
+NEW_DOCUMENT:
+  removed fixed 250ms sleep
+  press(Cmd+N, settle=false)
+    -> waitUntilChanged()
+    -> waitStable()
+
+Failure semantics
+-----------------
+Synchronization failures are deterministic:
+  recoveryPolicy=NONE
+
+A timing/synchronization failure is not permission for the LLM to invent a UI
+blocker or click unrelated controls.
+
+Expected regression tests
+-------------------------
+1. TextEdit:
+   Usa TextEdit per creare un nuovo documento e scrivi: Ciao RumiAI
+
+2. Safari:
+   Apri Safari e cerca OpenAI.
+
+The first test physically validates the NEW_DOCUMENT changed+stable sequence.
+The second exercises SEARCH changed+stable without arbitrary sleeps.

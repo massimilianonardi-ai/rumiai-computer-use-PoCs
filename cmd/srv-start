@@ -1,0 +1,74 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+SRV_NAME="${1:-}"
+
+if [ -z "$SRV_NAME" ]
+then
+  echo "usage: srv-start <server-name>" >&2
+  exit 2
+fi
+
+SRV_COMMAND="${SRV_NAME}-start"
+LOG_FILE="$ROOT/log/${SRV_NAME}.log"
+PID_FILE="$ROOT/run/${SRV_NAME}.pid"
+OWNER_FILE="$ROOT/run/${SRV_NAME}.owner"
+
+mkdir -p "$ROOT/log" "$ROOT/run"
+
+# A PID file is useful only if the recorded process still exists.
+if [ -f "$PID_FILE" ]
+then
+  PID="$(cat "$PID_FILE" 2>/dev/null || true)"
+
+  case "$PID" in
+    ''|*[!0-9]*)
+      echo "srv-start: [WARN] invalid PID file for SERVER '$SRV_NAME'; cleaning stale state"
+      rm -f "$PID_FILE" "$OWNER_FILE"
+      ;;
+    *)
+      if kill -0 "$PID" 2>/dev/null
+      then
+        # A service that predates ownership tracking is treated as external:
+        # callers may reuse it, but they must not accidentally stop it later.
+        if [ ! -f "$OWNER_FILE" ]
+        then
+          echo "external" > "$OWNER_FILE"
+        fi
+
+        echo "srv-start: [INFO] SERVER '$SRV_NAME' already running PID=$PID; reusing it"
+        exit 0
+      fi
+
+      echo "srv-start: [WARN] stale PID for SERVER '$SRV_NAME' PID=$PID; cleaning state"
+      rm -f "$PID_FILE" "$OWNER_FILE"
+      ;;
+  esac
+fi
+
+if ! command -v "$SRV_COMMAND" >/dev/null 2>&1
+then
+  echo "srv-start: [FATAL] start command not found: $SRV_COMMAND" >&2
+  exit 127
+fi
+
+nohup "$SRV_COMMAND" > "$LOG_FILE" 2>&1 &
+PID="$!"
+
+# Record who actually created this service instance. A later srv-stop called
+# by the same parent process may stop it; unrelated callers will leave it up.
+echo "$PID" > "$PID_FILE"
+echo "$PPID" > "$OWNER_FILE"
+
+# Detect immediate startup failures without imposing service-specific health
+# checks here. Readiness belongs to the individual service, not this wrapper.
+sleep 0.2
+if ! kill -0 "$PID" 2>/dev/null
+then
+  echo "srv-start: [FATAL] SERVER '$SRV_NAME' exited during startup; see $LOG_FILE" >&2
+  rm -f "$PID_FILE" "$OWNER_FILE"
+  exit 1
+fi
+
+echo "srv-start: starting SERVER '$SRV_NAME' PID=$PID owner=$PPID"

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+export AGENT_CTRL_BIN="$ROOT/bin/agent-ctrl"

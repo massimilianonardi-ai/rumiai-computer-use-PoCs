@@ -1,0 +1,60 @@
+Computer Control — Explicit Clear Semantics micro-PoC v47
+
+Observed issue
+--------------
+An empty string previously travelled through setText(), so erase/clear semantics
+were implicit in a generic SET operation. Before strict equality this also risked
+vacuous verification because every string contains the empty string.
+
+v47
+---
+Introduce a public Computer Control operation:
+
+  clear({ app, element, verify=true })
+
+and a semantic planner/executor intent:
+
+  CLEAR(target)
+
+Contracts
+---------
+setText():
+  - represents SET/REPLACE with a non-empty literal payload;
+  - setText("") fails with EMPTY_TEXT_REQUIRES_CLEAR.
+
+clear():
+  - represents erase-all semantics explicitly;
+  - may be idempotent;
+  - success requires exact observed equality with the empty string.
+
+Deterministic clear strategies
+------------------------------
+1. AX fill with empty value
+2. focus exact element + Cmd+A + Backspace
+3. focus exact element + Cmd+A + clipboard paste empty
+
+Verification
+------------
+The same strict v46 postcondition machinery is reused:
+
+  observed === ""
+
+No normalized/substring/vacuous comparison is permitted.
+
+Scope
+-----
+No browser/Electron surface work, clipboard public API, window API expansion,
+provider selection changes, recovery-policy changes, or runtime changes.
+
+Physical test
+-------------
+Recommended EXACT task:
+
+  Fai esattamente così: crea un nuovo documento di testo, inserisci la parola PROVA e poi cancella tutto il testo.
+
+Expected semantic plan contains INPUT followed by CLEAR. INPUT must first make
+the surface non-empty. CLEAR then must report verified=true with an exact empty
+verification method (for example ax-text-exact or ax-value-exact), and the final
+TextEdit document must be physically empty.
+
+The build remains NOT VALIDATED until the physical Mac test passes.

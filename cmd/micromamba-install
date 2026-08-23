@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+MICROMAMBA_URL="https://micro.mamba.pm/api/micromamba/$(uname)-$(uname -m)/latest"
+
+curl -Ls "$MICROMAMBA_URL" | tar -xvj - -C "$ROOT" "bin/micromamba"
+chmod +x "$MICROMAMBA_BIN"
+xattr -dr com.apple.quarantine "$MICROMAMBA_BIN"
+micromamba --version
+
+mkdir -p "$MICROMAMBA_ENV"
+micromamba create -y -p "$MICROMAMBA_ENV" python=3.12

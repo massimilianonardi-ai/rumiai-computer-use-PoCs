@@ -1,0 +1,12 @@
+{
+  "id": "textedit.application.activate",
+  "provider": "textedit",
+  "realizes": "application.activate",
+  "status": "VALIDATED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "PASS"
+    }
+  ]
+}

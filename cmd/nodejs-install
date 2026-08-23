@@ -1,0 +1,10 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+NODEJS_URL="https://nodejs.org/download/release/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz"
+
+rm -rf "$NODEJS_ROOT"
+mkdir -p "$NODEJS_ROOT"
+curl -Ls "$NODEJS_URL" | tar -xvj - -C "$NODEJS_ROOT" --strip-components=1
+node --version

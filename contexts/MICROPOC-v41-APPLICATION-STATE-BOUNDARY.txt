@@ -1,0 +1,111 @@
+Computer Control API v0 — Application State Boundary micro-PoC v41
+
+Validated entering this version
+-------------------------------
+ensureReady()       VALIDATED
+setText()           VALIDATED
+click()             VALIDATED
+focus()             VALIDATED
+press()             VALIDATED
+snapshot()          VALIDATED
+find()              VALIDATED
+get(text)           VALIDATED
+getBounds()         VALIDATED
+getCurrentWindow()  VALIDATED
+waitStable()        VALIDATED
+
+v40 physical evidence for getBounds()
+-------------------------------------
+fallback=true
+boundsObserved=true
+bounds=470,191,222,32
+selected=true
+PASS
+
+Problem found by boundary inventory
+-----------------------------------
+High-level modules still imported app/agent-ctrl.js merely to answer logical
+questions such as:
+
+  What application does this alias mean?
+  Is the requested app already foreground?
+  What is the actual foreground application?
+
+Those are not agent-ctrl concepts.
+
+v41 changes
+-----------
+Provider Registry now owns logical application identity:
+
+  applicationSpec(name)
+  applicationAliasMap()
+  sameApplication(requested, observed)
+
+Therefore aliases such as:
+  System Preferences
+  Impostazioni di Sistema
+  Preferenze di Sistema
+  -> System Settings
+
+come from providers/system-settings.json, not a hard-coded map inside
+agent-ctrl.js.
+
+New public Computer Control operation:
+
+  getForeground()
+
+Implementation:
+  native macOS lsappinfo backend
+
+The agent loop now observes:
+
+  ComputerControl.getForeground()
+
+instead of:
+  agent-ctrl.foregroundApp()
+
+ensureReady() also verifies foreground through the Computer Control/native OS
+observation path.
+
+High-level dependency result
+----------------------------
+llm.js:
+  no direct agent-ctrl dependency
+
+executors.js:
+  no direct agent-ctrl dependency
+
+semantic-ui.js:
+  no direct agent-ctrl dependency
+
+recovery.js:
+  no direct agent-ctrl dependency
+
+agent-loop.js:
+  retains only agent-ctrl daemon bootstrap/shutdown:
+    AGENT_CTRL
+    ensureDaemon()
+    closeDaemon()
+
+That remaining lifecycle dependency belongs to runtime/backend bootstrapping and
+will be isolated separately rather than mixed with application semantics.
+
+Physical test
+-------------
+Any task exercises getForeground() at task start.
+
+Recommended:
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected log:
+  [computer-state] foreground-app: ...
+  | source=computer-control
+  | method=macOS lsappinfo
+
+and the existing:
+  boundsObserved=true
+  selected=true
+  PASS
+
+The test simultaneously regression-checks Provider alias resolution,
+ensureReady(), find(), click(), getBounds(), and getCurrentWindow().

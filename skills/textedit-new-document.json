@@ -1,0 +1,12 @@
+{
+  "id": "textedit.document.new",
+  "provider": "textedit",
+  "realizes": "document.new",
+  "status": "VALIDATED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "PASS"
+    }
+  ]
+}

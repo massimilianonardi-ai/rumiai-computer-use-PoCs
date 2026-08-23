@@ -1,0 +1,22 @@
+{
+  "id": "pulsar",
+  "name": "Pulsar",
+  "type": "application",
+  "scope": "Pulsar text/code editor on macOS.",
+  "priority": 41,
+  "requires": [
+    "text-editing"
+  ],
+  "trigger": {
+    "app_names": [
+      "Pulsar"
+    ]
+  },
+  "knowledge": [
+    "Pulsar is a text/code editor and can create and edit textual documents."
+  ],
+  "planning_rules": [
+    "Use standard editor operations for a new unsaved text buffer."
+  ],
+  "planner_delta": []
+}

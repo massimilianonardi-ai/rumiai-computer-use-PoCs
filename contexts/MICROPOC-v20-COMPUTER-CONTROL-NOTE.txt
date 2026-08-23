@@ -1,0 +1,29 @@
+Computer Control micro-PoC v20
+
+Two fixes from v19.
+
+1. Correct macOS application launch semantics
+---------------------------------------------
+agent-ctrl `launch` is a generic detached-process launcher. It is no longer
+used to cold-start `.app` bundles.
+
+Computer Control now:
+- resolves the exact installed .app path from the Provider;
+- reads CFBundleIdentifier / CFBundleExecutable / names dynamically from
+  Contents/Info.plist;
+- cold-starts the exact bundle via `/usr/bin/open <exact.app.path>`, i.e.
+  macOS LaunchServices semantics as the logged-in desktop user;
+- uses agent-ctrl only for switch-app / snapshot / UI control;
+- switch-app tries exact app path first, then resolved bundle/executable;
+- snapshot targets the dynamically resolved CFBundleExecutable;
+- READY still requires settled AX snapshot + real foreground verification.
+
+There is no Pulsar-specific launch code.
+
+2. agent-ctrl daemon cleanup
+----------------------------
+The interactive PoC now closes the default agent-ctrl daemon when readline
+closes and also through a process `exit` handler (including SIGINT paths).
+This prevents the daemon from remaining alive at high CPU after the test exits.
+
+No INPUT/Skill/Planner behavior changed.

@@ -1,0 +1,13 @@
+{
+  "id": "pulsar.application.activate",
+  "provider": "pulsar",
+  "realizes": "application.activate",
+  "status": "VALIDATED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "PASS",
+      "note": "Activation works once application window is available; readiness remains a driver concern."
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+Computer Control API v0 — Find API micro-PoC v36
+
+Validated entering this version
+-------------------------------
+ensureReady()       VALIDATED
+setText()           VALIDATED
+click()             VALIDATED
+focus()             VALIDATED
+press()             VALIDATED
+snapshot()          VALIDATED
+get(text)           VALIDATED
+getCurrentWindow()  VALIDATED
+waitUntilChanged()  VALIDATED
+waitStable()        VALIDATED
+
+New public operation
+--------------------
+find({ app, query, role=null, first=true })
+
+Purpose:
+  hide backend semantic-locator syntax behind the RumiAI Computer Control API.
+
+v36 backend:
+  agent-ctrl find ...
+
+The public contract does not expose that command and does not require future
+backends to implement lookup in the same way.
+
+Resolver migration
+------------------
+semantic-ui.js no longer imports or calls app/agent-ctrl.js.
+
+When application identity is known:
+  ComputerControl.find()
+    -> returned @e ref
+    -> resolver maps ref into the already-observed snapshot
+    -> optional generic hierarchy promotion for CLICK
+
+If backend find does not resolve:
+  deterministic normalized snapshot matching remains a fallback.
+
+The resolver still owns:
+  role preference
+  editable-role preference
+  CLICK hierarchy promotion
+
+Computer Control owns:
+  generic backend element lookup
+
+Diagnostics
+-----------
+OPEN now reports:
+  resolver=computer-control.find ...
+  locator=agent-ctrl find ...
+
+or:
+  resolver=snapshot-semantic
+
+Physical test
+-------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Desired:
+  resolver=computer-control.find + hierarchy-promotion
+  locator=agent-ctrl find Wi-Fi --first
+  PASS
+
+This test also regression-checks the previously validated click fallback and
+Window API.

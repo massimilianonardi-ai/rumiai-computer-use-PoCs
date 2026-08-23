@@ -1,0 +1,10 @@
+Context Session micro-PoC v9
+
+Only functional change from v8:
+- deterministicPointerClick() now rounds the AX-derived center coordinates
+  before passing them to `agent-ctrl mouse`.
+- This fixes half-pixel values such as 232.5, which the CLI rejects.
+- Coordinates remain fully deterministic and are never produced by the LLM.
+
+Context-session, planner, cache experiment, executors and recovery semantics
+are otherwise unchanged.

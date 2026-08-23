@@ -1,0 +1,17 @@
+Capability / Competence Selection micro-PoC v16
+
+Fixes explicit application selection.
+
+Policy:
+- If the user explicitly names an installed application, that application is
+  selected in both GOAL and EXACT mode.
+- Competence ranking is used only when the user leaves tool choice open.
+- If an explicitly named app is unavailable:
+    GOAL  -> may fall back to the highest-competence installed provider.
+    EXACT -> does not substitute the application.
+
+Examples:
+  "Crea un nuovo documento..." -> TextEdit (highest competence)
+  "Usa Pulsar per creare..."    -> Pulsar (explicit installed application)
+
+No other behavior changed in this revision.

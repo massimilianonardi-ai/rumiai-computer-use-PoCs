@@ -1,0 +1,23 @@
+{
+  "id": "macos",
+  "name": "macOS",
+  "scope": "General macOS desktop conventions and application naming.",
+  "priority": 20,
+  "trigger": {
+    "always": true
+  },
+  "competence": {
+    "level": "expert",
+    "confidence": 0.95
+  },
+  "knowledge": [
+    "The current Computer Use environment is macOS.",
+    "Applications are activated before interacting with their controls.",
+    "The modern system configuration application is named System Settings."
+  ],
+  "planning_rules": [
+    "When a task names an application, activate it before application-specific operations.",
+    "Use the canonical application name System Settings for System Preferences, Preferenze di Sistema or Impostazioni di Sistema."
+  ],
+  "planner_delta": []
+}

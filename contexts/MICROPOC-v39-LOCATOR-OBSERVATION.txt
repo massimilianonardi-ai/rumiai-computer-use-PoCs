@@ -1,0 +1,106 @@
+Computer Control API v0 — Locator Observation micro-PoC v39
+
+Findings from v38 physical test
+-------------------------------
+1. Recovery Boundary itself worked correctly:
+
+   strong blocker: button "Rifiuta tutto"
+   -> deterministic recovery
+   -> ComputerControl.click()
+   -> waitStable()
+   -> recovery PASS
+
+   This physically validates the migrated recovery CLICK path.
+
+2. After the blocker was removed:
+
+   OPEN_RESULT candidates=0
+   state classification=RESULT-LOCATOR
+   locator candidates=0
+
+   The result locator was operating only on the compact application snapshot.
+
+Observation escalation
+----------------------
+The result locator now uses:
+
+  existing compact snapshot
+      |
+      | candidates available?
+      | yes -> continue
+      v no
+  ComputerControl.snapshot(compact=false)
+      |
+      v
+  full accessibility snapshot
+      |
+      v
+  semantic locator candidates
+
+Important safety condition:
+The agent loop invokes this locator only after strongBlockerEvidence() has
+returned false. Therefore deeper observation is not used to bypass a visible
+consent/dialog blocker.
+
+This is generic:
+  insufficient observation -> increase observation depth
+
+There is no Safari-, Google-, or search-engine-specific branch.
+
+Synchronization correctness fix
+-------------------------------
+A second issue was discovered while implementing this:
+
+  waitUntilChanged(previousCompactSnapshot)
+
+was internally observing FULL snapshots.
+
+Therefore the first comparison could report "changed" merely because:
+  compact representation != full representation
+even if the UI itself had not changed.
+
+v39 makes observation depth explicit.
+
+waitUntilSnapshotCondition():
+  default compact=false
+  preserves the full-snapshot behavior required by resource-readiness flows.
+
+waitUntilChanged():
+  default compact=true
+  ordinary state snapshots are compact, so compact is compared with compact.
+
+Result locator after full escalation:
+  previous FULL snapshot
+  -> waitUntilChanged(... compact=false)
+  -> FULL compared with FULL
+
+Rule:
+  STATE CHANGE must compare equivalent representations.
+
+Validation status correction
+----------------------------
+The v35 physical flows succeeded, but their changedAttempts=1 evidence alone
+was not rigorous proof of real UI change because of the compact/full mismatch.
+
+v39 fixes that ambiguity. waitUntilChanged() should be considered fully
+validated only after a new physical test succeeds with same-depth comparison.
+
+Target physical test
+--------------------
+  Apri Safari, cerca OpenAI e apri il primo risultato.
+
+Expected sequence:
+  SEARCH PASS
+  OPEN_RESULT initially finds no simple candidates if compact is insufficient
+  blocker "Rifiuta tutto" may be handled if present
+  result locator:
+    observationDepth=full
+    candidates=>0
+    computer-control.click ...
+    sync=changed+stable
+    syncCompact=false
+    PASS
+
+If full accessibility observation also contains zero actionable candidates,
+that will be evidence of an actual AX surface limitation rather than a
+compact-snapshot limitation.

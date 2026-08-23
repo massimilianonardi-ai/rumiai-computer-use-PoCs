@@ -1,0 +1,61 @@
+Computer Control API v0 — Window API micro-PoC v34
+
+Validated entering this version
+-------------------------------
+ensureReady()      VALIDATED
+setText()          VALIDATED
+click()            VALIDATED
+focus()            VALIDATED
+press()            VALIDATED
+snapshot()         VALIDATED
+get(text)          VALIDATED
+waitUntil()        condition-synchronization PoC
+
+New public Window operation
+---------------------------
+getCurrentWindow({ app })
+
+Returns current-window metadata from the backend.
+
+The Computer Control layer does not interpret the title or infer application
+semantics. The caller/Skill decides what the window metadata means.
+
+Migration
+---------
+OPEN:
+  old:
+    legacy currentWindow()
+  new:
+    ComputerControl.getCurrentWindow()
+
+OPEN still owns semantic verification:
+  target became selected
+  OR
+  current window title reflects target
+
+Diagnostics:
+  windowObserved=true|false
+  windowMethod=...
+  titleMatches=true|false
+
+Scope discipline
+----------------
+This version intentionally does NOT invent:
+  listWindows()
+  focusWindow()
+
+Those operations belong in the Window API only after the active backend has
+demonstrated concrete support or a deterministic native macOS implementation
+is added.
+
+Target physical test
+--------------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected:
+  OPEN PASS
+  windowObserved=true
+  windowMethod=agent-ctrl get window --json
+
+The main OPEN success may still come from selected=true, which is correct:
+window metadata is one source of evidence, not the semantic truth itself.

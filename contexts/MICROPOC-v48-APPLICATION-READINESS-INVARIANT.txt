@@ -1,0 +1,49 @@
+Computer Control — Application Readiness Invariant micro-PoC v48
+
+Observed issue
+--------------
+The first physical v47 CLEAR test used EXACT mode and produced the semantic
+sequence NEW_DOCUMENT -> INPUT -> CLEAR, but no ACTIVATE_APP semantic intent.
+NEW_DOCUMENT then failed because no application was active. CLEAR was never run.
+
+v48
+---
+Treat selected application readiness as a deterministic execution precondition,
+not as a semantic user intent. Before any non-ACTIVATE_APP intent carrying app=X,
+the agent loop verifies both:
+
+  - working state identifies X and has a current snapshot;
+  - the actual foreground application is X.
+
+If either condition is false, the executor uses the existing deterministic
+ACTIVATE_APP/ComputerControl.ensureReady() path for X before executing the
+original semantic intent.
+
+EXACT semantics
+---------------
+No ACTIVATE_APP step is injected into the LLM plan. The user-requested semantic
+order remains unchanged. Provider readiness belongs to HOW, not WHAT.
+
+Recovery boundary
+-----------------
+Failure to establish application readiness is a deterministic precondition
+failure. It does not authorize GUI recovery or application substitution.
+
+Physical regression / validation test
+-------------------------------------
+Repeat the exact blocked v47 task unchanged:
+
+  Fai esattamente così: crea un nuovo documento di testo, inserisci PROVA e poi cancella tutto il testo.
+
+Expected plan:
+  NEW_DOCUMENT -> INPUT(PROVA) -> CLEAR
+
+Expected runtime evidence before NEW_DOCUMENT:
+  precondition PASS | application-ready=TextEdit | source=executor
+
+Expected final CLEAR evidence:
+  computer-control.clear ... verified=true ... verification=...-exact
+
+The final TextEdit document must be physically empty. A PASS simultaneously
+validates the application-readiness invariant and completes the pending v47
+clear() physical validation.

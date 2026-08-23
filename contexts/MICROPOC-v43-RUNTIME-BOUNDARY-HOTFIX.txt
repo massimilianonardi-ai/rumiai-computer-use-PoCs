@@ -1,0 +1,43 @@
+Runtime Boundary hotfix v43
+
+Physical failure in v42
+-----------------------
+The process failed before startup with:
+
+  ReferenceError: cleanupAgentCtrl is not defined
+
+A complete scan found three stale lifecycle references in agent-loop.js:
+
+  cleanupAgentCtrl
+  fs.existsSync(AGENT_CTRL)
+  agent-ctrl path banner using AGENT_CTRL
+
+Fix
+---
+All three are migrated to the Computer Control runtime facade:
+
+  cleanupComputerControl()
+  runtimeInfo()
+  computer-control backend diagnostic
+
+No operation semantics or provider logic changed.
+
+Required invariant
+------------------
+agent-loop.js must contain none of:
+
+  require("./agent-ctrl")
+  cleanupAgentCtrl
+  ensureDaemon
+  closeDaemon
+  AGENT_CTRL
+
+Physical retest
+---------------
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected startup:
+  computer-control backend: agent-ctrl | ...
+
+Expected shutdown:
+  [computer-control] backend=agent-ctrl runtime closed.

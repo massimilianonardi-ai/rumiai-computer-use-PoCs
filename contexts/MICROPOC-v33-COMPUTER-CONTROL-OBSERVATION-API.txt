@@ -1,0 +1,57 @@
+Computer Control API v0 — Observation API micro-PoC v33
+
+Validated entering this version
+-------------------------------
+ensureReady()  VALIDATED
+setText()      VALIDATED
+click()        VALIDATED
+press()        VALIDATED
+focus()        VALIDATED (Safari: verified=true)
+waitUntil()    condition synchronization PoC
+
+New public observation operations
+---------------------------------
+snapshot({ app, settle=false, compact=true, previousSnapshot=null })
+
+  Returns the accessibility representation of a registered application
+  Provider.
+
+  If previousSnapshot is supplied:
+    changed=true|false
+
+  `changed` is a structural observation delta only. It does not claim any
+  semantic task outcome.
+
+get({ app, element, property })
+
+  Reads a property from an already-resolved actionable element.
+
+  v33 properties:
+    text
+    value
+
+  No semantic interpretation occurs in Computer Control.
+
+Migrations
+----------
+observeKnownApp()
+  old: direct snapshotTarget()
+  new: ComputerControl.snapshot()
+
+SEARCH verification
+  old: direct agent-ctrl get text
+  new: ComputerControl.get(property="text")
+
+The semantic checks remain in SEARCH:
+  queryVisible
+  changed
+  search success
+
+This starts moving observation behind the same RumiAI boundary already used
+for interaction.
+
+Not migrated yet
+----------------
+currentWindow() in OPEN remains for the later Window API.
+Legacy wait-for usage remains where it is not yet covered by the public
+synchronization operation.

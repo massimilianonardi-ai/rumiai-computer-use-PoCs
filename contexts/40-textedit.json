@@ -1,0 +1,23 @@
+{
+  "id": "textedit",
+  "name": "TextEdit",
+  "type": "application",
+  "scope": "Apple TextEdit on macOS.",
+  "priority": 40,
+  "requires": [
+    "text-editing"
+  ],
+  "trigger": {
+    "app_names": [
+      "TextEdit"
+    ]
+  },
+  "knowledge": [
+    "TextEdit is a native macOS editor suitable for simple text documents."
+  ],
+  "planning_rules": [
+    "For a simple new text document, use NEW_DOCUMENT followed by INPUT.",
+    "Use CLEAR to erase all text from the active TextEdit document surface."
+  ],
+  "planner_delta": []
+}

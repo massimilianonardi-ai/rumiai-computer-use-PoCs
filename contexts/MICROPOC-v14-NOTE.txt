@@ -1,0 +1,22 @@
+Capability / Competence Selection micro-PoC v14
+
+Only functional change from v13:
+INPUT verification now uses a deterministic hierarchy:
+
+1. agent-ctrl get value <editable-ref>
+2. agent-ctrl get text <editable-ref>
+3. semantic snapshot text
+4. generic clipboard fallback:
+   - save clipboard
+   - select-all on the editable ref
+   - Cmd+C
+   - clipboard read
+   - compare requested text
+   - restore original clipboard
+   - best-effort collapse selection
+
+This is not TextEdit-specific. It applies to native editors whose document
+content is not exposed through the compact AX snapshot/value projection.
+
+Capability selection, competence ranking, Context Session, prefix caching,
+planner and other executors are unchanged.

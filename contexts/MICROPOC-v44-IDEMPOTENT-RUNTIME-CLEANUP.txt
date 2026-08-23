@@ -1,0 +1,61 @@
+Computer Control — Idempotent Runtime Cleanup micro-PoC v44
+
+Physical result from v43
+------------------------
+The Runtime Boundary itself passed:
+
+  startup:
+    computer-control backend: agent-ctrl | ...
+
+  task:
+    PASS
+
+  first shutdown:
+    [computer-control] backend=agent-ctrl runtime closed.
+
+Then a second cleanup attempt occurred:
+
+    [computer-control] runtime close warning:
+    Error: no live daemon for session "default"
+
+Cause
+-----
+Two legitimate process paths converge on cleanup:
+
+  readline "close"
+  process "exit"
+
+The shutdown operation itself is correct, but cleanup was not idempotent.
+
+v44
+---
+cleanupComputerControl() now uses a process-local guard:
+
+  computerControlCleanupDone
+
+First call:
+  shutdownRuntime()
+
+Subsequent calls:
+  return immediately
+
+This preserves the defensive multi-path cleanup registration while guaranteeing
+one backend shutdown attempt per process.
+
+No Computer Control operation, Provider behavior, planner behavior, or backend
+selection logic is changed.
+
+Physical retest
+---------------
+Any normal task is sufficient.
+
+Recommended:
+  Apri Impostazioni di Sistema e apri Wi-Fi.
+
+Expected shutdown:
+  exactly one:
+    [computer-control] backend=agent-ctrl runtime closed.
+
+Expected:
+  no "no live daemon"
+  no second runtime-close warning.

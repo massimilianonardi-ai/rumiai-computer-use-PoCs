@@ -1,0 +1,22 @@
+Context Session micro-PoC v11 — working app vs foreground app
+
+New state distinction:
+- working-app: application retained by the Computer/Context Session as the
+  current work context across user commands.
+- foreground-app: real macOS frontmost application at the instant a new task
+  starts, detected through LaunchServices `lsappinfo`.
+
+Logging:
+  [computer-session] working-app: System Settings
+  [computer-state] foreground-app: Terminal (com.apple.Terminal)
+
+GOAL normalization:
+- If a planned ACTIVATE_APP already matches the REAL foreground app, it is
+  removed as already satisfied.
+- If Terminal/Safari/etc. is foreground, ACTIVATE_APP is preserved even when
+  the working context is still System Settings.
+- EXACT mode is not optimized away: explicitly requested activation remains
+  part of the method.
+
+No changes to Context selection, Ollama prefix caching, semantic executors,
+recovery or locator behavior.

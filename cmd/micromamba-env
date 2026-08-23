@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export MICROMAMBA_BIN="$ROOT/bin/micromamba"
+export MICROMAMBA_ENV="$ROOT/env"
+
+export PIP_CACHE_DIR="$ROOT/home/pip"
+export HF_HOME="$ROOT/home/huggingface"

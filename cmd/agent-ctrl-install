@@ -1,0 +1,12 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+# AGENT_CTRL_URL="https://raw.githubusercontent.com/k4cper-g/agent-ctrl/main/scripts/install-macos.sh"
+#
+# curl -fsSL "$AGENT_CTRL_URL" | sh -s -- --install-dir "$ROOT/bin" --no-path
+# curl -fsSL "$AGENT_CTRL_URL" | sh -s -- --install-dir "$ROOT/bin" --no-path --version "v${AGENT_CTRL_VERSION}"
+
+AGENT_CTRL_URL="https://github.com/k4cper-g/agent-ctrl/releases/download/v0.1.4/agent-ctrl-v0.1.4-aarch64-apple-darwin.tar.gz"
+curl -Ls "$AGENT_CTRL_URL" | tar -xvj - -C "$ROOT/bin" agent-ctrl
+agent-ctrl --version

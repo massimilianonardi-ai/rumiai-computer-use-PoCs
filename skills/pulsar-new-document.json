@@ -1,0 +1,12 @@
+{
+  "id": "pulsar.document.new",
+  "provider": "pulsar",
+  "realizes": "document.new",
+  "status": "VALIDATED",
+  "evidence": [
+    {
+      "source": "micro-poc",
+      "result": "PASS"
+    }
+  ]
+}
