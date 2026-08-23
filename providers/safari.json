@@ -1,0 +1,22 @@
+{
+  "id": "safari",
+  "name": "Safari",
+  "kind": "application",
+  "aliases": [
+    "Safari"
+  ],
+  "activation": {
+    "application": "Safari"
+  },
+  "availability": {
+    "type": "paths",
+    "paths": [
+      "/Applications/Safari.app",
+      "/System/Applications/Safari.app"
+    ]
+  },
+  "contexts": [
+    "macos"
+  ],
+  "capabilities": {}
+}
