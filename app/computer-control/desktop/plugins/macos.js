@@ -421,15 +421,36 @@ function focusWindow(application = {}, window = {}) {
   };
 }
 
-function windowId(window) {
-  if (!window) return null;
-  const value = window?.value || window;
-  return value?.id || window?.id || null;
+function normalizeCloseDescriptor(window = {}) {
+  return {
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || "").trim(),
+    pid:Number(window?.pid || 0),
+    bundle:String(window?.bundle || "").trim(),
+  };
 }
 
-function snapshotWindowId(snapshot) {
-  const match = String(snapshot || "").match(/^# window:\s+(.+?)\s+-/m);
-  return match ? match[1].trim() : null;
+function closeDescriptorComplete(window = {}) {
+  return Boolean(
+    window.title !== null &&
+    String(window.title).length > 0 &&
+    window.process &&
+    Number.isFinite(window.pid) &&
+    window.pid > 0
+  );
+}
+
+function sameCloseDescriptor(expected, current) {
+  return Boolean(
+    current &&
+    current.title === expected.title &&
+    current.process === expected.process &&
+    current.pid === expected.pid
+  );
+}
+
+function countCloseDescriptor(windows, descriptor) {
+  return windows.filter(item => sameCloseDescriptor(descriptor, item)).length;
 }
 
 function closeWindow(application = {}) {
@@ -447,35 +468,119 @@ function closeWindow(application = {}) {
     );
   }
 
-  const before = agentCtrl.getCurrentWindow();
-  observeSeconds += before.seconds || 0;
+  // Establish the target process in agent-ctrl without treating its pid/index
+  // handle as durable identity. v67 proved that a surviving window may reuse
+  // the exact same positional handle after close.
+  const established = listWindows(application);
+  observeSeconds += established.observeSeconds || established.seconds || 0;
 
-  if (!before.ok || !before.window) {
+  if (!established.ok) {
     return {
       ok:false,
       state:"FAILED",
-      error:"WINDOW_OBSERVATION_FAILED",
-      detail:(before.stderr || before.stdout || "current window unavailable before close").trim(),
+      error:established.error || "WINDOW_LIST_FAILED",
+      detail:established.detail || "could not establish application window context",
       platform,
       operation:"closeWindow",
-      method:before.method,
+      method:established.method,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
     };
   }
 
-  const beforeId = windowId(before.window);
-  if (!beforeId) {
+  // Observe the actual focused physical window independently of agent-ctrl's
+  // positional session pin. Cmd+W will act on this frontmost window.
+  const nativeBefore = macosNative.focusedWindowObservation();
+  observeSeconds += nativeBefore.seconds || 0;
+
+  if (!nativeBefore.ok) {
     return {
       ok:false,
       state:"FAILED",
-      error:"WINDOW_ID_UNAVAILABLE",
-      detail:"current window has no stable id before close",
+      error:"WINDOW_OBSERVATION_FAILED",
+      detail:nativeBefore.detail || "native focused window unavailable before close",
       platform,
       operation:"closeWindow",
-      window:before.window,
-      method:before.method,
+      method:nativeBefore.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const target = normalizeCloseDescriptor(nativeBefore);
+  if (!closeDescriptorComplete(target)) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_DESCRIPTOR_INSUFFICIENT",
+      detail:"macOS close verification requires focused title, process and pid",
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:nativeBefore.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const expectedBundle = String(identity.bundle || "").trim();
+  if (
+    (expectedBundle && target.bundle.toLowerCase() !== expectedBundle.toLowerCase()) ||
+    !established.windows.some(item => sameCloseDescriptor(target, item))
+  ) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_TARGET_MISMATCH",
+      detail:"the physically focused window does not belong to the resolved application",
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:nativeBefore.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  // Capture one raw pre-action list from the already established process.
+  // The count, not any id, is the close identity evidence.
+  const rawBefore = agentCtrl.listWindows();
+  observeSeconds += rawBefore.seconds || 0;
+
+  if (!rawBefore.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_LIST_FAILED",
+      detail:(rawBefore.stderr || rawBefore.stdout || "window-list failed before close").trim(),
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:rawBefore.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const beforeWindows = rawBefore.windows.map(normalizeWindow);
+  const descriptorCountBefore = countCloseDescriptor(beforeWindows, target);
+
+  if (descriptorCountBefore < 1) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_TARGET_STALE",
+      detail:"the focused window descriptor is not present immediately before close",
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:rawBefore.method,
+      descriptorCountBefore,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
@@ -493,51 +598,83 @@ function closeWindow(application = {}) {
       detail:(action.stderr || action.stdout || "Cmd+W failed").trim(),
       platform,
       operation:"closeWindow",
-      window:before.window,
+      window:target,
       method:action.method,
+      descriptorCountBefore,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
     };
   }
 
+  // agent-ctrl's stable wait is state-driven. Once the AX surface settles,
+  // enumerate the SAME pinned process directly so a fresh snapshot cannot
+  // introduce a new positional identity assumption.
   const stable = agentCtrl.waitStable(3000, 100);
   observeSeconds += stable.seconds || 0;
 
-  // v59 diagnostic result: agent-ctrl get window may remain stale after a
-  // physically successful close. A fresh AX application snapshot is the
-  // authoritative postcondition. If no snapshot exists, the app has no
-  // observable window. If another window exists, its AX window id must differ
-  // from the pre-close id.
-  const afterSnapshot = agentCtrl.snapshotApplication(
-    provider,
-    identity,
-    false,
-    {compact:true}
-  );
-  observeSeconds += afterSnapshot.seconds || 0;
+  if (!stable.ok) {
+    return {
+      ok:false,
+      state:"UNVERIFIED",
+      error:"WINDOW_CLOSE_STABILITY_FAILED",
+      detail:(stable.stderr || stable.stdout || "AX surface did not settle after close").trim(),
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:action.method,
+      verified:false,
+      verification:"window-descriptor-count-decreased",
+      descriptorCountBefore,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
 
-  const afterId = afterSnapshot.ok
-    ? snapshotWindowId(afterSnapshot.stdout)
-    : null;
+  const rawAfter = agentCtrl.listWindows();
+  observeSeconds += rawAfter.seconds || 0;
 
-  const verified =
-    !afterSnapshot.ok ||
-    (afterId !== null && afterId !== beforeId);
+  if (!rawAfter.ok) {
+    return {
+      ok:false,
+      state:"UNVERIFIED",
+      error:"WINDOW_CLOSE_VERIFICATION_FAILED",
+      detail:(rawAfter.stderr || rawAfter.stdout || "window-list unavailable after close").trim(),
+      platform,
+      operation:"closeWindow",
+      window:target,
+      method:action.method,
+      verified:false,
+      verification:"window-descriptor-count-decreased",
+      descriptorCountBefore,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const afterWindows = rawAfter.windows.map(normalizeWindow);
+  const descriptorCountAfter = countCloseDescriptor(afterWindows, target);
+  const verified = descriptorCountAfter === descriptorCountBefore - 1;
 
   if (!verified) {
     return {
       ok:false,
       state:"UNVERIFIED",
       error:"WINDOW_CLOSE_UNVERIFIED",
-      detail:"close action delivered but the same AX window is still observed",
+      detail:
+        `close action completed but matching window count changed ` +
+        `from ${descriptorCountBefore} to ${descriptorCountAfter}`,
       platform,
       operation:"closeWindow",
-      window:before.window,
-      currentWindow:afterId ? {id:afterId} : null,
+      window:target,
+      currentWindows:afterWindows,
       method:action.method,
       verified:false,
-      verification:"ax-window-absent-or-changed",
+      verification:"window-descriptor-count-decreased",
+      descriptorCountBefore,
+      descriptorCountAfter,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
@@ -549,11 +686,13 @@ function closeWindow(application = {}) {
     state:"CLOSED",
     platform,
     operation:"closeWindow",
-    window:before.window,
-    currentWindow:afterId ? {id:afterId} : null,
+    window:target,
+    currentWindows:afterWindows,
     method:action.method,
     verified:true,
-    verification:"ax-window-absent-or-changed",
+    verification:"window-descriptor-count-decreased",
+    descriptorCountBefore,
+    descriptorCountAfter,
     actionSeconds,
     observeSeconds,
     seconds:actionSeconds + observeSeconds,
