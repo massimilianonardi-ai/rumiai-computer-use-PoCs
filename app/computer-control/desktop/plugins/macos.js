@@ -16,7 +16,7 @@ const CAPABILITIES = Object.freeze({
   "window.list":"DEFERRED",
   "window.current":"IMPLEMENTED",
   "window.focus":"DEFERRED",
-  "window.close":"DEFERRED",
+  "window.close":"IMPLEMENTED",
   "window.minimize":"DEFERRED",
   "window.maximize":"DEFERRED",
   "window.restore":"DEFERRED",
@@ -93,8 +93,115 @@ function focusWindow() {
   return unsupported(platform, "focusWindow");
 }
 
-function closeWindow() {
-  return unsupported(platform, "closeWindow");
+function windowFingerprint(window) {
+  if (!window) return null;
+
+  const value = window?.value || window;
+  const id = value?.id || window?.id || null;
+  if (id) return `id:${id}`;
+
+  try {
+    return `json:${JSON.stringify(window)}`;
+  } catch (_) {
+    return `string:${String(window)}`;
+  }
+}
+
+function closeWindow(application = {}) {
+  let actionSeconds = 0;
+  let observeSeconds = 0;
+
+  const before = agentCtrl.getCurrentWindow();
+  observeSeconds += before.seconds || 0;
+
+  if (!before.ok || !before.window) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_OBSERVATION_FAILED",
+      detail:(before.stderr || before.stdout || "current window unavailable before close").trim(),
+      platform,
+      operation:"closeWindow",
+      method:before.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const beforeFingerprint = windowFingerprint(before.window);
+  const action = agentCtrl.pressKeys("Cmd+W");
+  actionSeconds += action.seconds || 0;
+
+  if (!action.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_CLOSE_ACTION_FAILED",
+      detail:(action.stderr || action.stdout || "Cmd+W failed").trim(),
+      platform,
+      operation:"closeWindow",
+      window:before.window,
+      method:action.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const stable = agentCtrl.waitStable(3000, 100);
+  observeSeconds += stable.seconds || 0;
+
+  const after = agentCtrl.getCurrentWindow();
+  observeSeconds += after.seconds || 0;
+
+  const afterFingerprint =
+    after.ok && after.window
+      ? windowFingerprint(after.window)
+      : null;
+
+  const verified =
+    !after.ok ||
+    !after.window ||
+    (
+      beforeFingerprint !== null &&
+      afterFingerprint !== null &&
+      beforeFingerprint !== afterFingerprint
+    );
+
+  if (!verified) {
+    return {
+      ok:false,
+      state:"UNVERIFIED",
+      error:"WINDOW_CLOSE_UNVERIFIED",
+      detail:"close action delivered but the same current window is still observed",
+      platform,
+      operation:"closeWindow",
+      window:before.window,
+      currentWindow:after.window || null,
+      method:action.method,
+      verified:false,
+      verification:"current-window-changed-or-absent",
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"CLOSED",
+    platform,
+    operation:"closeWindow",
+    window:before.window,
+    currentWindow:after.ok ? (after.window || null) : null,
+    method:action.method,
+    verified:true,
+    verification:"current-window-changed-or-absent",
+    actionSeconds,
+    observeSeconds,
+    seconds:actionSeconds + observeSeconds,
+  };
 }
 
 function minimizeWindow() {
