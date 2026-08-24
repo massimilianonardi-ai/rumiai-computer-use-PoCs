@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v60
 WINDOW LIST OBSERVATION
 
 STATUS
-WIP / PHYSICAL TEST PENDING
+VALIDATED / macOS PHYSICAL PASS
 
 PURPOSE
 Implement the existing Desktop Plugin listWindows() contract on macOS as a read-only observation before exposing it through the public Computer Control facade.
@@ -31,6 +31,31 @@ v59 demonstrated that cached current-window observation may be stale after a clo
 UPSTREAM BACKEND CONTRACT CONFIRMED
 agent-ctrl v0.1.4 documents `window-list` as the command for all top-level windows owned by the pinned process and supports `--json`. Its stable WindowInfo schema includes id, title, process, pid, focused and pinned. Its macOS AX fixture tests window-list physically.
 
+VALIDATION
+Static boundary PASS:
+- backend listWindows function/export PASS
+- agent-ctrl `window-list --json` PASS
+- `windows` array validation PASS
+- macOS `window.list` capability IMPLEMENTED PASS
+- explicit application pin snapshot PASS
+- normalized id/title/process/pid/focused/pinned PASS
+- public facade intentionally unchanged PASS
+
+Physical macOS PASS:
+- two real TextEdit fixture windows opened
+- listWindows state OBSERVED
+- window-count=2
+- both fixture titles returned
+- distinct stable ids returned
+- normalized fields verified
+- one window correctly marked pinned
+- runtime close PASS
+- physical_exit=0
+
+Observed test-only cleanup result:
+- fixture-cleanup=WARN
+This warning is preserved in evidence. It concerns best-effort fixture cleanup and did not affect any v60 observation assertion or the zero exit status.
+
 NON-GOALS
 - No public ComputerControl.listWindows() facade yet.
 - No focusWindow implementation.
@@ -39,16 +64,5 @@ NON-GOALS
 - No semantic planner changes.
 - No UI action changes.
 
-PHYSICAL VALIDATION PLAN
-1. Run static boundary test.
-2. Commit boundary PASS/FAIL.
-3. Create two concrete TextEdit windows using test-only fixtures.
-4. Ensure TextEdit has a valid AX session target.
-5. Call macOS Desktop Plugin listWindows() directly through the contract.
-6. Require both fixture windows to appear in normalized output.
-7. Require stable ids and process metadata.
-8. Require at least one pinned window.
-9. Close test windows/fixtures and runtime.
-10. Commit physical result before any v61 work.
-
-IMPLEMENTED does not mean VALIDATED until the physical test passes.
+CHECKPOINT
+v60 is VALIDATED. Public facade routing belongs to the next micro-PoC and must not retroactively change v60.
