@@ -273,6 +273,86 @@ function listWindows({app} = {}) {
   };
 }
 
+function focusWindow({app, window} = {}) {
+  const started = performance.now();
+
+  if (!app) {
+    return {
+      ok:false,
+      error:"APP_REQUIRED",
+      detail:"focusWindow requires an application",
+      state:"FAILED",
+    };
+  }
+
+  const targetId = String(window?.id || "").trim();
+  if (!targetId) {
+    return {
+      ok:false,
+      error:"WINDOW_ID_REQUIRED",
+      detail:"focusWindow requires a stable window id",
+      state:"FAILED",
+    };
+  }
+
+  const provider = resolveApplicationProvider(app);
+  if (!provider) {
+    return {
+      ok:false,
+      error:"PROVIDER_NOT_FOUND",
+      detail:`No application Provider registered for "${app}"`,
+      state:"FAILED",
+    };
+  }
+
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return {
+      ok:false,
+      error:desktopResolved.error,
+      detail:desktopResolved.detail,
+      state:"FAILED",
+    };
+  }
+
+  // The public contract is intentionally id-first. Metadata returned by a
+  // prior observation is not required for identity and may become stale.
+  const result = desktop.focusWindow(
+    desktopResolved.application,
+    {id:targetId}
+  );
+
+  if (!result?.ok) {
+    return {
+      ok:false,
+      error:result?.error || "WINDOW_FOCUS_FAILED",
+      detail:
+        result?.detail ||
+        `Desktop plugin "${desktop.id}" could not verify window focus`,
+      state:result?.state || "FAILED",
+      window:result?.window || {id:targetId},
+      method:result?.method || `desktop plugin ${desktop.id} focus-window`,
+      verified:false,
+      verificationMethod:result?.verification || "none",
+      actionSeconds:result?.actionSeconds || 0,
+      observeSeconds:result?.observeSeconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"FOCUSED",
+    window:result.window || {id:targetId},
+    method:result.method || `desktop plugin ${desktop.id} focus-window`,
+    verified:result.verified === true,
+    verificationMethod:result.verification || "window-focus-postcondition",
+    actionSeconds:result.actionSeconds || 0,
+    observeSeconds:result.observeSeconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -728,6 +808,7 @@ module.exports = {
   waitStable:operations.waitStable,
   getCurrentWindow,
   listWindows,
+  focusWindow,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
