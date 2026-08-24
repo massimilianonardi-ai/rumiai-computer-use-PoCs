@@ -37,6 +37,12 @@ function functionScope(source, startNeedle, endNeedle) {
   return source.slice(start, end);
 }
 
+const normalizeScope = functionScope(
+  plugin,
+  "function normalizeWindow(window = {})",
+  "function descriptorComplete"
+);
+
 const minimizeScope = functionScope(
   plugin,
   "function minimizeWindow(application = {}, window = {})",
@@ -101,10 +107,11 @@ check(
 );
 check(
   "required full observed descriptor",
-  minimizeScope.includes('id:String(window?.id || "").trim()') &&
-  minimizeScope.includes("title:window?.title") &&
-  minimizeScope.includes('process:String(window?.process || "").trim()') &&
-  minimizeScope.includes("pid:Number(window?.pid || 0)")
+  normalizeScope.includes('id:String(window?.id || "").trim()') &&
+  normalizeScope.includes("title:window?.title") &&
+  normalizeScope.includes('process:String(window?.process || "").trim()') &&
+  normalizeScope.includes("pid:Number(window?.pid || 0)") &&
+  minimizeScope.includes("const observedTarget = normalizeWindow(window)")
 );
 check(
   "required application context through validated base",
