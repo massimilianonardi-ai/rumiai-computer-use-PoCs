@@ -1,0 +1,54 @@
+RumiAI Computer Control micro-PoC v60
+WINDOW LIST OBSERVATION
+
+STATUS
+WIP / PHYSICAL TEST PENDING
+
+PURPOSE
+Implement the existing Desktop Plugin listWindows() contract on macOS as a read-only observation before exposing it through the public Computer Control facade.
+
+ARCHITECTURAL INVARIANT
+RumiAI defines the Desktop Plugin contract; the OS plugin owns HOW to obtain window observations.
+agent-ctrl remains a backend/tool inside the macOS plugin and is not the public architectural API.
+
+SCOPE
+- Add backend agentCtrl.listWindows() using `agent-ctrl window-list --json`.
+- Require valid JSON with a `windows` array.
+- Mark macOS Desktop capability `window.list` IMPLEMENTED.
+- macOS listWindows(application) explicitly pins the resolved application with a fresh read-only snapshot before enumeration.
+- Normalize each returned window to:
+  id
+  title
+  process
+  pid
+  focused
+  pinned
+- Keep ComputerControl facade unchanged in v60.
+
+WHY THIS STEP
+v59 demonstrated that cached current-window observation may be stale after a close while a fresh AX observation is authoritative. A first-class window enumeration primitive gives RumiAI a stronger observation basis for future focus/minimize/maximize/restore work.
+
+UPSTREAM BACKEND CONTRACT CONFIRMED
+agent-ctrl v0.1.4 documents `window-list` as the command for all top-level windows owned by the pinned process and supports `--json`. Its stable WindowInfo schema includes id, title, process, pid, focused and pinned. Its macOS AX fixture tests window-list physically.
+
+NON-GOALS
+- No public ComputerControl.listWindows() facade yet.
+- No focusWindow implementation.
+- No minimize/maximize/restore/move/resize implementation.
+- No Windows/Linux RumiAI plugin implementation claims.
+- No semantic planner changes.
+- No UI action changes.
+
+PHYSICAL VALIDATION PLAN
+1. Run static boundary test.
+2. Commit boundary PASS/FAIL.
+3. Create two concrete TextEdit windows using test-only fixtures.
+4. Ensure TextEdit has a valid AX session target.
+5. Call macOS Desktop Plugin listWindows() directly through the contract.
+6. Require both fixture windows to appear in normalized output.
+7. Require stable ids and process metadata.
+8. Require at least one pinned window.
+9. Close test windows/fixtures and runtime.
+10. Commit physical result before any v61 work.
+
+IMPLEMENTED does not mean VALIDATED until the physical test passes.
