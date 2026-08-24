@@ -81,6 +81,17 @@ function getSystemSettingsApplication() {
   };
 }
 
+function normalizeWindow(window) {
+  return {
+    id:String(window?.id || "").trim(),
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || "").trim(),
+    pid:Number(window?.pid || 0),
+    focused:window?.focused === true,
+    pinned:window?.pinned === true,
+  };
+}
+
 function listWindows(application = {}) {
   const provider = application?.provider || null;
   const identity = application?.identity || null;
@@ -136,14 +147,7 @@ function listWindows(application = {}) {
     };
   }
 
-  const windows = listed.windows.map(window => ({
-    id:String(window?.id || ""),
-    title:window?.title == null ? null : String(window.title),
-    process:String(window?.process || ""),
-    pid:Number(window?.pid || 0),
-    focused:window?.focused === true,
-    pinned:window?.pinned === true,
-  }));
+  const windows = listed.windows.map(normalizeWindow);
 
   return {
     ok:true,
@@ -161,13 +165,42 @@ function getCurrentWindow() {
   return agentCtrl.getCurrentWindow();
 }
 
+function normalizeFocusDescriptor(window = {}) {
+  return {
+    id:String(window?.id || "").trim(),
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || "").trim(),
+    pid:Number(window?.pid || 0),
+  };
+}
+
+function focusDescriptorComplete(window = {}) {
+  return Boolean(
+    window.id &&
+    window.title !== null &&
+    String(window.title).length > 0 &&
+    window.process &&
+    Number.isFinite(window.pid) &&
+    window.pid > 0
+  );
+}
+
+function sameFocusDescriptor(expected, current) {
+  return Boolean(
+    current &&
+    current.title === expected.title &&
+    current.process === expected.process &&
+    current.pid === expected.pid
+  );
+}
+
 function focusWindow(application = {}, window = {}) {
   let actionSeconds = 0;
   let observeSeconds = 0;
 
   const provider = application?.provider || null;
   const identity = application?.identity || null;
-  const targetId = String(window?.id || "").trim();
+  const observedTarget = normalizeFocusDescriptor(window);
 
   if (!provider || !identity) {
     return unsupported(
@@ -177,62 +210,123 @@ function focusWindow(application = {}, window = {}) {
     );
   }
 
-  if (!targetId) {
+  if (!observedTarget.id) {
     return {
       ok:false,
       state:"FAILED",
-      error:"WINDOW_ID_REQUIRED",
-      detail:"focusWindow requires a stable window id",
+      error:"WINDOW_HANDLE_REQUIRED",
+      detail:"focusWindow requires an observed window handle",
       platform,
       operation:"focusWindow",
-      method:"window id validation",
+      method:"window handle validation",
       actionSeconds,
       observeSeconds,
       seconds:0,
     };
   }
 
-  // Establish the application's current window set and prove the target id
-  // belongs to it. This initial observation may pin one app window; after the
-  // focus action no snapshot is allowed before verification because a targeted
-  // snapshot could overwrite the session pin we are trying to verify.
-  const before = listWindows(application);
-  observeSeconds += before.observeSeconds || before.seconds || 0;
-
-  if (!before.ok) {
+  // v64 proved macOS agent-ctrl ids are pid/index action handles that can
+  // rebind when AXWindows ordering changes. The old id alone is therefore not
+  // sufficient to identify the intended physical window.
+  if (!focusDescriptorComplete(observedTarget)) {
     return {
       ok:false,
       state:"FAILED",
-      error:before.error || "WINDOW_LIST_FAILED",
-      detail:before.detail || "could not observe application windows before focus",
+      error:"WINDOW_DESCRIPTOR_INSUFFICIENT",
+      detail:"macOS safe focus requires observed id, title, process and pid",
       platform,
       operation:"focusWindow",
-      window:{id:targetId},
-      method:before.method,
+      window:observedTarget,
+      method:"window descriptor validation",
+      actionSeconds,
+      observeSeconds,
+      seconds:0,
+    };
+  }
+
+  // First establish the resolved application's agent-ctrl session context.
+  const established = listWindows(application);
+  observeSeconds += established.observeSeconds || established.seconds || 0;
+
+  if (!established.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:established.error || "WINDOW_LIST_FAILED",
+      detail:established.detail || "could not establish application window context",
+      platform,
+      operation:"focusWindow",
+      window:observedTarget,
+      method:established.method,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
     };
   }
 
-  const targetBefore = before.windows.find(item => item.id === targetId) || null;
-  if (!targetBefore) {
+  // Read one raw list immediately before the action. This does not perform a
+  // new snapshot/pin. Resolve the physical target descriptor to the CURRENT
+  // action handle rather than trusting the previously observed pid/index id.
+  const fresh = agentCtrl.listWindows();
+  observeSeconds += fresh.seconds || 0;
+
+  if (!fresh.ok) {
     return {
       ok:false,
       state:"FAILED",
-      error:"WINDOW_NOT_FOUND",
-      detail:`window ${targetId} is not owned by the resolved application`,
+      error:"WINDOW_LIST_FAILED",
+      detail:(fresh.stderr || fresh.stdout || "window-list failed before focus").trim(),
       platform,
       operation:"focusWindow",
-      window:{id:targetId},
-      method:before.method,
+      window:observedTarget,
+      method:fresh.method,
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
     };
   }
 
-  const action = agentCtrl.focusWindow(targetId);
+  const currentWindows = fresh.windows.map(normalizeWindow);
+  const matches = currentWindows.filter(item =>
+    sameFocusDescriptor(observedTarget, item)
+  );
+
+  if (matches.length === 0) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_TARGET_STALE",
+      detail:"the observed window descriptor is no longer present",
+      platform,
+      operation:"focusWindow",
+      window:observedTarget,
+      method:fresh.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  if (matches.length !== 1) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_TARGET_AMBIGUOUS",
+      detail:`the observed window descriptor matches ${matches.length} current windows`,
+      platform,
+      operation:"focusWindow",
+      window:observedTarget,
+      method:fresh.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
+  const currentTarget = matches[0];
+  const handleRebound = currentTarget.id !== observedTarget.id;
+
+  const action = agentCtrl.focusWindow(currentTarget.id);
   actionSeconds += action.seconds || 0;
 
   if (!action.ok) {
@@ -243,67 +337,54 @@ function focusWindow(application = {}, window = {}) {
       detail:(action.stderr || action.stdout || "focus-window failed").trim(),
       platform,
       operation:"focusWindow",
-      window:targetBefore,
+      window:{
+        title:observedTarget.title,
+        process:observedTarget.process,
+        pid:observedTarget.pid,
+      },
+      observedHandle:observedTarget.id,
+      actionHandle:currentTarget.id,
+      handleRebound,
       method:action.method,
       verified:false,
-      verification:"window-list-target-pinned",
+      verification:"native-focused-window-descriptor",
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
     };
   }
 
-  // Read the session window state directly. Do NOT call plugin listWindows()
-  // here: it deliberately snapshots by process and could re-pin a different
-  // window, destroying the postcondition we need to observe.
-  const after = agentCtrl.listWindows();
-  observeSeconds += after.seconds || 0;
+  // v65 validated this native observer against an independent physical
+  // TextEdit front-document observation. It is independent of agent-ctrl's
+  // positional pin and therefore remains valid even when pid/index ids rebind.
+  const verified = macosNative.waitForFocusedWindow({
+    pid:observedTarget.pid,
+    process:observedTarget.process,
+    title:observedTarget.title,
+    bundle:identity.bundle || "",
+  });
+  observeSeconds += verified.observeSeconds || verified.seconds || 0;
 
-  if (!after.ok) {
-    return {
-      ok:false,
-      state:"UNVERIFIED",
-      error:"WINDOW_FOCUS_VERIFICATION_FAILED",
-      detail:(after.stderr || after.stdout || "window-list unavailable after focus").trim(),
-      platform,
-      operation:"focusWindow",
-      window:targetBefore,
-      method:action.method,
-      verified:false,
-      verification:"window-list-target-pinned",
-      actionSeconds,
-      observeSeconds,
-      seconds:actionSeconds + observeSeconds,
-    };
-  }
-
-  const targetAfterRaw = after.windows.find(
-    item => String(item?.id || "") === targetId
-  ) || null;
-
-  const targetAfter = targetAfterRaw ? {
-    id:String(targetAfterRaw.id || ""),
-    title:targetAfterRaw.title == null ? null : String(targetAfterRaw.title),
-    process:String(targetAfterRaw.process || ""),
-    pid:Number(targetAfterRaw.pid || 0),
-    focused:targetAfterRaw.focused === true,
-    pinned:targetAfterRaw.pinned === true,
-  } : null;
-
-  const verified = Boolean(targetAfter && targetAfter.pinned === true);
-
-  if (!verified) {
+  if (!verified.ok) {
     return {
       ok:false,
       state:"UNVERIFIED",
       error:"WINDOW_FOCUS_UNVERIFIED",
-      detail:"focus action completed but target window is not pinned afterwards",
+      detail:verified.detail || "native focused window did not match target descriptor",
       platform,
       operation:"focusWindow",
-      window:targetAfter || targetBefore,
+      window:{
+        title:observedTarget.title,
+        process:observedTarget.process,
+        pid:observedTarget.pid,
+      },
+      observedHandle:observedTarget.id,
+      actionHandle:currentTarget.id,
+      handleRebound,
+      nativeWindow:verified.observed || null,
       method:action.method,
       verified:false,
-      verification:"window-list-target-pinned",
+      verification:"native-focused-window-descriptor",
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
@@ -315,10 +396,25 @@ function focusWindow(application = {}, window = {}) {
     state:"FOCUSED",
     platform,
     operation:"focusWindow",
-    window:targetAfter,
+    window:{
+      title:observedTarget.title,
+      process:observedTarget.process,
+      pid:observedTarget.pid,
+    },
+    observedHandle:observedTarget.id,
+    actionHandle:currentTarget.id,
+    handleRebound,
+    nativeWindow:{
+      title:verified.title,
+      process:verified.process,
+      pid:verified.pid,
+      bundle:verified.bundle,
+      identifier:verified.identifier,
+      windowNumber:verified.windowNumber,
+    },
     method:action.method,
     verified:true,
-    verification:"window-list-target-pinned",
+    verification:"native-focused-window-descriptor",
     actionSeconds,
     observeSeconds,
     seconds:actionSeconds + observeSeconds,
