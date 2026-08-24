@@ -1,0 +1,55 @@
+RumiAI Computer Control micro-PoC v57 — Operations Desktop Boundary
+
+Goal
+----
+Complete the Desktop Plugin boundary inside app/computer-control/operations.js without changing validated Computer Control semantics.
+
+Invariant
+---------
+Desktop/OS-specific application identity and foreground observation belong to the selected Desktop Plugin.
+UI observation/action mechanics remain in the UI backend.
+
+v57 changes
+-----------
+- operations.js loads the selected Desktop Plugin through loadDesktopPlugin().
+- resolveProviderIdentity() uses desktop.resolveApplication().
+- getForeground() uses desktop.getForegroundApplication().
+- direct macosNative dependency is removed from operations.js.
+
+Intentionally unchanged
+-----------------------
+- agent-ctrl remains the current UI backend for snapshot/find/get/focus/press/click/setText/clear mechanics.
+- deterministic AX-bounds pointer fallback is unchanged.
+- exact text verification is unchanged.
+- clear semantics are unchanged.
+- macOS-specific keyboard chords currently used inside fallback strategies are NOT addressed by v57; shortcut normalization is a separate boundary/micro-PoC.
+- no new Windows or Linux GUI capability is claimed.
+
+Validation
+----------
+1. Static boundary test:
+   sh ./cmd/operations-desktop-boundary-test
+
+Expected:
+- Desktop Plugin loader/resolution/foreground tokens present.
+- UI backend tokens retained.
+- no direct macosNative/native identity/native foreground calls.
+- operations-boundary=PASS
+
+2. Physical macOS end-to-end regression:
+   ./cmd/agent-ctrl-start-cu-test
+
+Task:
+Fai esattamente così: crea un nuovo documento di testo, inserisci PROVA e poi cancella tutto il testo.
+
+Expected physical invariants:
+- desktop=macos readiness path remains valid.
+- NEW_DOCUMENT PASS.
+- INPUT exact verification PASS.
+- CLEAR exact verification PASS.
+- no recovery inference.
+- runtime cleanup succeeds.
+
+Status
+------
+WIP / PHYSICAL TEST PENDING until the boundary test and end-to-end run are observed on macOS ARM64.
