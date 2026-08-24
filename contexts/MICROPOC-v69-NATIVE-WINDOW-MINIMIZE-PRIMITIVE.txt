@@ -1,0 +1,60 @@
+RumiAI Computer Control micro-PoC v69
+NATIVE WINDOW MINIMIZE PRIMITIVE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Validate the generic macOS Accessibility primitive required for Desktop Plugin `window.minimize` before changing production behavior.
+
+ARCHITECTURAL CONTEXT
+- agent-ctrl 0.1.4 does not expose a native `minimize-window` command.
+- RumiAI Desktop Plugin contract already reserves `window.minimize`, currently DEFERRED on macOS.
+- v64-v68 established that pid/index window ids are ephemeral action handles and must not be treated as durable identities.
+- Therefore minimize must be implemented through a macOS-native window primitive and verified through physical state, not by extending the unsafe handle model.
+
+APPLE AX BASIS
+Apple Accessibility exposes `kAXMinimizedAttribute` for windows and `AXUIElementSetAttributeValue` for setting writable accessibility attributes. v69 validates this primitive physically before any production integration.
+
+TEST-ONLY HELPER
+`tools/macos-window-minimized.swift`
+
+Contract:
+- input: `<pid> <exact-title> <observe|minimize|restore>`
+- resolve application through `AXUIElementCreateApplication(pid)`
+- enumerate `kAXWindowsAttribute`
+- require exactly one exact title match inside the supplied process
+- read `kAXMinimizedAttribute`
+- query `AXUIElementIsAttributeSettable`
+- for `minimize`, set `kAXMinimizedAttribute=true`
+- for `restore`, set `kAXMinimizedAttribute=false`
+- read the attribute again and emit JSON
+- fail closed on absent or ambiguous target
+
+WHY TITLE IS ACCEPTABLE HERE
+This helper is diagnostic only and the fixture uses a unique exact title inside one known PID. It does not define a durable public window identity. A future production operation will reuse the safe descriptor/re-resolution rules validated in v66.
+
+BOUNDARY SUCCESS
+- Swift helper compiles.
+- Uses AX application/window APIs and `kAXMinimizedAttribute`.
+- Checks settable state before mutation.
+- Exact descriptor match is process-scoped and ambiguity fails closed.
+- No `Cmd+M` implementation.
+- No AppleScript implementation.
+- No production files changed.
+
+PHYSICAL PLAN AFTER BOUNDARY PASS
+1. Open a uniquely titled TextEdit fixture.
+2. Resolve its PID/title through existing public observation.
+3. Observe `minimized=false` through the native helper.
+4. Set minimized=true.
+5. Require native readback `true` and visible physical minimization.
+6. Restore to false only as fixture cleanup and require readback false.
+7. Commit exact physical result before production minimize integration.
+
+NON-GOALS
+- No public `ComputerControl.minimizeWindow()` yet.
+- No Desktop Plugin capability change yet.
+- No maximize/restore contract yet.
+- No Windows/Linux claim.
+- No durable window identity.
