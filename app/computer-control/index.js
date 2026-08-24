@@ -211,6 +211,73 @@ function getCurrentWindow({app} = {}) {
   };
 }
 
+function closeWindow({app} = {}) {
+  const started = performance.now();
+
+  if (!app) {
+    return {
+      ok:false,
+      error:"APP_REQUIRED",
+      detail:"closeWindow requires an application",
+      state:"FAILED",
+    };
+  }
+
+  const provider = resolveApplicationProvider(app);
+  if (!provider) {
+    return {
+      ok:false,
+      error:"PROVIDER_NOT_FOUND",
+      detail:`No application Provider registered for "${app}"`,
+      state:"FAILED",
+    };
+  }
+
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return {
+      ok:false,
+      error:desktopResolved.error,
+      detail:desktopResolved.detail,
+      state:"FAILED",
+    };
+  }
+
+  const result = desktop.closeWindow(desktopResolved.application);
+
+  if (!result?.ok) {
+    return {
+      ok:false,
+      error:result?.error || "WINDOW_CLOSE_FAILED",
+      detail:
+        result?.detail ||
+        `Desktop plugin "${desktop.id}" could not verify window close`,
+      state:result?.state || "FAILED",
+      window:result?.window || null,
+      currentWindow:result?.currentWindow || null,
+      method:result?.method || `desktop plugin ${desktop.id} close-window`,
+      verified:false,
+      verificationMethod:result?.verification || "none",
+      actionSeconds:result?.actionSeconds || 0,
+      observeSeconds:result?.observeSeconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"CLOSED",
+    window:result.window || null,
+    currentWindow:result.currentWindow || null,
+    method:result.method || `desktop plugin ${desktop.id} close-window`,
+    verified:result.verified === true,
+    verificationMethod:result.verification || "current-window-changed-or-absent",
+    actionSeconds:result.actionSeconds || 0,
+    observeSeconds:result.observeSeconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 async function ensureReady(providerOrApp, opts = {}) {
   const started = performance.now();
   const timeoutMs = Number(opts.timeoutMs || DEFAULT_READY_TIMEOUT_MS);
@@ -598,6 +665,7 @@ module.exports = {
   getForeground,
   waitStable:operations.waitStable,
   getCurrentWindow,
+  closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
   find:operations.find,
