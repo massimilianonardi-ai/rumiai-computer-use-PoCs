@@ -352,6 +352,26 @@ function listWindows() {
   }
 }
 
+function focusWindow(windowId) {
+  const id = String(windowId || "").trim();
+
+  if (!id) {
+    return {
+      ok:false,
+      code:1,
+      seconds:0,
+      stdout:"",
+      stderr:"window id is required",
+      method:"agent-ctrl focus-window",
+    };
+  }
+
+  return runAction(
+    ["focus-window", id, "--json"],
+    `agent-ctrl focus-window ${id} --json`
+  );
+}
+
 function getElementValue(ref) {
   return getElementProperty(ref, "value");
 }
@@ -403,6 +423,7 @@ module.exports = {
   focusElement,
   getCurrentWindow,
   listWindows,
+  focusWindow,
   findElement,
   getElementBounds,
   getElementProperty,
