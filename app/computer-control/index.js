@@ -150,6 +150,67 @@ function getForeground() {
   };
 }
 
+function getCurrentWindow({app} = {}) {
+  const started = performance.now();
+
+  if (!app) {
+    return {
+      ok:false,
+      error:"APP_REQUIRED",
+      detail:"getCurrentWindow requires an application",
+      state:"FAILED",
+    };
+  }
+
+  const provider = resolveApplicationProvider(app);
+  if (!provider) {
+    return {
+      ok:false,
+      error:"PROVIDER_NOT_FOUND",
+      detail:`No application Provider registered for "${app}"`,
+      state:"FAILED",
+    };
+  }
+
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return {
+      ok:false,
+      error:desktopResolved.error,
+      detail:desktopResolved.detail,
+      state:"FAILED",
+    };
+  }
+
+  const observed = desktop.getCurrentWindow(desktopResolved.application);
+
+  if (!observed?.ok || !observed.window) {
+    return {
+      ok:false,
+      error:"WINDOW_OBSERVATION_FAILED",
+      detail:(
+        observed?.detail ||
+        observed?.stderr ||
+        observed?.stdout ||
+        "current window unavailable"
+      ).trim(),
+      state:"FAILED",
+      method:observed?.method || `desktop plugin ${desktop.id} current-window observation`,
+      observeSeconds:observed?.seconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"OBSERVED",
+    window:observed.window,
+    method:observed.method || `desktop plugin ${desktop.id} current-window observation`,
+    observeSeconds:observed.seconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 async function ensureReady(providerOrApp, opts = {}) {
   const started = performance.now();
   const timeoutMs = Number(opts.timeoutMs || DEFAULT_READY_TIMEOUT_MS);
@@ -536,7 +597,7 @@ module.exports = {
   waitUntilChanged,
   getForeground,
   waitStable:operations.waitStable,
-  getCurrentWindow:operations.getCurrentWindow,
+  getCurrentWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
   find:operations.find,
