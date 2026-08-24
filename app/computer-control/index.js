@@ -211,6 +211,68 @@ function getCurrentWindow({app} = {}) {
   };
 }
 
+function listWindows({app} = {}) {
+  const started = performance.now();
+
+  if (!app) {
+    return {
+      ok:false,
+      error:"APP_REQUIRED",
+      detail:"listWindows requires an application",
+      state:"FAILED",
+    };
+  }
+
+  const provider = resolveApplicationProvider(app);
+  if (!provider) {
+    return {
+      ok:false,
+      error:"PROVIDER_NOT_FOUND",
+      detail:`No application Provider registered for "${app}"`,
+      state:"FAILED",
+    };
+  }
+
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return {
+      ok:false,
+      error:desktopResolved.error,
+      detail:desktopResolved.detail,
+      state:"FAILED",
+    };
+  }
+
+  const observed = desktop.listWindows(desktopResolved.application);
+
+  if (!observed?.ok || !Array.isArray(observed.windows)) {
+    return {
+      ok:false,
+      error:observed?.error || "WINDOW_LIST_FAILED",
+      detail:(
+        observed?.detail ||
+        observed?.stderr ||
+        observed?.stdout ||
+        "window list unavailable"
+      ).trim(),
+      state:observed?.state || "FAILED",
+      windows:[],
+      method:observed?.method || `desktop plugin ${desktop.id} window-list observation`,
+      observeSeconds:observed?.observeSeconds || observed?.seconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"OBSERVED",
+    windows:observed.windows,
+    method:observed.method || `desktop plugin ${desktop.id} window-list observation`,
+    observeSeconds:observed.observeSeconds || observed.seconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -665,6 +727,7 @@ module.exports = {
   getForeground,
   waitStable:operations.waitStable,
   getCurrentWindow,
+  listWindows,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
