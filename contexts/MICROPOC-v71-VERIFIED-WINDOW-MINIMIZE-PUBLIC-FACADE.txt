@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v71
 VERIFIED WINDOW MINIMIZE PUBLIC FACADE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Expose the physically validated v70 macOS Desktop Plugin window.minimize operation through the public ComputerControl facade without leaking backend or platform-specific details.
@@ -109,3 +109,33 @@ NON-GOALS
 - No Windows/Linux implementation claim.
 - No durable macOS window identity.
 - No change to validated v70 production targeting or native verification.
+
+BOUNDARY RESULT
+PASS.
+Evidence commit:
+`6065d30`
+`test(v71): validate window minimize public facade boundary`
+
+PHYSICAL RESULT
+PASS.
+Harness commit:
+`4ea1a47`
+`test(v71): add physical window minimize facade harness`
+
+Physical evidence commit:
+`e2bb967`
+`test(v71): validate window minimize public facade physically`
+
+VALIDATED CONCLUSIONS
+1. Public `ComputerControl.minimizeWindow({app, window})` is available and exported.
+2. The facade preserves the full observed id/title/process/pid descriptor.
+3. The facade routes only through the selected Desktop Plugin operation.
+4. Facade success requires plugin ok, verified=true and minimized=true.
+5. The physical TextEdit fixture reached native AXMinimized=true.
+6. Independent System Events observation also reported minimized=true.
+7. The facade propagated observed/action handle and rebound diagnostics.
+8. Fixture restoration, cleanup and runtime shutdown all passed.
+9. No backend, helper, Cmd+M, AppleScript or coordinate action logic leaked into the facade.
+
+NEXT
+Any subsequent window capability must begin as a separate micro-PoC and preserve the validated descriptor re-resolution and state-driven verification rules established through v64-v71.
