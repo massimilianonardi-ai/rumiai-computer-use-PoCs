@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v59
 VERIFIED WINDOW CLOSE
 
 STATUS
-EXPERIMENTAL / PHYSICAL TEST PENDING
+VALIDATED — macOS physical PASS 2026-08-24
 
 PURPOSE
 Activate the first verified Desktop window-control operation on macOS without exposing platform HOW to the Computer Control facade.
@@ -13,16 +13,29 @@ The selected OS plugin owns the implementation and postcondition verification.
 The Computer Control facade must not know that macOS currently uses Cmd+W.
 
 SCOPE
-- macOS Desktop Plugin capability window.close becomes IMPLEMENTED.
+- macOS Desktop Plugin capability window.close is IMPLEMENTED and physically validated.
 - macOS closeWindow() observes the current window before the action.
 - macOS closeWindow() performs the OS-specific close action internally.
-- macOS closeWindow() observes the current window after the action.
-- Success requires the previous current window to be absent or replaced.
+- macOS closeWindow() verifies the postcondition through a fresh AX application snapshot.
+- Success requires the pre-close window to be absent from the fresh AX observation or replaced by another window identity.
 - ComputerControl.closeWindow({app}) routes only through desktop.closeWindow().
 
 POSTCONDITION
-ok=true only when the pre-close current window is no longer the current window after the action.
-Verification marker: current-window-changed-or-absent.
+ok=true only when a fresh AX observation proves that the pre-action window is absent or has been replaced by a different window.
+Verification marker: ax-window-absent-or-changed.
+
+OBSERVABILITY FINDING
+On the validated macOS/agent-ctrl path, `agent-ctrl get window --json` may retain a stale current-window identity after the window has physically closed. It is therefore diagnostic-only after close and must not be used as the primary close postcondition.
+
+VALIDATION HISTORY
+- Initial static boundary: PASS.
+- Initial physical close action: physical window closed, but verification FAILED because getCurrentWindow() remained stale.
+- Diagnostic runs established that a fresh AX application snapshot became unavailable after the physical close while getCurrentWindow() still returned the old window.
+- Boundary updated to require fresh AX post-close observation and to forbid stale post-close getCurrentWindow verification.
+- Updated boundary test: PASS.
+- Updated physical test: PASS.
+- Independent fresh AX verification: PASS.
+- Runtime cleanup: PASS.
 
 NON-GOALS
 - No listWindows implementation.
@@ -32,15 +45,5 @@ NON-GOALS
 - No semantic planner changes.
 - No UI backend redesign.
 
-PHYSICAL VALIDATION PLAN
-1. Validate static routing boundary.
-2. Start Computer Control runtime.
-3. Ensure TextEdit is ready.
-4. Create an empty untitled TextEdit window.
-5. Observe its current-window identity.
-6. Call ComputerControl.closeWindow({app:"TextEdit"}).
-7. Require CLOSED + verified=true.
-8. Independently observe that the previous window is absent or replaced.
-9. Close runtime.
-
-IMPLEMENTED does not mean VALIDATED until the physical test passes.
+VALIDATED RESULT
+ComputerControl.closeWindow({app}) is validated on macOS as a normalized Desktop operation whose OS-specific action and verification remain inside the macOS Desktop Plugin.
