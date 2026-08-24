@@ -372,6 +372,98 @@ function focusWindow({app, window} = {}) {
   };
 }
 
+function minimizeWindow({app, window} = {}) {
+  const started = performance.now();
+
+  if (!app) {
+    return {
+      ok:false,
+      error:"APP_REQUIRED",
+      detail:"minimizeWindow requires an application",
+      state:"FAILED",
+    };
+  }
+
+  const targetWindow = {
+    id:String(window?.id || "").trim(),
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || "").trim(),
+    pid:Number(window?.pid || 0),
+  };
+
+  if (!targetWindow.id) {
+    return {
+      ok:false,
+      error:"WINDOW_HANDLE_REQUIRED",
+      detail:"minimizeWindow requires an observed window handle",
+      state:"FAILED",
+    };
+  }
+
+  const provider = resolveApplicationProvider(app);
+  if (!provider) {
+    return {
+      ok:false,
+      error:"PROVIDER_NOT_FOUND",
+      detail:`No application Provider registered for "${app}"`,
+      state:"FAILED",
+    };
+  }
+
+  const desktopResolved = resolveDesktopApplication(provider);
+  if (!desktopResolved.ok) {
+    return {
+      ok:false,
+      error:desktopResolved.error,
+      detail:desktopResolved.detail,
+      state:"FAILED",
+    };
+  }
+
+  const result = desktop.minimizeWindow(
+    desktopResolved.application,
+    targetWindow
+  );
+
+  if (!result?.ok || result.verified !== true || result.minimized !== true) {
+    return {
+      ok:false,
+      error:result?.error || "WINDOW_MINIMIZE_UNVERIFIED",
+      detail:
+        result?.detail ||
+        `Desktop plugin "${desktop.id}" could not verify window minimize`,
+      state:result?.ok ? "UNVERIFIED" : (result?.state || "FAILED"),
+      window:result?.window || targetWindow,
+      observedHandle:result?.observedHandle || targetWindow.id,
+      actionHandle:result?.actionHandle || null,
+      handleRebound:result?.handleRebound === true,
+      minimized:result?.minimized === true,
+      method:result?.method || `desktop plugin ${desktop.id} minimize-window`,
+      verified:false,
+      verificationMethod:result?.verification || "none",
+      actionSeconds:result?.actionSeconds || 0,
+      observeSeconds:result?.observeSeconds || 0,
+      totalSeconds:(performance.now() - started) / 1000,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"MINIMIZED",
+    window:result.window || targetWindow,
+    observedHandle:result.observedHandle || targetWindow.id,
+    actionHandle:result.actionHandle || null,
+    handleRebound:result.handleRebound === true,
+    minimized:true,
+    method:result.method || `desktop plugin ${desktop.id} minimize-window`,
+    verified:true,
+    verificationMethod:result.verification || "native-ax-minimized-true",
+    actionSeconds:result.actionSeconds || 0,
+    observeSeconds:result.observeSeconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -828,6 +920,7 @@ module.exports = {
   getCurrentWindow,
   listWindows,
   focusWindow,
+  minimizeWindow,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
