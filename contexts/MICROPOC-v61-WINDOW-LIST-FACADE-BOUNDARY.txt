@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v61
 WINDOW LIST FACADE BOUNDARY
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Expose the v60-validated Desktop Plugin window-list observation through the public Computer Control facade without leaking backend or OS-specific implementation details.
@@ -30,12 +30,28 @@ NON-GOALS
 - No Windows/Linux implementation claims.
 - No semantic changes to getCurrentWindow or closeWindow.
 
-VALIDATION PLAN
-1. Static boundary test proves public facade routing and forbids direct agent-ctrl/window-list/backend details.
-2. Commit boundary PASS/FAIL.
-3. Physical test opens two TextEdit fixture windows.
-4. Invoke public ComputerControl.listWindows({app:"TextEdit"}).
-5. Require both fixtures, distinct ids, normalized fields and OBSERVED state.
-6. Commit physical result before any v62 work.
+VALIDATION RESULT
+Static boundary initially failed because the test searched for `snapshotApplication(` across the entire Computer Control facade, where that backend reference legitimately pre-existed in readiness/synchronization code. The failure was committed before diagnosis. The boundary test was corrected to isolate the body of listWindows(); the implementation itself was unchanged.
 
-IMPLEMENTED does not mean VALIDATED until the physical facade test passes.
+Corrected static boundary: PASS.
+Physical facade validation: PASS on macOS.
+
+Physical evidence:
+- runtime-ready=PASS
+- two real TextEdit fixture windows opened
+- application-ready=PASS
+- facade-window-list=PASS
+- facade-window-list-state=OBSERVED
+- facade-window-count=2
+- both fixture titles returned through ComputerControl.listWindows({app:"TextEdit"})
+- distinct window ids returned
+- normalized id/title/process/pid/focused/pinned fields verified
+- pinned window verified
+- physical-window-list-facade=PASS
+- runtime-close=PASS
+- physical_exit=0
+- fixture-cleanup=WARN recorded as test-only cleanup warning; it did not affect the observation result or exit status
+
+CONCLUSION
+v61 VALIDATED.
+Public ComputerControl.listWindows({app}) now preserves the Desktop Plugin boundary while exposing the physically validated v60 window enumeration behavior.
