@@ -1,0 +1,46 @@
+RumiAI Computer Control micro-PoC v59
+VERIFIED WINDOW CLOSE
+
+STATUS
+EXPERIMENTAL / PHYSICAL TEST PENDING
+
+PURPOSE
+Activate the first verified Desktop window-control operation on macOS without exposing platform HOW to the Computer Control facade.
+
+ARCHITECTURAL INVARIANT
+RumiAI defines closeWindow() as a normalized Desktop operation.
+The selected OS plugin owns the implementation and postcondition verification.
+The Computer Control facade must not know that macOS currently uses Cmd+W.
+
+SCOPE
+- macOS Desktop Plugin capability window.close becomes IMPLEMENTED.
+- macOS closeWindow() observes the current window before the action.
+- macOS closeWindow() performs the OS-specific close action internally.
+- macOS closeWindow() observes the current window after the action.
+- Success requires the previous current window to be absent or replaced.
+- ComputerControl.closeWindow({app}) routes only through desktop.closeWindow().
+
+POSTCONDITION
+ok=true only when the pre-close current window is no longer the current window after the action.
+Verification marker: current-window-changed-or-absent.
+
+NON-GOALS
+- No listWindows implementation.
+- No focusWindow implementation.
+- No minimize/maximize/restore/move/resize implementation.
+- No Windows/Linux window action implementation.
+- No semantic planner changes.
+- No UI backend redesign.
+
+PHYSICAL VALIDATION PLAN
+1. Validate static routing boundary.
+2. Start Computer Control runtime.
+3. Ensure TextEdit is ready.
+4. Create an empty untitled TextEdit window.
+5. Observe its current-window identity.
+6. Call ComputerControl.closeWindow({app:"TextEdit"}).
+7. Require CLOSED + verified=true.
+8. Independently observe that the previous window is absent or replaced.
+9. Close runtime.
+
+IMPLEMENTED does not mean VALIDATED until the physical test passes.
