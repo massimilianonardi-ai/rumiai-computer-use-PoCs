@@ -40,34 +40,30 @@ func emit(_ object: [String: Any], exitCode: Int32) -> Never {
     exit(exitCode)
 }
 
-let systemWide = AXUIElementCreateSystemWide()
-var focusedAppValue: CFTypeRef?
-let appResult = AXUIElementCopyAttributeValue(
-    systemWide,
-    kAXFocusedApplicationAttribute as CFString,
-    &focusedAppValue
-)
-
-guard appResult == .success, let appValue = focusedAppValue else {
+// Do not ask the system-wide AX object for AXFocusedApplication here.
+// v65 physical diagnostic on macOS returned kAXErrorCannotComplete (-25204)
+// for that messaging path even though the same session could access TextEdit
+// through agent-ctrl. AppKit already exposes the OS frontmost application as
+// the app receiving key events, so resolve that process first and then perform
+// the window observation through the application's own AX object.
+guard let running = NSWorkspace.shared.frontmostApplication else {
     emit([
         "ok": false,
-        "error": "FOCUSED_APPLICATION_UNAVAILABLE",
-        "axError": appResult.rawValue,
+        "error": "FRONTMOST_APPLICATION_UNAVAILABLE",
+        "method": "NSWorkspace.frontmostApplication",
     ], exitCode: 2)
 }
 
-let focusedApp = appValue as! AXUIElement
-var appPid: pid_t = 0
-let appPidResult = AXUIElementGetPid(focusedApp, &appPid)
-
-guard appPidResult == .success, appPid > 0 else {
+let appPid = running.processIdentifier
+guard appPid > 0 else {
     emit([
         "ok": false,
-        "error": "FOCUSED_APPLICATION_PID_UNAVAILABLE",
-        "axError": appPidResult.rawValue,
+        "error": "FRONTMOST_APPLICATION_PID_UNAVAILABLE",
+        "method": "NSWorkspace.frontmostApplication",
     ], exitCode: 3)
 }
 
+let focusedApp = AXUIElementCreateApplication(appPid)
 var focusedWindowValue: CFTypeRef?
 let windowResult = AXUIElementCopyAttributeValue(
     focusedApp,
@@ -80,7 +76,10 @@ guard windowResult == .success, let windowValue = focusedWindowValue else {
         "ok": false,
         "error": "FOCUSED_WINDOW_UNAVAILABLE",
         "pid": Int(appPid),
+        "process": jsonValue(running.localizedName),
+        "bundle": jsonValue(running.bundleIdentifier),
         "axError": windowResult.rawValue,
+        "method": "NSWorkspace.frontmostApplication + AXFocusedWindow",
     ], exitCode: 4)
 }
 
@@ -89,7 +88,6 @@ var windowPid: pid_t = 0
 let windowPidResult = AXUIElementGetPid(focusedWindow, &windowPid)
 let effectivePid = windowPidResult == .success && windowPid > 0 ? windowPid : appPid
 
-let running = NSRunningApplication(processIdentifier: effectivePid)
 let title = stringAttribute(focusedWindow, kAXTitleAttribute as CFString)
 let identifier = stringAttribute(focusedWindow, kAXIdentifierAttribute as CFString)
 let role = stringAttribute(focusedWindow, kAXRoleAttribute as CFString)
@@ -99,11 +97,12 @@ let windowNumber = numberAttribute(focusedWindow, "AXWindowNumber" as CFString)
 emit([
     "ok": true,
     "pid": Int(effectivePid),
-    "process": jsonValue(running?.localizedName),
-    "bundle": jsonValue(running?.bundleIdentifier),
+    "process": jsonValue(running.localizedName),
+    "bundle": jsonValue(running.bundleIdentifier),
     "title": jsonValue(title),
     "identifier": jsonValue(identifier),
     "windowNumber": jsonNumber(windowNumber),
     "role": jsonValue(role),
     "subrole": jsonValue(subrole),
+    "method": "NSWorkspace.frontmostApplication + AXFocusedWindow",
 ], exitCode: 0)
