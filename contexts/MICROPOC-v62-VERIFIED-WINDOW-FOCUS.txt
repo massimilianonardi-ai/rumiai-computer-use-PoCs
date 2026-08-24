@@ -1,0 +1,56 @@
+RumiAI Computer Control micro-PoC v62
+VERIFIED WINDOW FOCUS
+
+STATUS
+WIP / PHYSICAL TEST PENDING
+
+PURPOSE
+Activate Desktop Plugin focusWindow() on macOS using stable window ids from the v60/v61 validated window-list observation, without exposing backend or OS-specific HOW through the public Computer Control facade.
+
+ARCHITECTURAL INVARIANT
+RumiAI defines the Desktop Plugin focusWindow(application, window) contract.
+The macOS plugin owns HOW a concrete window is focused and HOW the postcondition is verified.
+agent-ctrl remains a private backend/tool.
+The public Computer Control facade is unchanged in v62.
+
+UPSTREAM BACKEND CONTRACT CONFIRMED
+agent-ctrl exposes `focus-window <id>` and documents window-list as the discovery primitive for ids used by focus-window. The focus-window action brings the selected window to the foreground and re-pins the session on it.
+
+SCOPE
+- Add backend agentCtrl.focusWindow(windowId) using `agent-ctrl focus-window <id> --json`.
+- Mark macOS Desktop capability `window.focus` IMPLEMENTED.
+- macOS focusWindow(application, window) requires a stable window id.
+- Precondition: validated plugin listWindows(application) must prove the id belongs to the resolved application.
+- Execute focus through backend agentCtrl.focusWindow(targetId).
+- Postcondition observation must use direct backend agentCtrl.listWindows() with no intervening target-process snapshot.
+- Success requires the requested id to be present with pinned=true after the action.
+- Return FOCUSED + verified=true only when that postcondition is satisfied.
+
+WHY NO POST-ACTION plugin listWindows()
+The validated plugin listWindows(application) intentionally performs a fresh target-process snapshot before enumeration so it can establish the application context. Calling it after focus-window could re-pin a different window and destroy the very postcondition v62 needs to observe. Therefore post-action verification reads the already-pinned session window list directly inside the macOS plugin.
+
+PHYSICAL VERIFICATION PRINCIPLE
+Plugin verification proves session state: requested id is pinned after focus-window.
+The physical harness will independently prove visible window focus using a test-only TextEdit front-document observation. Test-only AppleScript is not part of the RumiAI implementation boundary.
+
+NON-GOALS
+- No public ComputerControl.focusWindow() facade yet.
+- No minimize/maximize/restore/move/resize implementation.
+- No planner/executor changes.
+- No Windows/Linux implementation claims.
+- No coordinate-based focus.
+- No title-based focus in the implementation contract.
+
+VALIDATION PLAN
+1. Run static boundary test.
+2. Commit exact PASS/FAIL.
+3. Open two distinct real TextEdit fixture windows.
+4. Enumerate them through the validated window-list path.
+5. Select the currently unpinned fixture by stable id.
+6. Call macOS Desktop Plugin focusWindow(application, targetWindow).
+7. Require FOCUSED + verified=true + target id pinned.
+8. Independently require TextEdit front document title to equal the target fixture title.
+9. Optionally focus the other fixture and verify the reverse direction as a stronger regression check.
+10. Cleanup fixtures/runtime and commit exact physical result before any v63 work.
+
+IMPLEMENTED does not mean VALIDATED until physical verification passes.
