@@ -1,7 +1,11 @@
 "use strict";
 
+const fs = require("fs");
+const {spawnSync} = require("child_process");
 const ComputerControl = require("./computer-control");
 const {loadDesktopPlugin} = require("./computer-control/desktop");
+
+const FIXTURE_PATH = "/tmp/rumiai-v59-window-close-diagnostic.txt";
 
 function fingerprint(window) {
   if (!window) return null;
@@ -18,12 +22,12 @@ function fingerprint(window) {
 function excerpt(snapshot) {
   return String(snapshot || "")
     .split("\n")
-    .filter(line => /window|text-field|focused|Senza nome/i.test(line))
+    .filter(line => /window|text-field|focused|Senza nome|rumiai-v59/i.test(line))
     .slice(0, 20)
     .join(" | ");
 }
 
-function establishWindowFixture(desktop) {
+async function establishWindowFixture(desktop) {
   const provider = ComputerControl.resolveApplicationProvider("TextEdit");
   if (!provider) {
     return {ok:false, error:"PROVIDER_NOT_FOUND"};
@@ -65,22 +69,39 @@ function establishWindowFixture(desktop) {
     };
   }
 
+  // Test-only fixture: create an unchanged temporary document and ask macOS to
+  // open it in TextEdit. This does not change Computer Control or plugin logic;
+  // it only guarantees that a concrete window exists before diagnostics begin.
+  fs.writeFileSync(FIXTURE_PATH, "RumiAI v59 window-close diagnostic fixture\n", "utf8");
+  const opened = spawnSync(
+    "/usr/bin/open",
+    ["-a", "TextEdit", FIXTURE_PATH],
+    {encoding:"utf8"}
+  );
+
+  if (opened.status !== 0) {
+    return {
+      ok:false,
+      provider,
+      resolved,
+      activated,
+      error:"WINDOW_FIXTURE_OPEN_FAILED",
+      detail:String(opened.stderr || opened.stdout || "open failed").trim(),
+    };
+  }
+
+  const ready = await ComputerControl.ensureReady("TextEdit");
   const foreground = ComputerControl.getForeground();
-  const fixture = ComputerControl.press({
-    app:"TextEdit",
-    keys:"Cmd+N",
-    settle:true,
-  });
 
   return {
-    ok:fixture.ok,
+    ok:ready.ok,
     provider,
     resolved,
     activated,
+    ready,
     foreground,
-    fixture,
-    error:fixture.ok ? null : (fixture.error || "WINDOW_FIXTURE_FAILED"),
-    detail:fixture.detail || null,
+    error:ready.ok ? null : (ready.error || "WINDOW_FIXTURE_NOT_READY"),
+    detail:ready.detail || null,
   };
 }
 
@@ -95,9 +116,10 @@ async function main() {
   if (!runtime.ok) process.exit(1);
 
   try {
-    const prepared = establishWindowFixture(desktop);
+    const prepared = await establishWindowFixture(desktop);
     console.log(`application-resolved=${prepared.resolved?.ok ? "PASS" : "FAIL"}`);
     console.log(`application-activated=${prepared.activated?.ok ? "PASS" : "FAIL"}`);
+    console.log(`window-fixture-ready=${prepared.ready?.ok ? "PASS" : "FAIL"}`);
     console.log(
       `fixture-foreground=${prepared.foreground?.ok ? `${prepared.foreground.name || ""} ${prepared.foreground.bundle || ""}`.trim() : "UNAVAILABLE"}`
     );
@@ -163,6 +185,12 @@ async function main() {
 
     console.log("diagnostic-complete=PASS");
   } finally {
+    try {
+      fs.unlinkSync(FIXTURE_PATH);
+    } catch (_) {
+      // Test fixture cleanup is best-effort and must not hide diagnostic output.
+    }
+
     const stopped = ComputerControl.shutdownRuntime();
     console.log(`runtime-close=${stopped.ok ? "PASS" : "FAIL"}`);
     if (!stopped.ok) failed = true;
@@ -173,6 +201,9 @@ async function main() {
 main().catch(error => {
   console.error("diagnostic-complete=FAIL");
   console.error(error && error.stack ? error.stack : String(error));
+  try {
+    fs.unlinkSync(FIXTURE_PATH);
+  } catch (_) {}
   try {
     const stopped = ComputerControl.shutdownRuntime();
     console.log(`runtime-close=${stopped.ok ? "PASS" : "FAIL"}`);
