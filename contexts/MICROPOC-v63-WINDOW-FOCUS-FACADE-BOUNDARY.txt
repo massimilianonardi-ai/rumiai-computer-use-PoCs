@@ -1,0 +1,53 @@
+RumiAI Computer Control micro-PoC v63
+WINDOW FOCUS FACADE BOUNDARY
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose the v62-validated verified window focus through the public Computer Control facade without leaking backend or OS-specific implementation details.
+
+ARCHITECTURAL INVARIANT
+ComputerControl.focusWindow({app, window}) owns only the normalized public contract and application/window identity resolution.
+The selected Desktop Plugin owns HOW focus is executed and HOW its postcondition is verified.
+agent-ctrl remains private to the Desktop Plugin/backend boundary.
+
+ID-FIRST CONTRACT
+The public facade requires window.id and forwards only that stable id to the Desktop Plugin.
+Observed title/focused/pinned metadata is not required for identity and is intentionally not trusted as an action selector. This preserves the v62 finding that immediate post-focus title metadata may be stale/mismatched even when the stable id and physical focus are correct.
+
+SCOPE
+- Add public ComputerControl.focusWindow({app, window}).
+- Require app.
+- Require stable window.id.
+- Resolve application Provider.
+- Resolve selected Desktop Plugin application identity.
+- Route only through desktop.focusWindow(application, {id:targetId}).
+- Preserve plugin error/state/verification results.
+- Return FOCUSED + verified only from the already validated Desktop Plugin result.
+- Export public focusWindow.
+- Preserve v62 backend/plugin implementation unchanged.
+
+NON-GOALS
+- No new focus backend behavior.
+- No title-based window targeting.
+- No coordinate-based targeting.
+- No minimize/maximize/restore/move/resize implementation.
+- No planner/executor changes.
+- No Windows/Linux implementation claims.
+- No metadata-consistency repair in v63.
+
+VALIDATION PLAN
+1. Static boundary test isolates the facade focusWindow() body.
+2. Require provider + Desktop Plugin resolution and id-only routing.
+3. Forbid direct agentCtrl/backend snapshot references in the facade focus operation.
+4. Commit exact boundary PASS/FAIL.
+5. Physical test opens two TextEdit fixture windows.
+6. Enumerate windows through public ComputerControl.listWindows().
+7. Choose the unpinned fixture by stable id.
+8. Invoke public ComputerControl.focusWindow({app:"TextEdit", window:{id}}).
+9. Require FOCUSED + verified=true.
+10. Independently require TextEdit front document to match the selected fixture.
+11. Commit exact physical result before any v64 work.
+
+IMPLEMENTED does not mean VALIDATED until the physical facade test passes.
