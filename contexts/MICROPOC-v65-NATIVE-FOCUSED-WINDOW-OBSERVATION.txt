@@ -1,0 +1,54 @@
+RumiAI Computer Control micro-PoC v65
+NATIVE FOCUSED WINDOW OBSERVATION
+
+STATUS
+WIP / PHYSICAL DIAGNOSTIC PENDING
+
+PURPOSE
+Validate a generic macOS AX observer for the actually focused window, independent of agent-ctrl's positional window pin. This observer is required before replacing the invalid v62/v63 post-focus verification exposed by v64.
+
+ARCHITECTURAL CONTEXT
+v64 physically proved that macOS agent-ctrl ids `pid:<pid>:window:<index>` are ephemeral positional handles and can rebind after focus. Therefore `target id pinned=true` cannot prove that the same physical window is focused after an action.
+
+v65 does not change production behavior. It validates an OS-level observation primitive first.
+
+PROPOSED OBSERVER
+A small Swift helper uses public macOS Accessibility APIs:
+- AXUIElementCreateSystemWide()
+- kAXFocusedApplicationAttribute
+- kAXFocusedWindowAttribute
+- AXUIElementGetPid
+- kAXTitleAttribute
+- kAXIdentifierAttribute when available
+- `AXWindowNumber` custom attribute when available
+
+It also resolves process/bundle metadata through NSRunningApplication for diagnostics.
+
+SCOPE
+- Add tools/macos-focused-window.swift.
+- Add a test-only Node diagnostic harness.
+- Open two distinct TextEdit windows.
+- Observe the front window through the native AX helper before focus.
+- Enumerate fixtures through the existing public window list.
+- Focus the unpinned target through the existing public focus path.
+- Observe the native focused AX window immediately after focus.
+- Require the native focused title/PID to match the physical target fixture.
+- Record AXIdentifier/AXWindowNumber if macOS exposes them; do not assume they exist.
+
+DIAGNOSTIC SUCCESS CONDITION
+- native-focused-before=PASS
+- focus-action=PASS
+- native-focused-after=PASS
+- native-focused-target-match=PASS
+- diagnostic-complete=PASS
+- diagnostic_exit=0
+
+NON-GOALS
+- No production focus fix yet.
+- No change to public facade/plugin/backend.
+- No minimize/maximize/restore work.
+- No assumption that title is globally unique.
+- No claim that AXIdentifier or AXWindowNumber is available until physically observed.
+
+NEXT
+If this observer is reliable, the next micro-PoC will use it together with a pre-action observed-descriptor guard to replace the unsafe id-only verification and fail closed on rebinding.
