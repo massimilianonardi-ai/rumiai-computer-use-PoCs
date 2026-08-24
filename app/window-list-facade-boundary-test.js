@@ -13,20 +13,35 @@ const macos = fs.readFileSync(
   "utf8"
 );
 
-const requiredFacade = [
+function functionScope(source, name, nextName) {
+  const startToken = `function ${name}`;
+  const endToken = `function ${nextName}`;
+  const start = source.indexOf(startToken);
+  if (start < 0) return "";
+  const end = source.indexOf(endToken, start + startToken.length);
+  return end < 0 ? source.slice(start) : source.slice(start, end);
+}
+
+const listWindowsScope = functionScope(facade, "listWindows", "closeWindow");
+
+const requiredFacadeScope = [
   ["public listWindows function", "function listWindows({app} = {})"],
   ["provider resolution retained", "resolveApplicationProvider(app)"],
   ["desktop application resolution retained", "resolveDesktopApplication(provider)"],
   ["desktop.listWindows routing", "desktop.listWindows(desktopResolved.application)"],
   ["windows array validation", "Array.isArray(observed.windows)"],
-  ["public listWindows export", "listWindows,"],
   ["observed state", "state:\"OBSERVED\""],
 ];
 
-const forbiddenFacade = [
-  ["direct agentCtrl.listWindows in facade", "agentCtrl.listWindows()"],
-  ["direct window-list command in facade", "window-list --json"],
-  ["direct plugin backend details in facade", "snapshotApplication("],
+const requiredFacadeGlobal = [
+  ["public listWindows export", "listWindows,"],
+];
+
+const forbiddenFacadeScope = [
+  ["direct agentCtrl.listWindows in listWindows facade", "agentCtrl.listWindows()"],
+  ["direct window-list command in listWindows facade", "window-list --json"],
+  ["direct snapshotApplication backend detail in listWindows facade", "snapshotApplication("],
+  ["direct agentCtrl backend reference in listWindows facade", "agentCtrl."],
 ];
 
 const requiredPlugin = [
@@ -53,8 +68,13 @@ function checkForbidden(scope, checks) {
   }
 }
 
-checkRequired(facade, requiredFacade);
-checkForbidden(facade, forbiddenFacade);
+const scopeFound = Boolean(listWindowsScope);
+console.log(`required isolated listWindows facade scope: ${scopeFound ? "PASS" : "FAIL"}`);
+if (!scopeFound) failed = true;
+
+checkRequired(listWindowsScope, requiredFacadeScope);
+checkRequired(facade, requiredFacadeGlobal);
+checkForbidden(listWindowsScope, forbiddenFacadeScope);
 checkRequired(macos, requiredPlugin);
 
 console.log(`window-list-facade-boundary=${failed ? "FAIL" : "PASS"}`);
