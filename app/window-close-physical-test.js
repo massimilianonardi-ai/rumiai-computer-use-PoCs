@@ -1,18 +1,21 @@
 "use strict";
 
+const fs = require("fs");
+const {spawnSync} = require("child_process");
 const ComputerControl = require("./computer-control");
 const {loadDesktopPlugin} = require("./computer-control/desktop");
 
-function windowFingerprint(window) {
+const FIXTURE_PATH = "/tmp/rumiai-v59-window-close-physical.txt";
+
+function windowId(window) {
   if (!window) return null;
   const value = window?.value || window;
-  const id = value?.id || window?.id || null;
-  if (id) return `id:${id}`;
-  try {
-    return `json:${JSON.stringify(window)}`;
-  } catch (_) {
-    return `string:${String(window)}`;
-  }
+  return value?.id || window?.id || null;
+}
+
+function snapshotWindowId(snapshot) {
+  const match = String(snapshot || "").match(/^# window:\s+(.+?)\s+-/m);
+  return match ? match[1].trim() : null;
 }
 
 async function main() {
@@ -30,24 +33,32 @@ async function main() {
   }
 
   try {
+    // Test-only fixture: explicitly open a temporary TextEdit document so this
+    // physical test does not depend on TextEdit already owning a window.
+    fs.writeFileSync(
+      FIXTURE_PATH,
+      "RumiAI v59 verified window-close physical fixture\n",
+      "utf8"
+    );
+
+    const opened = spawnSync(
+      "/usr/bin/open",
+      ["-a", "TextEdit", FIXTURE_PATH],
+      {encoding:"utf8"}
+    );
+    console.log(`window-fixture-open=${opened.status === 0 ? "PASS" : "FAIL"}`);
+
+    if (opened.status !== 0) {
+      console.log(`window-fixture-error=${String(opened.stderr || opened.stdout || "open failed").trim()}`);
+      failed = true;
+      return;
+    }
+
     const ready = await ComputerControl.ensureReady("TextEdit");
     console.log(`application-ready=${ready.ok ? "PASS" : "FAIL"}`);
 
     if (!ready.ok) {
       console.log(`application-error=${ready.error || ready.detail || "unknown"}`);
-      failed = true;
-      return;
-    }
-
-    const newDocument = ComputerControl.press({
-      app:"TextEdit",
-      keys:"Cmd+N",
-      settle:true,
-    });
-    console.log(`window-fixture=${newDocument.ok ? "PASS" : "FAIL"}`);
-
-    if (!newDocument.ok) {
-      console.log(`window-fixture-error=${newDocument.error || newDocument.detail || "unknown"}`);
       failed = true;
       return;
     }
@@ -62,8 +73,14 @@ async function main() {
       return;
     }
 
-    const beforeFingerprint = windowFingerprint(before.window);
-    console.log(`before-fingerprint=${beforeFingerprint || ""}`);
+    const beforeId = windowId(before.window);
+    console.log(`before-window-id=${beforeId || ""}`);
+
+    if (!beforeId) {
+      console.log("before-window-id-error=window id unavailable");
+      failed = true;
+      return;
+    }
 
     const closed = ComputerControl.closeWindow({app:"TextEdit"});
     console.log(`window-close=${closed.ok ? "PASS" : "FAIL"}`);
@@ -80,23 +97,29 @@ async function main() {
       return;
     }
 
-    const after = ComputerControl.getCurrentWindow({app:"TextEdit"});
-    const afterFingerprint = after.ok && after.window
-      ? windowFingerprint(after.window)
+    // Keep the known-stale observer visible for diagnostics, but do not use it
+    // as the independent postcondition.
+    const staleWindow = ComputerControl.getCurrentWindow({app:"TextEdit"});
+    console.log(`diagnostic-current-window=${JSON.stringify(staleWindow.window || null)}`);
+
+    // Independent verification uses a fresh AX snapshot. No snapshot means the
+    // app owns no observable window; otherwise the current AX window id must be
+    // different from the pre-close id.
+    const afterSnapshot = ComputerControl.snapshot({
+      app:"TextEdit",
+      settle:true,
+      compact:true,
+    });
+    const afterId = afterSnapshot.ok
+      ? snapshotWindowId(afterSnapshot.snapshot)
       : null;
 
-    console.log(`after-window-observation=${after.ok ? "OBSERVED" : "ABSENT"}`);
-    console.log(`after-window=${JSON.stringify(after.window || null)}`);
-    console.log(`after-fingerprint=${afterFingerprint || ""}`);
+    console.log(`after-snapshot=${afterSnapshot.ok ? "OBSERVED" : "ABSENT"}`);
+    console.log(`after-snapshot-window-id=${afterId || ""}`);
 
     const independentlyVerified =
-      !after.ok ||
-      !after.window ||
-      (
-        beforeFingerprint !== null &&
-        afterFingerprint !== null &&
-        beforeFingerprint !== afterFingerprint
-      );
+      !afterSnapshot.ok ||
+      (afterId !== null && afterId !== beforeId);
 
     console.log(`independent-close-verification=${independentlyVerified ? "PASS" : "FAIL"}`);
 
@@ -107,6 +130,12 @@ async function main() {
 
     console.log("physical-window-close=PASS");
   } finally {
+    try {
+      fs.unlinkSync(FIXTURE_PATH);
+    } catch (_) {
+      // Test fixture cleanup is best-effort.
+    }
+
     const runtimeClosed = ComputerControl.shutdownRuntime();
     console.log(`runtime-close=${runtimeClosed.ok ? "PASS" : "FAIL"}`);
     if (!runtimeClosed.ok) failed = true;
@@ -117,6 +146,9 @@ async function main() {
 main().catch(error => {
   console.error("physical-window-close=FAIL");
   console.error(error && error.stack ? error.stack : String(error));
+  try {
+    fs.unlinkSync(FIXTURE_PATH);
+  } catch (_) {}
   try {
     const runtimeClosed = ComputerControl.shutdownRuntime();
     console.log(`runtime-close=${runtimeClosed.ok ? "PASS" : "FAIL"}`);
