@@ -285,12 +285,18 @@ function focusWindow({app, window} = {}) {
     };
   }
 
-  const targetId = String(window?.id || "").trim();
-  if (!targetId) {
+  const targetWindow = {
+    id:String(window?.id || "").trim(),
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || "").trim(),
+    pid:Number(window?.pid || 0),
+  };
+
+  if (!targetWindow.id) {
     return {
       ok:false,
-      error:"WINDOW_ID_REQUIRED",
-      detail:"focusWindow requires a stable window id",
+      error:"WINDOW_HANDLE_REQUIRED",
+      detail:"focusWindow requires an observed window handle",
       state:"FAILED",
     };
   }
@@ -315,11 +321,12 @@ function focusWindow({app, window} = {}) {
     };
   }
 
-  // The public contract is intentionally id-first. Metadata returned by a
-  // prior observation is not required for identity and may become stale.
+  // v64 proved the backend id is an observation-scoped action handle, not a
+  // durable identity. Preserve the full observed descriptor so the Desktop
+  // Plugin can re-resolve the intended physical window immediately before use.
   const result = desktop.focusWindow(
     desktopResolved.application,
-    {id:targetId}
+    targetWindow
   );
 
   if (!result?.ok) {
@@ -330,7 +337,11 @@ function focusWindow({app, window} = {}) {
         result?.detail ||
         `Desktop plugin "${desktop.id}" could not verify window focus`,
       state:result?.state || "FAILED",
-      window:result?.window || {id:targetId},
+      window:result?.window || targetWindow,
+      observedHandle:result?.observedHandle || targetWindow.id,
+      actionHandle:result?.actionHandle || null,
+      handleRebound:result?.handleRebound === true,
+      nativeWindow:result?.nativeWindow || null,
       method:result?.method || `desktop plugin ${desktop.id} focus-window`,
       verified:false,
       verificationMethod:result?.verification || "none",
@@ -343,10 +354,18 @@ function focusWindow({app, window} = {}) {
   return {
     ok:true,
     state:"FOCUSED",
-    window:result.window || {id:targetId},
+    window:result.window || {
+      title:targetWindow.title,
+      process:targetWindow.process,
+      pid:targetWindow.pid,
+    },
+    observedHandle:result.observedHandle || targetWindow.id,
+    actionHandle:result.actionHandle || null,
+    handleRebound:result.handleRebound === true,
+    nativeWindow:result.nativeWindow || null,
     method:result.method || `desktop plugin ${desktop.id} focus-window`,
     verified:result.verified === true,
-    verificationMethod:result.verification || "window-focus-postcondition",
+    verificationMethod:result.verification || "native-focused-window-descriptor",
     actionSeconds:result.actionSeconds || 0,
     observeSeconds:result.observeSeconds || 0,
     totalSeconds:(performance.now() - started) / 1000,
