@@ -3,7 +3,7 @@
 const {validateDesktopPlugin} = require("./contract");
 
 const PLUGIN_MODULES = Object.freeze({
-  darwin:"./plugins/macos-v70",
+  darwin:"./plugins/macos-v72",
   win32:"./plugins/windows",
   linux:"./plugins/linux",
 });
