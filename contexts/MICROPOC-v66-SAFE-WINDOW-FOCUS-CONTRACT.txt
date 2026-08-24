@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v66
 SAFE WINDOW FOCUS CONTRACT
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Correct the public/macOS window-focus contract after v64 proved that agent-ctrl macOS ids `pid:<pid>:window:<index>` are observation-scoped positional action handles, not durable window identities, and v65 validated a native AX focused-window postcondition observer.
@@ -65,15 +65,58 @@ NON-GOALS
 - No Windows/Linux implementation claim.
 - No change to closeWindow() in v66.
 
-VALIDATION PLAN
-1. Static boundary/syntax test.
-2. Commit exact boundary PASS/FAIL.
-3. Physical harness opens two TextEdit windows and captures descriptor B.
-4. Test intentionally focuses A through raw backend, forcing AX window-order rebinding so B's old handle points at A.
-5. Public ComputerControl.focusWindow() receives the stale observed B descriptor.
-6. Require re-resolution to B's new current action handle with handleRebound=true.
-7. Require native focused-window verification to report B.
-8. Independently require TextEdit front document B.
-9. Commit exact physical result before any v67/new window action.
+BOUNDARY VALIDATION
+Boundary result: PASS
+Evidence: tests/v66-macos-safe-window-focus-boundary-PASS.md
+Evidence commit: 86a82f1060320d093ed8f9979e0ed738c69f8975
+Validated invariants include:
+- native focused-window backend integration;
+- descriptor normalization and completeness checks;
+- fresh raw pre-action window-list;
+- unique descriptor re-resolution;
+- stale/ambiguous fail-closed behavior;
+- current action handle selection;
+- rebound diagnostics;
+- native AX postcondition;
+- old pinned-id verification forbidden;
+- old id-only facade routing forbidden.
 
-IMPLEMENTED does not mean VALIDATED until the rebound physical scenario passes.
+PHYSICAL VALIDATION
+Physical result: PASS
+Evidence: tests/v66-macos-safe-window-focus-physical-PASS.md
+Evidence commit: 0377ac8610e12cab7b53193f01bc67565a5fde80
+
+Executed physical scenario:
+1. Opened two distinct TextEdit fixture windows.
+2. Observed fixture A as `pid:60525:window:1` while fixture B was `pid:60525:window:0`.
+3. Preserved A descriptor `{id,title,process,pid}`.
+4. A raw test-only focus action intentionally forced AX window-order rebinding.
+5. The original A handle `pid:60525:window:1` then described fixture B.
+6. Fixture A moved to current handle `pid:60525:window:0`.
+7. Public `ComputerControl.focusWindow()` received the original stale A descriptor.
+8. The safe focus implementation re-resolved A to `pid:60525:window:0`.
+9. Result reported `handleRebound=true`, observedHandle=`pid:60525:window:1`, actionHandle=`pid:60525:window:0`.
+10. Native AX verification reported fixture A focused.
+11. Independent TextEdit front-document verification also reported fixture A.
+12. The test explicitly confirmed that using the stale original handle would have targeted fixture B and that the wrong-window action was avoided.
+
+Decisive physical markers:
+- intentional-handle-rebound=PASS
+- safe-focus=PASS
+- safe-focus-verified=true
+- safe-focus-verification=native-focused-window-descriptor
+- safe-focus-handle-rebound=true
+- safe-focus-rebound-reroute=PASS
+- independent-safe-focus-verification=PASS
+- wrong-window-avoided=PASS
+- physical-safe-window-focus=PASS
+- physical_exit=0
+
+`fixture-cleanup=WARN` was test-only cleanup and did not invalidate the physical result.
+
+CONCLUSION
+v66 is VALIDATED on macOS.
+The public focus contract no longer treats agent-ctrl pid/index ids as durable identities and no longer verifies success through the positional pin. It re-resolves the intended physical window immediately before action and verifies the real focused window independently through native AX observation.
+
+NEXT
+Before adding new window actions, audit existing `closeWindow()` verification against the v64 ephemeral-handle finding. Its historical verifier compares pre/post pid/index ids and may produce false results when another window reoccupies the same index after close.
