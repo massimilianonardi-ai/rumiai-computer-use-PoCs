@@ -7,7 +7,9 @@ const {
 } = require("../provider-manager");
 
 const agentCtrl = require("./backends/agent-ctrl");
-const macosNative = require("./backends/macos-native");
+const {loadDesktopPlugin} = require("./desktop");
+
+const desktop = loadDesktopPlugin();
 
 function normText(x) {
   return String(x || "")
@@ -37,9 +39,19 @@ function resolveProviderIdentity(app) {
   }
 
   const exactPath = providerResolvedPath(provider);
-  const identity = macosNative.resolveApplicationIdentity(provider, exactPath);
+  const resolved = desktop.resolveApplication({provider, exactPath});
 
-  return {ok:true, provider, identity};
+  if (!resolved?.ok || !resolved.identity) {
+    return {
+      ok:false,
+      error:resolved?.error || "APP_RESOLVE_FAILED",
+      detail:
+        resolved?.detail ||
+        `Desktop plugin "${desktop.id}" could not resolve "${provider.name}"`,
+    };
+  }
+
+  return {ok:true, provider, identity:resolved.identity};
 }
 
 function decodeObservedText(raw) {
@@ -325,20 +337,21 @@ function clearFocusedValueByDelete(ref) {
  *   getForeground()
  *
  * Contract:
- *   returns the actual frontmost desktop application observed by the native OS
- *   backend. This is independent from RumiAI's persistent working-app state.
+ *   returns the actual frontmost desktop application observed by the selected
+ *   Desktop Plugin. This is independent from RumiAI's persistent working-app
+ *   state and from the UI accessibility backend.
  */
 function getForeground() {
   const started = performance.now();
-  const observed = macosNative.foregroundApplication();
+  const observed = desktop.getForegroundApplication();
 
   if (!observed.ok) {
     return {
       ok:false,
       error:"FOREGROUND_OBSERVATION_FAILED",
-      detail:observed.error || "frontmost application unavailable",
+      detail:observed.error || observed.detail || "frontmost application unavailable",
       state:"FAILED",
-      method:observed.method || "macOS foreground observation",
+      method:observed.method || `${desktop.id} foreground observation`,
       observeSeconds:observed.seconds || 0,
       totalSeconds:(performance.now() - started) / 1000,
     };
@@ -350,7 +363,7 @@ function getForeground() {
     name:observed.name,
     bundle:observed.bundle || null,
     asn:observed.asn || null,
-    method:observed.method || "macOS foreground observation",
+    method:observed.method || `${desktop.id} foreground observation`,
     observeSeconds:observed.seconds || 0,
     totalSeconds:(performance.now() - started) / 1000,
   };
@@ -797,7 +810,6 @@ function find({
   // Backend semantic locator remains useful when the caller has no suitable
   // snapshot or when the snapshot does not contain the target.
   const found = agentCtrl.findElement(wanted, role, first);
-
   if (!found.ok) {
     return {
       ok:false,
