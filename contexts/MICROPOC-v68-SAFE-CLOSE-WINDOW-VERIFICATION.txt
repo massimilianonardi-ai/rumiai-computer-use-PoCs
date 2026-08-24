@@ -1,0 +1,66 @@
+RumiAI Computer Control micro-PoC v68
+SAFE CLOSE WINDOW VERIFICATION
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Correct macOS closeWindow() verification after v67 physically proved that the historical v59 verifier can return a false negative when the surviving window reuses the closed window's positional agent-ctrl id.
+
+ROOT CAUSE
+Current macOS agent-ctrl window ids are `pid:<pid>:window:<index>` handles derived from AXWindows array position.
+v64 proved those handles can rebind after focus.
+v67 proved they can also be reused after close.
+Therefore cross-action comparison of those ids is not valid window-identity evidence.
+
+SAFE CLOSE CONTRACT
+closeWindow() continues to mean: close the physically focused window of the resolved application.
+
+Verification flow:
+1. Establish the resolved application/process with listWindows(application).
+2. Observe the actually focused window through the v65 native observer.
+3. Require the focused window to belong to the resolved application.
+4. Normalize physical descriptor `{title, process, pid, bundle}`.
+5. Read one raw agent-ctrl window list before action from the established session.
+6. Count windows matching `{title, process, pid}`; require count >= 1.
+7. Send Cmd+W.
+8. Wait for AX surface stability using agent-ctrl wait-for stable.
+9. Read one raw window list after action from the same session.
+10. Count the same descriptor again.
+11. Verify only when `descriptorCountAfter === descriptorCountBefore - 1`.
+
+WHY COUNT RATHER THAN ABSENCE
+A title is not globally unique. If two windows of the same application/process share a title, closing the focused one should reduce the matching descriptor count by exactly one rather than requiring complete absence.
+
+ID RULE
+No pid/index window id participates in the close postcondition.
+The result may expose current windows for diagnostics, but their ids are observation-scoped handles only.
+
+VERIFICATION MARKER
+`window-descriptor-count-decreased`
+
+SCOPE
+- Modify only macOS Desktop Plugin closeWindow implementation.
+- Preserve Cmd+W as macOS HOW.
+- Preserve public ComputerControl.closeWindow({app}) facade unchanged.
+- Preserve agent-ctrl backend unchanged.
+- Preserve focus/list/get-current behavior unchanged.
+
+NON-GOALS
+- No targeted close-by-window descriptor API yet.
+- No minimize/maximize/restore/move/resize work.
+- No Windows/Linux claim.
+- No attempt to create a durable macOS window identity.
+
+VALIDATION PLAN
+1. Boundary/syntax test.
+2. Commit exact boundary PASS/FAIL.
+3. Physical test reproduces the v67 two-window scenario.
+4. Require the physically frontmost fixture to close.
+5. Require survivor to reuse the closed positional handle in the fixture when macOS behaves as in v67.
+6. Require public close result to be CLOSED + verified=true despite handle reuse.
+7. Require verificationMethod=window-descriptor-count-decreased.
+8. Independently verify only the survivor document remains.
+9. Commit exact physical result before any v69/new lifecycle action.
+
+IMPLEMENTED does not mean VALIDATED until the physical handle-reuse scenario passes.
