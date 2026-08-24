@@ -1,6 +1,7 @@
 "use strict";
 
 const cp = require("child_process");
+const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
@@ -228,14 +229,19 @@ function launchApplicationBundle(exactPath) {
 }
 
 
-function ensureAxManualHelper() {
-  const helperSource = path.resolve(__dirname, "..", "..", "..", "tools", "enable-ax-manual.swift");
-  const helperBin = path.resolve(__dirname, "..", "..", "..", "bin", "rumiai-enable-ax-manual");
+function helperNeedsCompile(source, binary) {
+  if (!fs.existsSync(binary)) return true;
 
-  const fs = require("fs");
+  try {
+    return fs.statSync(source).mtimeMs > fs.statSync(binary).mtimeMs;
+  } catch {
+    return true;
+  }
+}
 
-  if (fs.existsSync(helperBin)) {
-    return {ok:true, path:helperBin, compiled:false, seconds:0};
+function compileSwiftHelper(source, binary, label) {
+  if (!helperNeedsCompile(source, binary)) {
+    return {ok:true, path:binary, compiled:false, seconds:0};
   }
 
   const which = run("/usr/bin/xcrun", ["--find", "swiftc"]);
@@ -250,28 +256,39 @@ function ensureAxManualHelper() {
 
   const compiled = run("/usr/bin/xcrun", [
     "swiftc",
-    helperSource,
+    source,
     "-o",
-    helperBin,
+    binary,
   ]);
 
   if (!compiled.ok) {
     return {
       ok:false,
-      error:"failed to compile AXManualAccessibility helper",
+      error:`failed to compile ${label}`,
       detail:(compiled.stderr || compiled.stdout || "").trim(),
-      seconds:compiled.seconds,
+      seconds:which.seconds + compiled.seconds,
     };
   }
 
-  try { fs.chmodSync(helperBin, 0o755); } catch {}
+  try { fs.chmodSync(binary, 0o755); } catch {}
 
   return {
     ok:true,
-    path:helperBin,
+    path:binary,
     compiled:true,
     seconds:which.seconds + compiled.seconds,
   };
+}
+
+function ensureAxManualHelper() {
+  const helperSource = path.resolve(__dirname, "..", "..", "..", "tools", "enable-ax-manual.swift");
+  const helperBin = path.resolve(__dirname, "..", "..", "..", "bin", "rumiai-enable-ax-manual");
+
+  return compileSwiftHelper(
+    helperSource,
+    helperBin,
+    "AXManualAccessibility helper"
+  );
 }
 
 function enableManualAccessibility(identity) {
@@ -305,6 +322,172 @@ function enableManualAccessibility(identity) {
   };
 }
 
+function ensureFocusedWindowHelper() {
+  const helperSource = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "tools",
+    "macos-focused-window.swift"
+  );
+  const helperBin = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "bin",
+    "rumiai-macos-focused-window"
+  );
+
+  return compileSwiftHelper(
+    helperSource,
+    helperBin,
+    "focused-window observation helper"
+  );
+}
+
+function focusedWindowObservation() {
+  const helper = ensureFocusedWindowHelper();
+
+  if (!helper.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"FOCUSED_WINDOW_HELPER_UNAVAILABLE",
+      detail:helper.detail || helper.error || "focused-window helper unavailable",
+      method:"macOS native focused-window helper",
+      seconds:helper.seconds || 0,
+    };
+  }
+
+  const observed = run(helper.path, []);
+  const seconds = (helper.seconds || 0) + (observed.seconds || 0);
+  const raw = String(observed.stdout || "").trim();
+
+  let data = null;
+  try {
+    data = JSON.parse(raw);
+  } catch (error) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"FOCUSED_WINDOW_INVALID_JSON",
+      detail:`invalid focused-window JSON: ${error.message}`,
+      method:observed.method,
+      seconds,
+    };
+  }
+
+  if (!observed.ok || data?.ok !== true) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:data?.error || "FOCUSED_WINDOW_OBSERVATION_FAILED",
+      detail:String(observed.stderr || raw || "focused-window observation failed").trim(),
+      axError:data?.axError ?? null,
+      method:data?.method || observed.method,
+      seconds,
+    };
+  }
+
+  return {
+    ok:true,
+    state:"OBSERVED",
+    pid:Number(data.pid || 0),
+    process:data.process == null ? null : String(data.process),
+    bundle:data.bundle == null ? null : String(data.bundle),
+    title:data.title == null ? null : String(data.title),
+    identifier:data.identifier == null ? null : String(data.identifier),
+    windowNumber:data.windowNumber == null ? null : Number(data.windowNumber),
+    role:data.role == null ? null : String(data.role),
+    subrole:data.subrole == null ? null : String(data.subrole),
+    method:data.method || observed.method,
+    compiled:helper.compiled === true,
+    seconds,
+  };
+}
+
+function sleepSync(ms) {
+  const timeout = Math.max(0, Number(ms) || 0);
+  if (!timeout) return;
+  const signal = new Int32Array(new SharedArrayBuffer(4));
+  Atomics.wait(signal, 0, 0, timeout);
+}
+
+function focusedWindowMatches(expected = {}, observed = {}) {
+  if (!observed?.ok) return false;
+
+  const expectedPid = Number(expected.pid || 0);
+  const expectedProcess = String(expected.process || "").trim();
+  const expectedTitle = expected.title == null ? null : String(expected.title);
+  const expectedBundle = String(expected.bundle || "").trim();
+
+  if (expectedPid > 0 && Number(observed.pid || 0) !== expectedPid) return false;
+  if (expectedProcess && String(observed.process || "") !== expectedProcess) return false;
+  if (expectedTitle !== null && observed.title !== expectedTitle) return false;
+  if (
+    expectedBundle &&
+    String(observed.bundle || "").toLowerCase() !== expectedBundle.toLowerCase()
+  ) return false;
+
+  return true;
+}
+
+function waitForFocusedWindow(expected = {}, opts = {}) {
+  const started = performance.now();
+  const timeoutMs = Number(opts.timeoutMs || 2000);
+  const pollMs = Number(opts.pollMs || 50);
+  let attempts = 0;
+  let observeSeconds = 0;
+  let last = null;
+
+  while ((performance.now() - started) <= timeoutMs) {
+    last = focusedWindowObservation();
+    attempts += 1;
+    observeSeconds += last.seconds || 0;
+
+    if (focusedWindowMatches(expected, last)) {
+      return {
+        ...last,
+        state:"CONDITION_READY",
+        attempts,
+        observeSeconds,
+        waitSeconds:(performance.now() - started) / 1000,
+        verification:"native-focused-window-descriptor",
+      };
+    }
+
+    if ((performance.now() - started) >= timeoutMs) break;
+    sleepSync(pollMs);
+  }
+
+  return {
+    ok:false,
+    state:"UNVERIFIED",
+    error:"FOCUSED_WINDOW_CONDITION_TIMEOUT",
+    detail:"native focused window did not match the expected descriptor",
+    expected:{
+      pid:Number(expected.pid || 0),
+      process:String(expected.process || ""),
+      title:expected.title == null ? null : String(expected.title),
+      bundle:String(expected.bundle || ""),
+    },
+    observed:last?.ok ? {
+      pid:last.pid,
+      process:last.process,
+      title:last.title,
+      bundle:last.bundle,
+    } : null,
+    attempts,
+    observeSeconds,
+    waitSeconds:(performance.now() - started) / 1000,
+    verification:"native-focused-window-descriptor",
+    method:last?.method || "macOS native focused-window helper",
+    seconds:observeSeconds,
+  };
+}
+
 module.exports = {
   run,
   normalizeFrontAsn,
@@ -316,4 +499,8 @@ module.exports = {
   launchApplicationBundle,
   ensureAxManualHelper,
   enableManualAccessibility,
+  ensureFocusedWindowHelper,
+  focusedWindowObservation,
+  focusedWindowMatches,
+  waitForFocusedWindow,
 };
