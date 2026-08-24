@@ -1,0 +1,120 @@
+RumiAI Computer Control micro-PoC v72
+VERIFIED WINDOW RESTORE DESKTOP PLUGIN
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Promote the restore transition already physically validated by the v69 native AXMinimized primitive into the effective macOS Desktop Plugin while preserving the safe ephemeral-handle and state-driven verification rules established in v64-v71.
+
+SCOPE
+- Compose the validated v70 effective macOS plugin through plugins/macos-v72.js so existing validated focus, close and minimize behavior remains untouched.
+- Select the composed plugin for darwin in desktop/index.js.
+- Mark effective window.restore capability IMPLEMENTED.
+- Implement Desktop Plugin restoreWindow(application, window) only.
+- Keep public ComputerControl.restoreWindow() absent in v72.
+
+WHY A SEPARATE MICRO-POC
+v69 proved that setting AXMinimized=false physically restores a uniquely identified minimized TextEdit window, but used restore only as primitive validation and fixture cleanup. v72 defines the production targeting, fail-closed behavior and verified Desktop Plugin result contract separately.
+
+TARGET CONTRACT
+Input window is a complete observed descriptor from the existing window observation boundary:
+- id: ephemeral observation handle
+- title
+- process
+- pid
+
+The id is never trusted as durable identity.
+
+PRECONDITION
+The target must be observed in native AX state AXMinimized=true immediately before mutation. A non-minimized target fails closed with WINDOW_NOT_MINIMIZED; v72 does not report an idempotent success without a physical restore transition.
+
+SAFE TARGETING FLOW
+1. Require resolved application provider + identity.
+2. Require observed id/title/process/pid.
+3. Establish application context through the validated v70 plugin listWindows(application).
+4. Read one fresh raw agentCtrl.listWindows() immediately before action.
+5. Re-resolve target by {title, process, pid}.
+6. No match -> WINDOW_TARGET_STALE.
+7. Multiple matches -> WINDOW_TARGET_AMBIGUOUS.
+8. Exactly one match -> current descriptor/action handle.
+9. Record handleRebound when current id differs from observed id.
+10. Do not select the action by the stale observed id.
+11. Observe native AXMinimized and require true before action.
+
+NATIVE HOW
+The validated private backend app/computer-control/backends/macos-window-minimized.js uses tools/macos-window-minimized.swift:
+- setWindowMinimized(descriptor, false) performs native AXMinimized mutation.
+- no keyboard shortcut.
+- no AppleScript in production.
+
+VERIFICATION
+Immediate AX readback is not authoritative. Production verification must poll through:
+waitForWindowMinimized(descriptor, false)
+until AXMinimized is observed false or timeout.
+
+Success marker:
+native-ax-minimized-false
+
+Successful plugin result:
+- ok=true
+- state=RESTORED
+- minimized=false
+- restored=true
+- verified=true
+- verification=native-ax-minimized-false
+- observedHandle
+- actionHandle
+- handleRebound
+
+FAIL-CLOSED RULES
+- missing descriptor -> failure
+- stale target -> failure
+- duplicate current descriptor -> failure
+- native precondition unavailable -> failure
+- target not minimized -> WINDOW_NOT_MINIMIZED
+- native mutation failure -> failure
+- verification timeout -> UNVERIFIED
+
+BOUNDARY REQUIREMENTS
+- Validated v70 plugin is preserved and composed.
+- Effective window.minimize remains IMPLEMENTED.
+- Effective window.restore becomes IMPLEMENTED.
+- Full descriptor reaches restoreWindow.
+- Application context and fresh descriptor re-resolution are retained.
+- Native minimized=true precondition is required.
+- Native mutation requests false.
+- State-driven verification requires minimized=false.
+- Successful result is RESTORED, restored=true, minimized=false and verified=true.
+
+PHYSICAL VALIDATION
+1. Start Computer Control runtime.
+2. Open one uniquely titled TextEdit fixture.
+3. Resolve the complete fixture descriptor through public listWindows.
+4. Minimize the fixture through the already validated effective Desktop Plugin minimizeWindow.
+5. Require native and independent AXMinimized=true precondition.
+6. Call only Desktop Plugin restoreWindow(resolvedApplication, fullDescriptor).
+7. Require RESTORED, restored=true, minimized=false and verified=true.
+8. Require verification=native-ax-minimized-false.
+9. Independently observe AXMinimized=false.
+10. Require fixture cleanup and runtime shutdown PASS.
+
+VALIDATION ORDER
+1. Commit this v72 contract.
+2. Implement plugin composition and boundary test only.
+3. Run boundary test.
+4. Commit exact boundary PASS/FAIL before diagnosis or correction.
+5. After boundary PASS, add and commit the physical harness before execution.
+6. Run the physical test once.
+7. Commit exact physical PASS/FAIL/BLOCKED before diagnosis or correction.
+8. Mark v72 VALIDATED only after physical PASS.
+
+NON-GOALS
+- No public restoreWindow facade.
+- No maximize, move or resize.
+- No Windows/Linux implementation claim.
+- No durable macOS window identity.
+- No change to the validated v70 minimize implementation.
+
+NEXT
+Only after v72 physical PASS may a later micro-PoC expose public ComputerControl.restoreWindow({app, window}).
