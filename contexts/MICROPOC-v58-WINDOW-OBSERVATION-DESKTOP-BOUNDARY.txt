@@ -1,0 +1,39 @@
+RumiAI Computer Control micro-PoC v58
+WINDOW OBSERVATION DESKTOP BOUNDARY
+
+Goal
+----
+Route the public Computer Control current-window observation through the selected Desktop Plugin without adding any new capability or changing UI backend behavior.
+
+Invariant
+---------
+RumiAI defines the stable operation; the selected OS plugin owns the OS-specific HOW.
+
+Scope
+-----
+- Public `ComputerControl.getCurrentWindow({app})` remains application-scoped.
+- Registered Provider resolution is preserved.
+- Desktop application resolution is preserved.
+- Current-window observation is delegated to `desktop.getCurrentWindow()`.
+- macOS plugin continues to implement that operation internally using the already existing agent-ctrl capability.
+
+Not in scope
+------------
+- listWindows
+- focusWindow
+- close/minimize/maximize/restore/move/resize
+- keyboard shortcut portability
+- changes to snapshot/find/click/setText/clear
+- Linux or Windows window implementation
+
+Validation
+----------
+1. Static boundary test must prove:
+   - public facade calls `desktop.getCurrentWindow()`;
+   - public facade no longer exports `operations.getCurrentWindow`;
+   - public facade does not call `agentCtrl.getCurrentWindow()` directly.
+2. Physical validation must specifically exercise `ComputerControl.getCurrentWindow()` on macOS; an unrelated TextEdit regression is not sufficient proof.
+
+Status
+------
+WIP / PHYSICAL TEST PENDING
