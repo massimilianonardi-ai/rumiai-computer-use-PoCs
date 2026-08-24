@@ -1,0 +1,49 @@
+RumiAI Computer Control micro-PoC v67
+CLOSE WINDOW EPHEMERAL HANDLE DIAGNOSTIC
+
+STATUS
+WIP / PHYSICAL DIAGNOSTIC PENDING
+
+PURPOSE
+Audit the existing macOS `closeWindow()` verifier against the v64 finding that agent-ctrl window ids `pid:<pid>:window:<index>` are ephemeral positional handles rather than durable identities.
+
+WHY THIS EXISTS
+The v59 close verifier captures a pre-close current-window id, sends Cmd+W, then takes a fresh application snapshot and considers close verified when:
+- no fresh AX window is observable; or
+- the fresh AX window id differs from the pre-close id.
+
+That logic was physically valid for the original v59 single-window scenario, but v64 later proved that pid/index ids can rebind. With two windows, closing the front window can allow the surviving window to occupy the same `window:<index>`. In that case the physical close may succeed while the verifier observes the same positional id and reports UNVERIFIED.
+
+SCOPE
+- No production code changes.
+- Add one physical diagnostic harness only.
+- Open two distinct TextEdit fixture windows.
+- Establish which fixture is physically frontmost.
+- Capture the public window list before close.
+- Invoke existing public `ComputerControl.closeWindow({app:"TextEdit"})` exactly once.
+- Independently observe TextEdit documents after the action.
+- Determine whether the front fixture was physically closed.
+- Compare the public close result with the independent physical result.
+
+DIAGNOSTIC OUTCOMES
+The diagnostic must report one of:
+- close-verifier-consistency=CONSISTENT
+- close-verifier-consistency=FALSE_NEGATIVE
+- close-verifier-consistency=FALSE_POSITIVE
+
+Expected from the v64 handle model:
+- physical close succeeds;
+- surviving fixture reoccupies the same positional id;
+- current `closeWindow()` reports UNVERIFIED;
+- close-verifier-consistency=FALSE_NEGATIVE.
+
+DIAGNOSTIC SUCCESS CONDITION
+The harness itself passes when it obtains a coherent before/action/after observation and classifies the verifier consistently, regardless of whether the current production result is correct or exposes the expected false negative.
+
+NON-GOALS
+- No closeWindow fix in v67.
+- No new public API.
+- No minimize/maximize/restore work.
+- No change to historical v59 PASS.
+
+The exact physical diagnostic result must be committed before changing closeWindow verification.
