@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v72
 VERIFIED WINDOW RESTORE DESKTOP PLUGIN
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Promote the restore transition already physically validated by the v69 native AXMinimized primitive into the effective macOS Desktop Plugin while preserving the safe ephemeral-handle and state-driven verification rules established in v64-v71.
@@ -118,3 +118,34 @@ NON-GOALS
 
 NEXT
 Only after v72 physical PASS may a later micro-PoC expose public ComputerControl.restoreWindow({app, window}).
+
+BOUNDARY RESULT
+PASS.
+Evidence commit:
+`5b9513a`
+`test(v72): validate window restore desktop boundary on macOS`
+
+PHYSICAL RESULT
+PASS.
+Harness commit:
+`e3b72b6`
+`test(v72): add physical Desktop Plugin window restore harness`
+
+Physical evidence commit:
+`72f39fc`
+`test(v72): validate physical Desktop Plugin window restore`
+
+VALIDATED CONCLUSIONS
+1. The effective macOS Desktop Plugin implements window.restore while preserving the validated v70 window.minimize capability through composition.
+2. It preserves the full observed id/title/process/pid descriptor and fails closed on stale or ambiguous targets.
+3. It re-resolves the descriptor against a fresh pre-action window list and does not act through the stale observed handle.
+4. It requires native AXMinimized=true before attempting a restore transition.
+5. Native AXMinimized mutation physically restored the uniquely titled TextEdit fixture.
+6. State-driven native verification observed minimized=false and reported native-ax-minimized-false.
+7. Independent System Events observation also observed minimized=false.
+8. The plugin reported RESTORED, restored=true, minimized=false and verified=true.
+9. Fixture cleanup and runtime shutdown passed.
+10. Production uses no keyboard shortcut and no AppleScript for the restore action.
+
+NEXT VALIDATED STEP
+A separate v73 micro-PoC may expose the validated operation through public ComputerControl.restoreWindow({app, window}) while preserving the full descriptor and verified result contract.
