@@ -316,6 +316,42 @@ function getCurrentWindow() {
   }
 }
 
+function listWindows() {
+  const r = runAction(
+    ["window-list", "--json"],
+    "agent-ctrl window-list --json"
+  );
+
+  if (!r.ok) return {...r, windows:[], data:null};
+
+  try {
+    const data = JSON.parse(r.stdout);
+    const windows = Array.isArray(data?.windows) ? data.windows : null;
+
+    if (!windows) {
+      return {
+        ...r,
+        ok:false,
+        code:1,
+        windows:[],
+        data,
+        stderr:"window-list JSON does not contain a windows array",
+      };
+    }
+
+    return {...r, windows, data};
+  } catch (e) {
+    return {
+      ...r,
+      ok:false,
+      code:1,
+      windows:[],
+      data:null,
+      stderr:`invalid window-list JSON: ${e.message}`,
+    };
+  }
+}
+
 function getElementValue(ref) {
   return getElementProperty(ref, "value");
 }
@@ -366,6 +402,7 @@ module.exports = {
   pointerClickElement,
   focusElement,
   getCurrentWindow,
+  listWindows,
   findElement,
   getElementBounds,
   getElementProperty,
