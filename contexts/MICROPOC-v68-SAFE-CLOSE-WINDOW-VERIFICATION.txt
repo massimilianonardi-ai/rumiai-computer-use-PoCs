@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v68
 SAFE CLOSE WINDOW VERIFICATION
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Correct macOS closeWindow() verification after v67 physically proved that the historical v59 verifier can return a false negative when the surviving window reuses the closed window's positional agent-ctrl id.
@@ -14,9 +14,9 @@ v67 proved they can also be reused after close.
 Therefore cross-action comparison of those ids is not valid window-identity evidence.
 
 SAFE CLOSE CONTRACT
-closeWindow() continues to mean: close the physically focused window of the resolved application.
+closeWindow() means: close the physically focused window of the resolved application.
 
-Verification flow:
+Validated verification flow:
 1. Establish the resolved application/process with listWindows(application).
 2. Observe the actually focused window through the v65 native observer.
 3. Require the focused window to belong to the resolved application.
@@ -30,7 +30,7 @@ Verification flow:
 11. Verify only when `descriptorCountAfter === descriptorCountBefore - 1`.
 
 WHY COUNT RATHER THAN ABSENCE
-A title is not globally unique. If two windows of the same application/process share a title, closing the focused one should reduce the matching descriptor count by exactly one rather than requiring complete absence.
+A title is not globally unique. If two windows of the same application/process share a title, closing the focused one reduces the matching descriptor count by exactly one rather than requiring complete absence.
 
 ID RULE
 No pid/index window id participates in the close postcondition.
@@ -39,28 +39,42 @@ The result may expose current windows for diagnostics, but their ids are observa
 VERIFICATION MARKER
 `window-descriptor-count-decreased`
 
-SCOPE
-- Modify only macOS Desktop Plugin closeWindow implementation.
-- Preserve Cmd+W as macOS HOW.
-- Preserve public ComputerControl.closeWindow({app}) facade unchanged.
-- Preserve agent-ctrl backend unchanged.
-- Preserve focus/list/get-current behavior unchanged.
+IMPLEMENTATION EVIDENCE
+- Safe close implementation: `7c52ad78ec9b37f6166dc0099c68081520ef55d3`
+- Boundary/context preparation: `0a9cb4a863b3b74d85c6b78f4d41ac02c393d9a0`, `c0b1714e5410d5bc925a807842420b6b73da168b`
+- Boundary PASS evidence: `e6c56ccac1c009e81fa28bf1e2132dce6f9c4449`
+- Physical harness: `66804dca86e013efb29aee44966c8e7ab41ef198`
+- Physical PASS evidence: `8174a244c510fc08b369e16ac8981aa2f7fde443`
+
+PHYSICAL VALIDATION RESULT
+The two-window TextEdit fixture reproduced the v67 handle-reuse condition:
+- closed window before action: `pid:60845:window:0`
+- surviving window before action: `pid:60845:window:1`
+- surviving window after action: `pid:60845:window:0`
+- `closed-handle-reused-by-survivor=true`
+
+Despite exact positional-handle reuse, the public API returned:
+- `safe-close=PASS`
+- `safe-close-state=CLOSED`
+- `safe-close-verified=true`
+- `safe-close-verification=window-descriptor-count-decreased`
+- descriptor count `1 -> 0`
+- independent physical document observation PASS
+- `v67-false-negative-fixed=PASS`
+- `physical_exit=0`
+
+CONCLUSION
+v68 removes the v67 false negative without creating a fictitious durable window identity. Close verification is now based on a physical descriptor-count transition, while pid/index ids remain observation-scoped action handles only.
+
+SCOPE PRESERVED
+- Modified only macOS Desktop Plugin closeWindow implementation.
+- Cmd+W remains macOS HOW.
+- Public ComputerControl.closeWindow({app}) facade unchanged.
+- agent-ctrl backend unchanged.
+- focus/list/get-current behavior unchanged.
 
 NON-GOALS
 - No targeted close-by-window descriptor API yet.
 - No minimize/maximize/restore/move/resize work.
 - No Windows/Linux claim.
 - No attempt to create a durable macOS window identity.
-
-VALIDATION PLAN
-1. Boundary/syntax test.
-2. Commit exact boundary PASS/FAIL.
-3. Physical test reproduces the v67 two-window scenario.
-4. Require the physically frontmost fixture to close.
-5. Require survivor to reuse the closed positional handle in the fixture when macOS behaves as in v67.
-6. Require public close result to be CLOSED + verified=true despite handle reuse.
-7. Require verificationMethod=window-descriptor-count-decreased.
-8. Independently verify only the survivor document remains.
-9. Commit exact physical result before any v69/new lifecycle action.
-
-IMPLEMENTED does not mean VALIDATED until the physical handle-reuse scenario passes.
