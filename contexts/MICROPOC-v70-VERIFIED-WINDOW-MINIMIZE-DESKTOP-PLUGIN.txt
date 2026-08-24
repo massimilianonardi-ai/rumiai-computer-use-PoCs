@@ -1,0 +1,89 @@
+RumiAI Computer Control micro-PoC v70
+VERIFIED WINDOW MINIMIZE DESKTOP PLUGIN
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Promote the physically validated v69 native AXMinimized primitive into the effective macOS Desktop Plugin while preserving the safe ephemeral-handle rules established in v64-v68.
+
+SCOPE
+- Add private backend `app/computer-control/backends/macos-window-minimized.js`.
+- Compose the validated macOS base plugin through `plugins/macos-v70.js` so existing validated focus/close behavior remains untouched.
+- Select the composed plugin for darwin in `desktop/index.js`.
+- Mark effective `window.minimize` capability IMPLEMENTED.
+- Implement Desktop Plugin `minimizeWindow(application, window)` only.
+- Keep public `ComputerControl.minimizeWindow()` absent in v70.
+
+WHY COMPOSITION
+The existing `plugins/macos.js` contains multiple physically validated lifecycle/window methods. v70 changes only minimize behavior. Composition keeps that validated base byte-for-byte unchanged while making the effective darwin plugin implement the new capability. A later consolidation can fold the extension into the base only after behavior is validated.
+
+TARGET CONTRACT
+Input window is an observed descriptor from the existing window observation boundary:
+- id: ephemeral observation handle
+- title
+- process
+- pid
+
+The id is never trusted as durable identity.
+
+SAFE TARGETING FLOW
+1. Require resolved application provider + identity.
+2. Require observed id/title/process/pid.
+3. Establish application context through the validated base `listWindows(application)`.
+4. Read one fresh raw `agentCtrl.listWindows()` immediately before action.
+5. Re-resolve target by `{title, process, pid}`.
+6. No match -> WINDOW_TARGET_STALE.
+7. Multiple matches -> WINDOW_TARGET_AMBIGUOUS.
+8. Exactly one match -> current descriptor/action handle.
+9. Record `handleRebound` when current id differs from observed id.
+10. Do not select the action by the stale observed id.
+
+NATIVE HOW
+Private backend uses the v69 helper `tools/macos-window-minimized.swift`:
+- `setWindowMinimized(descriptor, true)` performs native AXMinimized mutation.
+- no Cmd+M.
+- no AppleScript.
+
+VERIFICATION
+v69 physically proved immediate post-write AX readback can remain stale even though the mutation succeeds.
+Therefore production verification must ignore immediate readback as authority and poll through:
+`waitForWindowMinimized(descriptor, true)`
+until AXMinimized is observed true or timeout.
+
+Success marker:
+`native-ax-minimized-true`
+
+Successful plugin result:
+- ok=true
+- state=MINIMIZED
+- minimized=true
+- verified=true
+- verification=native-ax-minimized-true
+- observedHandle
+- actionHandle
+- handleRebound
+
+FAIL-CLOSED RULES
+- missing descriptor -> failure
+- stale target -> failure
+- duplicate current descriptor -> failure
+- native mutation failure -> failure
+- verification timeout -> UNVERIFIED
+
+NON-GOALS
+- No public minimize facade in v70.
+- No restoreWindow production capability yet; v69 restore was fixture cleanup/primitive validation only.
+- No maximize/move/resize work.
+- No Windows/Linux implementation claim.
+- No durable macOS window identity.
+
+VALIDATION ORDER
+1. Boundary/syntax test.
+2. Commit exact boundary PASS/FAIL.
+3. Physical Desktop Plugin test with uniquely titled TextEdit fixture.
+4. Require physical minimize plus independent observation.
+5. Restore fixture only as test cleanup using the validated native primitive.
+6. Commit exact physical PASS/FAIL.
+7. Mark v70 VALIDATED only after physical PASS.
+8. Only then consider a public ComputerControl minimize facade.
