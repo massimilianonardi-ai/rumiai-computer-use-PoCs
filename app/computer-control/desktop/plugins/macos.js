@@ -93,23 +93,31 @@ function focusWindow() {
   return unsupported(platform, "focusWindow");
 }
 
-function windowFingerprint(window) {
+function windowId(window) {
   if (!window) return null;
-
   const value = window?.value || window;
-  const id = value?.id || window?.id || null;
-  if (id) return `id:${id}`;
+  return value?.id || window?.id || null;
+}
 
-  try {
-    return `json:${JSON.stringify(window)}`;
-  } catch (_) {
-    return `string:${String(window)}`;
-  }
+function snapshotWindowId(snapshot) {
+  const match = String(snapshot || "").match(/^# window:\s+(.+?)\s+-/m);
+  return match ? match[1].trim() : null;
 }
 
 function closeWindow(application = {}) {
   let actionSeconds = 0;
   let observeSeconds = 0;
+
+  const provider = application?.provider || null;
+  const identity = application?.identity || null;
+
+  if (!provider || !identity) {
+    return unsupported(
+      platform,
+      "closeWindow",
+      "resolved application provider and identity are required"
+    );
+  }
 
   const before = agentCtrl.getCurrentWindow();
   observeSeconds += before.seconds || 0;
@@ -129,7 +137,23 @@ function closeWindow(application = {}) {
     };
   }
 
-  const beforeFingerprint = windowFingerprint(before.window);
+  const beforeId = windowId(before.window);
+  if (!beforeId) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_ID_UNAVAILABLE",
+      detail:"current window has no stable id before close",
+      platform,
+      operation:"closeWindow",
+      window:before.window,
+      method:before.method,
+      actionSeconds,
+      observeSeconds,
+      seconds:actionSeconds + observeSeconds,
+    };
+  }
+
   const action = agentCtrl.pressKeys("Cmd+W");
   actionSeconds += action.seconds || 0;
 
@@ -152,36 +176,40 @@ function closeWindow(application = {}) {
   const stable = agentCtrl.waitStable(3000, 100);
   observeSeconds += stable.seconds || 0;
 
-  const after = agentCtrl.getCurrentWindow();
-  observeSeconds += after.seconds || 0;
+  // v59 diagnostic result: agent-ctrl get window may remain stale after a
+  // physically successful close. A fresh AX application snapshot is the
+  // authoritative postcondition. If no snapshot exists, the app has no
+  // observable window. If another window exists, its AX window id must differ
+  // from the pre-close id.
+  const afterSnapshot = agentCtrl.snapshotApplication(
+    provider,
+    identity,
+    false,
+    {compact:true}
+  );
+  observeSeconds += afterSnapshot.seconds || 0;
 
-  const afterFingerprint =
-    after.ok && after.window
-      ? windowFingerprint(after.window)
-      : null;
+  const afterId = afterSnapshot.ok
+    ? snapshotWindowId(afterSnapshot.stdout)
+    : null;
 
   const verified =
-    !after.ok ||
-    !after.window ||
-    (
-      beforeFingerprint !== null &&
-      afterFingerprint !== null &&
-      beforeFingerprint !== afterFingerprint
-    );
+    !afterSnapshot.ok ||
+    (afterId !== null && afterId !== beforeId);
 
   if (!verified) {
     return {
       ok:false,
       state:"UNVERIFIED",
       error:"WINDOW_CLOSE_UNVERIFIED",
-      detail:"close action delivered but the same current window is still observed",
+      detail:"close action delivered but the same AX window is still observed",
       platform,
       operation:"closeWindow",
       window:before.window,
-      currentWindow:after.window || null,
+      currentWindow:afterId ? {id:afterId} : null,
       method:action.method,
       verified:false,
-      verification:"current-window-changed-or-absent",
+      verification:"ax-window-absent-or-changed",
       actionSeconds,
       observeSeconds,
       seconds:actionSeconds + observeSeconds,
@@ -194,10 +222,10 @@ function closeWindow(application = {}) {
     platform,
     operation:"closeWindow",
     window:before.window,
-    currentWindow:after.ok ? (after.window || null) : null,
+    currentWindow:afterId ? {id:afterId} : null,
     method:action.method,
     verified:true,
-    verification:"current-window-changed-or-absent",
+    verification:"ax-window-absent-or-changed",
     actionSeconds,
     observeSeconds,
     seconds:actionSeconds + observeSeconds,
