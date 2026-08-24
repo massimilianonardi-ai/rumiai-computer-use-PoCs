@@ -1,0 +1,41 @@
+RumiAI Computer Control micro-PoC v61
+WINDOW LIST FACADE BOUNDARY
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose the v60-validated Desktop Plugin window-list observation through the public Computer Control facade without leaking backend or OS-specific implementation details.
+
+ARCHITECTURAL INVARIANT
+ComputerControl.listWindows({app}) owns only the normalized public contract and application resolution.
+The selected Desktop Plugin owns HOW windows are enumerated.
+agent-ctrl remains private to the macOS plugin/backend boundary.
+
+SCOPE
+- Add public ComputerControl.listWindows({app}).
+- Require app.
+- Resolve the application Provider.
+- Resolve the selected Desktop Plugin application identity.
+- Route only through desktop.listWindows(application).
+- Require an observed windows array.
+- Return normalized OBSERVED state, windows, method and observation timing.
+- Preserve the already validated v60 backend/plugin implementation unchanged.
+
+NON-GOALS
+- No new window enumeration backend behavior.
+- No focusWindow implementation.
+- No minimize/maximize/restore/move/resize implementation.
+- No planner/executor changes.
+- No Windows/Linux implementation claims.
+- No semantic changes to getCurrentWindow or closeWindow.
+
+VALIDATION PLAN
+1. Static boundary test proves public facade routing and forbids direct agent-ctrl/window-list/backend details.
+2. Commit boundary PASS/FAIL.
+3. Physical test opens two TextEdit fixture windows.
+4. Invoke public ComputerControl.listWindows({app:"TextEdit"}).
+5. Require both fixtures, distinct ids, normalized fields and OBSERVED state.
+6. Commit physical result before any v62 work.
+
+IMPLEMENTED does not mean VALIDATED until the physical facade test passes.
