@@ -2,13 +2,13 @@ RumiAI Computer Control micro-PoC v64
 WINDOW HANDLE STABILITY DIAGNOSTIC
 
 STATUS
-WIP / PHYSICAL DIAGNOSTIC PENDING
+VALIDATED / REBOUND CONFIRMED PHYSICALLY ON macOS
 
 PURPOSE
 Determine whether macOS agent-ctrl window ids such as `pid:<pid>:window:<n>` are stable window identities or observation-scoped positional handles that can rebind when AX window ordering changes.
 
 WHY THIS EXISTS
-v62 and v63 physically focused the requested TextEdit document successfully, but immediately afterwards the same target id was reported with the title of the previously pinned document. That was initially classified as stale title metadata. Upstream source inspection now shows a stronger explanation: macOS agent-ctrl stores an `AxPinnedWindow { pid, index }`, enumerates the application's AXWindows array by index, and derives window ids from that pid/index pair. Therefore an id can denote a different concrete AX window if the array order changes.
+v62 and v63 physically focused the requested TextEdit document successfully, but immediately afterwards the same target id was reported with the title of the previously pinned document. That was initially classified as stale title metadata. Upstream source inspection showed a stronger explanation: macOS agent-ctrl stores an `AxPinnedWindow { pid, index }`, enumerates the application's AXWindows array by index, and derives window ids from that pid/index pair. Therefore an id can denote a different concrete AX window if the array order changes.
 
 UPSTREAM SOURCE FINDING
 agent-ctrl commit inspected: 7cc6b3d6d25ae6064aa1cf56d32df3af6e24a212
@@ -18,36 +18,55 @@ Observed implementation facts:
 - list_windows() iterates AXWindows by array index and builds each WindowInfo id from that pid/index pin.
 - focus_window(id) parses the id back to pid/index and raises the window currently at that index.
 
-ARCHITECTURAL CONSEQUENCE IF CONFIRMED PHYSICALLY
-The id is not a durable identity and must not be called stable.
-It may be used as an immediate action locator only when paired with observation metadata and freshness validation.
-Future action contracts must fail closed if an observed handle has rebound before use.
+PHYSICAL DIAGNOSTIC RESULT
+PASS. Handle rebinding was reproduced directly with two TextEdit windows.
 
-SCOPE
+Before focus:
+- `pid:60184:window:0` -> rumiai-v64-window-handle-B.txt
+- `pid:60184:window:1` -> rumiai-v64-window-handle-A.txt
+
+The observed target was A at `window:1`.
+
+After focusing A:
+- `pid:60184:window:0` -> rumiai-v64-window-handle-A.txt
+- `pid:60184:window:1` -> rumiai-v64-window-handle-B.txt
+
+Therefore:
+- same-id-still-same-window=false
+- same-window-still-same-id=false
+- window-handle-stability=REBOUND
+- independent-focus-verification=PASS
+- diagnostic-complete=PASS
+- diagnostic_exit=0
+
+CONCLUSION
+The macOS agent-ctrl id is NOT a durable window identity. It is an ephemeral action handle derived from the current AXWindows positional index.
+
+ARCHITECTURAL CONSEQUENCE
+RumiAI must not describe this id as stable and must not execute a delayed action from id alone.
+A previously observed action target must carry enough observation metadata to prove that the current handle binding still denotes the same observed window immediately before action.
+If the binding no longer matches, the operation must fail closed with a stale/rebound-handle error rather than act on whichever window currently occupies that index.
+
+The current v62/v63 physical PASS remains valid as evidence that focus delivery works. v64 changes the interpretation of the id contract: the focus implementation is physically functional, but id-only delayed targeting is not sufficiently safe for the general contract.
+
+SCOPE COMPLETED
 - No production code changes.
 - No facade/plugin behavior changes.
-- Add one test-only diagnostic harness.
-- Open two distinct TextEdit windows.
-- Observe the initial public window list.
-- Select the unpinned target and preserve its initial id/title/process/pid mapping.
-- Focus it using the currently validated public focus path.
-- Observe the raw agent-ctrl window list after focus without a new target-process snapshot.
-- Compare the original id->title mapping and the target title->id mapping after focus.
-- Independently verify the physical front document.
+- Physical diagnostic harness added and executed.
+- Initial public window mapping captured.
+- Focus executed through the validated public path.
+- Raw post-focus window list observed without a new target-process snapshot.
+- Original id->title and target title->id mappings compared.
+- Physical front document independently verified.
 
-DIAGNOSTIC SUCCESS CONDITION
-The diagnostic passes if it obtains a coherent observation, regardless of whether ids remain stable or rebind. It must report one of:
-- window-handle-stability=STABLE
-- window-handle-stability=REBOUND
-and physical focus must independently remain correct.
-
-EXPECTED FROM EXISTING EVIDENCE
-REBOUND is expected on current macOS/agent-ctrl because v62/v63 already showed the target id associated with the previous document title after focus.
+NEXT MICRO-POC
+v65 must introduce a window-handle rebinding guard before any new minimize/maximize/restore/move/resize work.
+The guard must preserve the full observed window descriptor needed for freshness validation and fail closed on mismatch before action delivery.
 
 NON-GOALS
-- No fix in v64.
-- No minimize/maximize/restore work.
-- No change to v62/v63 historical physical PASS records.
-- No claim yet about Windows/UIA id stability.
+- No minimize/maximize/restore work in v64.
+- No retroactive alteration of v62/v63 evidence.
+- No claim about Windows/UIA id stability.
 
-The diagnostic result must be committed before implementing the rebinding guard.
+EVIDENCE
+- tests/v64-macos-window-handle-stability-diagnostic-REBOUND.md
