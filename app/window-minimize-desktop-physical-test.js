@@ -96,8 +96,8 @@ async function main() {
 
     const before = macosWindowMinimized.observeWindowMinimized(target);
     console.log(`native-before=${before.ok ? "PASS" : "FAIL"}`);
-    console.log(`native-minimized-before=${before.minimized}`);
-    if (!before.ok || before.minimized !== false) { failed = true; return; }
+    console.log(`native-minimized-before=${before.minimizedAfter}`);
+    if (!before.ok || before.minimizedAfter !== false) { failed = true; return; }
 
     const result = desktop.minimizeWindow(resolved, target);
     console.log(`desktop-minimize=${result.ok ? "PASS" : "FAIL"}`);
