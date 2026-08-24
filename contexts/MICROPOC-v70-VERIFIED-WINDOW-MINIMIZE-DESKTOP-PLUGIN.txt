@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v70
 VERIFIED WINDOW MINIMIZE DESKTOP PLUGIN
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Promote the physically validated v69 native AXMinimized primitive into the effective macOS Desktop Plugin while preserving the safe ephemeral-handle rules established in v64-v68.
@@ -87,3 +87,33 @@ VALIDATION ORDER
 6. Commit exact physical PASS/FAIL.
 7. Mark v70 VALIDATED only after physical PASS.
 8. Only then consider a public ComputerControl minimize facade.
+
+
+BOUNDARY RESULT
+PASS.
+Evidence commit:
+`381976f41fa0bae73884fd32d6105a899cde0337`
+`test(v70): validate window minimize desktop boundary on macOS`
+
+PHYSICAL RESULT
+PASS.
+Harness contract correction:
+`d7288d0787ca2db32cf9b91ace8b3f82f139ad6d`
+`fix(v70): read native minimized observation field`
+
+Physical evidence commit:
+`6d70eb90b6af9e6d26df51e21c43abdb26f6378a`
+`test(v70): validate physical Desktop Plugin window minimize`
+
+VALIDATED CONCLUSIONS
+1. The effective macOS Desktop Plugin implements window.minimize.
+2. It preserves the full observed descriptor and fails closed on stale or ambiguous targets.
+3. It re-resolves the descriptor against a fresh pre-action window list.
+4. Native AXMinimized mutation physically minimized the uniquely titled TextEdit fixture.
+5. State-driven native verification observed minimized=true.
+6. Independent System Events observation also observed minimized=true.
+7. Fixture restoration, cleanup and runtime shutdown passed.
+8. Production uses no Cmd+M and no AppleScript for the minimize action.
+
+NEXT
+v71 may expose the validated operation through public ComputerControl.minimizeWindow({app, window}) while preserving the full descriptor and verified result contract.
