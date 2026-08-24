@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v67
 CLOSE WINDOW EPHEMERAL HANDLE DIAGNOSTIC
 
 STATUS
-WIP / PHYSICAL DIAGNOSTIC PENDING
+VALIDATED / FALSE_NEGATIVE CONFIRMED
 
 PURPOSE
 Audit the existing macOS `closeWindow()` verifier against the v64 finding that agent-ctrl window ids `pid:<pid>:window:<index>` are ephemeral positional handles rather than durable identities.
@@ -14,31 +14,43 @@ The v59 close verifier captures a pre-close current-window id, sends Cmd+W, then
 
 That logic was physically valid for the original v59 single-window scenario, but v64 later proved that pid/index ids can rebind. With two windows, closing the front window can allow the surviving window to occupy the same `window:<index>`. In that case the physical close may succeed while the verifier observes the same positional id and reports UNVERIFIED.
 
-SCOPE
+PHYSICAL RESULT
+macOS / TextEdit two-window fixture:
+- front/closed fixture B before close: `pid:60698:window:0`
+- survivor A before close: `pid:60698:window:1`
+- public close returned `WINDOW_CLOSE_UNVERIFIED`
+- independent document observation proved B was physically closed
+- only A remained after close
+- survivor A was then reported as `pid:60698:window:0`
+- therefore the closed handle was reused by the survivor
+- classification: `close-verifier-consistency=FALSE_NEGATIVE`
+- diagnostic_exit=0
+
+VALIDATED CONCLUSION
+The v59 postcondition `afterId !== beforeId` is not valid in the multi-window case on current macOS/agent-ctrl because the id is a positional action handle, not durable window identity.
+
+The historical v59 PASS remains valid for its original single-window scenario, but the verifier is not general enough for multiple windows.
+
+ARCHITECTURAL CONSEQUENCE
+Production close verification must not compare positional ids across the close operation.
+A correct verifier must prove that the physical descriptor of the closed window is no longer present, or use an equally strong native OS-level postcondition that is independent of the rebinding handle.
+
+SCOPE COMPLETED
 - No production code changes.
-- Add one physical diagnostic harness only.
-- Open two distinct TextEdit fixture windows.
-- Establish which fixture is physically frontmost.
-- Capture the public window list before close.
-- Invoke existing public `ComputerControl.closeWindow({app:"TextEdit"})` exactly once.
-- Independently observe TextEdit documents after the action.
-- Determine whether the front fixture was physically closed.
-- Compare the public close result with the independent physical result.
+- Added physical diagnostic harness.
+- Opened two distinct TextEdit windows.
+- Identified the physically frontmost fixture.
+- Captured public window list before close.
+- Invoked existing public `ComputerControl.closeWindow({app:"TextEdit"})` exactly once.
+- Independently observed TextEdit documents after the action.
+- Confirmed physical close succeeded.
+- Confirmed surviving window reused the closed positional handle.
+- Classified current production verifier as FALSE_NEGATIVE.
 
-DIAGNOSTIC OUTCOMES
-The diagnostic must report one of:
-- close-verifier-consistency=CONSISTENT
-- close-verifier-consistency=FALSE_NEGATIVE
-- close-verifier-consistency=FALSE_POSITIVE
-
-Expected from the v64 handle model:
-- physical close succeeds;
-- surviving fixture reoccupies the same positional id;
-- current `closeWindow()` reports UNVERIFIED;
-- close-verifier-consistency=FALSE_NEGATIVE.
-
-DIAGNOSTIC SUCCESS CONDITION
-The harness itself passes when it obtains a coherent before/action/after observation and classifies the verifier consistently, regardless of whether the current production result is correct or exposes the expected false negative.
+EVIDENCE
+- v67 diagnostic definition: `5881445c61c2b4ee40f9f80f94f4769b1cb66e5c`
+- v67 diagnostic harness: `3079b284601b8696462efff941f2a4f0de06ec8f`
+- physical FALSE_NEGATIVE evidence: `f4f02067456a26d046477761221d215e01af589a`
 
 NON-GOALS
 - No closeWindow fix in v67.
@@ -46,4 +58,5 @@ NON-GOALS
 - No minimize/maximize/restore work.
 - No change to historical v59 PASS.
 
-The exact physical diagnostic result must be committed before changing closeWindow verification.
+NEXT
+The next micro-PoC must correct closeWindow verification before any additional window lifecycle actions are introduced.
