@@ -23,6 +23,67 @@ function excerpt(snapshot) {
     .join(" | ");
 }
 
+function establishWindowFixture(desktop) {
+  const provider = ComputerControl.resolveApplicationProvider("TextEdit");
+  if (!provider) {
+    return {ok:false, error:"PROVIDER_NOT_FOUND"};
+  }
+
+  const resolved = desktop.resolveApplication({provider});
+  if (!resolved?.ok || !resolved.identity) {
+    return {
+      ok:false,
+      error:resolved?.error || "APP_RESOLVE_FAILED",
+      detail:resolved?.detail || "TextEdit resolution failed",
+    };
+  }
+
+  const application = {
+    ...resolved,
+    provider,
+    identity:resolved.identity,
+  };
+
+  let activated = desktop.activateApplication(application);
+  if (!activated?.ok) {
+    const launched = desktop.launchApplication(application);
+    if (!launched?.ok) {
+      return {
+        ok:false,
+        error:launched?.error || "APP_LAUNCH_FAILED",
+        detail:launched?.detail || launched?.stderr || launched?.stdout || "TextEdit launch failed",
+      };
+    }
+    activated = desktop.activateApplication(application);
+  }
+
+  if (!activated?.ok) {
+    return {
+      ok:false,
+      error:activated?.error || "APP_ACTIVATE_FAILED",
+      detail:activated?.detail || activated?.stderr || activated?.stdout || "TextEdit activation failed",
+    };
+  }
+
+  const foreground = ComputerControl.getForeground();
+  const fixture = ComputerControl.press({
+    app:"TextEdit",
+    keys:"Cmd+N",
+    settle:true,
+  });
+
+  return {
+    ok:fixture.ok,
+    provider,
+    resolved,
+    activated,
+    foreground,
+    fixture,
+    error:fixture.ok ? null : (fixture.error || "WINDOW_FIXTURE_FAILED"),
+    detail:fixture.detail || null,
+  };
+}
+
 async function main() {
   const desktop = loadDesktopPlugin();
   let failed = false;
@@ -34,20 +95,16 @@ async function main() {
   if (!runtime.ok) process.exit(1);
 
   try {
-    const ready = await ComputerControl.ensureReady("TextEdit");
-    console.log(`application-ready=${ready.ok ? "PASS" : "FAIL"}`);
-    if (!ready.ok) {
-      failed = true;
-      return;
-    }
+    const prepared = establishWindowFixture(desktop);
+    console.log(`application-resolved=${prepared.resolved?.ok ? "PASS" : "FAIL"}`);
+    console.log(`application-activated=${prepared.activated?.ok ? "PASS" : "FAIL"}`);
+    console.log(
+      `fixture-foreground=${prepared.foreground?.ok ? `${prepared.foreground.name || ""} ${prepared.foreground.bundle || ""}`.trim() : "UNAVAILABLE"}`
+    );
+    console.log(`window-fixture=${prepared.ok ? "PASS" : "FAIL"}`);
 
-    const fixture = ComputerControl.press({
-      app:"TextEdit",
-      keys:"Cmd+N",
-      settle:true,
-    });
-    console.log(`window-fixture=${fixture.ok ? "PASS" : "FAIL"}`);
-    if (!fixture.ok) {
+    if (!prepared.ok) {
+      console.log(`window-fixture-error=${prepared.error || prepared.detail || "unknown"}`);
       failed = true;
       return;
     }
