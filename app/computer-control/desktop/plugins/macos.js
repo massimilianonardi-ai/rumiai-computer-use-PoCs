@@ -13,7 +13,7 @@ const CAPABILITIES = Object.freeze({
   "application.activate":"IMPLEMENTED",
   "application.foreground":"IMPLEMENTED",
   "system-settings.resolve":"IMPLEMENTED",
-  "window.list":"DEFERRED",
+  "window.list":"IMPLEMENTED",
   "window.current":"IMPLEMENTED",
   "window.focus":"DEFERRED",
   "window.close":"IMPLEMENTED",
@@ -81,8 +81,80 @@ function getSystemSettingsApplication() {
   };
 }
 
-function listWindows() {
-  return unsupported(platform, "listWindows");
+function listWindows(application = {}) {
+  const provider = application?.provider || null;
+  const identity = application?.identity || null;
+
+  if (!provider || !identity) {
+    return unsupported(
+      platform,
+      "listWindows",
+      "resolved application provider and identity are required"
+    );
+  }
+
+  // agent-ctrl window-list enumerates windows for the session's pinned process.
+  // Pin explicitly through a fresh read-only snapshot so listWindows() never
+  // depends on whichever application happened to be observed previously.
+  const pinned = agentCtrl.snapshotApplication(
+    provider,
+    identity,
+    false,
+    {compact:true}
+  );
+
+  if (!pinned.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_LIST_PIN_FAILED",
+      detail:(pinned.stderr || pinned.stdout || "could not pin application window").trim(),
+      platform,
+      operation:"listWindows",
+      windows:[],
+      method:pinned.method,
+      observeSeconds:pinned.seconds || 0,
+      seconds:pinned.seconds || 0,
+    };
+  }
+
+  const listed = agentCtrl.listWindows();
+  const observeSeconds = (pinned.seconds || 0) + (listed.seconds || 0);
+
+  if (!listed.ok) {
+    return {
+      ok:false,
+      state:"FAILED",
+      error:"WINDOW_LIST_FAILED",
+      detail:(listed.stderr || listed.stdout || "window-list failed").trim(),
+      platform,
+      operation:"listWindows",
+      windows:[],
+      method:listed.method,
+      observeSeconds,
+      seconds:observeSeconds,
+    };
+  }
+
+  const windows = listed.windows.map(window => ({
+    id:String(window?.id || ""),
+    title:window?.title == null ? null : String(window.title),
+    process:String(window?.process || ""),
+    pid:Number(window?.pid || 0),
+    focused:window?.focused === true,
+    pinned:window?.pinned === true,
+  }));
+
+  return {
+    ok:true,
+    state:"OBSERVED",
+    platform,
+    operation:"listWindows",
+    windows,
+    method:listed.method,
+    observeSeconds,
+    seconds:observeSeconds,
+  };
 }
 
 function getCurrentWindow() {
