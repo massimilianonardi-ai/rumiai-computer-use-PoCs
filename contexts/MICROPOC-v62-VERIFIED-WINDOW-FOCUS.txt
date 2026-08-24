@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v62
 VERIFIED WINDOW FOCUS
 
 STATUS
-WIP / PHYSICAL TEST PENDING
+VALIDATED
 
 PURPOSE
 Activate Desktop Plugin focusWindow() on macOS using stable window ids from the v60/v61 validated window-list observation, without exposing backend or OS-specific HOW through the public Computer Control facade.
@@ -16,41 +16,54 @@ The public Computer Control facade is unchanged in v62.
 UPSTREAM BACKEND CONTRACT CONFIRMED
 agent-ctrl exposes `focus-window <id>` and documents window-list as the discovery primitive for ids used by focus-window. The focus-window action brings the selected window to the foreground and re-pins the session on it.
 
-SCOPE
-- Add backend agentCtrl.focusWindow(windowId) using `agent-ctrl focus-window <id> --json`.
-- Mark macOS Desktop capability `window.focus` IMPLEMENTED.
+VALIDATED IMPLEMENTATION
+- Backend agentCtrl.focusWindow(windowId) uses `agent-ctrl focus-window <id> --json`.
+- macOS Desktop capability `window.focus` is IMPLEMENTED.
 - macOS focusWindow(application, window) requires a stable window id.
-- Precondition: validated plugin listWindows(application) must prove the id belongs to the resolved application.
-- Execute focus through backend agentCtrl.focusWindow(targetId).
-- Postcondition observation must use direct backend agentCtrl.listWindows() with no intervening target-process snapshot.
+- Precondition: validated plugin listWindows(application) proves the id belongs to the resolved application.
+- Focus executes through backend agentCtrl.focusWindow(targetId).
+- Postcondition observation uses direct backend agentCtrl.listWindows() with no intervening target-process snapshot.
 - Success requires the requested id to be present with pinned=true after the action.
-- Return FOCUSED + verified=true only when that postcondition is satisfied.
+- FOCUSED + verified=true is returned only when that postcondition is satisfied.
 
 WHY NO POST-ACTION plugin listWindows()
-The validated plugin listWindows(application) intentionally performs a fresh target-process snapshot before enumeration so it can establish the application context. Calling it after focus-window could re-pin a different window and destroy the very postcondition v62 needs to observe. Therefore post-action verification reads the already-pinned session window list directly inside the macOS plugin.
+The validated plugin listWindows(application) intentionally performs a fresh target-process snapshot before enumeration so it can establish the application context. Calling it after focus-window could re-pin a different window and destroy the postcondition. Therefore post-action verification reads the already-pinned session window list directly inside the macOS plugin.
 
-PHYSICAL VERIFICATION PRINCIPLE
-Plugin verification proves session state: requested id is pinned after focus-window.
-The physical harness will independently prove visible window focus using a test-only TextEdit front-document observation. Test-only AppleScript is not part of the RumiAI implementation boundary.
+BOUNDARY VALIDATION
+PASS. The boundary test proved:
+- stable target id requirement;
+- target ownership precondition;
+- backend focus-window routing remains private;
+- no post-action plugin listWindows/application snapshot re-pin;
+- target id pinned postcondition;
+- public Computer Control facade remains unchanged in v62.
+
+PHYSICAL VALIDATION
+PASS on macOS with two real TextEdit windows.
+
+Observed sequence:
+- initial pinned window: rumiai-v62-window-focus-B.txt, id pid:59940:window:0;
+- target unpinned window: rumiai-v62-window-focus-A.txt, id pid:59940:window:1;
+- plugin focus returned FOCUSED, verified=true;
+- postcondition reported target id pid:59940:window:1 with pinned=true;
+- independent TextEdit front-document observation reported rumiai-v62-window-focus-A.txt;
+- physical-window-focus=PASS;
+- physical_exit=0.
+
+KNOWN OBSERVATION / DEBT
+The immediate post-action backend window-list associated the correctly pinned target id pid:59940:window:1 with the stale/mismatched title rumiai-v62-window-focus-B.txt. Independent physical observation proved the actual front document was rumiai-v62-window-focus-A.txt.
+
+This does not invalidate v62 because the focus contract is id-based and both the id pin transition and independent physical focus passed. Do not treat immediate post-focus title metadata as authoritative until a separate metadata-consistency micro-PoC investigates it.
+
+fixture-cleanup=WARN was test cleanup only and did not affect the functional result.
 
 NON-GOALS
-- No public ComputerControl.focusWindow() facade yet.
+- No public ComputerControl.focusWindow() facade in v62.
 - No minimize/maximize/restore/move/resize implementation.
 - No planner/executor changes.
 - No Windows/Linux implementation claims.
 - No coordinate-based focus.
 - No title-based focus in the implementation contract.
 
-VALIDATION PLAN
-1. Run static boundary test.
-2. Commit exact PASS/FAIL.
-3. Open two distinct real TextEdit fixture windows.
-4. Enumerate them through the validated window-list path.
-5. Select the currently unpinned fixture by stable id.
-6. Call macOS Desktop Plugin focusWindow(application, targetWindow).
-7. Require FOCUSED + verified=true + target id pinned.
-8. Independently require TextEdit front document title to equal the target fixture title.
-9. Optionally focus the other fixture and verify the reverse direction as a stronger regression check.
-10. Cleanup fixtures/runtime and commit exact physical result before any v63 work.
-
-IMPLEMENTED does not mean VALIDATED until physical verification passes.
+FINAL CLASSIFICATION
+v62 VERIFIED WINDOW FOCUS: VALIDATED.
