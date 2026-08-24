@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. "${0%/*}/env"
+
+check_bin "$NODEJS_BIN" nodejs-install
+"$NODEJS_BIN" "$ROOT/app/window-observation-desktop-boundary-test.js"
