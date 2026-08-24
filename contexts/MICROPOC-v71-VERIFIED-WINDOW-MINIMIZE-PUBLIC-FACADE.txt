@@ -1,0 +1,111 @@
+RumiAI Computer Control micro-PoC v71
+VERIFIED WINDOW MINIMIZE PUBLIC FACADE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose the physically validated v70 macOS Desktop Plugin window.minimize operation through the public ComputerControl facade without leaking backend or platform-specific details.
+
+SCOPE
+- Add public ComputerControl.minimizeWindow({app, window}).
+- Export minimizeWindow from app/computer-control/index.js.
+- Route only through the selected Desktop Plugin minimizeWindow(application, window).
+- Preserve the full observed window descriptor: id, title, process and pid.
+- Propagate verified result metadata from the validated v70 plugin.
+- Add a dedicated static boundary test.
+- Add a dedicated physical public-facade test on macOS.
+
+PUBLIC INPUT CONTRACT
+{
+  app,
+  window: {
+    id,
+    title,
+    process,
+    pid
+  }
+}
+
+The public facade accepts only an observed descriptor returned by the existing public listWindows boundary. It does not invent, reconstruct or weaken the descriptor.
+
+FACADE FLOW
+1. Require app.
+2. Normalize the observed id/title/process/pid without discarding fields.
+3. Require the observed handle.
+4. Resolve the application Provider through the existing public Computer Control path.
+5. Resolve the application through the selected Desktop Plugin.
+6. Call desktop.minimizeWindow(resolvedApplication, fullObservedDescriptor).
+7. Propagate failure closed with verified=false and v70 diagnostics.
+8. Report success only when the plugin returns verified success.
+
+SUCCESS RESULT
+- ok=true
+- state=MINIMIZED
+- minimized=true
+- verified=true
+- verificationMethod=native-ax-minimized-true
+- window
+- observedHandle
+- actionHandle
+- handleRebound
+- method
+- actionSeconds
+- observeSeconds
+- totalSeconds
+
+FAILURE RESULT
+- ok=false
+- plugin error/state/detail propagated
+- verified=false
+- observed/action handle diagnostics retained
+- no facade-level fallback action
+
+BOUNDARY REQUIREMENTS
+- Public function and export exist.
+- Application and observed handle are required.
+- Full descriptor reaches desktop.minimizeWindow.
+- Provider and Desktop Plugin application resolution are retained.
+- Verified success/failure metadata is propagated.
+- Success state is MINIMIZED and minimized=true.
+- Effective macOS window.minimize capability remains IMPLEMENTED.
+- Validated v70 Desktop Plugin minimizeWindow remains selected on darwin.
+
+FORBIDDEN IN FACADE
+- Direct agentCtrl or agent-ctrl references.
+- Direct macOS minimized backend references.
+- Direct Swift helper references.
+- Cmd+M.
+- AppleScript.
+- Coordinate-based targeting.
+- Title-only targeting.
+- ID-only weakening of the descriptor.
+- Restore/maximize/move/resize behavior.
+
+PHYSICAL VALIDATION
+1. Start Computer Control runtime.
+2. Open one uniquely titled TextEdit fixture.
+3. Resolve the fixture through public ComputerControl.listWindows({app}).
+4. Require native precondition AXMinimized=false.
+5. Call only public ComputerControl.minimizeWindow({app, window:fullDescriptor}).
+6. Require facade result MINIMIZED, minimized=true and verified=true.
+7. Require verificationMethod=native-ax-minimized-true.
+8. Independently observe AXMinimized=true.
+9. Restore only as test cleanup through the validated private primitive.
+10. Require restored=false, cleanup PASS and runtime shutdown PASS.
+
+VALIDATION ORDER
+1. Commit this v71 contract.
+2. Implement facade and boundary test only.
+3. Run boundary test.
+4. Commit exact boundary PASS/FAIL before diagnosis or correction.
+5. After boundary PASS, add/run the physical facade harness.
+6. Commit exact physical PASS/FAIL before diagnosis or correction.
+7. Mark v71 VALIDATED only after physical PASS.
+
+NON-GOALS
+- No public restoreWindow.
+- No maximize, move or resize.
+- No Windows/Linux implementation claim.
+- No durable macOS window identity.
+- No change to validated v70 production targeting or native verification.
