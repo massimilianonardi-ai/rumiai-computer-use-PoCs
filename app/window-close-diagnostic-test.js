@@ -3,6 +3,7 @@
 const fs = require("fs");
 const {spawnSync} = require("child_process");
 const ComputerControl = require("./computer-control");
+const {providerResolvedPath} = require("./provider-manager");
 const {loadDesktopPlugin} = require("./computer-control/desktop");
 
 const FIXTURE_PATH = "/tmp/rumiai-v59-window-close-diagnostic.txt";
@@ -33,10 +34,24 @@ async function establishWindowFixture(desktop) {
     return {ok:false, error:"PROVIDER_NOT_FOUND"};
   }
 
-  const resolved = desktop.resolveApplication({provider});
+  const exactPath = providerResolvedPath(provider);
+  if (!exactPath) {
+    return {
+      ok:false,
+      provider,
+      exactPath:null,
+      error:"PROVIDER_PATH_NOT_FOUND",
+      detail:"No installed TextEdit path resolved from Provider availability",
+    };
+  }
+
+  const resolved = desktop.resolveApplication({provider, exactPath});
   if (!resolved?.ok || !resolved.identity) {
     return {
       ok:false,
+      provider,
+      exactPath,
+      resolved,
       error:resolved?.error || "APP_RESOLVE_FAILED",
       detail:resolved?.detail || "TextEdit resolution failed",
     };
@@ -46,6 +61,7 @@ async function establishWindowFixture(desktop) {
     ...resolved,
     provider,
     identity:resolved.identity,
+    exactPath,
   };
 
   let activated = desktop.activateApplication(application);
@@ -54,6 +70,10 @@ async function establishWindowFixture(desktop) {
     if (!launched?.ok) {
       return {
         ok:false,
+        provider,
+        exactPath,
+        resolved,
+        activated,
         error:launched?.error || "APP_LAUNCH_FAILED",
         detail:launched?.detail || launched?.stderr || launched?.stdout || "TextEdit launch failed",
       };
@@ -64,6 +84,10 @@ async function establishWindowFixture(desktop) {
   if (!activated?.ok) {
     return {
       ok:false,
+      provider,
+      exactPath,
+      resolved,
+      activated,
       error:activated?.error || "APP_ACTIVATE_FAILED",
       detail:activated?.detail || activated?.stderr || activated?.stdout || "TextEdit activation failed",
     };
@@ -83,6 +107,7 @@ async function establishWindowFixture(desktop) {
     return {
       ok:false,
       provider,
+      exactPath,
       resolved,
       activated,
       error:"WINDOW_FIXTURE_OPEN_FAILED",
@@ -96,6 +121,7 @@ async function establishWindowFixture(desktop) {
   return {
     ok:ready.ok,
     provider,
+    exactPath,
     resolved,
     activated,
     ready,
@@ -117,6 +143,7 @@ async function main() {
 
   try {
     const prepared = await establishWindowFixture(desktop);
+    console.log(`provider-path=${prepared.exactPath || ""}`);
     console.log(`application-resolved=${prepared.resolved?.ok ? "PASS" : "FAIL"}`);
     console.log(`application-activated=${prepared.activated?.ok ? "PASS" : "FAIL"}`);
     console.log(`window-fixture-ready=${prepared.ready?.ok ? "PASS" : "FAIL"}`);
