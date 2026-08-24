@@ -30,14 +30,17 @@ const requiredPlugin = [
   ["window.close capability implemented", "\"window.close\":\"IMPLEMENTED\""],
   ["macOS closeWindow implementation", "function closeWindow(application = {})"],
   ["macOS Cmd+W implementation", "agentCtrl.pressKeys(\"Cmd+W\")"],
-  ["pre-close window observation", "const before = agentCtrl.getCurrentWindow()"],
-  ["post-close window observation", "const after = agentCtrl.getCurrentWindow()"],
+  ["pre-close current-window observation", "const before = agentCtrl.getCurrentWindow()"],
+  ["fresh AX post-close snapshot", "const afterSnapshot = agentCtrl.snapshotApplication("],
+  ["AX snapshot window-id extraction", "snapshotWindowId(afterSnapshot.stdout)"],
   ["verified close failure", "WINDOW_CLOSE_UNVERIFIED"],
-  ["verified close postcondition", "current-window-changed-or-absent"],
+  ["verified AX close postcondition", "ax-window-absent-or-changed"],
 ];
 
 const forbiddenPlugin = [
   ["closeWindow still deferred", "unsupported(platform, \"closeWindow\")"],
+  ["stale post-close getCurrentWindow verification", "const after = agentCtrl.getCurrentWindow()"],
+  ["legacy current-window postcondition", "current-window-changed-or-absent"],
 ];
 
 let failed = false;
