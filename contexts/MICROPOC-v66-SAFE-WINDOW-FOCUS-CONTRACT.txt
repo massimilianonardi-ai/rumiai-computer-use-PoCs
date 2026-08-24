@@ -1,0 +1,79 @@
+RumiAI Computer Control micro-PoC v66
+SAFE WINDOW FOCUS CONTRACT
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Correct the public/macOS window-focus contract after v64 proved that agent-ctrl macOS ids `pid:<pid>:window:<index>` are observation-scoped positional action handles, not durable window identities, and v65 validated a native AX focused-window postcondition observer.
+
+ARCHITECTURAL CORRECTION
+The previous v62/v63 contract was physically successful but conceptually unsafe:
+- it treated pid/index id as stable identity;
+- it selected the action target directly from the previously observed id;
+- it verified success by requiring that same id to be pinned after focus.
+
+v64 physically proved that the id can rebind to another window when AXWindows order changes, invalidating both assumptions.
+
+SAFE CONTRACT
+A window returned by listWindows() is an OBSERVED DESCRIPTOR containing:
+- id: ephemeral action handle valid for that observation
+- title
+- process
+- pid
+
+For macOS focus:
+1. Public ComputerControl.focusWindow() preserves the full observed descriptor.
+2. Desktop Plugin establishes the resolved application context.
+3. Desktop Plugin reads a fresh raw window-list immediately before action.
+4. The intended physical window is re-resolved by descriptor `{title, process, pid}`.
+5. If no current window matches: WINDOW_TARGET_STALE.
+6. If more than one current window matches: WINDOW_TARGET_AMBIGUOUS.
+7. If exactly one matches, its CURRENT id becomes the action handle.
+8. `handleRebound=true` when the current action handle differs from the originally observed handle.
+9. agent-ctrl focus-window is called only with the freshly resolved current handle.
+10. Success is verified with the v65 native observer `NSWorkspace.frontmostApplication + AXFocusedWindow`, matching pid/process/title and resolved bundle.
+11. The old postcondition `target id pinned=true` is forbidden.
+
+FAIL-CLOSED LIMIT
+The current macOS descriptor requires non-empty title, process and pid plus the observed handle. This is intentionally conservative because v65 did not discover a durable AX window identity. A missing descriptor is WINDOW_DESCRIPTOR_INSUFFICIENT rather than permission to guess.
+
+TITLE IS NOT A GLOBAL ID
+Title is used only inside the already resolved application/process descriptor and must match uniquely in the current window set. Two same-title windows therefore produce WINDOW_TARGET_AMBIGUOUS; RumiAI does not guess.
+
+PUBLIC RESULT
+Successful focus returns the physical descriptor without pretending the action handle is still a durable window id, plus:
+- observedHandle
+- actionHandle
+- handleRebound
+- nativeWindow
+- verified=true
+- verificationMethod=native-focused-window-descriptor
+
+SCOPE
+- Promote v65 native focused-window helper to macos-native backend.
+- Add state-driven waitForFocusedWindow().
+- Replace macOS plugin id-only focus targeting with descriptor re-resolution.
+- Replace pinned-id postcondition with native focused-window descriptor verification.
+- Update public focus facade to preserve full observed descriptor and new diagnostics.
+- Preserve backend agent-ctrl focus-window as private HOW.
+
+NON-GOALS
+- No durable cross-observation RumiAI window identity yet.
+- No guessing between duplicate titles.
+- No minimize/maximize/restore/move/resize work.
+- No Windows/Linux implementation claim.
+- No change to closeWindow() in v66.
+
+VALIDATION PLAN
+1. Static boundary/syntax test.
+2. Commit exact boundary PASS/FAIL.
+3. Physical harness opens two TextEdit windows and captures descriptor B.
+4. Test intentionally focuses A through raw backend, forcing AX window-order rebinding so B's old handle points at A.
+5. Public ComputerControl.focusWindow() receives the stale observed B descriptor.
+6. Require re-resolution to B's new current action handle with handleRebound=true.
+7. Require native focused-window verification to report B.
+8. Independently require TextEdit front document B.
+9. Commit exact physical result before any v67/new window action.
+
+IMPLEMENTED does not mean VALIDATED until the rebound physical scenario passes.
