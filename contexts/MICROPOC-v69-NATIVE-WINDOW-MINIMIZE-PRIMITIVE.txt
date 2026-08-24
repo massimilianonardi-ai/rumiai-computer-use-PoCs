@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v69
 NATIVE WINDOW MINIMIZE PRIMITIVE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Validate the generic macOS Accessibility primitive required for Desktop Plugin `window.minimize` before changing production behavior.
@@ -34,23 +34,38 @@ Contract:
 WHY TITLE IS ACCEPTABLE HERE
 This helper is diagnostic only and the fixture uses a unique exact title inside one known PID. It does not define a durable public window identity. A future production operation will reuse the safe descriptor/re-resolution rules validated in v66.
 
-BOUNDARY SUCCESS
-- Swift helper compiles.
-- Uses AX application/window APIs and `kAXMinimizedAttribute`.
-- Checks settable state before mutation.
-- Exact descriptor match is process-scoped and ambiguity fails closed.
-- No `Cmd+M` implementation.
-- No AppleScript implementation.
-- No production files changed.
+BOUNDARY RESULT
+PASS.
+Evidence commit:
+`519bef969ec73e83023327711b32836c3a730971`
+`test(v69): validate native window minimize boundary on macOS`
 
-PHYSICAL PLAN AFTER BOUNDARY PASS
-1. Open a uniquely titled TextEdit fixture.
-2. Resolve its PID/title through existing public observation.
-3. Observe `minimized=false` through the native helper.
-4. Set minimized=true.
-5. Require native readback `true` and visible physical minimization.
-6. Restore to false only as fixture cleanup and require readback false.
-7. Commit exact physical result before production minimize integration.
+PHYSICAL RESULT
+PASS.
+Evidence commit:
+`052e2efaeeb1d077949dd7ce1114c34152a67530`
+`test(v69): validate native window minimize primitive physically on macOS`
+
+Observed physical transitions:
+- native initial `AXMinimized=false`
+- minimize action succeeded
+- immediate helper readback could still be stale (`false`), so success was determined by state-driven re-observation rather than immediate write response
+- state-driven native observation reached `AXMinimized=true` on first poll
+- independent physical observer also reported minimized=true
+- restore action succeeded
+- immediate helper readback could still be stale (`true`)
+- state-driven native observation reached `AXMinimized=false` on first poll
+- independent physical observer also reported minimized=false
+- fixture cleanup PASS
+- runtime shutdown PASS
+
+VALIDATED CONCLUSIONS
+1. `kAXMinimizedAttribute` is writable for the tested TextEdit window on macOS.
+2. `AXUIElementSetAttributeValue(..., kAXMinimizedAttribute, true)` physically minimizes the window.
+3. Setting the same attribute to false physically restores the window.
+4. Immediate post-write readback is not authoritative; production verification must use state-driven re-observation.
+5. The primitive requires no `Cmd+M` and no AppleScript in production.
+6. Exact-title matching inside a known PID is sufficient for this diagnostic only; production targeting must follow the safe descriptor/re-resolution model validated in v66.
 
 NON-GOALS
 - No public `ComputerControl.minimizeWindow()` yet.
@@ -58,3 +73,6 @@ NON-GOALS
 - No maximize/restore contract yet.
 - No Windows/Linux claim.
 - No durable window identity.
+
+NEXT
+v70 may promote the validated AX primitive into the macOS Desktop Plugin `window.minimize`, preserving safe descriptor re-resolution and state-driven verification before any public facade exposure.
