@@ -563,6 +563,35 @@ function restoreWindow({app, window} = {}) {
   };
 }
 
+function maximizeWindow({app, window} = {}) {
+  const started = performance.now();
+  if (!app) return {ok:false, error:"APP_REQUIRED", detail:"maximizeWindow requires an application", state:"FAILED"};
+  const targetWindow = {id:String(window?.id || "").trim(), title:window?.title == null ? null : String(window.title), process:String(window?.process || "").trim(), pid:Number(window?.pid || 0)};
+  if (!targetWindow.id) return {ok:false, error:"WINDOW_HANDLE_REQUIRED", detail:"maximizeWindow requires an observed window handle", state:"FAILED"};
+  const provider = resolveApplicationProvider(app);
+  if (!provider) return {ok:false, error:"PROVIDER_NOT_FOUND", detail:`No application Provider registered for "${app}"`, state:"FAILED"};
+  const resolved = resolveDesktopApplication(provider);
+  if (!resolved.ok) return {ok:false, error:resolved.error, detail:resolved.detail, state:"FAILED"};
+  const result = desktop.maximizeWindow(resolved.application, targetWindow);
+  const common = {
+    window:result?.window || targetWindow,
+    observedHandle:result?.observedHandle || targetWindow.id,
+    actionHandle:result?.actionHandle || null,
+    handleRebound:result?.handleRebound === true,
+    bounds:result?.bounds || null,
+    desiredBounds:result?.desiredBounds || null,
+    method:result?.method || `desktop plugin ${desktop.id} maximize-window`,
+    verificationMethod:result?.verification || "none",
+    actionSeconds:result?.actionSeconds || 0,
+    observeSeconds:result?.observeSeconds || 0,
+    totalSeconds:(performance.now() - started) / 1000,
+  };
+  if (!result?.ok || result.verified !== true || result.maximized !== true) {
+    return {ok:false, error:result?.error || "WINDOW_MAXIMIZE_UNVERIFIED", detail:result?.detail || `Desktop plugin "${desktop.id}" could not verify window maximize`, state:result?.ok ? "UNVERIFIED" : (result?.state || "FAILED"), ...common, maximized:false, verified:false};
+  }
+  return {ok:true, state:"MAXIMIZED", ...common, maximized:true, verified:true, verificationMethod:result.verification || "native-ax-visible-frame-bounds"};
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -1021,6 +1050,7 @@ module.exports = {
   focusWindow,
   minimizeWindow,
   restoreWindow,
+  maximizeWindow,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,

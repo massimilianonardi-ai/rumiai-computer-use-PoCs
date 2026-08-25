@@ -1,0 +1,38 @@
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const {spawnSync} = require("child_process");
+const root = path.resolve(__dirname, "..");
+const facadePath = path.join(root, "app", "computer-control", "index.js");
+const pluginPath = path.join(root, "app", "computer-control", "desktop", "plugins", "macos-v75.js");
+const loaderPath = path.join(root, "app", "computer-control", "desktop", "index.js");
+const facade = fs.readFileSync(facadePath, "utf8");
+const plugin = fs.readFileSync(pluginPath, "utf8");
+const loader = fs.readFileSync(loaderPath, "utf8");
+let failed = false;
+function check(label, ok) { console.log(`${label}: ${ok ? "PASS" : "FAIL"}`); if (!ok) failed = true; }
+function syntax(file) { return spawnSync(process.execPath, ["--check", file]).status === 0; }
+const scope = facade.slice(facade.indexOf("function maximizeWindow({app, window} = {})"), facade.indexOf("function closeWindow({app} = {})"));
+check("required facade syntax", syntax(facadePath));
+check("required plugin syntax", syntax(pluginPath));
+check("required loader syntax", syntax(loaderPath));
+check("required isolated maximize facade", scope.length > 0);
+check("required application", scope.includes("maximizeWindow requires an application"));
+check("required full descriptor", scope.includes('id:String(window?.id || "").trim()') && scope.includes("title:window?.title") && scope.includes("process:String(window?.process") && scope.includes("pid:Number(window?.pid"));
+check("required handle", scope.includes("WINDOW_HANDLE_REQUIRED"));
+check("required Provider resolution", scope.includes("resolveApplicationProvider(app)"));
+check("required Desktop resolution", scope.includes("resolveDesktopApplication(provider)"));
+check("required plugin routing", scope.includes("desktop.maximizeWindow(resolved.application, targetWindow)"));
+check("required success guard", scope.includes("result.verified !== true") && scope.includes("result.maximized !== true"));
+check("required MAXIMIZED success", scope.includes('state:"MAXIMIZED"') && scope.includes("maximized:true") && scope.includes("verified:true"));
+check("required bounds propagation", scope.includes("bounds:result?.bounds") && scope.includes("desiredBounds:result?.desiredBounds"));
+check("required verification propagation", scope.includes("native-ax-visible-frame-bounds"));
+check("required handle diagnostics", scope.includes("observedHandle") && scope.includes("actionHandle") && scope.includes("handleRebound"));
+check("forbidden backend", !scope.includes("agentCtrl") && !scope.includes("macosWindowBounds"));
+check("forbidden native action", !scope.includes("setWindowBounds") && !scope.includes("maximizeWindowBounds"));
+check("forbidden shortcut or AppleScript", !scope.includes("pressKeys") && !scope.includes("osascript"));
+check("required public export", facade.includes("\n  maximizeWindow,\n"));
+check("required validated capability", plugin.includes('"window.maximize":"IMPLEMENTED"'));
+check("required loader v75", loader.includes('darwin:"./plugins/macos-v75"'));
+console.log(`verified-window-maximize-facade-boundary=${failed ? "FAIL" : "PASS"}`);
+process.exit(failed ? 1 : 0);
