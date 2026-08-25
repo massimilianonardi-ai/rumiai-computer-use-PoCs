@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v80
 VERIFIED WINDOW RESIZE DESKTOP PLUGIN
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Promote only the v77 size transition into effective macOS Desktop Plugin resizeWindow(application, window, size).
@@ -19,3 +19,12 @@ Boundary plus physical Desktop Plugin test proving requested size, preserved pos
 
 NEXT
 After PASS, v81 may expose public ComputerControl.resizeWindow({app, window, size}).
+
+RESULTS
+- Boundary PASS: `3f4a3bc`.
+- Physical harness: `f82edd1`.
+- Readiness BLOCKED evidence: `fd1664b`, `8e9e1fe`, `2615c9f`.
+- Physical PASS after graphical session unlock: `6a4a82e`.
+
+CONCLUSION
+Desktop Plugin resizeWindow physically changes only size, preserves position, re-resolves the target safely and verifies the resulting AX bounds.
