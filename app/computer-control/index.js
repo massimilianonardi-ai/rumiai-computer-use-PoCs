@@ -592,6 +592,21 @@ function maximizeWindow({app, window} = {}) {
   return {ok:true, state:"MAXIMIZED", ...common, maximized:true, verified:true, verificationMethod:result.verification || "native-ax-visible-frame-bounds"};
 }
 
+function moveWindow({app, window, position} = {}) {
+  const started = performance.now();
+  if (!app) return {ok:false, error:"APP_REQUIRED", detail:"moveWindow requires an application", state:"FAILED"};
+  const targetWindow = {id:String(window?.id || "").trim(), title:window?.title == null ? null : String(window.title), process:String(window?.process || "").trim(), pid:Number(window?.pid || 0)};
+  if (!targetWindow.id) return {ok:false, error:"WINDOW_HANDLE_REQUIRED", state:"FAILED"};
+  const targetPosition = {x:Number(position?.x), y:Number(position?.y)};
+  if (!Number.isFinite(targetPosition.x) || !Number.isFinite(targetPosition.y)) return {ok:false, error:"WINDOW_POSITION_REQUIRED", state:"FAILED"};
+  const provider = resolveApplicationProvider(app); if (!provider) return {ok:false, error:"PROVIDER_NOT_FOUND", state:"FAILED"};
+  const resolved = resolveDesktopApplication(provider); if (!resolved.ok) return {ok:false, error:resolved.error, detail:resolved.detail, state:"FAILED"};
+  const result = desktop.moveWindow(resolved.application, targetWindow, targetPosition);
+  const common = {window:result?.window || targetWindow, observedHandle:result?.observedHandle || targetWindow.id, actionHandle:result?.actionHandle || null, handleRebound:result?.handleRebound === true, bounds:result?.bounds || null, previousBounds:result?.previousBounds || null, desiredBounds:result?.desiredBounds || null, position:result?.position || targetPosition, method:result?.method || `desktop plugin ${desktop.id} move-window`, verificationMethod:result?.verification || "none", actionSeconds:result?.actionSeconds || 0, observeSeconds:result?.observeSeconds || 0, totalSeconds:(performance.now() - started) / 1000};
+  if (!result?.ok || result.verified !== true || result.moved !== true) return {ok:false, error:result?.error || "WINDOW_MOVE_UNVERIFIED", detail:result?.detail, state:result?.ok ? "UNVERIFIED" : (result?.state || "FAILED"), ...common, moved:false, verified:false};
+  return {ok:true, state:"MOVED", ...common, moved:true, verified:true, verificationMethod:result.verification || "native-ax-window-position"};
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -1051,6 +1066,7 @@ module.exports = {
   minimizeWindow,
   restoreWindow,
   maximizeWindow,
+  moveWindow,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
