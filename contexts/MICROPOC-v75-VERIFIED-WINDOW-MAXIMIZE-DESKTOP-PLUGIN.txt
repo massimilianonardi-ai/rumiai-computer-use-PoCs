@@ -1,0 +1,34 @@
+RumiAI Computer Control micro-PoC v75
+VERIFIED WINDOW MAXIMIZE DESKTOP PLUGIN
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Promote the physically validated v74 AX window-bounds primitive into the effective macOS Desktop Plugin window.maximize capability.
+
+PRODUCTION CONTRACT
+- Compose the validated v72 plugin through plugins/macos-v75.js.
+- Preserve window.minimize and window.restore.
+- Mark only window.maximize IMPLEMENTED.
+- Accept the complete observed id/title/process/pid descriptor.
+- Establish application context, read a fresh raw window list and re-resolve by title/process/pid.
+- Fail closed for missing, stale or ambiguous targets.
+- Invoke native maximize bounds mutation on the freshly resolved target.
+- Poll AXPosition/AXSize until the selected visible-frame bounds match within three pixels.
+- Report MAXIMIZED only with maximized=true, verified=true and verification=native-ax-visible-frame-bounds.
+
+FORBIDDEN
+- Acting through the stale observed handle.
+- Keyboard shortcuts, AppleScript or full-screen mode in production.
+- Public ComputerControl.maximizeWindow in v75.
+- Move or resize capability claims.
+
+PHYSICAL VALIDATION
+Use a uniquely titled TextEdit fixture with prepared non-maximized bounds, invoke only Desktop Plugin maximizeWindow, and require plugin verification plus native and independent visible-frame bounds observations. Restore original bounds as cleanup.
+
+VALIDATION ORDER
+Commit contract; implement backend/plugin/boundary; run and record boundary; add committed physical harness; run and record physical result; mark VALIDATED only after physical PASS.
+
+NEXT
+After physical PASS, v76 may expose public ComputerControl.maximizeWindow({app, window}).
