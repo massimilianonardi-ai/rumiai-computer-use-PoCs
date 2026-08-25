@@ -1,0 +1,26 @@
+RumiAI Computer Control micro-PoC v78
+VERIFIED WINDOW MOVE DESKTOP PLUGIN
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Promote only the v77 position transition into effective macOS Desktop Plugin moveWindow(application, window, position).
+
+INPUT
+- complete observed window descriptor id/title/process/pid
+- desired position {x, y} in macOS AX global top-left coordinates
+
+RULES
+Re-establish application context; read a fresh raw window list; re-resolve by title/process/pid; fail closed on missing/ambiguous target; observe current bounds; preserve width/height; set only requested x/y; poll full expected bounds; report MOVED, moved=true, verified=true and native-ax-window-position.
+
+Coordinates define the requested resulting state and are never used to identify the target window.
+
+FORBIDDEN
+Public facade in v78, resize capability claim, shortcuts, AppleScript, stale-handle action, or unverified success.
+
+VALIDATION
+Boundary then physical Desktop Plugin test with a uniquely titled TextEdit fixture, independent position observation, size-preservation proof, restoration and runtime shutdown.
+
+NEXT
+After PASS, v79 may expose public ComputerControl.moveWindow({app, window, position}).
