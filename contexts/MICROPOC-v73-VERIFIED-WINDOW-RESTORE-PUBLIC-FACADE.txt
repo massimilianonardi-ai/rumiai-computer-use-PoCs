@@ -1,0 +1,118 @@
+RumiAI Computer Control micro-PoC v73
+VERIFIED WINDOW RESTORE PUBLIC FACADE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose the physically validated v72 macOS Desktop Plugin window.restore operation through the public ComputerControl facade without leaking backend or platform-specific details.
+
+SCOPE
+- Add public ComputerControl.restoreWindow({app, window}).
+- Export restoreWindow from app/computer-control/index.js.
+- Route only through the selected Desktop Plugin restoreWindow(application, window).
+- Preserve the full observed window descriptor: id, title, process and pid.
+- Propagate verified result metadata from the validated v72 plugin.
+- Add a dedicated static boundary test.
+- Add a dedicated physical public-facade test on macOS.
+
+PUBLIC INPUT CONTRACT
+{
+  app,
+  window: {
+    id,
+    title,
+    process,
+    pid
+  }
+}
+
+The public facade accepts only an observed descriptor returned by the existing public listWindows boundary. It does not invent, reconstruct or weaken the descriptor.
+
+FACADE FLOW
+1. Require app.
+2. Normalize the observed id/title/process/pid without discarding fields.
+3. Require the observed handle.
+4. Resolve the application Provider through the existing public Computer Control path.
+5. Resolve the application through the selected Desktop Plugin.
+6. Call desktop.restoreWindow(resolvedApplication, fullObservedDescriptor).
+7. Propagate failure closed with verified=false and v72 diagnostics.
+8. Report success only when the plugin returns verified restore success.
+
+SUCCESS RESULT
+- ok=true
+- state=RESTORED
+- restored=true
+- minimized=false
+- verified=true
+- verificationMethod=native-ax-minimized-false
+- window
+- observedHandle
+- actionHandle
+- handleRebound
+- method
+- actionSeconds
+- observeSeconds
+- totalSeconds
+
+FAILURE RESULT
+- ok=false
+- plugin error/state/detail propagated
+- verified=false
+- restored=false
+- minimized observation retained when available
+- observed/action handle diagnostics retained
+- no facade-level fallback action
+
+BOUNDARY REQUIREMENTS
+- Public function and export exist.
+- Application and observed handle are required.
+- Full descriptor reaches desktop.restoreWindow.
+- Provider and Desktop Plugin application resolution are retained.
+- Verified success/failure metadata is propagated.
+- Success state is RESTORED, restored=true and minimized=false.
+- Effective macOS window.restore capability remains IMPLEMENTED.
+- Validated v72 Desktop Plugin restoreWindow remains selected on darwin.
+
+FORBIDDEN IN FACADE
+- Direct agentCtrl or agent-ctrl references.
+- Direct macOS minimized backend references.
+- Direct Swift helper references.
+- Keyboard shortcuts.
+- AppleScript.
+- Coordinate-based targeting.
+- Title-only targeting.
+- ID-only weakening of the descriptor.
+- Maximize/move/resize behavior.
+
+PHYSICAL VALIDATION
+1. Start Computer Control runtime.
+2. Open one uniquely titled TextEdit fixture.
+3. Resolve the fixture through public ComputerControl.listWindows({app}).
+4. Require native precondition AXMinimized=false.
+5. Minimize through the already validated public ComputerControl.minimizeWindow facade.
+6. Require native and independent AXMinimized=true.
+7. Call only public ComputerControl.restoreWindow({app, window:fullDescriptor}).
+8. Require facade result RESTORED, restored=true, minimized=false and verified=true.
+9. Require verificationMethod=native-ax-minimized-false.
+10. Independently observe AXMinimized=false.
+11. Require fixture cleanup and runtime shutdown PASS.
+
+VALIDATION ORDER
+1. Commit this v73 contract.
+2. Implement facade and boundary test only.
+3. Run boundary test.
+4. Commit exact boundary PASS/FAIL before diagnosis or correction.
+5. After boundary PASS, add and commit the physical facade harness.
+6. Run the physical test once.
+7. Commit exact physical PASS/FAIL/BLOCKED before diagnosis or correction.
+8. Mark v73 VALIDATED only after physical PASS.
+
+NON-GOALS
+- No maximize, move or resize.
+- No Windows/Linux implementation claim.
+- No durable macOS window identity.
+- No change to validated v72 production targeting or native verification.
+
+NEXT
+Any subsequent window capability must begin as a separate micro-PoC and preserve the validated descriptor re-resolution and state-driven verification rules established through v64-v73.
