@@ -1,15 +1,14 @@
 "use strict";
 
 const fs = require("node:fs");
-const os = require("node:os");
 const path = require("node:path");
 
 const explicitAdapter = process.env.RUMIAI_COMPUTER_CONTROL_ADAPTER;
 const installationHome = process.env.RUMIAI_COMPUTER_CONTROL_HOME;
 const defaultHome = path.join(
-  os.userInfo().homedir,
-  ".local",
-  "lib",
+  __dirname,
+  "..",
+  "bin",
   "rumiai-computer-control",
   "current"
 );

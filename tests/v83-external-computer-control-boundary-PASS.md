@@ -14,8 +14,9 @@ Observed result:
 external wrapper syntax: PASS
 external adapter environment override: PASS
 external installation home override: PASS
-external versioned installation default: PASS
+external portable project default: PASS
 external wrapper has no development-volume path: PASS
+external wrapper has no user-profile install: PASS
 agent-loop.js uses external boundary: PASS
 executors.js uses external boundary: PASS
 recovery.js uses external boundary: PASS

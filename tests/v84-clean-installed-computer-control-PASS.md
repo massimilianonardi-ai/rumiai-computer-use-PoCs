@@ -6,7 +6,7 @@ Status: `PHYSICALLY_VALIDATED`
 
 The RumiAI external wrapper no longer contains a development-volume path. It
 resolves an explicit adapter, `RUMIAI_COMPUTER_CONTROL_HOME`, or the versioned
-installation at `~/.local/lib/rumiai-computer-control/current`.
+installation inside RumiAI at `$ROOT/bin/rumiai-computer-control/current`.
 
 Computer Control `v0.8.0` was installed into an empty temporary prefix. RumiAI
 loaded the adapter from that installed tree and observed:
@@ -22,4 +22,7 @@ RumiAI NEW_DOCUMENT: PASS
 RumiAI INPUT exact verification: PASS
 TASK COMPLETE: all 2 intents verified
 external runtime clean shutdown: PASS
+user-profile installation refusal: PASS
+portable default resolution from RumiAI/bin: PASS
+no Computer Control artifacts under ~/.local: PASS
 ```
