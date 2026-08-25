@@ -17,7 +17,9 @@ function check(label, condition) {
 check("external wrapper syntax", spawnSync(process.execPath, ["--check", wrapper]).status === 0);
 const wrapperSource = fs.readFileSync(wrapper, "utf8");
 check("external adapter environment override", wrapperSource.includes("RUMIAI_COMPUTER_CONTROL_ADAPTER"));
-check("external adapter default", wrapperSource.includes("rumiai-computer-control/adapters/rumiai/compat.js"));
+check("external installation home override", wrapperSource.includes("RUMIAI_COMPUTER_CONTROL_HOME"));
+check("external versioned installation default", wrapperSource.includes('"rumiai-computer-control"') && wrapperSource.includes('"current"'));
+check("external wrapper has no development-volume path", !wrapperSource.includes("/Volumes/RumiAI"));
 
 for (const name of consumers) {
   const file = path.join(root, name);
