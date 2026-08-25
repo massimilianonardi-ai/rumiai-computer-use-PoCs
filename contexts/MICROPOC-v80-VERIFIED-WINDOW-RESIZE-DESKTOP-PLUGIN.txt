@@ -1,0 +1,21 @@
+RumiAI Computer Control micro-PoC v80
+VERIFIED WINDOW RESIZE DESKTOP PLUGIN
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Promote only the v77 size transition into effective macOS Desktop Plugin resizeWindow(application, window, size).
+
+INPUT
+- complete observed descriptor id/title/process/pid
+- desired size {width,height}
+
+RULES
+Safely re-resolve the target from a fresh list; observe current bounds; preserve x/y; set requested width/height; poll full bounds; report RESIZED, resized=true, verified=true and native-ax-window-size. Fail closed on invalid size, stale/ambiguous target, action failure or unverified state.
+
+VALIDATION
+Boundary plus physical Desktop Plugin test proving requested size, preserved position, independent observation, restoration and runtime shutdown.
+
+NEXT
+After PASS, v81 may expose public ComputerControl.resizeWindow({app, window, size}).
