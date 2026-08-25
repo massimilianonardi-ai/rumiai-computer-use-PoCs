@@ -8,7 +8,7 @@ const {
   snapshot,
   waitUntilChanged,
   waitStable,
-} = require("./computer-control");
+} = require("./computer-control-external");
 const {
   snapshotForModel,
   parseSnapshot,

@@ -1,0 +1,21 @@
+RumiAI micro-PoC v83 — External Computer Control Boundary
+
+Goal:
+move production/high-level RumiAI consumers behind the standalone
+rumiai-computer-control SDK/runtime boundary without deleting historical PoC
+implementations or diagnostics.
+
+Required:
+- agent-loop.js imports computer-control-external;
+- executors.js imports computer-control-external;
+- recovery.js imports computer-control-external;
+- semantic-ui.js imports computer-control-external;
+- wrapper supports RUMIAI_COMPUTER_CONTROL_ADAPTER override;
+- no high-level consumer imports ./computer-control or ./agent-ctrl directly;
+- historical physical/diagnostic tests remain unchanged.
+
+Validation sequence:
+1. run app/external-computer-control-boundary-test.js;
+2. physically validate the standalone compatibility adapter;
+3. run an end-to-end RumiAI task when Ollama is available;
+4. record exact PASS/FAIL without reclassifying blocked evidence.

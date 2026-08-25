@@ -1,6 +1,6 @@
 "use strict";
 
-const { find } = require("./computer-control");
+const { find } = require("./computer-control-external");
 
 const EDITABLE_ROLES = new Set(["search-box", "text-field", "text-area", "textarea", "combobox"]);
 const DIRECT_CLICK_ROLES = new Set([

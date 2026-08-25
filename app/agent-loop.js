@@ -24,7 +24,7 @@ const {
   ensureRuntime,
   shutdownRuntime,
   getForeground,
-} = require("./computer-control");
+} = require("./computer-control-external");
 const { OLLAMA_URL, MODEL, warmOllama, planTask, executionMode } = require("./llm");
 const { createContextSession, contextSummary } = require("./context-manager");
 const { selectCapabilityTool } = require("./capability-manager");

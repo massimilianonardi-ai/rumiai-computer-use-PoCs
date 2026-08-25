@@ -11,7 +11,7 @@ const {
   semanticTargetSelected,
   resultCandidates,
 } = require("./semantic-ui");
-const { ensureReady, waitUntilSnapshotCondition, waitUntilChanged, waitStable, getCurrentWindow, snapshot, get, focus, press, click, setText, clear } = require("./computer-control");
+const { ensureReady, waitUntilSnapshotCondition, waitUntilChanged, waitStable, getCurrentWindow, snapshot, get, focus, press, click, setText, clear } = require("./computer-control-external");
 
 async function observeKnownApp(currentApp, previousSnapshot = "") {
   const observed = snapshot({
