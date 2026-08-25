@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v76
 VERIFIED WINDOW MAXIMIZE PUBLIC FACADE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Expose the physically validated v75 Desktop Plugin maximize operation through public ComputerControl.maximizeWindow({app, window}) without leaking native or platform details.
@@ -23,3 +23,11 @@ Commit contract; implement facade and boundary; execute and record boundary; add
 
 NEXT
 After v76, v77 may validate the shared native move/resize geometry primitive independently.
+
+RESULTS
+- Boundary PASS: `c6bcc27`.
+- Physical harness: `f68f65f`.
+- Physical PASS: `5f8483f`.
+
+CONCLUSION
+Public ComputerControl.maximizeWindow is physically validated with complete descriptor routing, bounds/handle diagnostics and native visible-frame verification.
