@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v79
 VERIFIED WINDOW MOVE PUBLIC FACADE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Expose validated v78 move through public ComputerControl.moveWindow({app, window, position}).
@@ -15,3 +15,11 @@ Boundary plus physical public-facade test proving requested position, preserved 
 
 NEXT
 After PASS, v80 may implement only Desktop Plugin resizeWindow.
+
+RESULTS
+- Boundary PASS: `fb43e76`.
+- Physical harness: `0ef4566`.
+- Physical PASS: `1c09544`.
+
+CONCLUSION
+Public moveWindow is physically validated with complete descriptor routing, requested position, preserved size and independent verification.
