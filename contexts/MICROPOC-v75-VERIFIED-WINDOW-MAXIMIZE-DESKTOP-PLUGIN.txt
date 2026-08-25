@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v75
 VERIFIED WINDOW MAXIMIZE DESKTOP PLUGIN
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Promote the physically validated v74 AX window-bounds primitive into the effective macOS Desktop Plugin window.maximize capability.
@@ -32,3 +32,11 @@ Commit contract; implement backend/plugin/boundary; run and record boundary; add
 
 NEXT
 After physical PASS, v76 may expose public ComputerControl.maximizeWindow({app, window}).
+
+RESULTS
+- Boundary PASS: `66f8711`.
+- Physical harness: `ea22283`.
+- Physical PASS evidence: `fa52e80`.
+
+CONCLUSION
+The effective macOS Desktop Plugin implements verified window.maximize through safe descriptor re-resolution and native visible-frame bounds verification. Original bounds and runtime were restored.
