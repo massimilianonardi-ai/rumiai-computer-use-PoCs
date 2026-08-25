@@ -1,0 +1,25 @@
+"use strict";
+const fs = require("fs"), path = require("path"), {spawnSync} = require("child_process"); const root = __dirname;
+const pluginPath = path.join(root, "computer-control", "desktop", "plugins", "macos-v78.js"), loaderPath = path.join(root, "computer-control", "desktop", "index.js"), facadePath = path.join(root, "computer-control", "index.js");
+const plugin = fs.readFileSync(pluginPath, "utf8"), loader = fs.readFileSync(loaderPath, "utf8"), facade = fs.readFileSync(facadePath, "utf8"); let failed = false; function check(l,o){console.log(`${l}: ${o?"PASS":"FAIL"}`);if(!o)failed=true;}
+const scope = plugin.slice(plugin.indexOf("function moveWindow(application = {}, window = {}, position = {})"), plugin.indexOf("module.exports ="));
+check("required plugin syntax", spawnSync(process.execPath,["--check",pluginPath]).status===0);
+check("required v75 composition", plugin.includes('require("./macos-v75")'));
+check("required move capability", plugin.includes('"window.move":"IMPLEMENTED"'));
+check("required complete descriptor", scope.includes("WINDOW_DESCRIPTOR_INSUFFICIENT"));
+check("required position validation", scope.includes("WINDOW_POSITION_REQUIRED"));
+check("required application context", scope.includes("base.listWindows(application)"));
+check("required fresh list", scope.includes("agentCtrl.listWindows()"));
+check("required re-resolution", scope.includes("filter(w => same(observed, w))"));
+check("required stale and ambiguous failures", scope.includes("WINDOW_TARGET_STALE") && scope.includes("WINDOW_TARGET_AMBIGUOUS"));
+check("required bounds observation", scope.includes("observeWindowBounds(current)"));
+check("required size preservation", scope.includes("width:before.bounds.width") && scope.includes("height:before.bounds.height"));
+check("required native set", scope.includes("setWindowBounds(current, desired)"));
+check("required state verification", scope.includes("waitForWindowBounds(current, desired)"));
+check("required MOVED success", scope.includes('state:"MOVED"') && scope.includes("moved:true") && scope.includes("verified:true"));
+check("required verification marker", scope.includes("native-ax-window-position"));
+check("required handle diagnostics", scope.includes("observedHandle") && scope.includes("actionHandle") && scope.includes("handleRebound"));
+check("required loader v78", loader.includes('darwin:"./plugins/macos-v78"'));
+check("forbidden public move facade", !facade.includes("function moveWindow("));
+check("forbidden shortcut AppleScript", !scope.includes("pressKeys") && !scope.includes("osascript"));
+console.log(`verified-window-move-desktop-boundary=${failed?"FAIL":"PASS"}`);process.exit(failed?1:0);
