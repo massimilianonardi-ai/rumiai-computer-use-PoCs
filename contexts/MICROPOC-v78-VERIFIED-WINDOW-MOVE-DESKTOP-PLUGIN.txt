@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v78
 VERIFIED WINDOW MOVE DESKTOP PLUGIN
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Promote only the v77 position transition into effective macOS Desktop Plugin moveWindow(application, window, position).
@@ -24,3 +24,11 @@ Boundary then physical Desktop Plugin test with a uniquely titled TextEdit fixtu
 
 NEXT
 After PASS, v79 may expose public ComputerControl.moveWindow({app, window, position}).
+
+RESULTS
+- Boundary PASS: `5a250c7`.
+- Physical harness: `fa74c8d`.
+- Physical PASS: `0021607`.
+
+CONCLUSION
+Desktop Plugin moveWindow physically changes only position, preserves size, re-resolves the target safely and verifies the resulting AX bounds.
