@@ -1,0 +1,31 @@
+"use strict";
+const fs = require("fs"); const path = require("path"); const {spawnSync} = require("child_process");
+const ComputerControl = require("./computer-control"); const boundsBackend = require("./computer-control/backends/macos-window-bounds");
+const FIXTURE = "/tmp/rumiai-v77-native-geometry.txt"; const TITLE = path.basename(FIXTURE);
+function openFixture() { return spawnSync("/usr/bin/open", ["-a", "TextEdit", FIXTURE]).status === 0; }
+function closeFixture() { return spawnSync("/usr/bin/osascript", ["-e", `tell application "TextEdit" to repeat with d in documents\nif name of d is "${TITLE}" then close d saving no\nend repeat`]); }
+function independentBounds() { const s = `tell application "System Events" to tell process "TextEdit"\nset m to every window whose name is "${TITLE}"\nif (count of m) is not 1 then return "AMBIGUOUS"\nset p to position of item 1 of m\nset z to size of item 1 of m\nreturn (item 1 of p as text) & "," & (item 2 of p as text) & "," & (item 1 of z as text) & "," & (item 2 of z as text)\nend tell`; const r = spawnSync("/usr/bin/osascript", ["-e", s], {encoding:"utf8"}); const v = String(r.stdout || "").trim().split(",").map(Number); return r.status === 0 && v.length === 4 && v.every(Number.isFinite) ? {x:v[0], y:v[1], width:v[2], height:v[3]} : null; }
+async function main() {
+  let failed = false, target = null, original = null;
+  const runtime = ComputerControl.ensureRuntime(); console.log(`runtime-ready=${runtime.ok ? "PASS" : "FAIL"}`); if (!runtime.ok) process.exit(1);
+  try {
+    fs.writeFileSync(FIXTURE, "RumiAI v77 native geometry fixture\n"); console.log(`fixture-open=${openFixture() ? "PASS" : "FAIL"}`);
+    const ready = await ComputerControl.ensureReady("TextEdit"); console.log(`application-ready=${ready.ok ? "PASS" : "FAIL"}`); if (!ready.ok) { failed = true; return; }
+    const listed = ComputerControl.listWindows({app:"TextEdit"}); target = (listed.windows || []).find(w => w.title === TITLE) || null; console.log(`window-list=${listed.ok ? "PASS" : "FAIL"}`); console.log(`target-window=${JSON.stringify(target)}`); if (!target) { failed = true; return; }
+    const before = boundsBackend.observeWindowBounds(target); original = before.bounds; console.log(`native-original-bounds=${JSON.stringify(original)}`); if (!original) { failed = true; return; }
+    const prepared = {x:180, y:140, width:620, height:420}; const prep = boundsBackend.setWindowBounds(target, prepared); const prepOk = prep.ok && boundsBackend.waitForWindowBounds(target, prepared).ok; console.log(`fixture-prepared=${prepOk ? "PASS" : "FAIL"}`); if (!prepOk) { failed = true; return; }
+    const moved = {x:prepared.x + 110, y:prepared.y + 85, width:prepared.width, height:prepared.height}; const moveAction = boundsBackend.setWindowBounds(target, moved); const moveNative = moveAction.ok ? boundsBackend.waitForWindowBounds(target, moved) : {ok:false}; const moveIndependent = independentBounds();
+    const movePosition = moveNative.ok && Math.abs(moveNative.bounds.x - moved.x) <= 3 && Math.abs(moveNative.bounds.y - moved.y) <= 3; const moveSizePreserved = moveNative.ok && Math.abs(moveNative.bounds.width - prepared.width) <= 3 && Math.abs(moveNative.bounds.height - prepared.height) <= 3; const moveIndependentOk = boundsBackend.boundsEqual(moveIndependent, moved);
+    console.log(`native-move-action=${moveAction.ok ? "PASS" : "FAIL"}`); console.log(`native-move-position=${movePosition ? "PASS" : "FAIL"}`); console.log(`native-move-size-preserved=${moveSizePreserved ? "PASS" : "FAIL"}`); console.log(`independent-move-state=${moveIndependentOk ? "PASS" : "FAIL"}`); console.log(`native-moved-bounds=${JSON.stringify(moveNative.bounds || null)}`); console.log(`physical-window-move-primitive=${moveAction.ok && movePosition && moveSizePreserved && moveIndependentOk ? "PASS" : "FAIL"}`);
+    if (!moveAction.ok || !movePosition || !moveSizePreserved || !moveIndependentOk) { failed = true; return; }
+    const resized = {x:moved.x, y:moved.y, width:moved.width + 150, height:moved.height + 110}; const resizeAction = boundsBackend.setWindowBounds(target, resized); const resizeNative = resizeAction.ok ? boundsBackend.waitForWindowBounds(target, resized) : {ok:false}; const resizeIndependent = independentBounds();
+    const resizeSize = resizeNative.ok && Math.abs(resizeNative.bounds.width - resized.width) <= 3 && Math.abs(resizeNative.bounds.height - resized.height) <= 3; const resizePositionPreserved = resizeNative.ok && Math.abs(resizeNative.bounds.x - moved.x) <= 3 && Math.abs(resizeNative.bounds.y - moved.y) <= 3; const resizeIndependentOk = boundsBackend.boundsEqual(resizeIndependent, resized);
+    console.log(`native-resize-action=${resizeAction.ok ? "PASS" : "FAIL"}`); console.log(`native-resize-size=${resizeSize ? "PASS" : "FAIL"}`); console.log(`native-resize-position-preserved=${resizePositionPreserved ? "PASS" : "FAIL"}`); console.log(`independent-resize-state=${resizeIndependentOk ? "PASS" : "FAIL"}`); console.log(`native-resized-bounds=${JSON.stringify(resizeNative.bounds || null)}`); console.log(`physical-window-resize-primitive=${resizeAction.ok && resizeSize && resizePositionPreserved && resizeIndependentOk ? "PASS" : "FAIL"}`);
+    if (!resizeAction.ok || !resizeSize || !resizePositionPreserved || !resizeIndependentOk) failed = true;
+    const restore = boundsBackend.setWindowBounds(target, original); const restored = restore.ok && boundsBackend.waitForWindowBounds(target, original).ok; console.log(`fixture-restored-state=${restored ? "PASS" : "FAIL"}`); if (!restored) failed = true;
+    console.log(`physical-native-window-geometry-primitive=${failed ? "FAIL" : "PASS"}`);
+  } finally {
+    if (target && original) try { boundsBackend.setWindowBounds(target, original); } catch (_) {} console.log(`fixture-cleanup=${closeFixture().status === 0 ? "PASS" : "WARN"}`); try { fs.unlinkSync(FIXTURE); } catch (_) {} const stopped = ComputerControl.shutdownRuntime(); console.log(`runtime-close=${stopped.ok ? "PASS" : "FAIL"}`); if (!stopped.ok) failed = true; process.exitCode = failed ? 1 : 0;
+  }
+}
+main().catch(e => { console.error("physical-native-window-geometry-primitive=FAIL"); console.error(e.stack || String(e)); try { closeFixture(); } catch (_) {} try { ComputerControl.shutdownRuntime(); } catch (_) {} process.exit(1); });
