@@ -1,0 +1,13 @@
+.DS_Store
+
+# Portable runtime artifacts belong to the enclosing workspace, not this repo.
+/bin/
+/data/
+/env/
+/etc/
+/home/
+/log/
+/models/
+/run/
+/srv/
+/workspace/
