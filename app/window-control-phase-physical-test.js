@@ -111,9 +111,10 @@ async function main() {
     if (!focused.ok || focused.verified !== true) { failed = true; return; }
 
     const current = ComputerControl.getCurrentWindow({app:"TextEdit"});
-    const currentPass = current.ok && current.window?.title === TITLE_A;
+    const currentValue = current.window?.value || current.window || null;
+    const currentPass = current.ok && currentValue?.title === TITLE_A;
     console.log(`public-current-window=${currentPass ? "PASS" : "FAIL"}`);
-    console.log(`public-current-title=${current.window?.title || ""}`);
+    console.log(`public-current-title=${currentValue?.title || ""}`);
     if (!currentPass) { failed = true; return; }
 
     const originalObserved = boundsBackend.observeWindowBounds(targetA);
@@ -221,6 +222,8 @@ async function main() {
     const cleanupB = closeFixture(TITLE_B);
     console.log(`fixture-A-cleanup=${cleanupA.status === 0 ? "PASS" : "WARN"}`);
     console.log(`fixture-B-cleanup=${cleanupB.status === 0 ? "PASS" : "WARN"}`);
+    if (cleanupA.status !== 0) console.log(`fixture-A-cleanup-detail=${String(cleanupA.stderr || cleanupA.stdout || "").trim()}`);
+    if (cleanupB.status !== 0) console.log(`fixture-B-cleanup-detail=${String(cleanupB.stderr || cleanupB.stdout || "").trim()}`);
     try { fs.unlinkSync(FIXTURE_A); } catch (_) {}
     try { fs.unlinkSync(FIXTURE_B); } catch (_) {}
     const stopped = ComputerControl.shutdownRuntime();
