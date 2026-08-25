@@ -1,0 +1,74 @@
+RumiAI Computer Control micro-PoC v74
+NATIVE WINDOW MAXIMIZE PRIMITIVE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Validate the native macOS Accessibility geometry primitive required for Desktop Plugin window.maximize before changing production behavior.
+
+SEMANTICS
+For this phase, maximize means expanding the target window to the visible frame of the display containing its center. It does not mean macOS full-screen mode and does not create a new Space.
+
+TEST-ONLY HELPER
+tools/macos-window-bounds.swift
+
+Contract:
+- input observe: <pid> <exact-title> observe
+- input maximize: <pid> <exact-title> maximize
+- input set: <pid> <exact-title> set <x> <y> <width> <height>
+- resolve the application through AXUIElementCreateApplication(pid)
+- enumerate kAXWindowsAttribute
+- require exactly one exact-title match inside the supplied process
+- read kAXPositionAttribute and kAXSizeAttribute
+- require both attributes settable for mutation
+- calculate the selected NSScreen visibleFrame in AX top-left coordinates
+- for maximize, set AXPosition and AXSize to that visible frame
+- for set, apply explicit test-only bounds
+- emit JSON with before, desired and immediate after bounds
+- fail closed on missing or ambiguous targets
+
+VERIFICATION
+Immediate post-write values are not authoritative. The physical harness must poll observe until position and size match the desired bounds within a small tolerance, then independently read the same AX attributes through System Events.
+
+BOUNDARY REQUIREMENTS
+- Swift helper compiles.
+- Exact PID/title target resolution is present.
+- AXPosition and AXSize observation and settable checks are present.
+- Display visible-frame selection is present.
+- AX coordinate conversion is explicit.
+- Observe, maximize and set modes are present.
+- No keyboard shortcut, AppleScript or full-screen mutation exists in the helper.
+- Production window.maximize remains DEFERRED.
+- Public maximizeWindow remains absent.
+
+PHYSICAL VALIDATION
+1. Start Computer Control runtime.
+2. Open one uniquely titled TextEdit fixture.
+3. Resolve its PID and complete descriptor through public listWindows.
+4. Observe original bounds natively and independently.
+5. Invoke helper maximize.
+6. Poll native observation until desired visible-frame bounds are reached.
+7. Independently observe matching position and size through System Events.
+8. Require a real bounds transition.
+9. Restore the exact original bounds through helper set.
+10. Require native and independent restoration, cleanup and runtime shutdown PASS.
+
+VALIDATION ORDER
+1. Commit this contract.
+2. Add helper and boundary test, committing both before execution.
+3. Execute boundary test once and commit exact PASS/FAIL before diagnosis.
+4. After boundary PASS, add and commit physical harness.
+5. Execute physical test once and commit exact PASS/FAIL/BLOCKED before diagnosis.
+6. Mark v74 VALIDATED only after physical PASS.
+
+NON-GOALS
+- No production backend or Desktop Plugin capability change.
+- No public maximizeWindow.
+- No move or resize production behavior.
+- No macOS full-screen mode.
+- No Windows/Linux claim.
+- No durable public identity based on title.
+
+NEXT
+Only after physical PASS may v75 promote this primitive into the effective macOS Desktop Plugin with safe descriptor re-resolution.
