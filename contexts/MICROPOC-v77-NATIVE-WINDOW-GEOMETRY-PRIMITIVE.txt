@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v77
 NATIVE WINDOW MOVE/RESIZE GEOMETRY PRIMITIVE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Physically validate the shared AXPosition/AXSize primitive for independent move and resize transitions before either capability enters the Desktop Plugin.
@@ -22,3 +22,11 @@ Commit contract and boundary; execute/record boundary; add committed physical ha
 
 NEXT
 After v77 PASS, v78 may implement only Desktop Plugin moveWindow.
+
+RESULTS
+- Boundary PASS: `b54dbb7`.
+- Physical harness: `54c20d4`.
+- Physical PASS: `11f1bcc`.
+
+CONCLUSION
+Independent position-only move and size-only resize transitions are physically validated with native polling, independent observation and restoration.
