@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v82
 MACOS WINDOW CONTROL PHASE REGRESSION
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED / PHASE COMPLETE
 
 PURPOSE
 Close the macOS Window Control phase only after one integrated public-facade regression proves all validated window capabilities coexist through the final effective Desktop Plugin composition.
@@ -40,6 +40,22 @@ Every operation must return its validated public state/verification marker. No a
 
 VALIDATION ORDER
 Commit contract and boundary; execute/record boundary; add committed physical harness; execute once and record exact PASS/FAIL/BLOCKED before diagnosis; mark phase COMPLETE only after physical PASS.
+
+RESULTS
+- Initial boundary PASS: `f42facb`.
+- Physical harness: `c23165c`.
+- First exact physical FAIL: `28a4cdd` (the harness did not unwrap the validated v58 current-window value).
+- Harness normalization fix: `e59a849`.
+- Second exact physical FAIL: `73b26b6` (focus physically selected fixture A while positional current-window observation returned fixture B).
+- Native current-window reconciliation fix: `682c0af`.
+- Updated current-window regression boundary PASS: `cb4f99e`.
+- Integrated physical Window Control phase PASS: `01d9640`.
+
+REGRESSION RESOLUTION
+The effective macOS Desktop Plugin is now composed through macos-v82. getCurrentWindow establishes the resolved application context, observes the actual focused AX window with the validated native helper, and reconciles its title/process/pid descriptor against a fresh complete window list. It fails closed when the focused window belongs to another application or when the descriptor is absent or ambiguous. The positional agent-ctrl pin is no longer treated as current-window proof.
+
+CONCLUSION
+The final public-facade regression physically validated list, current, focus, close, minimize, restore, maximize, move and resize together on two distinct TextEdit windows. Independent native observations confirmed identity, bounds, minimized state and selective close behavior. Both fixtures were cleaned up and runtime shutdown passed. The macOS Window Control phase is complete.
 
 NON-GOALS
 Windows/Linux implementations, application.find, general architectural refactoring and vision/OCR work remain outside this phase.
