@@ -36,4 +36,4 @@ jobs:
       - name: Verify Computer Control contract
         env:
           RUMIAI_COMPUTER_CONTROL_ROOT: ${{ github.workspace }}/products/computer-control
-        run: node --test poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js
+        run: node --test poc/tests/products/computer-control/contract-tests/*.test.js
