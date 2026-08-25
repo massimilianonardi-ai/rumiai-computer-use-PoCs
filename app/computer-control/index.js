@@ -607,6 +607,21 @@ function moveWindow({app, window, position} = {}) {
   return {ok:true, state:"MOVED", ...common, moved:true, verified:true, verificationMethod:result.verification || "native-ax-window-position"};
 }
 
+function resizeWindow({app, window, size} = {}) {
+  const started = performance.now();
+  if (!app) return {ok:false, error:"APP_REQUIRED", detail:"resizeWindow requires an application", state:"FAILED"};
+  const targetWindow = {id:String(window?.id || "").trim(), title:window?.title == null ? null : String(window.title), process:String(window?.process || "").trim(), pid:Number(window?.pid || 0)};
+  if (!targetWindow.id) return {ok:false, error:"WINDOW_HANDLE_REQUIRED", state:"FAILED"};
+  const targetSize = {width:Number(size?.width), height:Number(size?.height)};
+  if (!Number.isFinite(targetSize.width) || !Number.isFinite(targetSize.height) || targetSize.width <= 0 || targetSize.height <= 0) return {ok:false, error:"WINDOW_SIZE_REQUIRED", state:"FAILED"};
+  const provider = resolveApplicationProvider(app); if (!provider) return {ok:false, error:"PROVIDER_NOT_FOUND", state:"FAILED"};
+  const resolved = resolveDesktopApplication(provider); if (!resolved.ok) return {ok:false, error:resolved.error, detail:resolved.detail, state:"FAILED"};
+  const result = desktop.resizeWindow(resolved.application, targetWindow, targetSize);
+  const common = {window:result?.window || targetWindow, observedHandle:result?.observedHandle || targetWindow.id, actionHandle:result?.actionHandle || null, handleRebound:result?.handleRebound === true, bounds:result?.bounds || null, previousBounds:result?.previousBounds || null, desiredBounds:result?.desiredBounds || null, size:result?.size || targetSize, method:result?.method || `desktop plugin ${desktop.id} resize-window`, verificationMethod:result?.verification || "none", actionSeconds:result?.actionSeconds || 0, observeSeconds:result?.observeSeconds || 0, totalSeconds:(performance.now() - started) / 1000};
+  if (!result?.ok || result.verified !== true || result.resized !== true) return {ok:false, error:result?.error || "WINDOW_RESIZE_UNVERIFIED", detail:result?.detail, state:result?.ok ? "UNVERIFIED" : (result?.state || "FAILED"), ...common, resized:false, verified:false};
+  return {ok:true, state:"RESIZED", ...common, resized:true, verified:true, verificationMethod:result.verification || "native-ax-window-size"};
+}
+
 function closeWindow({app} = {}) {
   const started = performance.now();
 
@@ -1067,6 +1082,7 @@ module.exports = {
   restoreWindow,
   maximizeWindow,
   moveWindow,
+  resizeWindow,
   closeWindow,
   snapshot:operations.snapshot,
   getBounds:operations.getBounds,
