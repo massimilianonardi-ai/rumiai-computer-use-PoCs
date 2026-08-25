@@ -1,0 +1,17 @@
+RumiAI Computer Control micro-PoC v81
+VERIFIED WINDOW RESIZE PUBLIC FACADE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose validated v80 resize through public ComputerControl.resizeWindow({app, window, size}).
+
+CONTRACT
+Preserve the complete descriptor and numeric positive size {width,height}; route only through desktop.resizeWindow; success requires RESIZED, resized=true and verified=true; propagate bounds, previousBounds, desiredBounds, size, verificationMethod=native-ax-window-size and handle diagnostics; fail closed without native fallback.
+
+VALIDATION
+Boundary plus physical public-facade test proving requested size, preserved position, independent observation, restoration and runtime shutdown.
+
+NEXT
+After PASS, v82 must execute the complete physical public Window Control regression and close the phase.
