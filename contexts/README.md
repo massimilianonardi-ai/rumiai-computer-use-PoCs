@@ -1,51 +1,19 @@
-# Computer Use contexts — micro-PoC
+# RumiAI runtime contexts
 
-This directory intentionally contains **data**, not executable code.
+Questa cartella contiene esclusivamente dati JSON caricati dal Context Manager prima della pianificazione. Non contiene codice eseguibile né documentazione dei micro-PoC.
 
-The current experiment validates one idea only:
+## Contesti correnti
 
-> before planning a task, Computer Use selects a small hierarchy of relevant
-> operational contexts and injects only those contexts into the planner.
+- `generic-gui` — base GUI indipendente dalla piattaforma;
+- `macos` — convenzioni macOS, attivo solo su Darwin;
+- `linux` — convenzioni Linux senza assumere un backend GUI;
+- `system-settings` — conoscenza specifica di macOS System Settings;
+- `text-editing` — conoscenza condivisa per attività di editing testuale;
+- `textedit` — conoscenza specifica di TextEdit;
+- `pulsar` — conoscenza specifica di Pulsar.
 
-Current hierarchy:
+Ogni contesto può dichiarare scope, trigger, piattaforme, dipendenze, competenza, conoscenze, regole di pianificazione e un `planner_delta` compatto.
 
-- `generic-gui` — always active
-- `macos` — always active in this macOS PoC
-- `system-settings` — selected only when the task concerns System Settings
+Il Context Manager filtra i contesti per piattaforma, seleziona quelli rilevanti per task e applicazione, espande le dipendenze e mantiene nella sessione i contesti delle applicazioni realmente osservate.
 
-A context currently contains:
-
-- scope
-- trigger
-- competence level/confidence
-- compact knowledge
-- planning rules
-
-Contexts do **not** yet modify executors, resolver, recovery or agent-ctrl.
-That is deliberate: this micro-PoC only tests context selection + planner use.
-
-Primary validation task:
-
-    Open System Settings, search for Bluetooth, then open the Bluetooth result.
-
-Expected selection:
-
-    generic-gui -> macos -> system-settings
-
-Expected plan if the context is used correctly:
-
-    ACTIVATE_APP("System Settings")
-    SEARCH("Bluetooth")
-    OPEN("Bluetooth")
-
-`OPEN_RESULT(1)` should remain reserved for explicitly ordinal requests such as:
-
-    Open Safari, search for OpenAI, then open the first result.
-## Planner payload compression
-
-The JSON files may retain readable knowledge, scope and competence metadata.
-Only `planner_delta` is injected into the LLM planner prompt. This keeps the
-active operational context small and treats each specialized context as a
-delta over the general planner semantics. Empty deltas remain selected for
-context hierarchy/logging but add zero planner tokens.
-
+La documentazione delle decisioni architetturali e dei micro-PoC si trova in `docs/micro-pocs/`.
