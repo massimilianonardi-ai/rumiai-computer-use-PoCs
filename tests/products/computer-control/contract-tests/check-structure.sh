@@ -15,6 +15,8 @@ contract/schemas/snapshot.params.schema.json
 contract/schemas/find.params.schema.json
 contract/schemas/application.params.schema.json
 contract/schemas/element-observation.params.schema.json
+contract/schemas/describe.params.schema.json
+contract/schemas/control-description.schema.json
 contract/schemas/interaction.params.schema.json
 contract/schemas/clipboard.params.schema.json
 contract/schemas/synchronization.params.schema.json
@@ -36,6 +38,8 @@ docs/installation.md
 sdk/typescript/src/index.js
 sdk/typescript/src/sync-call.js
 docs/architecture.md
+docs/api.md
+docs/native-controls-roadmap.md
 docs/versioning.md
 docs/security.md
 "

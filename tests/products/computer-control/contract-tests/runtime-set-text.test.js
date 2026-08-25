@@ -46,6 +46,31 @@ function mockBackend() {
       changed:null,
       method:"mock-snapshot",
     }),
+    describe:({element}) => ({
+      ok:true,
+      state:"DESCRIBED",
+      ref:element.ref,
+      role:"text-field",
+      name:"Editor",
+      description:null,
+      value:"Ciao RumiAI.",
+      valueType:"string",
+      visible:true,
+      enabled:true,
+      focused:true,
+      selected:null,
+      checked:null,
+      mixed:null,
+      expanded:null,
+      readOnly:false,
+      required:null,
+      range:null,
+      actions:null,
+      childCount:null,
+      parentRole:null,
+      bounds:{x:1,y:2,width:3,height:4},
+      method:"mock-describe",
+    }),
     find:({query}) => ({
       ok:true,
       ref:"@e1",
@@ -81,7 +106,7 @@ test("runtime.info and ui.setText cross the local RPC boundary", async t => {
 
   const client = new ComputerControlClient({socketPath, timeoutMs:2000});
   const info = await client.runtimeInfo();
-  assert.equal(info.contractVersion, "0.8.0");
+  assert.equal(info.contractVersion, "0.9.0");
   assert.equal(info.backend.name, "macos-ax");
   assert.equal(info.capabilities.find(item => item.name === "ui.setText").available, true);
 
@@ -97,6 +122,18 @@ test("runtime.info and ui.setText cross the local RPC boundary", async t => {
   assert.equal(snapshot.state, "OBSERVED");
   assert.equal(snapshot.nodes[0].ref, "@e0");
   assert.equal(snapshot.nodes[0].role, "text-area");
+
+  const described = await client.describe({
+    application:"TextEdit",
+    target:{ref:"@e0", role:"text-field", name:"Editor"},
+  });
+  assert.equal(described.state, "DESCRIBED");
+  assert.equal(described.target.ref, "@e0");
+  assert.equal(described.target.role, "text-field");
+  assert.equal(described.value, "Ciao RumiAI.");
+  assert.equal(described.valueType, "string");
+  assert.equal(described.enabled, true);
+  assert.equal(described.checked, null);
 
   const editable = await client.find({
     application:"TextEdit",
