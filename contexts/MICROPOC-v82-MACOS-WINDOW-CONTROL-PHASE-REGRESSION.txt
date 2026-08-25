@@ -1,0 +1,45 @@
+RumiAI Computer Control micro-PoC v82
+MACOS WINDOW CONTROL PHASE REGRESSION
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Close the macOS Window Control phase only after one integrated public-facade regression proves all validated window capabilities coexist through the final effective Desktop Plugin composition.
+
+REQUIRED PUBLIC CAPABILITIES
+- listWindows
+- getCurrentWindow
+- focusWindow
+- closeWindow
+- minimizeWindow
+- restoreWindow
+- maximizeWindow
+- moveWindow
+- resizeWindow
+
+BOUNDARY
+The effective macOS capability map must declare list/current/focus/close/minimize/restore/maximize/move/resize IMPLEMENTED. Every corresponding public facade must exist and be exported. Windows/Linux capability claims remain unchanged.
+
+PHYSICAL FLOW
+1. Open two uniquely titled TextEdit windows.
+2. List both and require complete distinct descriptors.
+3. Focus fixture A and observe it as current.
+4. Move A and independently verify position with size preserved.
+5. Resize A and independently verify size with position preserved.
+6. Maximize A and independently verify visible-frame bounds.
+7. Restore prepared test bounds only as harness cleanup between capabilities.
+8. Minimize A and independently observe AXMinimized=true.
+9. Restore A publicly and independently observe AXMinimized=false.
+10. Focus A and close it publicly.
+11. Require A absent and fixture B still present.
+12. Cleanup B and require runtime shutdown PASS.
+
+SUCCESS
+Every operation must return its validated public state/verification marker. No action-delivery-only success is accepted.
+
+VALIDATION ORDER
+Commit contract and boundary; execute/record boundary; add committed physical harness; execute once and record exact PASS/FAIL/BLOCKED before diagnosis; mark phase COMPLETE only after physical PASS.
+
+NON-GOALS
+Windows/Linux implementations, application.find, general architectural refactoring and vision/OCR work remain outside this phase.
