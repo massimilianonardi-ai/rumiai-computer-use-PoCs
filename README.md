@@ -28,6 +28,7 @@ providers/ registro applicazioni, alias, identità e disponibilità
 skills/    evidenze strutturate delle competenze dei Provider
 tools/     sorgenti degli helper nativi macOS compilati dal runtime
 docs/      checkpoint e contratti storici dei micro-PoC
+tests/     risultati storici e test dei prodotti autonomi
 archive/   artefatti storici non utilizzati dal runtime
 srv/       software/server installati localmente
 home/      HOME e cache isolate del progetto
@@ -42,7 +43,9 @@ I dati runtime e la documentazione sono separati intenzionalmente:
 - `contexts/` contiene soltanto i contesti JSON letti dal Context Manager;
 - `docs/micro-pocs/` conserva i contratti e le decisioni dalla v3 alla v82;
 - `docs/checkpoints/` conserva le fotografie delle milestone storiche;
-- `archive/patches/` conserva vecchi delta sorgente già incorporati nella cronologia Git.
+- `archive/patches/` conserva vecchi delta sorgente già incorporati nella cronologia Git;
+- `tests/products/` verifica i repository autonomi `rumiai-computer-use` e
+  `rumiai-computer-control` senza inserire test nei prodotti.
 
 Se esiste `/Volumes/AI-Models`, `cmd/env` usa attualmente:
 

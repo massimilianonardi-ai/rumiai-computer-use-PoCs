@@ -1,0 +1,39 @@
+name: product-tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  boundaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out test laboratory
+        uses: actions/checkout@v4
+        with:
+          path: poc
+      - name: Check out Computer Use
+        uses: actions/checkout@v4
+        with:
+          repository: massimilianonardi-ai/rumiai-computer-use
+          path: products/computer-use
+      - name: Check out Computer Control
+        uses: actions/checkout@v4
+        with:
+          repository: massimilianonardi-ai/rumiai-computer-control
+          path: products/computer-control
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Computer Use boundary
+        env:
+          RUMIAI_COMPUTER_USE_ROOT: ${{ github.workspace }}/products/computer-use
+        run: node poc/tests/products/computer-use/external-computer-control-boundary-test.js
+      - name: Verify Computer Control structure
+        env:
+          RUMIAI_COMPUTER_CONTROL_ROOT: ${{ github.workspace }}/products/computer-control
+        run: sh poc/tests/products/computer-control/contract-tests/check-structure.sh
+      - name: Verify Computer Control contract
+        env:
+          RUMIAI_COMPUTER_CONTROL_ROOT: ${{ github.workspace }}/products/computer-control
+        run: node --test poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js
