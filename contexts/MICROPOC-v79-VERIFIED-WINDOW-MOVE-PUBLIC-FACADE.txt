@@ -1,0 +1,17 @@
+RumiAI Computer Control micro-PoC v79
+VERIFIED WINDOW MOVE PUBLIC FACADE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose validated v78 move through public ComputerControl.moveWindow({app, window, position}).
+
+CONTRACT
+Preserve the complete descriptor and numeric position {x,y}; route only through desktop.moveWindow; success requires MOVED, moved=true and verified=true; propagate bounds, previousBounds, desiredBounds, position, verificationMethod=native-ax-window-position and handle diagnostics; fail closed without native fallback.
+
+VALIDATION
+Boundary plus physical public-facade test proving requested position, preserved size, independent observation, restoration and runtime shutdown.
+
+NEXT
+After PASS, v80 may implement only Desktop Plugin resizeWindow.
