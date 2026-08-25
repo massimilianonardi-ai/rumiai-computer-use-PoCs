@@ -22,6 +22,15 @@ function mockBackend() {
     getBounds:({element}) => ({ok:true, ref:element.ref, bounds:{x:1,y:2,w:3,h:4}, method:"mock-bounds"}),
     focus:() => ({ok:true, verified:true, verificationMethod:"snapshot-ref", method:"mock-focus"}),
     click:() => ({ok:true, method:"mock-click", fallbackUsed:false}),
+    invoke:({element}) => ({
+      ok:true,
+      state:"INVOKED",
+      ref:element.ref,
+      role:"button",
+      name:"Done",
+      method:"mock-native-primary-action",
+      fallbackUsed:false,
+    }),
     press:() => ({ok:true, method:"mock-press"}),
     clear:() => ({ok:true, verified:true, verificationMethod:"ax-text-exact", method:"ax-fill-empty", attempts:[]}),
     clipboardRead:() => ({ok:true, stdout:JSON.stringify(clipboard), method:"mock-clipboard-read"}),
@@ -149,6 +158,14 @@ test("runtime.info and ui.setText cross the local RPC boundary", async t => {
   assert.deepEqual(bounds.bounds, {x:1,y:2,width:3,height:4});
   assert.equal((await client.focus({application:"TextEdit", target:editable.target})).state, "FOCUS_DELIVERED");
   assert.equal((await client.click({application:"TextEdit", target:editable.target})).state, "CLICK_DELIVERED");
+  const invoked = await client.invoke({
+    application:"TextEdit",
+    target:{ref:"@e1", role:"button", name:"Done"},
+  });
+  assert.equal(invoked.state, "INVOKED");
+  assert.equal(invoked.verified, true);
+  assert.equal(invoked.semanticConsequenceVerified, false);
+  assert.equal(invoked.verification.method, "native-primary-action-delivered");
   assert.equal((await client.press({application:"TextEdit", keys:"Right"})).state, "KEYS_DELIVERED");
   assert.equal((await client.clear({application:"TextEdit", target:editable.target})).state, "CLEARED");
   await client.writeClipboard("fixture");

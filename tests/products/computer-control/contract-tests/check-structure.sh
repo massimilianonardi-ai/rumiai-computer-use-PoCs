@@ -17,6 +17,8 @@ contract/schemas/application.params.schema.json
 contract/schemas/element-observation.params.schema.json
 contract/schemas/describe.params.schema.json
 contract/schemas/control-description.schema.json
+contract/schemas/invoke.params.schema.json
+contract/schemas/invoke-result.schema.json
 contract/schemas/interaction.params.schema.json
 contract/schemas/clipboard.params.schema.json
 contract/schemas/synchronization.params.schema.json
