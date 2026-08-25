@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v74
 NATIVE WINDOW MAXIMIZE PRIMITIVE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Validate the native macOS Accessibility geometry primitive required for Desktop Plugin window.maximize before changing production behavior.
@@ -72,3 +72,17 @@ NON-GOALS
 
 NEXT
 Only after physical PASS may v75 promote this primitive into the effective macOS Desktop Plugin with safe descriptor re-resolution.
+
+BOUNDARY RESULT
+PASS — `ba18109` (`test(v74): validate native window maximize boundary`).
+
+PHYSICAL RESULT
+PASS — harness `3d4a460`; evidence `99d0311` (`test(v74): validate native window maximize primitive physically`).
+
+VALIDATED CONCLUSIONS
+1. AXPosition and AXSize are readable and writable for the tested TextEdit window.
+2. The selected display visible frame was converted to AX coordinates and applied physically.
+3. Native polling and independent System Events observation agreed within three pixels.
+4. The operation produced a real position/size transition without entering full-screen mode.
+5. Original bounds, fixture state and runtime were restored successfully.
+6. Production maximize behavior remains absent until v75.
