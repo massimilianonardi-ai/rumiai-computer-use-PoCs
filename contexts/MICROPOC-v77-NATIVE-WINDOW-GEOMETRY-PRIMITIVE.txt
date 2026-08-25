@@ -1,0 +1,24 @@
+RumiAI Computer Control micro-PoC v77
+NATIVE WINDOW MOVE/RESIZE GEOMETRY PRIMITIVE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Physically validate the shared AXPosition/AXSize primitive for independent move and resize transitions before either capability enters the Desktop Plugin.
+
+INVARIANTS
+- Move changes x/y to the requested position while preserving width/height.
+- Resize changes width/height to the requested size while preserving x/y.
+- Both transitions require state-driven native polling and independent System Events observation.
+- Exact-title matching remains diagnostic inside a known PID only.
+- Original bounds are restored after the test.
+
+BOUNDARY
+The validated macos-window-bounds helper/backend must expose observe, explicit set, normalized bounds, tolerance comparison and state-driven wait. Production window.move and window.resize remain DEFERRED and public facades absent.
+
+VALIDATION
+Commit contract and boundary; execute/record boundary; add committed physical harness; execute/record one move and one resize transition; mark VALIDATED only after both PASS plus restoration and runtime shutdown.
+
+NEXT
+After v77 PASS, v78 may implement only Desktop Plugin moveWindow.
