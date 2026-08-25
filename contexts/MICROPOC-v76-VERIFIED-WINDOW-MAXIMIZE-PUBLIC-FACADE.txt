@@ -1,0 +1,25 @@
+RumiAI Computer Control micro-PoC v76
+VERIFIED WINDOW MAXIMIZE PUBLIC FACADE
+
+STATUS
+WIP / BOUNDARY TEST PENDING
+
+PURPOSE
+Expose the physically validated v75 Desktop Plugin maximize operation through public ComputerControl.maximizeWindow({app, window}) without leaking native or platform details.
+
+CONTRACT
+- Preserve id/title/process/pid.
+- Resolve Provider and Desktop application through existing paths.
+- Route only to desktop.maximizeWindow(application, descriptor).
+- Success requires ok=true, MAXIMIZED, maximized=true and verified=true.
+- Propagate bounds, desiredBounds, verificationMethod=native-ax-visible-frame-bounds and handle diagnostics.
+- Fail closed without fallback action.
+
+FORBIDDEN
+Direct backend/helper references, shortcuts, AppleScript, full-screen mutation, coordinate targeting in the facade, and move/resize behavior.
+
+VALIDATION
+Commit contract; implement facade and boundary; execute and record boundary; add committed physical harness; execute and record physical result; mark VALIDATED only after physical PASS.
+
+NEXT
+After v76, v77 may validate the shared native move/resize geometry primitive independently.
