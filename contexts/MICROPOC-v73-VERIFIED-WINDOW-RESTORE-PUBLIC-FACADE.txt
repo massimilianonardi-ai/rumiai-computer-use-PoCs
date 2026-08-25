@@ -2,7 +2,7 @@ RumiAI Computer Control micro-PoC v73
 VERIFIED WINDOW RESTORE PUBLIC FACADE
 
 STATUS
-WIP / BOUNDARY TEST PENDING
+VALIDATED
 
 PURPOSE
 Expose the physically validated v72 macOS Desktop Plugin window.restore operation through the public ComputerControl facade without leaking backend or platform-specific details.
@@ -116,3 +116,33 @@ NON-GOALS
 
 NEXT
 Any subsequent window capability must begin as a separate micro-PoC and preserve the validated descriptor re-resolution and state-driven verification rules established through v64-v73.
+
+BOUNDARY RESULT
+PASS.
+Evidence commit:
+`254f578`
+`test(v73): validate window restore public facade boundary`
+
+PHYSICAL RESULT
+PASS.
+Harness commit:
+`c3da04d`
+`test(v73): add physical window restore facade harness`
+
+Physical evidence commit:
+`5014f1f`
+`test(v73): validate window restore public facade physically`
+
+VALIDATED CONCLUSIONS
+1. Public ComputerControl.restoreWindow({app, window}) is available and exported.
+2. The facade preserves the full observed id/title/process/pid descriptor.
+3. The facade routes only through the selected Desktop Plugin operation.
+4. Facade success requires plugin ok, verified=true, restored=true and minimized=false.
+5. The physical TextEdit fixture transitioned from native AXMinimized=true to false.
+6. Independent System Events observation also reported minimized=false.
+7. The facade propagated observed/action handle and rebound diagnostics.
+8. Fixture cleanup and runtime shutdown passed.
+9. No backend, helper, keyboard shortcut, AppleScript or coordinate action logic leaked into the facade.
+
+NEXT VALIDATED STEP
+Any maximize, move or resize capability must start as a separate diagnostic/native primitive micro-PoC. No such behavior is claimed by v73.
