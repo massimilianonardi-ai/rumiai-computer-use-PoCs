@@ -19,8 +19,8 @@ function openFixture(file) {
 function closeFixture(title) {
   const script = `
     tell application "TextEdit"
-      repeat with d in documents
-        if name of d is "${title}" then close d saving no
+      repeat with i from (count documents) to 1 by -1
+        if name of document i is "${title}" then close document i saving no
       end repeat
     end tell
   `;
