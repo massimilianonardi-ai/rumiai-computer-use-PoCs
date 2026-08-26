@@ -11,6 +11,8 @@ const {createRouter} = require(path.join(productRoot, "runtime/src/router"));
 const {createServer} = require(path.join(productRoot, "runtime/src/server"));
 const {createMacOSBackend} = require(path.join(productRoot, "backends/macos/backend"));
 const {ComputerControlClient} = require(path.join(productRoot, "sdk/typescript/src"));
+const operations = require(path.join(productRoot, "backends/macos/runtime/app/computer-control/operations"));
+const agentCtrl = require(path.join(productRoot, "backends/macos/runtime/app/computer-control/backends/agent-ctrl"));
 
 function mockBackend() {
   let clipboard = "";
@@ -209,6 +211,29 @@ test("ui.find performs normalized semantic matching over caller observation", as
   });
   assert.equal(result.target.ref, "@e4");
   assert.equal(result.source, "snapshot");
+});
+
+test("native ui.find translates canonical radio-button to the agent-ctrl radio role", () => {
+  const original = agentCtrl.findElement;
+  let observedRole = null;
+  agentCtrl.findElement = (query, role) => {
+    observedRole = role;
+    return {ok:true, stdout:"@e7\n", stderr:"", seconds:0, method:"mock-agent-find"};
+  };
+  try {
+    const result = operations.find({
+      app:"System Settings",
+      query:"RumiAI Native Option A",
+      role:"radio-button",
+      first:true,
+    });
+    assert.equal(observedRole, "radio");
+    assert.equal(result.ok, true);
+    assert.equal(result.ref, "@e7");
+    assert.equal(result.role, "radio-button");
+  } finally {
+    agentCtrl.findElement = original;
+  }
 });
 
 test("ui.setText rejects empty text without invoking GUI recovery", async () => {
