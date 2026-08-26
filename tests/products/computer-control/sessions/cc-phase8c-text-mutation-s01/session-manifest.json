@@ -1,0 +1,40 @@
+{
+  "sessionId": "cc-phase8c-text-mutation-s01",
+  "scope": "Computer Control Phase 8C precise native text range mutation, caret insertion and append",
+  "productSha": "a9366f2efd23fe2830e0ab88b428e02df205909e",
+  "testSourceSha": "f92c5fb26f7e600e110efa45360fcaaf08f4a3c9",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-mutation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8c-text-mutation=PASS",
+  "prerequisites": {
+    "ui.getTextSelection": "PHYSICALLY_VALIDATED",
+    "ui.selectTextRange": "PHYSICALLY_VALIDATED"
+  },
+  "capabilitiesUnderTest": [
+    "ui.replaceTextRange",
+    "ui.insertText",
+    "ui.appendText"
+  ],
+  "requiredEvidence": [
+    "exact non-empty range replacement",
+    "non-BMP replacement with UTF-16 lengths and deterministic caret",
+    "CARET_REQUIRED on non-collapsed insert without text change",
+    "caret insertion",
+    "append at observed text end regardless of current selection",
+    "precise deletion with empty replacement",
+    "surrogate-boundary rejection without text change",
+    "verified idempotent empty append",
+    "independent full-text and caret postconditions"
+  ],
+  "previousEvidenceCommit": "c1cbab943cd2885ee9f62098cc23f1b903dc4dee",
+  "promotionPolicy": "Keep all Phase 8C capabilities IMPLEMENTED until this session produces committed physical PASS evidence and that evidence is reviewed."
+}
