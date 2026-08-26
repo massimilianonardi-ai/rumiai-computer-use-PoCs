@@ -96,12 +96,12 @@ test("ui.scrollIntoView requires visible true and preserves idempotence", async 
   assert.equal(idempotent.changed, false);
 });
 
-test("scroll surfaces remain IMPLEMENTED before physical validation", async () => {
+test("scroll validation states reflect physical evidence", async () => {
   const info = await createMacOSBackend({backendModule:backendModule()}).info();
   for (const name of ["ui.scroll", "ui.scrollIntoView"]) {
     const capability = info.capabilities.find(item => item.name === name);
     assert.ok(capability);
-    assert.equal(capability.validationState, "IMPLEMENTED");
+    assert.equal(capability.validationState, name === "ui.scroll" ? "PHYSICALLY_VALIDATED" : "IMPLEMENTED");
   }
 });
 
@@ -121,4 +121,3 @@ test("schemas, SDK and RumiAI adapter expose both scroll APIs", () => {
   assert.match(adapter, /ui\.scroll/);
   assert.match(adapter, /ui\.scrollIntoView/);
 });
-
