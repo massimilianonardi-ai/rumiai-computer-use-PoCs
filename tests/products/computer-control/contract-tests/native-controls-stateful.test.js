@@ -9,6 +9,8 @@ const portableRoot = path.resolve(__dirname, "../../../../../..");
 const productRoot = process.env.RUMIAI_COMPUTER_CONTROL_ROOT || path.join(portableRoot, "lib", "computer-control");
 const {createRouter} = require(path.join(productRoot, "runtime/src/router"));
 const {createMacOSBackend} = require(path.join(productRoot, "backends/macos/backend"));
+const operations = require(path.join(productRoot, "backends/macos/runtime/app/computer-control/operations"));
+const agentCtrl = require(path.join(productRoot, "backends/macos/runtime/app/computer-control/backends/agent-ctrl"));
 
 function fixtureRouterBackend() {
   return {
@@ -78,6 +80,39 @@ test("macOS snapshot canonicalizes the native radio role", async () => {
   const observed = await backend.snapshot({application:"Safari", compact:false});
   assert.equal(observed.nodes.length, 1);
   assert.equal(observed.nodes[0].role, "radio-button");
+});
+
+test("macOS description decodes checked state and maps radio selection", () => {
+  const originalGet = agentCtrl.getElementPropertyJson;
+  const originalBounds = agentCtrl.getElementBounds;
+  let role = "checkbox";
+  let state = {checked:"false", selected:false, enabled:true, focused:false, visible:true};
+
+  agentCtrl.getElementPropertyJson = (_ref, property) => ({
+    ok:true,
+    value:property === "role" ? role
+      : property === "name" ? "Fixture control"
+      : property === "value" ? "0"
+      : property === "state" ? state
+      : null,
+    seconds:0,
+  });
+  agentCtrl.getElementBounds = () => ({ok:true, bounds:{x:1,y:2,w:3,h:4}, seconds:0});
+
+  try {
+    const checkbox = operations.describe({app:"Safari", element:{ref:"@e1"}});
+    assert.equal(checkbox.checked, false);
+
+    role = "radio";
+    state = {checked:"true", selected:false, enabled:true, focused:false, visible:true};
+    const radio = operations.describe({app:"Safari", element:{ref:"@e2"}});
+    assert.equal(radio.role, "radio-button");
+    assert.equal(radio.checked, true);
+    assert.equal(radio.selected, true);
+  } finally {
+    agentCtrl.getElementPropertyJson = originalGet;
+    agentCtrl.getElementBounds = originalBounds;
+  }
 });
 
 test("new stateful capabilities remain IMPLEMENTED before physical validation", async () => {
