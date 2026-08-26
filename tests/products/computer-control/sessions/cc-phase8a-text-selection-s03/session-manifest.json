@@ -1,0 +1,21 @@
+{
+  "sessionId": "cc-phase8a-text-selection-s03",
+  "scope": "Computer Control Phase 8A native text selection observation after canonical text-area role translation fix",
+  "productSha": "6be2aef9b0f38c3ad2e92893b9879a87a35a4e50",
+  "testSourceSha": "b20292ce4b2cea8d5e34719af37f354fb3df3cb8",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-selection.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8a-text-selection=PASS",
+  "supersedesFailedSession": "cc-phase8a-text-selection-s02",
+  "previousEvidenceCommit": "9016d5195b7a857221c442530e5a5d174baf80d6",
+  "previousFailure": "canonical text-area was forwarded to agent-ctrl, which accepts text-field for this native AppKit text surface"
+}
