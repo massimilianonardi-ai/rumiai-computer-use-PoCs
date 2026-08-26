@@ -87,11 +87,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSourc
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int { (item as? OutlineItem)?.children.count ?? 1 }
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any { item == nil ? outlineRoot : (item as! OutlineItem).children[index] }
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool { !(item as! OutlineItem).children.isEmpty }
+    func outlineView(_ outlineView: NSOutlineView, rowViewForItem item: Any) -> NSTableRowView? {
+        let model = item as! OutlineItem
+        let row = NSTableRowView()
+        row.setAccessibilityLabel("RumiAI \(model.title) Row")
+        row.setAccessibilityIdentifier("rumiai.native.outline.row." + model.title.lowercased().replacingOccurrences(of: " ", with: "."))
+        return row
+    }
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let model = item as! OutlineItem
         let field = NSTextField(labelWithString: model.title)
-        field.setAccessibilityLabel(model.title)
-        field.setAccessibilityIdentifier("rumiai.native.outline." + model.title.lowercased().replacingOccurrences(of: " ", with: "."))
+        field.setAccessibilityIdentifier("rumiai.native.outline.cell." + model.title.lowercased().replacingOccurrences(of: " ", with: "."))
         return field
     }
 }
