@@ -1,0 +1,28 @@
+{
+  "sessionId": "cc-phase8b-text-range-selection-s01",
+  "scope": "Computer Control Phase 8B native text range selection on deterministic AppKit NSTextView",
+  "productSha": "778c39e3358295ba18b0bbfd0705858f6902a15d",
+  "testSourceSha": "a6bf06a467dfc9bbd4fd9289cd112aef99a342b6",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-range-selection.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8b-text-range-selection=PASS",
+  "prerequisiteEvidenceCommit": "faf24053aa8b9b31abc7f3ac730941921c3625f9",
+  "prerequisite": "Phase 8A ui.getTextSelection PHYSICALLY_VALIDATED",
+  "expectedCoverage": [
+    "non-empty native range selection",
+    "exact selected text postcondition",
+    "idempotent re-selection",
+    "collapsed range caret placement",
+    "UTF-16 non-BMP consistency",
+    "out-of-bounds rejection without mutation"
+  ]
+}
