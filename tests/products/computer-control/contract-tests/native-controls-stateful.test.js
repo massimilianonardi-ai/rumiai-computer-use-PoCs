@@ -65,6 +65,21 @@ test("macOS mapping preserves verified stateful postconditions", async () => {
   assert.equal(selected.verification.method, "accessibility-selected-postcondition");
 });
 
+test("macOS snapshot canonicalizes the native radio role", async () => {
+  const backend = createMacOSBackend({backendModule:{
+    snapshot:() => ({
+      ok:true,
+      snapshot:'@e4 radio "Fixture radio"',
+      changed:null,
+      method:"fixture-accessibility-tree",
+    }),
+  }});
+
+  const observed = await backend.snapshot({application:"Safari", compact:false});
+  assert.equal(observed.nodes.length, 1);
+  assert.equal(observed.nodes[0].role, "radio-button");
+});
+
 test("new stateful capabilities remain IMPLEMENTED before physical validation", async () => {
   const backend = createMacOSBackend({backendModule:{}});
   const info = await backend.info();
