@@ -1,9 +1,13 @@
 # micro-PoC — stateful native controls
 
-Status: **NOT_RUN**
+Status: **NOT_RUN_PHYSICALLY**
 
 Product repository: `massimilianonardi-ai/rumiai-computer-control`
-Product commit under test: `35f3be07914faeae133237b566d6ae4bd0d79557`
+Product commits under test:
+
+- implementation: `35f3be07914faeae133237b566d6ae4bd0d79557`
+- boundary compatibility fix: `b7e7e62db1fca98e888938fb4af4f62237d345ea`
+
 Capabilities: `ui.toggle`, `ui.select`
 
 ## Question
@@ -16,7 +20,7 @@ Can the macOS backend mutate stateful native controls idempotently and accept su
 node --test tests/products/computer-control/contract-tests/native-controls-stateful.test.js
 ```
 
-Expected: router validation, canonical mapping, schemas/SDK/adapter exposure and `IMPLEMENTED` (not physically validated) capability state all pass.
+The initial full product boundary run `32946412098` recorded 15 PASS / 2 FAIL because the first implementation moved the already validated `describe`/`invoke` SDK definitions behind inheritance. That exact failure is preserved in `results/2026-08-26-native-control-stateful-boundary-FAIL.md`. Product commit `b7e7e62...` restores those public source surfaces without changing their semantics.
 
 ## Physical test
 
@@ -32,4 +36,4 @@ Expected terminal marker on complete success:
 physical-native-control-stateful=PASS
 ```
 
-Any failure or unavailable Accessibility state must be recorded exactly as FAIL/BLOCKED before code diagnosis or modification. The product capability must remain `IMPLEMENTED` until this physical test is run and the exact evidence is committed.
+Any physical failure or unavailable Accessibility state must be recorded exactly as FAIL/BLOCKED before code diagnosis or modification. The product capability must remain `IMPLEMENTED` until this physical test is run and the exact evidence is committed.
