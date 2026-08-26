@@ -35,7 +35,7 @@ test("macOS mapping preserves verified value evidence",async()=>{
   assert.equal((await backend.decrement({application:"Safari",target:{ref:"@e2"}})).observedValue,5);
 });
 
-test("schemas SDK types and capabilities expose value mutations as IMPLEMENTED",async()=>{
+test("schemas SDK types and capabilities expose value mutations as physically validated",async()=>{
   const setSchema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/set-value.params.schema.json"),"utf8"));
   const stepSchema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/value-step.params.schema.json"),"utf8"));
   const sdk=fs.readFileSync(path.join(productRoot,"sdk/typescript/src/index.js"),"utf8");
@@ -47,5 +47,5 @@ test("schemas SDK types and capabilities expose value mutations as IMPLEMENTED",
   assert.match(sdk,/decrement\(\{application, target, settle = true\}\)/);
   assert.match(types,/interface ValueMutationResult/);
   const info=await createMacOSBackend({backendModule:{}}).info();
-  for(const name of ["ui.setValue","ui.increment","ui.decrement"]) assert.equal(info.capabilities.find(x=>x.name===name)?.validationState,"IMPLEMENTED");
+  for(const name of ["ui.setValue","ui.increment","ui.decrement"]) assert.equal(info.capabilities.find(x=>x.name===name)?.validationState,"PHYSICALLY_VALIDATED");
 });
