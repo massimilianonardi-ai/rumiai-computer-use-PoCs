@@ -98,13 +98,13 @@ async function main() {
     check("offscreen-target-observed", Boolean(target));
 
     const beforeTarget = await client.describe({application:"Safari", target});
-    check("target-initially-not-visible", beforeTarget.visible === false);
+    check("target-bounds-offscreen", Boolean(beforeTarget.bounds && beforeTarget.bounds.y > 1000));
 
     const scrolled = await client.scroll({application:"Safari", target:anchor, direction:"down", amount:1});
     check("scroll-postcondition", scrolled.verified === true && scrolled.verification?.evidence?.changed === true);
 
     const visible = await client.scrollIntoView({application:"Safari", target});
-    check("scroll-into-view-postcondition", visible.verified === true && visible.verification?.evidence?.visible === true);
+    check("scroll-into-view-postcondition", visible.verified === true && visible.changed === true && visible.verification?.evidence?.visible === true);
 
     const idempotent = await client.scrollIntoView({application:"Safari", target:visible.target});
     check("scroll-into-view-idempotent", idempotent.verified === true && idempotent.idempotent === true && idempotent.changed === false);
@@ -123,4 +123,3 @@ main().catch(error => {
   console.error(error.stack || error.message);
   process.exit(1);
 });
-
