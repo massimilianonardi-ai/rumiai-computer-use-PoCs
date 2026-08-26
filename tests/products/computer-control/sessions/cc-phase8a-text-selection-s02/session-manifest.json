@@ -1,0 +1,19 @@
+{
+  "sessionId": "cc-phase8a-text-selection-s02",
+  "scope": "Computer Control Phase 8A native text selection observation",
+  "productSha": "0ad6baf7e82d2cde3d5fdbe4da57a884b93c5be5",
+  "testSourceSha": "79af56caf2a121b70d8ed29545b766beaf93bbcd",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-selection.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8a-text-selection=PASS",
+  "supersedesUnexecutedSession": "cc-phase8a-text-selection-s01"
+}
