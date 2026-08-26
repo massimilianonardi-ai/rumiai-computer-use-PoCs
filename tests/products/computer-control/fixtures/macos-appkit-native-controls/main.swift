@@ -10,6 +10,7 @@ final class FlippedView: NSView { override var isFlipped: Bool { true } }
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate {
     var window: NSWindow!
+    var disclosureExpanded = false
     let outlineRoot = OutlineItem("Native Parent", [OutlineItem("Native Child", [OutlineItem("Native Grandchild")])])
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -51,6 +52,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSourc
         popup.setAccessibilityIdentifier("rumiai.native.popup")
         root.addSubview(popup)
 
+        let disclosure = NSButton(title: "RumiAI Native Disclosure", target: self, action: #selector(toggleDisclosure(_:)))
+        disclosure.frame = NSRect(x: 320, y: 490, width: 220, height: 30)
+        disclosure.setAccessibilityExpanded(false)
+        disclosure.setAccessibilityIdentifier("rumiai.native.disclosure")
+        root.addSubview(disclosure)
+
         let outlineScroll = NSScrollView(frame: NSRect(x: 24, y: 220, width: 350, height: 240))
         outlineScroll.hasVerticalScroller = true
         let outline = NSOutlineView(frame: outlineScroll.bounds)
@@ -62,6 +69,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSourc
         outlineScroll.documentView = outline
         root.addSubview(outlineScroll)
         outline.reloadData()
+
+        let childrenParent = NSBox(frame: NSRect(x: 24, y: 20, width: 350, height: 170))
+        childrenParent.title = ""
+        childrenParent.setAccessibilityLabel("RumiAI Native Children Parent")
+        childrenParent.setAccessibilityIdentifier("rumiai.native.children.parent")
+        let childrenChild = NSBox(frame: NSRect(x: 18, y: 18, width: 310, height: 125))
+        childrenChild.title = ""
+        childrenChild.setAccessibilityLabel("RumiAI Native Child")
+        childrenChild.setAccessibilityIdentifier("rumiai.native.children.child")
+        let childrenGrandchild = NSButton(title: "RumiAI Native Grandchild", target: nil, action: nil)
+        childrenGrandchild.frame = NSRect(x: 18, y: 18, width: 230, height: 32)
+        childrenGrandchild.setAccessibilityIdentifier("rumiai.native.children.grandchild")
+        childrenChild.contentView?.addSubview(childrenGrandchild)
+        childrenParent.contentView?.addSubview(childrenChild)
+        root.addSubview(childrenParent)
 
         let scroll = NSScrollView(frame: NSRect(x: 420, y: 220, width: 430, height: 468))
         scroll.hasVerticalScroller = true; scroll.hasHorizontalScroller = false; scroll.borderType = .bezelBorder
@@ -84,6 +106,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSourc
         for view in root.subviews.compactMap({ $0 as? NSButton }).filter({ $0.tag == 1 || $0.tag == 2 }) { view.state = (view === sender) ? .on : .off }
     }
 
+    @objc func toggleDisclosure(_ sender: NSButton) {
+        disclosureExpanded.toggle()
+        sender.setAccessibilityExpanded(disclosureExpanded)
+    }
+
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int { (item as? OutlineItem)?.children.count ?? 1 }
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any { item == nil ? outlineRoot : (item as! OutlineItem).children[index] }
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool { !(item as! OutlineItem).children.isEmpty }
@@ -97,6 +124,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSOutlineViewDataSourc
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let model = item as! OutlineItem
         let field = NSTextField(labelWithString: model.title)
+        field.setAccessibilityLabel("RumiAI \(model.title) Row")
         field.setAccessibilityIdentifier("rumiai.native.outline.cell." + model.title.lowercased().replacingOccurrences(of: " ", with: "."))
         return field
     }
