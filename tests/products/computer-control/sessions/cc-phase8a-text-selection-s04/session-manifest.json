@@ -1,0 +1,20 @@
+{
+  "sessionId": "cc-phase8a-text-selection-s04",
+  "scope": "Computer Control Phase 8A native text selection observation after AX/provider text-role rebind fix",
+  "productSha": "4166cab8c6b535d627c0f93fe0015ad3c69fcc6a",
+  "testSourceSha": "cdf869ba43f1a6294a7349ca5a66daeadc726209",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-selection.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8a-text-selection=PASS",
+  "previousEvidenceCommit": "6770e60ca98111bdda8ba5aa3492ba2d60e60de0",
+  "previousFailure": "native AX rebind did not bridge provider text-field to AppKit AXTextArea"
+}
