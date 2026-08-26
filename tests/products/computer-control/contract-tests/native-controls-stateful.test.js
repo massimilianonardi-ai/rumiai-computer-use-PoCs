@@ -115,13 +115,13 @@ test("macOS description decodes checked state and maps radio selection", () => {
   }
 });
 
-test("new stateful capabilities remain IMPLEMENTED before physical validation", async () => {
+test("physically observed stateful capabilities are promoted", async () => {
   const backend = createMacOSBackend({backendModule:{}});
   const info = await backend.info();
   for (const name of ["ui.toggle", "ui.select"]) {
     const capability = info.capabilities.find(item => item.name === name);
     assert.ok(capability);
-    assert.equal(capability.validationState, "IMPLEMENTED");
+    assert.equal(capability.validationState, "PHYSICALLY_VALIDATED");
   }
 });
 

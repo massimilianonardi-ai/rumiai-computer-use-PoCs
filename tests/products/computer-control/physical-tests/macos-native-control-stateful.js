@@ -70,7 +70,7 @@ async function main() {
     for (const name of ["ui.toggle", "ui.select"]) {
       const capability = info.capabilities.find(item => item.name === name);
       check(`${name}-capability-present`, Boolean(capability));
-      check(`${name}-capability-awaits-validation`, capability?.validationState === "IMPLEMENTED");
+      check(`${name}-capability-physically-validated`, capability?.validationState === "PHYSICALLY_VALIDATED");
     }
 
     const snapshot = await client.snapshot({application:"Safari", settle:true, compact:false});
