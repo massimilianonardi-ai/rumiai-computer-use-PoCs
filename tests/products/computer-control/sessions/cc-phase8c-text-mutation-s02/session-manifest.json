@@ -1,0 +1,37 @@
+{
+  "sessionId": "cc-phase8c-text-mutation-s02",
+  "scope": "Computer Control Phase 8C native text mutation after replacing cached describe.value verification with fresh native AX full-text observation",
+  "productSha": "d679a89a88977a70c450eec9e1aece6c7b2a6506",
+  "testSourceSha": "aa3856253eb34eac4d5e3e6d52e7d1324747eb2f",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-mutation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "terminalMarker": "physical-phase8c-text-mutation=PASS",
+  "previousEvidenceCommit": "bf0809c9dabdfd63f31ce7019ab8029d2c971772",
+  "previousFailure": "native selected-text mutation was helper-verified, but the independent full-text postcondition reused agent-ctrl describe.value from an observation-scoped ref and could read a stale cached value",
+  "fix": {
+    "nativeObserver": "macos-text-selection helper now returns backend-private fresh AXValue fullText",
+    "productPostcondition": "Phase 8C uses fresh native AX fullText before and after mutation",
+    "physicalVerification": "test re-finds the target before describe-based exact-value checks"
+  },
+  "expectedCoverage": [
+    "ui.replaceTextRange exact native replacement",
+    "ui.insertText requires collapsed caret",
+    "ui.insertText exact native insertion",
+    "ui.appendText derives native text end independently of current selection",
+    "empty-string deletion",
+    "empty append idempotence",
+    "UTF-16 non-BMP payload fidelity",
+    "surrogate-pair boundary rejection without mutation",
+    "exact fresh full-text postcondition",
+    "deterministic final caret postcondition"
+  ]
+}
