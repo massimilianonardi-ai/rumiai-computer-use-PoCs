@@ -1,0 +1,51 @@
+{
+  "sessionId": "cc-phase9b3c-file-picker-accept-result-diagnostic-s01",
+  "scope": "Computer Control Phase 9B3C diagnostic capture of AppKit completion after filePicker.accept",
+  "productSha": "2be349b1fdf2a6ea08ee893be423942d926a2c0b",
+  "testSourceSha": "53f0de348a4547b6bfda531d82eaeaa7d971dff1",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via registered Provider and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-accept-result-diagnostic.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3c-file-picker-accept-result-diagnostic=PASS",
+  "historicalEvidence": {
+    "blockedSession": "cc-phase9b3c-file-picker-semantic-actions-s01",
+    "blockedEvidenceCommit": "53239bbb4b1da389e65e24f7dc484bd119b1a31f",
+    "blockedCause": "NSOpenPanel did not expose AXDefaultButton/AXCancelButton relationships on the tested surface",
+    "failedSession": "cc-phase9b3c-file-picker-semantic-actions-s02",
+    "failedEvidenceCommit": "bc593924b065975dc52227ae6e4f81395c92e35b",
+    "failedObservation": "accept target delivered successfully and picker became absent, but the expected AppKit result label was not captured"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Provider only",
+    "productMutationUnderTest": "filePicker.accept only after already validated exact item selection",
+    "diagnosticObservation": "read-only Accessibility traversal of test-owned fixture result label",
+    "directDiagnosticUiMutation": false,
+    "labelBasedProductTargeting": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "filesystemMutationByProduct": false,
+    "nativeHandlesPublic": false,
+    "promotionAllowed": false,
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "filePicker.selectItem remains physically validated",
+    "filePicker.accept remains IMPLEMENTED and is invoked through the current corrected backend",
+    "a real AppKit NSOpenPanel opens at PickerRoot",
+    "Alpha.txt is selected before accept",
+    "filePicker.accept reports verified dismissal",
+    "a separate read-only Accessibility helper captures the fixture Picker Result value after accept",
+    "the diagnostic records the exact AppKit completion text without assuming accepted/cancelled/other in advance",
+    "PASS means diagnostic evidence captured, not Phase 9B3C promotion"
+  ]
+}
