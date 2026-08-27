@@ -1,0 +1,54 @@
+{
+  "sessionId": "cc-phase9c1-menu-bar-discovery-s02",
+  "scope": "Computer Control Phase 9C1 native AppKit menu bar ownership and Accessibility topology discovery, corrected readiness harness",
+  "productSha": "ebce7c87c264932144909a491d04c7f307b4cafe",
+  "testSourceSha": "72790fd9dbd8142ff71f34d823443dea107fd382",
+  "platform": "macOS Cocoa/AppKit application menu bar via registered Provider and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-menu-bar-discovery.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-menu-bar-discovery/main.swift",
+  "terminalMarker": "physical-phase9c1-menu-bar-discovery=PASS",
+  "historicalEvidence": {
+    "s01Session": "cc-phase9c1-menu-bar-discovery-s01",
+    "s01EvidenceCommit": "90c781121e377273b9c3de2ce1dc6202733764e5",
+    "s01Result": "FAIL",
+    "s01Cause": "readiness harness checked a nonexistent ready.running field even though ensureApplicationReady returned state READY and verified true; topology probe was not reached"
+  },
+  "prerequisiteEvidence": {
+    "phase9b3cSession": "cc-phase9b3c-file-picker-semantic-actions-s03",
+    "phase9b3cEvidenceCommit": "9a47234951d3de5dff9d4b975892a8b0b07e079d",
+    "phase9b3cValidatedProduct": "2be349b1fdf2a6ea08ee893be423942d926a2c0b",
+    "phase9b3cResult": "29 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Provider only for fixture ownership; native menu bar read from the exact Provider process AX application object",
+    "readOnly": true,
+    "implicitLaunchByProductApi": false,
+    "implicitActivationByProductApi": false,
+    "axPerformAction": false,
+    "axSetAttribute": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "filesystemMutation": false,
+    "nativeHandlesPublic": false,
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "registered Provider fixture readiness is accepted only from ensureApplicationReady state READY with verified true",
+    "application AX object exposes kAXMenuBarAttribute",
+    "resolved menu bar has role AXMenuBar",
+    "the deterministic RumiAI Actions top-level menu marker is present",
+    "complete read-only topology JSON is recorded including roles, titles/values/descriptions/identifiers, enabled state, advertised actions and child counts",
+    "visibility of Alpha Action, Disabled Action and Nested Action while the menu is closed is recorded diagnostically rather than assumed",
+    "no menu is opened and no action is performed during discovery"
+  ]
+}
