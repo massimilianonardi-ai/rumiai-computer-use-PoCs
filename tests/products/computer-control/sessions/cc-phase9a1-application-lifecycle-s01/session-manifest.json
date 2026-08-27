@@ -1,0 +1,43 @@
+{
+  "sessionId": "cc-phase9a1-application-lifecycle-s01",
+  "scope": "Computer Control Phase 9A1 provider-scoped application inventory, launch and activation",
+  "productSha": "5e36c5fd098ac50f80e439f1bb4e778e73c3fd86",
+  "testSourceSha": "fbf5d3e2c0eee168327bf4d1517d11551a762295",
+  "platform": "macOS Cocoa/AppKit via Provider registry, Desktop Plugin and foreground/process observation",
+  "browserSurfaceAllowed": false,
+  "applicationTerminateIncluded": false,
+  "applicationTerminateStatus": "deferred to Phase 9A2 security/consent review",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-application-lifecycle.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-application-lifecycle/main.swift",
+  "terminalMarker": "physical-phase9a1-application-lifecycle=PASS",
+  "safetyBoundary": {
+    "addressing": "registered application Providers only",
+    "arbitraryExecutablePaths": false,
+    "implicitLaunchFromActivate": false,
+    "durableProcessIdentity": false,
+    "cleanup": "physical harness may stop only its two temporary test-owned fixture processes"
+  },
+  "expectedCoverage": [
+    "application.list observes registered available fixture before launch",
+    "application.list reports fixture not running before launch",
+    "application.activate before launch fails APP_NOT_RUNNING without launching",
+    "application.launch starts the exact Provider-resolved fixture",
+    "application.launch verifies running postcondition",
+    "repeated application.launch is idempotent",
+    "application.list observes running state after launch",
+    "test-owned distractor application moves foreground away from target",
+    "application.activate brings target fixture to foreground",
+    "application.activate verifies foreground Provider identity",
+    "repeated application.activate is idempotent",
+    "application.list observes final running and active state",
+    "Phase 8C remains PHYSICALLY_VALIDATED",
+    "Phase 9A1 capabilities remain IMPLEMENTED until this physical session passes"
+  ]
+}
