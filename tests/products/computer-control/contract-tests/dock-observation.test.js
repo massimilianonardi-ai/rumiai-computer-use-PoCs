@@ -18,7 +18,7 @@ test("Phase 9C2A router exposes global parameterless read-only Dock observation"
   assert.deepEqual(value.dock,{items:[]});
 });
 
-test("Phase 9C2A macOS helper is OS-owned native AX read-only observation",()=>{
+test("Phase 9C2A macOS helper remains OS-owned native AX read-only observation",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-dock-observation.swift"),"utf8");
   const wrapper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/app/computer-control/backends/macos-dock-observation.js"),"utf8");
   assert.match(helper,/com\.apple\.dock/);
@@ -31,9 +31,9 @@ test("Phase 9C2A macOS helper is OS-owned native AX read-only observation",()=>{
   assert.doesNotMatch(wrapper,/agent-ctrl|clipboard|keyboard|click|mouse/);
 });
 
-test("Phase 9C2A backend and public surfaces expose semantic Dock state only",()=>{
+test("Phase 9C2A backend and public surfaces remain semantic after physical promotion",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(source,/dock\.observe.*IMPLEMENTED/);
+  assert.match(source,/dock\.observe.*PHYSICALLY_VALIDATED/);
   assert.match(source,/os-owned-native-AX-dock-observation/);
   assert.match(source,/async observeDock/);
   const schema=JSON.stringify(JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/dock-observe-result.schema.json"),"utf8")));
@@ -47,20 +47,20 @@ test("Phase 9C2A backend and public surfaces expose semantic Dock state only",()
   for(const text of[sdk,types,adapter])assert.match(text,/observeDock/);
 });
 
-test("Phase 9C2A documentation records discovery provenance without premature physical promotion",()=>{
+test("Phase 9C2A documentation records authoritative physical promotion and immutable history",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-dock.md"),"utf8");
-  const discovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c23-system-chrome-discovery.md"),"utf8");
-  assert.match(docs,/Phase 9C2A validation state: `IMPLEMENTED`/);
-  assert.doesNotMatch(docs,/Phase 9C2A validation state: `PHYSICALLY_VALIDATED`/);
-  assert.match(docs,/generic Dock invocation API is introduced by Phase 9C2A/i);
-  assert.match(docs,/delivery is represented as delivery rather than semantic success/i);
-  assert.match(discovery,/cc-phase9c23-system-chrome-discovery-s01/);
-  assert.match(discovery,/f68f5bc4bc3e2fec2aa1219b402b7016107a6e6f/);
-  assert.match(discovery,/32 PASS \/ 0 FAIL \/ 0 BLOCKED/);
-  assert.match(discovery,/does not promote a public Dock or menu-extras capability to `PHYSICALLY_VALIDATED`/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c2a-dock-observation-physical.md"),"utf8");
+  assert.match(docs,/Phase 9C2A validation state: `PHYSICALLY_VALIDATED`/);
+  assert.match(docs,/5662b659a3b80c236db323dfe09125b56b48eca6/);
+  assert.match(docs,/33 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(evidence,/cc-phase9c2a-dock-observation-s02/);
+  assert.match(evidence,/b9d04f5213c5dcb00ca8dc0363f8248caa9a8916/);
+  assert.match(evidence,/3da618a37d813d9cfc3e8003301388a03eea7b20/);
+  assert.match(evidence,/Historical evidence is not rewritten/);
+  assert.match(docs,/No generic Dock invocation API is introduced by Phase 9C2A/i);
 });
 
-test("Phase 9C2A public result schema is stable semantic data",()=>{
+test("Phase 9C2A public result schema remains stable semantic data",()=>{
   const schema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/dock-observe-result.schema.json"),"utf8"));
   const item=schema.properties.dock.oneOf.find(value=>value.type==="object").properties.items.items;
   assert.deepEqual(item.required,["kind","title","running","status"]);
