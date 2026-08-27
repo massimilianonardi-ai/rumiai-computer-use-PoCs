@@ -1,0 +1,53 @@
+{
+  "sessionId": "cc-phase9b3b-directory-disclosure-discovery-s01",
+  "scope": "Computer Control Phase 9B3B native file picker hierarchical disclosure discovery",
+  "productSha": "16e4f1b427170b0e5c729a10629990d48ee71daf",
+  "testSourceSha": "b79a7d091970ba97bccfeeb06e972fdd3c4ccd90",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via Provider registry and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-directory-disclosure-discovery.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3b-directory-disclosure-discovery=PASS",
+  "purpose": "diagnostic physical discovery only; PASS means the disclosure experiment and independent observation were captured, not that Phase 9B3B is promoted",
+  "prerequisiteEvidence": {
+    "phase9b3aObservationEvidenceCommit": "63a2b850a2c1dcf8509a27e7f8292a1f09f811ba",
+    "phase9b3bNavigationS01EvidenceCommit": "d9f4bba6c496d27417e0d6780ca47385133bbfed",
+    "phase9b3bNavigationS02EvidenceCommit": "55c2a3859f652b5e36e5d319275481d92078ff53",
+    "phase9b3bDirectoryActionDiscoveryEvidenceCommit": "cedecaecd29846c7dacef4b24e5fe1d226b4ef5b",
+    "phase9b3bNavigationS03EvidenceCommit": "4ba929882233c7292be993cc9dba6c495262394b"
+  },
+  "knownFindingBeforeSession": "AXConfirm on the exact FolderA name field is delivered successfully but does not change the picker location; AXShowDefaultUI/AXShowAlternateUI are UI-presentation semantics rather than navigation semantics",
+  "experiment": {
+    "target": "FolderA AXDisclosureTriangle",
+    "nativeAction": "AXPress",
+    "state": "AXDisclosing before/after",
+    "independentObserver": "filePicker.observe",
+    "expectedDiagnostic": "record whether Nested.txt becomes AX-visible while picker location remains PickerRoot"
+  },
+  "safetyBoundary": {
+    "registeredProviderOnly": true,
+    "arbitraryFilesystemPath": false,
+    "filesystemEnumerationByProduct": false,
+    "filesystemMutation": false,
+    "pickerAcceptOrCancel": false,
+    "keyboardFallback": false,
+    "coordinateTargeting": false,
+    "clipboardFallback": false,
+    "AXConfirm": false,
+    "AXOpen": false,
+    "action": "only AXPress on the exact native disclosure triangle discovered under FolderA",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "promotion": {
+    "filePicker.observe": "PHYSICALLY_VALIDATED prerequisite only",
+    "filePicker.selectItem": "remains IMPLEMENTED",
+    "filePicker.openDirectory": "remains IMPLEMENTED and must not be promoted from this discovery"
+  }
+}
