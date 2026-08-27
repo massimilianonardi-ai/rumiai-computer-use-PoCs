@@ -1,0 +1,49 @@
+{
+  "sessionId": "cc-phase9c23-system-chrome-discovery-s01",
+  "scope": "Computer Control Phase 9C2+9C3 combined native macOS system chrome topology discovery for Dock and menu extras/status-item ownership",
+  "productSha": "979ecb74dd486da832a96f02486dec7e71b42236",
+  "testSourceSha": "35ba8c86cbfa3c23ef513410e658e000af8b1a2e",
+  "platform": "macOS system-owned Accessibility surfaces: Dock, SystemUIServer and Control Center",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-system-chrome-discovery.js",
+  "terminalMarker": "physical-phase9c23-system-chrome-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase9c1aSession": "cc-phase9c1a-menu-bar-observation-s02",
+    "phase9c1aEvidenceCommit": "decc4ccd989c694e624e3c3db69884b6903b0cee",
+    "phase9c1aValidatedProduct": "d0d1d23eedb7258d1fc292e3647559cf96d726d5",
+    "phase9c1aResult": "31 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "systemOwnedDiscovery": true,
+    "targetBundleIdentifiers": ["com.apple.dock", "com.apple.systemuiserver", "com.apple.controlcenter"],
+    "readOnly": true,
+    "productMutation": false,
+    "axPerformAction": false,
+    "axSetAttribute": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "appleScript": false,
+    "filesystemMutation": false,
+    "nativeHandlesPublic": false,
+    "cleanup": "only the temporary compiled discovery helper is removed"
+  },
+  "expectedCoverage": [
+    "the running macOS Dock process is resolved by OS bundle identity",
+    "the Dock Accessibility tree exposes one or more AXDockItem nodes",
+    "Dock item subroles, attributes and advertised actions are recorded diagnostically",
+    "running SystemUIServer and Control Center candidates are resolved independently by bundle identity",
+    "kAXExtrasMenuBarAttribute presence/absence, role and topology are recorded per candidate rather than assumed",
+    "the full bounded read-only Accessibility topology is recorded for each candidate",
+    "no native Accessibility action or input event is delivered",
+    "no public Dock or menu-extra API is frozen by this discovery checkpoint"
+  ]
+}
