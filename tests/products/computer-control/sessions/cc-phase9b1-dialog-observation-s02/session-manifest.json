@@ -1,0 +1,45 @@
+{
+  "sessionId": "cc-phase9b1-dialog-observation-s02",
+  "scope": "Computer Control Phase 9B1 provider-scoped native dialog and sheet observation",
+  "productSha": "2e7aaa24572fe5d55262d8cdce7f8fbc06cfaa58",
+  "testSourceSha": "24ce607d8dbbf72a8c60c586a402ffe704d59440",
+  "platform": "macOS Cocoa/AppKit via Provider registry and fresh native Accessibility observation",
+  "browserSurfaceAllowed": false,
+  "readOnly": true,
+  "dialogActionsIncluded": false,
+  "filePickerIncluded": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-dialog-observation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-dialog-observation/main.swift",
+  "terminalMarker": "physical-phase9b1-dialog-observation=PASS",
+  "safetyBoundary": {
+    "addressing": "registered application Providers only",
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "dialogInvocation": false,
+    "dialogDismissal": false,
+    "nativeHandlesPublic": false,
+    "labelBasedAuthorization": false,
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "Phase 9A1 and 9A2 application lifecycle capabilities remain PHYSICALLY_VALIDATED",
+    "dialog.list remains IMPLEMENTED until this physical session passes",
+    "running fixture without a dialog returns an observed empty dialog list",
+    "a native NSAlert presented as an AppKit sheet becomes observable",
+    "native AXSheet is canonicalized to kind=sheet without exposing AX identifiers",
+    "alert message text is observed exactly",
+    "alert informative text is observed exactly",
+    "modal state is represented explicitly as boolean when exposed by Accessibility or null when unavailable",
+    "the current reference Mac preserves AXModal unavailability as modal=null rather than inferring from sheet kind",
+    "Continue and Cancel button labels are observed",
+    "button enabled state is observed",
+    "repeated dialog.list leaves the native sheet present and proves read-only observation"
+  ]
+}
