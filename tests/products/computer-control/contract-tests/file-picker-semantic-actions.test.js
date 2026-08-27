@@ -72,6 +72,19 @@ test("Phase 9B3C fixture records accepted and cancelled AppKit completion indepe
   assert.match(fixture,/Picker Result: cancelled/);
 });
 
+test("Phase 9B3C blocked s01 evidence remains immutable and explains the corrected binding",()=>{
+  const evidencePath=path.join(__dirname,"../sessions/cc-phase9b3c-file-picker-semantic-actions-s01/session-result.json");
+  const evidence=JSON.parse(fs.readFileSync(evidencePath,"utf8"));
+  assert.equal(evidence.productShaExpected,"3cedb57d35663f74d0598b6c83645c973cdc6810");
+  assert.equal(evidence.productShaObserved,evidence.productShaExpected);
+  assert.equal(evidence.testSourceSha,"f3e0a6960ac46b7c554fae73d9849245311fcea6");
+  assert.equal(evidence.pocShaTested,"b740096ea5d792e201981e620e3eeec4e403448b");
+  assert.deepEqual(evidence.summary,{pass:26,fail:0,blocked:1,total:27,overall:"BLOCKED"});
+  const docs=fs.readFileSync(path.join(productRoot,"docs/api-file-picker.md"),"utf8");
+  assert.match(docs,/53239bbb4b1da389e65e24f7dc484bd119b1a31f/);
+  assert.match(docs,/did not expose AXDefaultButton/);
+});
+
 test("Phase 9B3C documentation remains IMPLEMENTED until physical evidence",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-file-picker.md"),"utf8");
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
