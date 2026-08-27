@@ -20,6 +20,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
 
+#if REFUSE_TERMINATION
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        return .terminateCancel
+    }
+#endif
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }
 
