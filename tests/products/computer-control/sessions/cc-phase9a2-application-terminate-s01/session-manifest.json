@@ -1,0 +1,42 @@
+{
+  "sessionId": "cc-phase9a2-application-terminate-s01",
+  "scope": "Computer Control Phase 9A2 provider-scoped graceful application termination",
+  "productSha": "2c99a708a5c78262a0df1c2d9bbbdc18cf72932a",
+  "testSourceSha": "e1b8aafd18c23cdf6516cb795e041ad3ae9a3102",
+  "platform": "macOS Cocoa/AppKit via Provider registry, NSRunningApplication graceful termination and independent process observation",
+  "browserSurfaceAllowed": false,
+  "forceTerminationAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-application-termination.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-application-lifecycle/main.swift",
+  "terminalMarker": "physical-phase9a2-application-terminate=PASS",
+  "safetyBoundary": {
+    "addressing": "registered application Providers only",
+    "arbitraryExecutablePaths": false,
+    "durableProcessIdentity": false,
+    "terminationMode": "graceful-only",
+    "forceKillFallback": false,
+    "dialogAutoConfirmation": false,
+    "cleanup": "physical harness may stop only its two temporary test-owned fixture processes after evidence is collected"
+  },
+  "expectedCoverage": [
+    "Phase 9A1 application.list/launch/activate remain PHYSICALLY_VALIDATED",
+    "application.terminate reports IMPLEMENTED before this physical session",
+    "terminating an already-stopped Provider is idempotent and does not launch it",
+    "application.launch starts the normal deterministic fixture",
+    "application.terminate requests graceful termination for the exact Provider bundle identity",
+    "APPLICATION_TERMINATED is returned only after the process is independently observed absent",
+    "application.list reports running=false and active=false after termination",
+    "repeated application.terminate is idempotent",
+    "a second AppKit fixture deliberately refuses graceful termination",
+    "refused termination returns APP_TERMINATION_NOT_COMPLETED",
+    "the refusing process remains running after the failed operation, proving no force-kill escalation",
+    "product source contains no forceTerminate, pkill, kill, Cmd+Q or osascript fallback for application.terminate"
+  ]
+}
