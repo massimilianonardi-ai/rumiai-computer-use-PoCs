@@ -1,0 +1,49 @@
+{
+  "sessionId": "cc-phase9b3a-file-picker-discovery-s02",
+  "scope": "Computer Control Phase 9B3A discovery-only native NSOpenPanel Accessibility topology",
+  "productSha": "5a7f6a00888838d042ce127f405fc050c07e4872",
+  "testSourceSha": "0856eb78a484a495b4eaf84809cbd1e392abf337",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel plus system-wide native Accessibility discovery",
+  "browserSurfaceAllowed": false,
+  "productApiIntroduced": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-topology-discovery.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-discovery/main.swift",
+  "topologyProbe": "tests/products/computer-control/physical-tests/helpers/macos-file-picker-ax-topology.swift",
+  "terminalMarker": "physical-phase9b3a-file-picker-discovery=PASS",
+  "previousSession": {
+    "sessionId": "cc-phase9b3a-file-picker-discovery-s01",
+    "evidenceCommit": "3ad64b2d49d9de9e6cd72d7fdb75f0dcfdfaaa16",
+    "result": "FAIL",
+    "classification": "discovery harness expectation defect",
+    "finding": "the real picker and all deterministic markers were already visible through native AX under the fixture process, while the system-wide focused-application PID was unavailable; global focus is not a required picker-identity signal"
+  },
+  "discoveryRules": {
+    "required": [
+      "fixture Provider host process is identified",
+      "one candidate Accessibility surface contains every deterministic picker marker",
+      "full topology JSON is recorded before relationship interpretation"
+    ],
+    "observedNotRequired": [
+      "system-wide focused application PID",
+      "picker owner equals focused application",
+      "picker is or is not a separate process"
+    ],
+    "noMutation": true,
+    "noProductFilePickerApi": true
+  },
+  "expectedCoverage": [
+    "real NSOpenPanel opens on the deterministic PickerRoot",
+    "Alpha.txt, Beta.txt, FolderA, Choose and the discovery prompt are visible in one native AX candidate surface",
+    "Provider host identity is observed",
+    "focused application identity is recorded when available and preserved as unavailable otherwise",
+    "candidate versus Provider process relationship is recorded rather than assumed",
+    "complete Accessibility topology is committed as physical evidence for the subsequent 9B3 contract design"
+  ]
+}
