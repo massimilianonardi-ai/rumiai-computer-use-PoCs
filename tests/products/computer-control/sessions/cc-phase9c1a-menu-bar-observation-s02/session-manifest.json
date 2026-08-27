@@ -1,0 +1,59 @@
+{
+  "sessionId": "cc-phase9c1a-menu-bar-observation-s02",
+  "scope": "Computer Control Phase 9C1A Provider-scoped native AppKit menu bar read-only observation",
+  "productSha": "d0d1d23eedb7258d1fc292e3647559cf96d726d5",
+  "testSourceSha": "2018e5ede25b44dc5f68285ce103ec5eb3355bfd",
+  "platform": "macOS Cocoa/AppKit application menu bar via registered Provider and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-menu-bar-observation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-menu-bar-discovery/main.swift",
+  "terminalMarker": "physical-phase9c1a-menu-bar-observation=PASS",
+  "prerequisiteEvidence": {
+    "phase9c1DiscoverySession": "cc-phase9c1-menu-bar-discovery-s02",
+    "phase9c1DiscoveryEvidenceCommit": "fe203eceec6a3976c911786860b8803794d6880a",
+    "phase9c1DiscoveryResult": "30 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9c1aHistoricalFailSession": "cc-phase9c1a-menu-bar-observation-s01",
+    "phase9c1aHistoricalFailEvidenceCommit": "18cc84e8f2380cd16e0fe812e4e14b91d1fbef15",
+    "phase9c1aHistoricalFailCause": "physical harness called non-existent client.info() before the first menuBar.observe invocation; product observation path was not exercised",
+    "phase9c1aCorrection": "physical harness now inspects capabilities through the real ComputerControlClient.runtimeInfo() SDK surface"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Provider only; menu bar resolved from exact Provider process application AX object",
+    "readOnly": true,
+    "implicitLaunchByProductApi": false,
+    "implicitActivationByProductApi": false,
+    "axPerformAction": false,
+    "axSetAttribute": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "appleScriptFallback": false,
+    "filesystemMutation": false,
+    "nativeHandlesPublic": false,
+    "nativeIdentifiersPublic": false,
+    "nativeActionsPublic": false,
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "menuBar.observe capability reports IMPLEMENTED through runtimeInfo before physical promotion",
+    "registered Provider fixture is READY and verified",
+    "public menuBar.observe returns an Accessibility-visible menu bar without opening menus",
+    "RumiAI Actions top-level menu is observed",
+    "Alpha Action is observed enabled",
+    "Disabled Action is observed disabled with AppKit automatic enabling disabled in the fixture",
+    "Nested Group and Nested Action hierarchy is preserved",
+    "public result exposes no AX identifiers, action names, roles or native handles",
+    "independent native topology observation agrees on menu bar presence and deterministic enabled states",
+    "repeated observation preserves the deterministic RumiAI Actions subtree",
+    "fixture Menu Result remains none before and after repeated observation",
+    "no menu item is invoked and no UI mutation is performed"
+  ]
+}
