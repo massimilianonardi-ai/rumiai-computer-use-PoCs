@@ -34,8 +34,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         value.messageText = "RumiAI Native Alert"
         value.informativeText = "Physical dialog observation"
         value.alertStyle = .informational
-        value.addButton(withTitle: "Continue")
-        value.addButton(withTitle: "Cancel")
+        let defaultButton = value.addButton(withTitle: "Continue")
+        defaultButton.keyEquivalent = "\r"
+        let cancelButton = value.addButton(withTitle: "Cancel")
+        cancelButton.keyEquivalent = "\u{1b}"
         alert = value
         value.beginSheetModal(for: window) { [weak self] _ in self?.alert = nil }
     }
