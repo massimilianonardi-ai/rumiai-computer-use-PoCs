@@ -1,0 +1,10 @@
+"use strict";
+const assert=require("node:assert/strict");const fs=require("node:fs");const path=require("node:path");const test=require("node:test");
+const portableRoot=path.resolve(__dirname,"../../../../../..");const productRoot=process.env.RUMIAI_COMPUTER_CONTROL_ROOT||path.join(portableRoot,"lib","computer-control");
+const fixture=path.resolve(__dirname,"../fixtures/macos-appkit-file-picker-discovery/main.swift");
+const probe=path.resolve(__dirname,"../physical-tests/helpers/macos-file-picker-ax-topology.swift");
+const physical=path.resolve(__dirname,"../physical-tests/macos-file-picker-topology-discovery.js");
+
+test("Phase 9B3A discovery uses a real NSOpenPanel and system-wide AX observation",()=>{const fixtureSource=fs.readFileSync(fixture,"utf8");const probeSource=fs.readFileSync(probe,"utf8");const physicalSource=fs.readFileSync(physical,"utf8");assert.match(fixtureSource,/NSOpenPanel\(\)/);assert.match(fixtureSource,/beginSheetModal/);assert.match(fixtureSource,/canChooseFiles\s*=\s*true/);assert.match(fixtureSource,/canChooseDirectories\s*=\s*true/);assert.match(probeSource,/AXUIElementCreateSystemWide/);assert.match(probeSource,/kAXFocusedApplicationAttribute/);assert.match(probeSource,/NSWorkspace\.shared\.runningApplications/);assert.match(physicalSource,/phase9b3a-topology-json/);});
+
+test("Phase 9B3A remains discovery-only and does not invent a product API before topology evidence",()=>{const backend=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");const router=fs.readFileSync(path.join(productRoot,"runtime/src/router.js"),"utf8");assert.doesNotMatch(backend,/filePicker\.|file-picker-observation|file-picker-navigation/);assert.doesNotMatch(router,/filePicker\./);const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");assert.match(roadmap,/Phase 9B3A — observation and native topology discovery/);assert.match(roadmap,/separate process/);assert.match(roadmap,/No public 9B3 API is declared before the topology is observed/);});
