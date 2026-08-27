@@ -44,8 +44,10 @@ test("Phase 9B3C backend requires picker absence while application remains runni
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
   assert.match(source,/filePicker\.selectItem.*PHYSICALLY_VALIDATED/);
   assert.match(source,/filePicker\.expandDirectory.*PHYSICALLY_VALIDATED/);
-  assert.match(source,/filePicker\.accept.*IMPLEMENTED/);
-  assert.match(source,/filePicker\.cancel.*IMPLEMENTED/);
+  assert.match(source,/filePicker\.accept.*PHYSICALLY_VALIDATED/);
+  assert.match(source,/filePicker\.cancel.*PHYSICALLY_VALIDATED/);
+  assert.match(source,/provider-scoped-native-AX-picker-accept-button/);
+  assert.match(source,/provider-scoped-native-AX-picker-cancel-button/);
   assert.match(source,/FILE_PICKER_ACTION_APP_EXITED/);
   assert.match(source,/native-file-picker-absent-after-semantic-action/);
   assert.match(source,/after\.pickers\.length===0/);
@@ -72,24 +74,31 @@ test("Phase 9B3C fixture records accepted and cancelled AppKit completion indepe
   assert.match(fixture,/Picker Result: cancelled/);
 });
 
-test("Phase 9B3C blocked s01 evidence remains immutable and explains the corrected binding",()=>{
-  const evidencePath=path.join(__dirname,"../sessions/cc-phase9b3c-file-picker-semantic-actions-s01/session-result.json");
-  const evidence=JSON.parse(fs.readFileSync(evidencePath,"utf8"));
-  assert.equal(evidence.productShaExpected,"3cedb57d35663f74d0598b6c83645c973cdc6810");
-  assert.equal(evidence.productShaObserved,evidence.productShaExpected);
-  assert.equal(evidence.testSourceSha,"f3e0a6960ac46b7c554fae73d9849245311fcea6");
-  assert.equal(evidence.pocShaTested,"b740096ea5d792e201981e620e3eeec4e403448b");
-  assert.deepEqual(evidence.summary,{pass:26,fail:0,blocked:1,total:27,overall:"BLOCKED"});
-  const docs=fs.readFileSync(path.join(productRoot,"docs/api-file-picker.md"),"utf8");
-  assert.match(docs,/53239bbb4b1da389e65e24f7dc484bd119b1a31f/);
-  assert.match(docs,/did not expose AXDefaultButton/);
+test("Phase 9B3C history remains immutable and canonical s03 evidence is promoted",()=>{
+  const s01=JSON.parse(fs.readFileSync(path.join(__dirname,"../sessions/cc-phase9b3c-file-picker-semantic-actions-s01/session-result.json"),"utf8"));
+  assert.equal(s01.productShaExpected,"3cedb57d35663f74d0598b6c83645c973cdc6810");
+  assert.deepEqual(s01.summary,{pass:26,fail:0,blocked:1,total:27,overall:"BLOCKED"});
+
+  const s02=JSON.parse(fs.readFileSync(path.join(__dirname,"../sessions/cc-phase9b3c-file-picker-semantic-actions-s02/session-result.json"),"utf8"));
+  assert.equal(s02.productShaExpected,"2be349b1fdf2a6ea08ee893be423942d926a2c0b");
+  assert.deepEqual(s02.summary,{pass:26,fail:1,blocked:0,total:27,overall:"FAIL"});
+
+  const s03=JSON.parse(fs.readFileSync(path.join(__dirname,"../sessions/cc-phase9b3c-file-picker-semantic-actions-s03/session-result.json"),"utf8"));
+  assert.equal(s03.productShaExpected,"2be349b1fdf2a6ea08ee893be423942d926a2c0b");
+  assert.equal(s03.productShaObserved,s03.productShaExpected);
+  assert.equal(s03.testSourceSha,"2f107d05bdce5650929db8ead670f12da2f59f54");
+  assert.equal(s03.pocShaTested,"5cc8e8f97cc8fa139248ff3e6c28612df31aa8a9");
+  assert.deepEqual(s03.summary,{pass:29,fail:0,blocked:0,total:29,overall:"PASS"});
+
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9b3c-file-picker-semantic-actions-physical.md"),"utf8");
+  assert.match(evidence,/9a47234951d3de5dff9d4b975892a8b0b07e079d/);
+  assert.match(evidence,/29 PASS \/ 0 FAIL \/ 0 BLOCKED/);
 });
 
-test("Phase 9B3C documentation remains IMPLEMENTED until physical evidence",()=>{
+test("Phase 9B3C documentation is physically promoted",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-file-picker.md"),"utf8");
-  const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
-  assert.match(docs,/Phase 9B3C validation state: `IMPLEMENTED`/);
+  assert.match(docs,/Phase 9B3C validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(docs,/OKButton/);
   assert.match(docs,/CancelButton/);
-  assert.match(roadmap,/Phase 9B3C file picker accept\/cancel\s+IMPLEMENTED; physical checkpoint pending/);
+  assert.match(docs,/9a47234951d3de5dff9d4b975892a8b0b07e079d/);
 });
