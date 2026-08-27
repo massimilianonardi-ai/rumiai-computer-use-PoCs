@@ -1,0 +1,48 @@
+{
+  "sessionId": "cc-phase9b3a-file-picker-observation-s01",
+  "scope": "Computer Control Phase 9B3A Provider-scoped native file picker observation",
+  "productSha": "c26552046ae0cc18b76ab33d6a24af98b0e68cde",
+  "testSourceSha": "4ffbe2c0790d0e9ba4fc5019634f3a5c7cc0bc64",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via Provider registry and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-observation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3a-file-picker-observation=PASS",
+  "discoveryEvidence": {
+    "session": "cc-phase9b3a-file-picker-discovery-s02",
+    "evidenceCommit": "326f3283da91ee4c32a7d67bd8bb6e55b414d9ce",
+    "result": "22 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Providers only",
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "readOnly": true,
+    "filesystemEnumeration": false,
+    "filesystemMutation": false,
+    "coordinateTargeting": false,
+    "nativeHandlesPublic": false,
+    "globalFocusRequired": false,
+    "postcondition": "repeated observation preserves the native picker and deterministic visible entries",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "Phase 9B1 and 9B2 dialog capabilities remain PHYSICALLY_VALIDATED",
+    "filePicker.observe remains IMPLEMENTED until this session passes",
+    "running Provider with no native file picker returns picker:null",
+    "a real AppKit NSOpenPanel sheet becomes observable through the public API",
+    "visible native location is observed without reconstructing an absolute filesystem path",
+    "Alpha.txt and Beta.txt are observed as files",
+    "FolderA is observed as a directory",
+    "selection state is represented explicitly from native Accessibility",
+    "a repeated observation leaves the picker and visible entries intact",
+    "no PID, AX object, native identifier or coordinate crosses the public contract"
+  ]
+}
