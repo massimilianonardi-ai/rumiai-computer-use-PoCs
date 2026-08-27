@@ -59,3 +59,10 @@ test("Phase 9C1A final fixture disables AppKit automatic menu enabling",()=>{
   assert.match(fixture,/disabled\.isEnabled = false/);
   assert.match(fixture,/submenu\.autoenablesItems = false/);
 });
+
+test("Phase 9C1A physical checkpoint inspects capability through the real SDK runtimeInfo surface",()=>{
+  const physical=fs.readFileSync(path.join(__dirname,"../physical-tests/macos-menu-bar-observation.js"),"utf8");
+  assert.match(physical,/client\.runtimeInfo\(\)/);
+  assert.doesNotMatch(physical,/client\.info\(\)/);
+  assert.match(physical,/phase9c1a-capability-implemented/);
+});
