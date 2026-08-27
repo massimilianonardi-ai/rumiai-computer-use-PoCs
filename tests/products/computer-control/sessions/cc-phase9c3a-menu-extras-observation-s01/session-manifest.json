@@ -1,0 +1,60 @@
+{
+  "sessionId": "cc-phase9c3a-menu-extras-observation-s01",
+  "scope": "Computer Control Phase 9C3A global OS-owned native macOS menu-extras read-only observation",
+  "productSha": "042d587299852f517022e6792874ec4fae7d826c",
+  "testSourceSha": "f4946f51b39a64e870c5c4a3ee3e73e1cab1e147",
+  "platform": "macOS menu extras via native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-menu-extras-observation.js",
+  "terminalMarker": "physical-phase9c3a-menu-extras-observation=PASS",
+  "prerequisiteEvidence": {
+    "phase9c1aMenuBarSession": "cc-phase9c1a-menu-bar-observation-s02",
+    "phase9c1aMenuBarEvidenceCommit": "decc4ccd989c694e624e3c3db69884b6903b0cee",
+    "phase9c1aMenuBarResult": "31 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9c23DiscoverySession": "cc-phase9c23-system-chrome-discovery-s01",
+    "phase9c23DiscoveryEvidenceCommit": "f68f5bc4bc3e2fec2aa1219b402b7016107a6e6f",
+    "phase9c23DiscoveryResult": "32 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9c2aDockSession": "cc-phase9c2a-dock-observation-s02",
+    "phase9c2aDockEvidenceCommit": "5662b659a3b80c236db323dfe09125b56b48eca6",
+    "phase9c2aDockResult": "33 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "global OS-owned menu-extra owner processes resolved internally by backend-private bundle identity; no caller-supplied native identity",
+    "readOnly": true,
+    "implicitLaunchByProductApi": false,
+    "implicitActivationByProductApi": false,
+    "axPerformAction": false,
+    "axSetAttribute": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "appleScriptFallback": false,
+    "filesystemMutation": false,
+    "nativeHandlesPublic": false,
+    "nativeIdentifiersPublic": false,
+    "nativeActionsPublic": false,
+    "ownerIdentityPublic": false
+  },
+  "expectedCoverage": [
+    "all structure and contract guards pass at the frozen product SHA",
+    "Phase 9C2A Dock remains PHYSICALLY_VALIDATED before Phase 9C3A validation",
+    "historical Phase 9C2+9C3 discovery remains read-only provenance while dock.observe and menuExtras.observe advance as separate observation surfaces",
+    "menuExtras.observe capability reports IMPLEMENTED before physical promotion",
+    "public menuExtras.observe returns OBSERVED through the real runtime and SDK",
+    "public menu-extra items expose only title, description, value and enabled",
+    "anonymous native menu extras remain anonymous rather than receiving guessed identities",
+    "public result exposes no native AX roles, subroles, actions, owner/bundle identifiers, native identifiers, coordinates, native handles or PID",
+    "an independent native AX topology observer agrees with public item order and stable semantic signature",
+    "value presence is compared independently without requiring volatile clock/battery text to remain byte-identical between observations",
+    "repeated observation remains read-only and preserves the stable semantic item signature",
+    "no menu-extra action or UI mutation is performed"
+  ]
+}
