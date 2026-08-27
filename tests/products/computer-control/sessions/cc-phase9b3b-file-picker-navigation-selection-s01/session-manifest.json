@@ -1,0 +1,51 @@
+{
+  "sessionId": "cc-phase9b3b-file-picker-navigation-selection-s01",
+  "scope": "Computer Control Phase 9B3B native file picker navigation and selection",
+  "productSha": "6d25a1773c615ab7ac3e8cd17105d660b13a39a3",
+  "testSourceSha": "ee95b4f482f26516c403cfafd57b4711bd0e5500",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via Provider registry and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-navigation-selection.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3b-file-picker-navigation-selection=PASS",
+  "prerequisiteEvidence": {
+    "phase9b3aObservationSession": "cc-phase9b3a-file-picker-observation-s01",
+    "phase9b3aEvidenceCommit": "63a2b850a2c1dcf8509a27e7f8292a1f09f811ba",
+    "phase9b3aResult": "23 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Providers and exact currently visible picker item names only",
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "arbitraryFilesystemPath": false,
+    "filesystemEnumeration": false,
+    "filesystemMutation": false,
+    "pickerAcceptOrCancel": false,
+    "coordinateTargeting": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "nativeHandlesPublic": false,
+    "postcondition": "selection requires fresh selected=true observation; directory navigation requires picker remains open with changed visible location",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "filePicker.observe remains PHYSICALLY_VALIDATED",
+    "filePicker.selectItem and filePicker.openDirectory remain IMPLEMENTED until this session passes",
+    "a real NSOpenPanel opens on PickerRoot",
+    "Alpha.txt is selected through native AX semantics and independently observed selected=true",
+    "re-selecting Alpha.txt is idempotent",
+    "openDirectory rejects Alpha.txt before native mutation because it is a file",
+    "the rejected file-as-directory operation preserves the open picker and PickerRoot location",
+    "FolderA is opened using native AX confirmation after exact semantic rebind",
+    "success requires a changed visible location while the picker remains open",
+    "the new location is FolderA and Nested.txt becomes visibly observable",
+    "no picker accept/cancel, arbitrary path, filesystem mutation, coordinate or keyboard fallback is used"
+  ]
+}
