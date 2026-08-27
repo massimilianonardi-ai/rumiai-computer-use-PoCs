@@ -1,0 +1,40 @@
+{
+  "sessionId": "cc-phase9b2-dialog-semantic-actions-s01",
+  "scope": "Computer Control Phase 9B2 provider-scoped native dialog default/cancel semantic actions",
+  "productSha": "86421b35f6413c990cebcb76f4357412266d06f7",
+  "testSourceSha": "14845076651b206b81a41b39948111fa3104ae56",
+  "platform": "macOS Cocoa/AppKit via Provider registry and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-dialog-semantic-actions.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-dialog-observation/main.swift",
+  "terminalMarker": "physical-phase9b2-dialog-semantic-actions=PASS",
+  "safetyBoundary": {
+    "addressing": "registered application Providers only",
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "buttonLabelTargeting": false,
+    "coordinateTargeting": false,
+    "nativeHandlesPublic": false,
+    "semanticRelationships": ["AXDefaultButton", "AXCancelButton"],
+    "postcondition": "dialog absent under independent native Accessibility observation",
+    "applicationExitCountsAsSuccess": false,
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "dialog.list remains PHYSICALLY_VALIDATED",
+    "dialog.invokeDefault and dialog.invokeCancel remain IMPLEMENTED until this session passes",
+    "default invocation without a dialog fails closed",
+    "a real NSAlert sheet exposes and executes the native default semantic action",
+    "default success requires the sheet to become absent",
+    "a reopened NSAlert sheet exposes and executes the native cancel semantic action",
+    "cancel success requires the sheet to become absent",
+    "no label, coordinate or public native handle selects either action"
+  ]
+}
