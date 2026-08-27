@@ -27,7 +27,14 @@ test("Phase 9C2+9C3 discovery starts only after Phase 9C1A physical promotion",(
   assert.match(evidence,/31 PASS \/ 0 FAIL \/ 0 BLOCKED/);
 });
 
-test("Phase 9C2+9C3 discovery remains topology-only rather than prematurely defining public APIs",()=>{
+test("Phase 9C2+9C3 discovery remains historical topology evidence while public phases advance independently",()=>{
   const router=fs.readFileSync(path.join(productRoot,"runtime/src/router.js"),"utf8");
-  assert.doesNotMatch(router,/dock\.observe|dock\.invoke|menuExtras\.observe|menuExtras\.invoke|systemChrome\./);
+  const dockApi=fs.readFileSync(path.join(productRoot,"docs/api-dock.md"),"utf8");
+  const discoveryEvidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c23-system-chrome-discovery.md"),"utf8");
+  assert.match(router,/dock\.observe/);
+  assert.doesNotMatch(router,/dock\.invoke|menuExtras\.observe|menuExtras\.invoke|systemChrome\./);
+  assert.match(dockApi,/Phase 9C2A validation state: `IMPLEMENTED`/);
+  assert.match(dockApi,/No generic Dock invocation API is introduced by Phase 9C2A/);
+  assert.match(discoveryEvidence,/This checkpoint is discovery evidence only/);
+  assert.match(discoveryEvidence,/defines no public API and exposes no durable native identifier/);
 });
