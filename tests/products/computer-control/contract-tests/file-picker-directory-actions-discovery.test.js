@@ -17,10 +17,10 @@ test("Phase 9B3B directory-action discovery is read-only and action-introspectio
   assert.doesNotMatch(physical,/openFilePickerDirectory|selectFilePickerItem/);
 });
 
-test("Phase 9B3B historical action discovery remains non-promoting after model correction",()=>{
+test("Phase 9B3B historical action discovery remains preserved after physical promotion",()=>{
   const productRoot=process.env.RUMIAI_COMPUTER_CONTROL_ROOT||path.resolve(here,"../../../../../../lib/computer-control");
   const backend=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(backend,/filePicker\.selectItem.*IMPLEMENTED/);
-  assert.match(backend,/filePicker\.expandDirectory.*IMPLEMENTED/);
+  assert.match(backend,/filePicker\.selectItem.*PHYSICALLY_VALIDATED/);
+  assert.match(backend,/filePicker\.expandDirectory.*PHYSICALLY_VALIDATED/);
   assert.doesNotMatch(backend,/filePicker\.openDirectory/);
 });
