@@ -22,16 +22,20 @@ test("Phase 9B3C router exposes only explicit accept/cancel semantic intents",as
   }
 });
 
-test("Phase 9B3C resolves native default/cancel relationships and presses only that target",()=>{
+test("Phase 9B3C resolves physically observed native picker identifiers and presses only that target",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-file-picker-semantic-action.swift"),"utf8");
   const wrapper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/app/computer-control/backends/macos-file-picker-semantic-action.js"),"utf8");
-  assert.match(helper,/kAXDefaultButtonAttribute/);
-  assert.match(helper,/kAXCancelButtonAttribute/);
+  assert.match(helper,/expectedIdentifier = action == "accept" \? "OKButton" : "CancelButton"/);
+  assert.match(helper,/identifier\(\$0\) == expectedIdentifier/);
+  assert.match(helper,/role\(\$0\) == \(kAXButtonRole as String\)/);
+  assert.match(helper,/buttons\.count == 1/);
   assert.match(helper,/actionNames\(button\)\.contains\(kAXPressAction as String\)/);
   assert.match(helper,/AXUIElementPerformAction\(button, kAXPressAction as CFString\)/);
   assert.match(helper,/FILE_PICKER_ACCEPT_ACTION_UNAVAILABLE/);
   assert.match(helper,/FILE_PICKER_CANCEL_ACTION_UNAVAILABLE/);
+  assert.match(helper,/FILE_PICKER_ACTION_AMBIGUOUS/);
   assert.match(helper,/FILE_PICKER_ACTION_DISABLED/);
+  assert.doesNotMatch(helper,/kAXDefaultButtonAttribute|kAXCancelButtonAttribute/);
   assert.doesNotMatch(helper,/CGEvent|keyCode|NSEvent|mouse|clipboard|keyboard|FileManager\.default|contentsOfDirectory/);
   assert.doesNotMatch(wrapper,/agent-ctrl|clipboard|keyboard|click/);
 });
@@ -53,7 +57,7 @@ test("Phase 9B3C public contract contains no picker button label or native ident
   assert.deepEqual(Object.keys(params.properties),["application","timeoutMs"]);
   assert.equal(params.additionalProperties,false);
   const result=JSON.stringify(JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/file-picker-semantic-action-result.schema.json"),"utf8")));
-  for(const forbidden of["pid","AXUIElement","nativeRef","coordinates","buttonLabel","absolutePath"])assert.equal(result.includes(forbidden),false,forbidden);
+  for(const forbidden of["pid","AXUIElement","nativeRef","coordinates","buttonLabel","absolutePath","OKButton","CancelButton"])assert.equal(result.includes(forbidden),false,forbidden);
   const sdk=fs.readFileSync(path.join(productRoot,"sdk/typescript/src/index.js"),"utf8");
   const types=fs.readFileSync(path.join(productRoot,"sdk/typescript/src/index.d.ts"),"utf8");
   const adapter=fs.readFileSync(path.join(productRoot,"adapters/rumiai/compat.js"),"utf8");
@@ -72,5 +76,7 @@ test("Phase 9B3C documentation remains IMPLEMENTED until physical evidence",()=>
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-file-picker.md"),"utf8");
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
   assert.match(docs,/Phase 9B3C validation state: `IMPLEMENTED`/);
+  assert.match(docs,/OKButton/);
+  assert.match(docs,/CancelButton/);
   assert.match(roadmap,/Phase 9B3C file picker accept\/cancel\s+IMPLEMENTED; physical checkpoint pending/);
 });
