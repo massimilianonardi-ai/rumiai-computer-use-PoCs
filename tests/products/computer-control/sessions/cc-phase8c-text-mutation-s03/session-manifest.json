@@ -1,0 +1,40 @@
+{
+  "sessionId": "cc-phase8c-text-mutation-s03",
+  "scope": "Computer Control Phase 8C native text mutation after replacing cached describe-based physical verification with an independent test-owned native AXValue observer",
+  "productSha": "d679a89a88977a70c450eec9e1aece6c7b2a6506",
+  "testSourceSha": "55e8dc67a5878c000512ebdb8d515aff8d185369",
+  "platform": "macOS Cocoa/AppKit via Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-native-text-mutation.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-text-selection/main.swift",
+  "independentObserver": "tests/products/computer-control/physical-tests/helpers/macos-read-ax-text-value.swift",
+  "terminalMarker": "physical-phase8c-text-mutation=PASS",
+  "previousEvidenceCommit": "c569db166a169863dd4f71702df554fa35b6d3d5",
+  "previousFailureClassification": "POC_HARNESS_DEFECT",
+  "previousFailure": "The product returned a verified TEXT_MUTATED result using fresh native AX fullText and exact caret postconditions, but the physical harness then queried ui.describe.value, whose agent-ctrl accessibility-cached-properties surface still returned the pre-mutation value.",
+  "fix": {
+    "product": "none; product remains exactly d679a89a88977a70c450eec9e1aece6c7b2a6506",
+    "physicalVerification": "exact text checks now use a test-owned Swift Accessibility observer reading kAXValueAttribute directly from the AppKit control by unique accessible name",
+    "regression": "contract test forbids reintroducing client.describe as the exact Phase 8C physical text postcondition"
+  },
+  "expectedCoverage": [
+    "ui.replaceTextRange exact native replacement",
+    "ui.insertText requires collapsed caret",
+    "ui.insertText exact native insertion",
+    "ui.appendText derives native text end independently of current selection",
+    "empty-string deletion",
+    "empty append idempotence",
+    "UTF-16 non-BMP payload fidelity",
+    "surrogate-pair boundary rejection without mutation",
+    "product-internal fresh native AX full-text postcondition",
+    "test-owned independent fresh AXValue postcondition",
+    "deterministic final caret postcondition"
+  ]
+}
