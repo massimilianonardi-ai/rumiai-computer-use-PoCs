@@ -1,0 +1,1274 @@
+RumiAI Computer Control physical session
+session_id=cc-phase9c2a-dock-observation-s02
+started_at=2026-08-27T23:02:53Z
+product_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+product_expected_sha=b9d04f5213c5dcb00ca8dc0363f8248caa9a8916
+product_observed_sha=b9d04f5213c5dcb00ca8dc0363f8248caa9a8916
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=c928f3dacd3c3456072d21baaef2742e042e5b0d
+poc_tested_sha=670cc9bd80d5d7f9fb315669a0f3e30e9f20b758
+poc_origin_main=670cc9bd80d5d7f9fb315669a0f3e30e9f20b758
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+swift=swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101) Target: arm64-apple-macosx26.0 
+agent_ctrl=agent-ctrl 0.1.4 on macos/aarch64 recommended surface: ax home: /Users/massimilianonardi/.agent-ctrl active sessions: 0 macOS Accessibility: ✓ trusted  surfaces:   ✓  mock        ready   -  uia         wrong-os   ✓  ax          ready   -  atspi       wrong-os   ·  android     not-implemented   ·  ios         not-implemented 
+
+================================================================================
+TEST: structure
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' /bin/sh '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/check-structure.sh'
+START: 2026-08-27T23:02:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+computer-control-structure=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 2548
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:application-lifecycle.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-lifecycle.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A1 router validates application lifecycle inputs before dispatch (0.887959ms)
+✔ Phase 9A1 public surfaces remain provider-scoped after Phase 9A2 extension (1.024709ms)
+✔ Phase 8C through 9B2 are physically validated before Phase 9B3 discovery (0.642291ms)
+✔ Phase 9A lifecycle documentation records physical evidence and preserves separation (0.629334ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.793834
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 111
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:application-termination.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-termination.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A2 router validates graceful termination inputs before dispatch (0.568208ms)
+✔ Phase 9A2 requires a resolved native identity and exposes APPLICATION_TERMINATED (0.429208ms)
+✔ Phase 9A2 macOS implementation is graceful-only and fail-closed (0.609708ms)
+✔ Phase 9A2 public surfaces remain explicit after physical promotion (0.221459ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.438583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-observation.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B1 router validates application before dialog observation (0.568375ms)
+✔ Phase 9B1 remains native read-only observation after physical promotion (0.804459ms)
+✔ Phase 9B1 canonical surface omits native handles and action semantics (0.901541ms)
+✔ Phase 9B1 and 9B2 are physically validated before file-picker discovery (0.1435ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.309334
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-semantic-actions.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B2 router exposes only default/cancel semantic intents (0.5755ms)
+✔ Phase 9B2 resolves native semantic relationships and never targets labels (0.750042ms)
+✔ Phase 9B2 requires an independently observed dialog-absence postcondition (0.138291ms)
+✔ Phase 9B2 public contract exposes no label, coordinates or native handle (0.83375ms)
+✔ Phase 9B2 capabilities and evidence are physically promoted (0.233541ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.001084
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:dock-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dock-observation.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2A router exposes global parameterless read-only Dock observation (0.793792ms)
+✔ Phase 9C2A macOS helper is OS-owned native AX read-only observation (0.418875ms)
+✔ Phase 9C2A backend and public surfaces expose semantic Dock state only (0.351167ms)
+✔ Phase 9C2A documentation records discovery provenance without premature physical promotion (0.247542ms)
+✔ Phase 9C2A public result schema is stable semantic data (0.086417ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.485167
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-27T23:02:56Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-accept-result-diagnostic.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-accept-result-diagnostic.test.js'
+START: 2026-08-27T23:02:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C accept-result diagnostic observes fixture completion without direct UI mutation (0.642209ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.328084
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-actions-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-actions-discovery.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B directory-action discovery is read-only and action-introspection only (0.955208ms)
+✔ Phase 9B3B historical action discovery remains preserved after physical promotion (0.244917ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.105
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 104
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-disclosure-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-disclosure-discovery.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B disclosure discovery probes only native outline disclosure semantics (0.851125ms)
+✔ Phase 9B3B disclosure discovery remains preserved after physical promotion (0.21375ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.758292
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-discovery.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A discovery used a real NSOpenPanel and system-wide AX observation (0.956875ms)
+✔ Phase 9B3A discovery treats global focus as optional evidence, not picker identity (0.095542ms)
+✔ Phase 9B3A discovery evidence is preserved and informs the product contract (0.183708ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.730291
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-navigation-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-navigation-selection.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B router validates exact visible item addressing before dispatch (1.164458ms)
+✔ Phase 9B3B native helper uses only discovered outline disclosure semantics (0.785083ms)
+✔ Phase 9B3B backend keeps independently verified semantic postconditions after promotion (0.191166ms)
+✔ Phase 9B3B public contract exposes names but not paths or native identity (0.813459ms)
+✔ Phase 9B3B stable evidence records the immutable physical checkpoint (0.1445ms)
+✔ Phase 9B3A and Phase 9B3B are physically validated before Phase 9B3C (0.08775ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.858417
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-observation.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A router exposes read-only Provider-scoped file picker observation (0.554792ms)
+✔ Phase 9B3A canonical result exposes semantic location and entries only (0.394208ms)
+✔ Phase 9B3A macOS implementation remains fresh native AX observation after physical promotion (0.460333ms)
+✔ Phase 9B3A public SDK, adapter and physical evidence remain explicit (0.236625ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.337375
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 101
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions-physical-observer.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C final physical observer validates AppKit completion independently (0.402709ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.035042
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-27T23:02:57Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions.test.js'
+START: 2026-08-27T23:02:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C router exposes only explicit accept/cancel semantic intents (0.892125ms)
+✔ Phase 9B3C resolves physically observed native picker identifiers and presses only that target (1.205542ms)
+✔ Phase 9B3C backend requires picker absence while application remains running (0.168875ms)
+✔ Phase 9B3C public contract contains no picker button label or native identity (0.448667ms)
+✔ Phase 9B3C fixture records accepted and cancelled AppKit completion independently (0.144625ms)
+✔ Phase 9B3C history remains immutable and canonical s03 evidence is promoted (1.350209ms)
+✔ Phase 9B3C documentation is physically promoted (0.067416ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.974459
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-discovery.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1 menu bar discovery is Provider-scoped and read-only (1.107833ms)
+✔ Phase 9C1 historical s01 FAIL is preserved as a readiness-harness defect (0.264791ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.72425
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 98
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-observation.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1A router exposes Provider-scoped read-only menu bar observation (0.806ms)
+✔ Phase 9C1A macOS helper is native AX read-only observation (0.92425ms)
+✔ Phase 9C1A backend and public surfaces expose semantic tree only (0.349459ms)
+✔ Phase 9C1A documentation records physical promotion and keeps invocation separate (0.638083ms)
+✔ Phase 9C1A final fixture disables AppKit automatic menu enabling (0.083208ms)
+✔ Phase 9C1A authoritative physical evidence remains immutable (0.061084ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.833292
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-appkit-fixture.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-appkit-fixture.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ physical fixture exposes deterministic native AppKit disclosure and hierarchy (0.367041ms)
+✔ physical harness validates Cocoa controls without browser substitutes (0.17375ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.957541
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 109
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-children.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-children.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native JSON tree preserves scope and bounded depth (1.449ms)
+✔ ui.children accepts observation scopes but action APIs do not (0.393292ms)
+✔ children contract uses native tree rather than indentation (0.167916ms)
+✔ native JSON snapshots remain compatible with agent-ctrl 0.1.4 (0.074125ms)
+✔ ui.children is physically validated on the AppKit hierarchy fixture (0.323334ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.994917
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 101
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-describe.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-describe.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.describe routes an actionable target without backend-specific fields (0.535625ms)
+✔ ui.describe rejects missing or malformed element handles before backend dispatch (0.21225ms)
+✔ control description schema makes unavailable state explicit (0.510167ms)
+✔ SDK and RumiAI adapter expose the canonical operation (0.193166ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.384791
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 97
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-disclosure.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-disclosure.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.expand and ui.collapse route actionable native targets (0.478458ms)
+✔ disclosure is physically validated on the AppKit reference control (0.331583ms)
+✔ disclosure contract and SDK remain directly exposed (0.395916ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.384875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-27T23:02:58Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-invoke.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-invoke.test.js'
+START: 2026-08-27T23:02:58Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.invoke routes an actionable target and preserves delivery semantics (0.534875ms)
+✔ ui.invoke rejects missing or malformed element handles before dispatch (0.216708ms)
+✔ macOS mapping reports action delivery without inventing the semantic consequence (0.402417ms)
+✔ macOS mapping keeps role, state and visibility failures distinct (0.145ms)
+✔ invoke schemas, SDK and RumiAI adapter expose the canonical operation (0.253333ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.459
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 102
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-role-adapter.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-role-adapter.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ macOS agent-ctrl adapter translates canonical text-area to backend text-field (0.95425ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.1245
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 89
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-scroll.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-scroll.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.scroll validates direction and bounded semantic units (0.606ms)
+✔ macOS scroll requires native scroll-area observation change (0.292334ms)
+✔ semantic down maps to negative native content delta (0.350417ms)
+✔ scrollIntoView uses native action plus geometry rather than visible flag (0.188875ms)
+✔ scrollIntoView falls back to verified wheel geometry when AXScrollToVisible is unsupported (0.082916ms)
+✔ AppKit scroll groups are recognized by their native scrollbar child (0.411917ms)
+✔ wheel pivot center must be inside the AppKit viewport (0.113333ms)
+✔ scroll capabilities are physically validated on the AppKit scroll fixture (0.244792ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.292166
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 102
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-stateful.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-stateful.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.toggle requires explicit boolean and ui.select requires actionable refs (0.679291ms)
+✔ stateful macOS capabilities are physically validated on AppKit reference controls (0.345583ms)
+✔ toggle implementation exposes native check/uncheck delivery (0.283208ms)
+✔ schemas SDK adapter preserve stateful public surfaces (0.405292ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.997875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 106
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation-physical-observer.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C physical postcondition uses a test-owned fresh AXValue observer instead of cached ui.describe.value (0.370417ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.965542
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 105
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C router validates canonical targets, ranges and text before dispatch (0.69875ms)
+✔ ui.replaceTextRange verifies fresh native AX full text even when describe.value is stale (0.82925ms)
+✔ ui.insertText requires an observed caret and never replaces a non-empty selection (0.179833ms)
+✔ ui.appendText derives the native text end independently of the current selection (0.13275ms)
+✔ Phase 8C rejects UTF-16 boundaries inside surrogate pairs before native mutation (0.115125ms)
+✔ empty replacement at an already collapsed caret is a verified idempotent no-op (0.123208ms)
+✔ Phase 8C capabilities are physically validated together with Phase 8A and 8B (0.253167ms)
+✔ Phase 8C public surfaces use native AX selected-text mutation without browser, keyboard or clipboard substitution (1.355791ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.738167
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 100
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-range-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-range-selection.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.selectTextRange validates the canonical request before backend dispatch (0.643083ms)
+✔ macOS Phase 8B writes native AX selection and independently verifies the exact range (0.673666ms)
+✔ Phase 8B is idempotent and rejects observed out-of-bounds ranges before mutation (0.132209ms)
+✔ Phase 8B is physically validated on the AppKit reference fixture (0.245166ms)
+✔ Phase 8B public surfaces and native mutation strategy remain explicit (0.511333ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.184416
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-27T23:02:59Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection-rebind.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection-rebind.test.js'
+START: 2026-08-27T23:02:59Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native text rebind only bridges text-field and text-area vocabularies (0.591459ms)
+✔ native text rebind retries only an exact stale-target failure (0.191625ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.587042
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-27T23:03:00Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection.test.js'
+START: 2026-08-27T23:03:00Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.getTextSelection requires an actionable target (0.581209ms)
+✔ macOS text selection normalizes native AX range to explicit UTF-16 offsets (0.580458ms)
+✔ collapsed native range becomes an explicit caret (0.097958ms)
+✔ text selection fails closed for unsupported roles and inconsistent observations (0.129667ms)
+✔ Phase 8A is physically validated on the AppKit reference fixture (0.234667ms)
+✔ Phase 8A public surfaces and native source remain explicit (0.313709ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.789875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-27T23:03:00Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-value.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-value.test.js'
+START: 2026-08-27T23:03:00Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ value mutations route canonical parameters (0.635208ms)
+✔ numeric value capabilities are physically validated on AppKit reference controls (0.334417ms)
+✔ SDK and schemas preserve value surfaces (0.398583ms)
+✔ numeric setValue steps native sliders instead of sending a text fill (1.711708ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.2265
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 98
+RESULT: PASS
+END: 2026-08-27T23:03:00Z
+================================================================================
+
+================================================================================
+TEST: contract:runtime-set-text.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js'
+START: 2026-08-27T23:03:00Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ runtime.info and ui.setText cross the local RPC boundary (9.730458ms)
+✔ ui.find performs normalized semantic matching over caller observation (0.264583ms)
+✔ native ui.find translates canonical radio-button to the agent-ctrl radio role (0.064125ms)
+✔ ui.setText rejects empty text without invoking GUI recovery (0.212041ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52.651
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 106
+RESULT: PASS
+END: 2026-08-27T23:03:00Z
+================================================================================
+
+================================================================================
+TEST: contract:system-chrome-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/system-chrome-discovery.test.js'
+START: 2026-08-27T23:03:00Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2+9C3 combined discovery is read-only and OS-owned (1.426791ms)
+✔ Phase 9C2+9C3 discovery starts only after Phase 9C1A physical promotion (0.209584ms)
+✔ Phase 9C2+9C3 discovery remains historical topology evidence while public phases advance independently (0.210459ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.911417
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 89
+RESULT: PASS
+END: 2026-08-27T23:03:00Z
+================================================================================
+
+================================================================================
+TEST: physical:phase9c2a-dock-observation
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/physical-tests/macos-dock-observation.js'
+START: 2026-08-27T23:03:00Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+phase9c2a-independent-native={"appRole":"AXApplication","bundleIdentifier":"com.apple.dock","extrasMenuBarPresent":false,"extrasNodes":[],"label":"dock","localizedName":"Dock","nodes":[{"actions":[],"attributes":["AXChildren","AXEnhancedUserInterface","AXFocusedUIElement","AXRole","AXRoleDescription","AXTitle"],"childCount":1,"depth":0,"role":"AXApplication","title":"Dock"},{"actions":[],"attributes":["AXChildren","AXEnabled","AXFocused","AXFrame","AXOrientation","AXParent","AXPosition","AXRole","AXRoleDescription","AXSelectedChildren","AXSize","AXTopLevelUIElement","AXVisibleChildren","AXWindow"],"childCount":45,"depth":1,"enabled":true,"role":"AXList"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Finder"},{"actions":["AXPress","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"App"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"App Store"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Password"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Impostazioni di Sistema"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Utility Disco"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Monitoraggio Attività"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Terminale"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"TextEdit"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Pulsar"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Xcode"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"ChatGPT"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"VMware Fusion"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Windows App"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"mbp-connect"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Safari"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Firefox"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Google Chrome Incognito"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"LibreOffice"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"XnViewMP"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"IINA"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"krita"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Blender"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Sweet Home 3D"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Keka"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Mail"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Messaggi"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"WhatsApp"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"FaceTime"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Mappe"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Foto"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Calendario"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Contatti"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Promemoria"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Note"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Freeform"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"TV"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Musica"},{"actions":["AXPress","AXShowMenu"],"attributes":["AXFrame","AXParent","AXPosition","AXRole","AXRoleDescription","AXShownMenuUIElement","AXSize","AXSubrole","AXTopLevelUIElement","AXValue"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXSeparatorDockItem","title":""},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Google Chrome"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Condivisione Schermo"},{"actions":["AXPress","AXShowExpose","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXIsApplicationRunning","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXApplicationDockItem","title":"Image Playground"},{"actions":["AXPress","AXShowMenu"],"attributes":["AXFrame","AXParent","AXPosition","AXRole","AXRoleDescription","AXShownMenuUIElement","AXSize","AXSubrole","AXTopLevelUIElement","AXValue"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXSeparatorDockItem","title":""},{"actions":["AXPress","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXShownStack","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement","AXURL"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXFolderDockItem","title":"Download"},{"actions":["AXPress","AXShowMenu"],"attributes":["AXChildren","AXFrame","AXParent","AXPosition","AXProgressValue","AXRole","AXRoleDescription","AXSelected","AXShownMenuUIElement","AXSize","AXStatusLabel","AXSubrole","AXTitle","AXTopLevelUIElement"],"childCount":0,"depth":2,"role":"AXDockItem","subrole":"AXTrashDockItem","title":"Cestino"}],"pid":657,"runningCount":1}
+phase9c2a-independent-app-role=PASS {"appRole":"AXApplication"}
+phase9c2a-independent-items=PASS {"count":45}
+phase9c2a-capability-implemented=PASS {"name":"dock.observe","available":true,"validationState":"IMPLEMENTED","strategies":["os-owned-native-AX-dock-observation"]}
+phase9c2a-first={"state":"OBSERVED","dock":{"items":[{"kind":"application","title":"Finder","running":true,"status":null},{"kind":"application","title":"App","running":false,"status":null},{"kind":"application","title":"App Store","running":false,"status":null},{"kind":"application","title":"Password","running":false,"status":null},{"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null},{"kind":"application","title":"Utility Disco","running":false,"status":null},{"kind":"application","title":"Monitoraggio Attività","running":false,"status":null},{"kind":"application","title":"Terminale","running":true,"status":null},{"kind":"application","title":"TextEdit","running":false,"status":null},{"kind":"application","title":"Pulsar","running":false,"status":null},{"kind":"application","title":"Xcode","running":false,"status":null},{"kind":"application","title":"ChatGPT","running":false,"status":null},{"kind":"application","title":"VMware Fusion","running":false,"status":null},{"kind":"application","title":"Windows App","running":false,"status":null},{"kind":"application","title":"mbp-connect","running":false,"status":null},{"kind":"application","title":"Safari","running":false,"status":null},{"kind":"application","title":"Firefox","running":true,"status":null},{"kind":"application","title":"Google Chrome Incognito","running":false,"status":null},{"kind":"application","title":"LibreOffice","running":false,"status":null},{"kind":"application","title":"XnViewMP","running":true,"status":null},{"kind":"application","title":"IINA","running":false,"status":null},{"kind":"application","title":"krita","running":false,"status":null},{"kind":"application","title":"Blender","running":false,"status":null},{"kind":"application","title":"Sweet Home 3D","running":false,"status":null},{"kind":"application","title":"Keka","running":false,"status":null},{"kind":"application","title":"Mail","running":false,"status":null},{"kind":"application","title":"Messaggi","running":false,"status":null},{"kind":"application","title":"WhatsApp","running":true,"status":null},{"kind":"application","title":"FaceTime","running":false,"status":null},{"kind":"application","title":"Mappe","running":false,"status":null},{"kind":"application","title":"Foto","running":false,"status":null},{"kind":"application","title":"Calendario","running":false,"status":null},{"kind":"application","title":"Contatti","running":false,"status":null},{"kind":"application","title":"Promemoria","running":false,"status":null},{"kind":"application","title":"Note","running":false,"status":null},{"kind":"application","title":"Freeform","running":false,"status":null},{"kind":"application","title":"TV","running":false,"status":null},{"kind":"application","title":"Musica","running":false,"status":null},{"kind":"separator","title":null,"running":null,"status":null},{"kind":"application","title":"Google Chrome","running":true,"status":null},{"kind":"application","title":"Condivisione Schermo","running":false,"status":null},{"kind":"application","title":"Image Playground","running":false,"status":null},{"kind":"separator","title":null,"running":null,"status":null},{"kind":"folder","title":"Download","running":null,"status":null},{"kind":"trash","title":"Cestino","running":null,"status":null}]},"observation":{"method":"macos-os-owned-native-AX-dock-observation"},"backend":{"name":"macos-ax","strategy":"os-owned-native-AX-dock-observation"},"diagnostics":{"observeSeconds":0.036645375000000015,"helperCompiled":false}}
+phase9c2a-observed=PASS {"state":"OBSERVED","dockPresent":true}
+phase9c2a-items=PASS {"count":45}
+phase9c2a-item-0-shape=PASS {"kind":"application","title":"Finder","running":true,"status":null}
+phase9c2a-item-0-kind=PASS {"kind":"application","title":"Finder","running":true,"status":null}
+phase9c2a-item-0-title=PASS {"kind":"application","title":"Finder","running":true,"status":null}
+phase9c2a-item-0-running=PASS {"kind":"application","title":"Finder","running":true,"status":null}
+phase9c2a-item-0-status=PASS {"kind":"application","title":"Finder","running":true,"status":null}
+phase9c2a-item-1-shape=PASS {"kind":"application","title":"App","running":false,"status":null}
+phase9c2a-item-1-kind=PASS {"kind":"application","title":"App","running":false,"status":null}
+phase9c2a-item-1-title=PASS {"kind":"application","title":"App","running":false,"status":null}
+phase9c2a-item-1-running=PASS {"kind":"application","title":"App","running":false,"status":null}
+phase9c2a-item-1-status=PASS {"kind":"application","title":"App","running":false,"status":null}
+phase9c2a-item-2-shape=PASS {"kind":"application","title":"App Store","running":false,"status":null}
+phase9c2a-item-2-kind=PASS {"kind":"application","title":"App Store","running":false,"status":null}
+phase9c2a-item-2-title=PASS {"kind":"application","title":"App Store","running":false,"status":null}
+phase9c2a-item-2-running=PASS {"kind":"application","title":"App Store","running":false,"status":null}
+phase9c2a-item-2-status=PASS {"kind":"application","title":"App Store","running":false,"status":null}
+phase9c2a-item-3-shape=PASS {"kind":"application","title":"Password","running":false,"status":null}
+phase9c2a-item-3-kind=PASS {"kind":"application","title":"Password","running":false,"status":null}
+phase9c2a-item-3-title=PASS {"kind":"application","title":"Password","running":false,"status":null}
+phase9c2a-item-3-running=PASS {"kind":"application","title":"Password","running":false,"status":null}
+phase9c2a-item-3-status=PASS {"kind":"application","title":"Password","running":false,"status":null}
+phase9c2a-item-4-shape=PASS {"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null}
+phase9c2a-item-4-kind=PASS {"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null}
+phase9c2a-item-4-title=PASS {"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null}
+phase9c2a-item-4-running=PASS {"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null}
+phase9c2a-item-4-status=PASS {"kind":"application","title":"Impostazioni di Sistema","running":false,"status":null}
+phase9c2a-item-5-shape=PASS {"kind":"application","title":"Utility Disco","running":false,"status":null}
+phase9c2a-item-5-kind=PASS {"kind":"application","title":"Utility Disco","running":false,"status":null}
+phase9c2a-item-5-title=PASS {"kind":"application","title":"Utility Disco","running":false,"status":null}
+phase9c2a-item-5-running=PASS {"kind":"application","title":"Utility Disco","running":false,"status":null}
+phase9c2a-item-5-status=PASS {"kind":"application","title":"Utility Disco","running":false,"status":null}
+phase9c2a-item-6-shape=PASS {"kind":"application","title":"Monitoraggio Attività","running":false,"status":null}
+phase9c2a-item-6-kind=PASS {"kind":"application","title":"Monitoraggio Attività","running":false,"status":null}
+phase9c2a-item-6-title=PASS {"kind":"application","title":"Monitoraggio Attività","running":false,"status":null}
+phase9c2a-item-6-running=PASS {"kind":"application","title":"Monitoraggio Attività","running":false,"status":null}
+phase9c2a-item-6-status=PASS {"kind":"application","title":"Monitoraggio Attività","running":false,"status":null}
+phase9c2a-item-7-shape=PASS {"kind":"application","title":"Terminale","running":true,"status":null}
+phase9c2a-item-7-kind=PASS {"kind":"application","title":"Terminale","running":true,"status":null}
+phase9c2a-item-7-title=PASS {"kind":"application","title":"Terminale","running":true,"status":null}
+phase9c2a-item-7-running=PASS {"kind":"application","title":"Terminale","running":true,"status":null}
+phase9c2a-item-7-status=PASS {"kind":"application","title":"Terminale","running":true,"status":null}
+phase9c2a-item-8-shape=PASS {"kind":"application","title":"TextEdit","running":false,"status":null}
+phase9c2a-item-8-kind=PASS {"kind":"application","title":"TextEdit","running":false,"status":null}
+phase9c2a-item-8-title=PASS {"kind":"application","title":"TextEdit","running":false,"status":null}
+phase9c2a-item-8-running=PASS {"kind":"application","title":"TextEdit","running":false,"status":null}
+phase9c2a-item-8-status=PASS {"kind":"application","title":"TextEdit","running":false,"status":null}
+phase9c2a-item-9-shape=PASS {"kind":"application","title":"Pulsar","running":false,"status":null}
+phase9c2a-item-9-kind=PASS {"kind":"application","title":"Pulsar","running":false,"status":null}
+phase9c2a-item-9-title=PASS {"kind":"application","title":"Pulsar","running":false,"status":null}
+phase9c2a-item-9-running=PASS {"kind":"application","title":"Pulsar","running":false,"status":null}
+phase9c2a-item-9-status=PASS {"kind":"application","title":"Pulsar","running":false,"status":null}
+phase9c2a-item-10-shape=PASS {"kind":"application","title":"Xcode","running":false,"status":null}
+phase9c2a-item-10-kind=PASS {"kind":"application","title":"Xcode","running":false,"status":null}
+phase9c2a-item-10-title=PASS {"kind":"application","title":"Xcode","running":false,"status":null}
+phase9c2a-item-10-running=PASS {"kind":"application","title":"Xcode","running":false,"status":null}
+phase9c2a-item-10-status=PASS {"kind":"application","title":"Xcode","running":false,"status":null}
+phase9c2a-item-11-shape=PASS {"kind":"application","title":"ChatGPT","running":false,"status":null}
+phase9c2a-item-11-kind=PASS {"kind":"application","title":"ChatGPT","running":false,"status":null}
+phase9c2a-item-11-title=PASS {"kind":"application","title":"ChatGPT","running":false,"status":null}
+phase9c2a-item-11-running=PASS {"kind":"application","title":"ChatGPT","running":false,"status":null}
+phase9c2a-item-11-status=PASS {"kind":"application","title":"ChatGPT","running":false,"status":null}
+phase9c2a-item-12-shape=PASS {"kind":"application","title":"VMware Fusion","running":false,"status":null}
+phase9c2a-item-12-kind=PASS {"kind":"application","title":"VMware Fusion","running":false,"status":null}
+phase9c2a-item-12-title=PASS {"kind":"application","title":"VMware Fusion","running":false,"status":null}
+phase9c2a-item-12-running=PASS {"kind":"application","title":"VMware Fusion","running":false,"status":null}
+phase9c2a-item-12-status=PASS {"kind":"application","title":"VMware Fusion","running":false,"status":null}
+phase9c2a-item-13-shape=PASS {"kind":"application","title":"Windows App","running":false,"status":null}
+phase9c2a-item-13-kind=PASS {"kind":"application","title":"Windows App","running":false,"status":null}
+phase9c2a-item-13-title=PASS {"kind":"application","title":"Windows App","running":false,"status":null}
+phase9c2a-item-13-running=PASS {"kind":"application","title":"Windows App","running":false,"status":null}
+phase9c2a-item-13-status=PASS {"kind":"application","title":"Windows App","running":false,"status":null}
+phase9c2a-item-14-shape=PASS {"kind":"application","title":"mbp-connect","running":false,"status":null}
+phase9c2a-item-14-kind=PASS {"kind":"application","title":"mbp-connect","running":false,"status":null}
+phase9c2a-item-14-title=PASS {"kind":"application","title":"mbp-connect","running":false,"status":null}
+phase9c2a-item-14-running=PASS {"kind":"application","title":"mbp-connect","running":false,"status":null}
+phase9c2a-item-14-status=PASS {"kind":"application","title":"mbp-connect","running":false,"status":null}
+phase9c2a-item-15-shape=PASS {"kind":"application","title":"Safari","running":false,"status":null}
+phase9c2a-item-15-kind=PASS {"kind":"application","title":"Safari","running":false,"status":null}
+phase9c2a-item-15-title=PASS {"kind":"application","title":"Safari","running":false,"status":null}
+phase9c2a-item-15-running=PASS {"kind":"application","title":"Safari","running":false,"status":null}
+phase9c2a-item-15-status=PASS {"kind":"application","title":"Safari","running":false,"status":null}
+phase9c2a-item-16-shape=PASS {"kind":"application","title":"Firefox","running":true,"status":null}
+phase9c2a-item-16-kind=PASS {"kind":"application","title":"Firefox","running":true,"status":null}
+phase9c2a-item-16-title=PASS {"kind":"application","title":"Firefox","running":true,"status":null}
+phase9c2a-item-16-running=PASS {"kind":"application","title":"Firefox","running":true,"status":null}
+phase9c2a-item-16-status=PASS {"kind":"application","title":"Firefox","running":true,"status":null}
+phase9c2a-item-17-shape=PASS {"kind":"application","title":"Google Chrome Incognito","running":false,"status":null}
+phase9c2a-item-17-kind=PASS {"kind":"application","title":"Google Chrome Incognito","running":false,"status":null}
+phase9c2a-item-17-title=PASS {"kind":"application","title":"Google Chrome Incognito","running":false,"status":null}
+phase9c2a-item-17-running=PASS {"kind":"application","title":"Google Chrome Incognito","running":false,"status":null}
+phase9c2a-item-17-status=PASS {"kind":"application","title":"Google Chrome Incognito","running":false,"status":null}
+phase9c2a-item-18-shape=PASS {"kind":"application","title":"LibreOffice","running":false,"status":null}
+phase9c2a-item-18-kind=PASS {"kind":"application","title":"LibreOffice","running":false,"status":null}
+phase9c2a-item-18-title=PASS {"kind":"application","title":"LibreOffice","running":false,"status":null}
+phase9c2a-item-18-running=PASS {"kind":"application","title":"LibreOffice","running":false,"status":null}
+phase9c2a-item-18-status=PASS {"kind":"application","title":"LibreOffice","running":false,"status":null}
+phase9c2a-item-19-shape=PASS {"kind":"application","title":"XnViewMP","running":true,"status":null}
+phase9c2a-item-19-kind=PASS {"kind":"application","title":"XnViewMP","running":true,"status":null}
+phase9c2a-item-19-title=PASS {"kind":"application","title":"XnViewMP","running":true,"status":null}
+phase9c2a-item-19-running=PASS {"kind":"application","title":"XnViewMP","running":true,"status":null}
+phase9c2a-item-19-status=PASS {"kind":"application","title":"XnViewMP","running":true,"status":null}
+phase9c2a-item-20-shape=PASS {"kind":"application","title":"IINA","running":false,"status":null}
+phase9c2a-item-20-kind=PASS {"kind":"application","title":"IINA","running":false,"status":null}
+phase9c2a-item-20-title=PASS {"kind":"application","title":"IINA","running":false,"status":null}
+phase9c2a-item-20-running=PASS {"kind":"application","title":"IINA","running":false,"status":null}
+phase9c2a-item-20-status=PASS {"kind":"application","title":"IINA","running":false,"status":null}
+phase9c2a-item-21-shape=PASS {"kind":"application","title":"krita","running":false,"status":null}
+phase9c2a-item-21-kind=PASS {"kind":"application","title":"krita","running":false,"status":null}
+phase9c2a-item-21-title=PASS {"kind":"application","title":"krita","running":false,"status":null}
+phase9c2a-item-21-running=PASS {"kind":"application","title":"krita","running":false,"status":null}
+phase9c2a-item-21-status=PASS {"kind":"application","title":"krita","running":false,"status":null}
+phase9c2a-item-22-shape=PASS {"kind":"application","title":"Blender","running":false,"status":null}
+phase9c2a-item-22-kind=PASS {"kind":"application","title":"Blender","running":false,"status":null}
+phase9c2a-item-22-title=PASS {"kind":"application","title":"Blender","running":false,"status":null}
+phase9c2a-item-22-running=PASS {"kind":"application","title":"Blender","running":false,"status":null}
+phase9c2a-item-22-status=PASS {"kind":"application","title":"Blender","running":false,"status":null}
+phase9c2a-item-23-shape=PASS {"kind":"application","title":"Sweet Home 3D","running":false,"status":null}
+phase9c2a-item-23-kind=PASS {"kind":"application","title":"Sweet Home 3D","running":false,"status":null}
+phase9c2a-item-23-title=PASS {"kind":"application","title":"Sweet Home 3D","running":false,"status":null}
+phase9c2a-item-23-running=PASS {"kind":"application","title":"Sweet Home 3D","running":false,"status":null}
+phase9c2a-item-23-status=PASS {"kind":"application","title":"Sweet Home 3D","running":false,"status":null}
+phase9c2a-item-24-shape=PASS {"kind":"application","title":"Keka","running":false,"status":null}
+phase9c2a-item-24-kind=PASS {"kind":"application","title":"Keka","running":false,"status":null}
+phase9c2a-item-24-title=PASS {"kind":"application","title":"Keka","running":false,"status":null}
+phase9c2a-item-24-running=PASS {"kind":"application","title":"Keka","running":false,"status":null}
+phase9c2a-item-24-status=PASS {"kind":"application","title":"Keka","running":false,"status":null}
+phase9c2a-item-25-shape=PASS {"kind":"application","title":"Mail","running":false,"status":null}
+phase9c2a-item-25-kind=PASS {"kind":"application","title":"Mail","running":false,"status":null}
+phase9c2a-item-25-title=PASS {"kind":"application","title":"Mail","running":false,"status":null}
+phase9c2a-item-25-running=PASS {"kind":"application","title":"Mail","running":false,"status":null}
+phase9c2a-item-25-status=PASS {"kind":"application","title":"Mail","running":false,"status":null}
+phase9c2a-item-26-shape=PASS {"kind":"application","title":"Messaggi","running":false,"status":null}
+phase9c2a-item-26-kind=PASS {"kind":"application","title":"Messaggi","running":false,"status":null}
+phase9c2a-item-26-title=PASS {"kind":"application","title":"Messaggi","running":false,"status":null}
+phase9c2a-item-26-running=PASS {"kind":"application","title":"Messaggi","running":false,"status":null}
+phase9c2a-item-26-status=PASS {"kind":"application","title":"Messaggi","running":false,"status":null}
+phase9c2a-item-27-shape=PASS {"kind":"application","title":"WhatsApp","running":true,"status":null}
+phase9c2a-item-27-kind=PASS {"kind":"application","title":"WhatsApp","running":true,"status":null}
+phase9c2a-item-27-title=PASS {"kind":"application","title":"WhatsApp","running":true,"status":null}
+phase9c2a-item-27-running=PASS {"kind":"application","title":"WhatsApp","running":true,"status":null}
+phase9c2a-item-27-status=PASS {"kind":"application","title":"WhatsApp","running":true,"status":null}
+phase9c2a-item-28-shape=PASS {"kind":"application","title":"FaceTime","running":false,"status":null}
+phase9c2a-item-28-kind=PASS {"kind":"application","title":"FaceTime","running":false,"status":null}
+phase9c2a-item-28-title=PASS {"kind":"application","title":"FaceTime","running":false,"status":null}
+phase9c2a-item-28-running=PASS {"kind":"application","title":"FaceTime","running":false,"status":null}
+phase9c2a-item-28-status=PASS {"kind":"application","title":"FaceTime","running":false,"status":null}
+phase9c2a-item-29-shape=PASS {"kind":"application","title":"Mappe","running":false,"status":null}
+phase9c2a-item-29-kind=PASS {"kind":"application","title":"Mappe","running":false,"status":null}
+phase9c2a-item-29-title=PASS {"kind":"application","title":"Mappe","running":false,"status":null}
+phase9c2a-item-29-running=PASS {"kind":"application","title":"Mappe","running":false,"status":null}
+phase9c2a-item-29-status=PASS {"kind":"application","title":"Mappe","running":false,"status":null}
+phase9c2a-item-30-shape=PASS {"kind":"application","title":"Foto","running":false,"status":null}
+phase9c2a-item-30-kind=PASS {"kind":"application","title":"Foto","running":false,"status":null}
+phase9c2a-item-30-title=PASS {"kind":"application","title":"Foto","running":false,"status":null}
+phase9c2a-item-30-running=PASS {"kind":"application","title":"Foto","running":false,"status":null}
+phase9c2a-item-30-status=PASS {"kind":"application","title":"Foto","running":false,"status":null}
+phase9c2a-item-31-shape=PASS {"kind":"application","title":"Calendario","running":false,"status":null}
+phase9c2a-item-31-kind=PASS {"kind":"application","title":"Calendario","running":false,"status":null}
+phase9c2a-item-31-title=PASS {"kind":"application","title":"Calendario","running":false,"status":null}
+phase9c2a-item-31-running=PASS {"kind":"application","title":"Calendario","running":false,"status":null}
+phase9c2a-item-31-status=PASS {"kind":"application","title":"Calendario","running":false,"status":null}
+phase9c2a-item-32-shape=PASS {"kind":"application","title":"Contatti","running":false,"status":null}
+phase9c2a-item-32-kind=PASS {"kind":"application","title":"Contatti","running":false,"status":null}
+phase9c2a-item-32-title=PASS {"kind":"application","title":"Contatti","running":false,"status":null}
+phase9c2a-item-32-running=PASS {"kind":"application","title":"Contatti","running":false,"status":null}
+phase9c2a-item-32-status=PASS {"kind":"application","title":"Contatti","running":false,"status":null}
+phase9c2a-item-33-shape=PASS {"kind":"application","title":"Promemoria","running":false,"status":null}
+phase9c2a-item-33-kind=PASS {"kind":"application","title":"Promemoria","running":false,"status":null}
+phase9c2a-item-33-title=PASS {"kind":"application","title":"Promemoria","running":false,"status":null}
+phase9c2a-item-33-running=PASS {"kind":"application","title":"Promemoria","running":false,"status":null}
+phase9c2a-item-33-status=PASS {"kind":"application","title":"Promemoria","running":false,"status":null}
+phase9c2a-item-34-shape=PASS {"kind":"application","title":"Note","running":false,"status":null}
+phase9c2a-item-34-kind=PASS {"kind":"application","title":"Note","running":false,"status":null}
+phase9c2a-item-34-title=PASS {"kind":"application","title":"Note","running":false,"status":null}
+phase9c2a-item-34-running=PASS {"kind":"application","title":"Note","running":false,"status":null}
+phase9c2a-item-34-status=PASS {"kind":"application","title":"Note","running":false,"status":null}
+phase9c2a-item-35-shape=PASS {"kind":"application","title":"Freeform","running":false,"status":null}
+phase9c2a-item-35-kind=PASS {"kind":"application","title":"Freeform","running":false,"status":null}
+phase9c2a-item-35-title=PASS {"kind":"application","title":"Freeform","running":false,"status":null}
+phase9c2a-item-35-running=PASS {"kind":"application","title":"Freeform","running":false,"status":null}
+phase9c2a-item-35-status=PASS {"kind":"application","title":"Freeform","running":false,"status":null}
+phase9c2a-item-36-shape=PASS {"kind":"application","title":"TV","running":false,"status":null}
+phase9c2a-item-36-kind=PASS {"kind":"application","title":"TV","running":false,"status":null}
+phase9c2a-item-36-title=PASS {"kind":"application","title":"TV","running":false,"status":null}
+phase9c2a-item-36-running=PASS {"kind":"application","title":"TV","running":false,"status":null}
+phase9c2a-item-36-status=PASS {"kind":"application","title":"TV","running":false,"status":null}
+phase9c2a-item-37-shape=PASS {"kind":"application","title":"Musica","running":false,"status":null}
+phase9c2a-item-37-kind=PASS {"kind":"application","title":"Musica","running":false,"status":null}
+phase9c2a-item-37-title=PASS {"kind":"application","title":"Musica","running":false,"status":null}
+phase9c2a-item-37-running=PASS {"kind":"application","title":"Musica","running":false,"status":null}
+phase9c2a-item-37-status=PASS {"kind":"application","title":"Musica","running":false,"status":null}
+phase9c2a-item-38-shape=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-38-kind=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-38-title=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-38-running=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-38-status=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-39-shape=PASS {"kind":"application","title":"Google Chrome","running":true,"status":null}
+phase9c2a-item-39-kind=PASS {"kind":"application","title":"Google Chrome","running":true,"status":null}
+phase9c2a-item-39-title=PASS {"kind":"application","title":"Google Chrome","running":true,"status":null}
+phase9c2a-item-39-running=PASS {"kind":"application","title":"Google Chrome","running":true,"status":null}
+phase9c2a-item-39-status=PASS {"kind":"application","title":"Google Chrome","running":true,"status":null}
+phase9c2a-item-40-shape=PASS {"kind":"application","title":"Condivisione Schermo","running":false,"status":null}
+phase9c2a-item-40-kind=PASS {"kind":"application","title":"Condivisione Schermo","running":false,"status":null}
+phase9c2a-item-40-title=PASS {"kind":"application","title":"Condivisione Schermo","running":false,"status":null}
+phase9c2a-item-40-running=PASS {"kind":"application","title":"Condivisione Schermo","running":false,"status":null}
+phase9c2a-item-40-status=PASS {"kind":"application","title":"Condivisione Schermo","running":false,"status":null}
+phase9c2a-item-41-shape=PASS {"kind":"application","title":"Image Playground","running":false,"status":null}
+phase9c2a-item-41-kind=PASS {"kind":"application","title":"Image Playground","running":false,"status":null}
+phase9c2a-item-41-title=PASS {"kind":"application","title":"Image Playground","running":false,"status":null}
+phase9c2a-item-41-running=PASS {"kind":"application","title":"Image Playground","running":false,"status":null}
+phase9c2a-item-41-status=PASS {"kind":"application","title":"Image Playground","running":false,"status":null}
+phase9c2a-item-42-shape=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-42-kind=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-42-title=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-42-running=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-42-status=PASS {"kind":"separator","title":null,"running":null,"status":null}
+phase9c2a-item-43-shape=PASS {"kind":"folder","title":"Download","running":null,"status":null}
+phase9c2a-item-43-kind=PASS {"kind":"folder","title":"Download","running":null,"status":null}
+phase9c2a-item-43-title=PASS {"kind":"folder","title":"Download","running":null,"status":null}
+phase9c2a-item-43-running=PASS {"kind":"folder","title":"Download","running":null,"status":null}
+phase9c2a-item-43-status=PASS {"kind":"folder","title":"Download","running":null,"status":null}
+phase9c2a-item-44-shape=PASS {"kind":"trash","title":"Cestino","running":null,"status":null}
+phase9c2a-item-44-kind=PASS {"kind":"trash","title":"Cestino","running":null,"status":null}
+phase9c2a-item-44-title=PASS {"kind":"trash","title":"Cestino","running":null,"status":null}
+phase9c2a-item-44-running=PASS {"kind":"trash","title":"Cestino","running":null,"status":null}
+phase9c2a-item-44-status=PASS {"kind":"trash","title":"Cestino","running":null,"status":null}
+phase9c2a-application-present=PASS {"application":41,"folder":1,"trash":1,"separator":2,"other":0}
+phase9c2a-trash-present=PASS {"application":41,"folder":1,"trash":1,"separator":2,"other":0}
+phase9c2a-separator-present=PASS {"application":41,"folder":1,"trash":1,"separator":2,"other":0}
+phase9c2a-public-omits-AXDockItem=PASS
+phase9c2a-public-omits-AXApplicationDockItem=PASS
+phase9c2a-public-omits-AXFolderDockItem=PASS
+phase9c2a-public-omits-AXTrashDockItem=PASS
+phase9c2a-public-omits-AXSeparatorDockItem=PASS
+phase9c2a-public-omits-AXPress=PASS
+phase9c2a-public-omits-AXShowMenu=PASS
+phase9c2a-public-omits-AXShowExpose=PASS
+phase9c2a-public-omits-com.apple.dock=PASS
+phase9c2a-public-omits-bundleIdentifier=PASS
+phase9c2a-public-omits-nativeRef=PASS
+phase9c2a-public-omits-identifier=PASS
+phase9c2a-public-omits-actions=PASS
+phase9c2a-public-omits-coordinates=PASS
+phase9c2a-public-omits-pid=PASS
+phase9c2a-independent-signature=PASS {"public":[{"kind":"application","title":"Finder"},{"kind":"application","title":"App"},{"kind":"application","title":"App Store"},{"kind":"application","title":"Password"},{"kind":"application","title":"Impostazioni di Sistema"},{"kind":"application","title":"Utility Disco"},{"kind":"application","title":"Monitoraggio Attività"},{"kind":"application","title":"Terminale"},{"kind":"application","title":"TextEdit"},{"kind":"application","title":"Pulsar"},{"kind":"application","title":"Xcode"},{"kind":"application","title":"ChatGPT"},{"kind":"application","title":"VMware Fusion"},{"kind":"application","title":"Windows App"},{"kind":"application","title":"mbp-connect"},{"kind":"application","title":"Safari"},{"kind":"application","title":"Firefox"},{"kind":"application","title":"Google Chrome Incognito"},{"kind":"application","title":"LibreOffice"},{"kind":"application","title":"XnViewMP"},{"kind":"application","title":"IINA"},{"kind":"application","title":"krita"},{"kind":"application","title":"Blender"},{"kind":"application","title":"Sweet Home 3D"},{"kind":"application","title":"Keka"},{"kind":"application","title":"Mail"},{"kind":"application","title":"Messaggi"},{"kind":"application","title":"WhatsApp"},{"kind":"application","title":"FaceTime"},{"kind":"application","title":"Mappe"},{"kind":"application","title":"Foto"},{"kind":"application","title":"Calendario"},{"kind":"application","title":"Contatti"},{"kind":"application","title":"Promemoria"},{"kind":"application","title":"Note"},{"kind":"application","title":"Freeform"},{"kind":"application","title":"TV"},{"kind":"application","title":"Musica"},{"kind":"separator","title":null},{"kind":"application","title":"Google Chrome"},{"kind":"application","title":"Condivisione Schermo"},{"kind":"application","title":"Image Playground"},{"kind":"separator","title":null},{"kind":"folder","title":"Download"},{"kind":"trash","title":"Cestino"}],"native":[{"kind":"application","title":"Finder"},{"kind":"application","title":"App"},{"kind":"application","title":"App Store"},{"kind":"application","title":"Password"},{"kind":"application","title":"Impostazioni di Sistema"},{"kind":"application","title":"Utility Disco"},{"kind":"application","title":"Monitoraggio Attività"},{"kind":"application","title":"Terminale"},{"kind":"application","title":"TextEdit"},{"kind":"application","title":"Pulsar"},{"kind":"application","title":"Xcode"},{"kind":"application","title":"ChatGPT"},{"kind":"application","title":"VMware Fusion"},{"kind":"application","title":"Windows App"},{"kind":"application","title":"mbp-connect"},{"kind":"application","title":"Safari"},{"kind":"application","title":"Firefox"},{"kind":"application","title":"Google Chrome Incognito"},{"kind":"application","title":"LibreOffice"},{"kind":"application","title":"XnViewMP"},{"kind":"application","title":"IINA"},{"kind":"application","title":"krita"},{"kind":"application","title":"Blender"},{"kind":"application","title":"Sweet Home 3D"},{"kind":"application","title":"Keka"},{"kind":"application","title":"Mail"},{"kind":"application","title":"Messaggi"},{"kind":"application","title":"WhatsApp"},{"kind":"application","title":"FaceTime"},{"kind":"application","title":"Mappe"},{"kind":"application","title":"Foto"},{"kind":"application","title":"Calendario"},{"kind":"application","title":"Contatti"},{"kind":"application","title":"Promemoria"},{"kind":"application","title":"Note"},{"kind":"application","title":"Freeform"},{"kind":"application","title":"TV"},{"kind":"application","title":"Musica"},{"kind":"separator","title":null},{"kind":"application","title":"Google Chrome"},{"kind":"application","title":"Condivisione Schermo"},{"kind":"application","title":"Image Playground"},{"kind":"separator","title":null},{"kind":"folder","title":"Download"},{"kind":"trash","title":"Cestino"}]}
+phase9c2a-repeat-observed=PASS
+phase9c2a-repeat-core-kinds=PASS {"application":41,"folder":1,"trash":1,"separator":2,"other":0}
+phase9c2a-method=PASS {"method":"macos-os-owned-native-AX-dock-observation"}
+phase9c2a-backend=PASS {"name":"macos-ax","strategy":"os-owned-native-AX-dock-observation"}
+physical-phase9c2a-dock-observation=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 1374
+RESULT: PASS
+END: 2026-08-27T23:03:01Z
+================================================================================
+
+session_ended_at=2026-08-27T23:03:01Z
+session_duration_ms=8454
+session_overall=PASS
