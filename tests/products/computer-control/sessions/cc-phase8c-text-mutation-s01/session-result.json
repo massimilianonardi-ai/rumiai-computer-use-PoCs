@@ -1,0 +1,131 @@
+{
+  "sessionId": "cc-phase8c-text-mutation-s01",
+  "startedAt": "2026-08-27T07:26:20Z",
+  "endedAt": "2026-08-27T07:26:28Z",
+  "durationMs": 8612,
+  "productShaExpected": "a9366f2efd23fe2830e0ab88b428e02df205909e",
+  "productShaObserved": "a9366f2efd23fe2830e0ab88b428e02df205909e",
+  "testSourceSha": "f92c5fb26f7e600e110efa45360fcaaf08f4a3c9",
+  "pocShaTested": "7c41fbb7fb96a404f70c70275f75c5c7b4e17435",
+  "tests": [
+    {
+      "id": "structure",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' /bin/sh '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/check-structure.sh'",
+      "exitCode": 0,
+      "durationMs": 1493,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-appkit-fixture.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-appkit-fixture.test.js'",
+      "exitCode": 0,
+      "durationMs": 114,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-children.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-children.test.js'",
+      "exitCode": 0,
+      "durationMs": 99,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-describe.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-describe.test.js'",
+      "exitCode": 0,
+      "durationMs": 91,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-disclosure.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-disclosure.test.js'",
+      "exitCode": 0,
+      "durationMs": 89,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-invoke.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-invoke.test.js'",
+      "exitCode": 0,
+      "durationMs": 90,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-role-adapter.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-role-adapter.test.js'",
+      "exitCode": 0,
+      "durationMs": 87,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-scroll.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-scroll.test.js'",
+      "exitCode": 0,
+      "durationMs": 90,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-stateful.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-stateful.test.js'",
+      "exitCode": 0,
+      "durationMs": 91,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-text-mutation.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation.test.js'",
+      "exitCode": 0,
+      "durationMs": 92,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-text-range-selection.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-range-selection.test.js'",
+      "exitCode": 0,
+      "durationMs": 91,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-text-selection-rebind.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection-rebind.test.js'",
+      "exitCode": 0,
+      "durationMs": 87,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-text-selection.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection.test.js'",
+      "exitCode": 0,
+      "durationMs": 94,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:native-controls-value.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-value.test.js'",
+      "exitCode": 0,
+      "durationMs": 97,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:runtime-set-text.test.js",
+      "command": "RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js'",
+      "exitCode": 0,
+      "durationMs": 100,
+      "result": "PASS"
+    },
+    {
+      "id": "physical:phase8c-text-mutation",
+      "command": "AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/physical-tests/macos-native-text-mutation.js'",
+      "exitCode": 1,
+      "durationMs": 4862,
+      "result": "FAIL"
+    }
+  ],
+  "summary": {
+    "pass": 15,
+    "fail": 1,
+    "blocked": 0,
+    "total": 16,
+    "overall": "FAIL"
+  }
+}
