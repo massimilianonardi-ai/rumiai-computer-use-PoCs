@@ -1,0 +1,60 @@
+{
+  "sessionId": "cc-phase9b3c-file-picker-semantic-actions-s01",
+  "scope": "Computer Control Phase 9B3C native file picker explicit semantic accept and cancel",
+  "productSha": "3cedb57d35663f74d0598b6c83645c973cdc6810",
+  "testSourceSha": "f3e0a6960ac46b7c554fae73d9849245311fcea6",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via registered Provider and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-semantic-actions.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3c-file-picker-semantic-actions=PASS",
+  "prerequisiteEvidence": {
+    "phase9b3bSession": "cc-phase9b3b-file-picker-selection-expansion-s01",
+    "phase9b3bEvidenceCommit": "36ca5eb400954457f44467d9028e6f26a21e70cd",
+    "phase9b3bValidatedProduct": "805ec5126f991bd6a19945bfda5d0fc2778ae221",
+    "phase9b3bTestSource": "5e9fb88809af10c07bcf9f109d8d1e51ff92994a",
+    "phase9b3bResult": "26 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Provider only; exactly one running Provider process and one supported native picker",
+    "acceptTarget": "native AXDefaultButton relationship only",
+    "cancelTarget": "native AXCancelButton relationship only",
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "labelBasedTargeting": false,
+    "labelBasedAuthorization": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "filesystemEnumeration": false,
+    "filesystemMutation": false,
+    "syntheticKeypress": false,
+    "nativeHandlesPublic": false,
+    "postcondition": "after semantic AXPress, Provider application remains running and independent fresh filePicker.observe reports picker null",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "filePicker.observe, filePicker.selectItem and filePicker.expandDirectory remain PHYSICALLY_VALIDATED",
+    "filePicker.accept and filePicker.cancel remain IMPLEMENTED until this session passes",
+    "a real AppKit NSOpenPanel opens at PickerRoot",
+    "Alpha.txt is selected through already validated native selection semantics before accept",
+    "filePicker.accept resolves the native AXDefaultButton relationship rather than the visible Choose label",
+    "accept delivers only advertised AXPress",
+    "accept succeeds only when the picker is independently absent while the Provider application remains running",
+    "the AppKit completion handler independently records Picker Result: accepted Alpha.txt",
+    "the picker can be reopened after accept",
+    "filePicker.cancel resolves the native AXCancelButton relationship rather than the visible Cancel label",
+    "cancel delivers only advertised AXPress",
+    "cancel succeeds only when the picker is independently absent while the Provider application remains running",
+    "the AppKit completion handler independently records Picker Result: cancelled",
+    "no coordinate, mouse, keyboard, clipboard, synthetic keypress, filesystem operation or label-matching fallback is used"
+  ]
+}
