@@ -1,0 +1,55 @@
+{
+  "sessionId": "cc-phase9b3b-directory-actions-discovery-s01",
+  "scope": "Computer Control Phase 9B3B native file picker directory action discovery after unsupported/attributeUnsupported evidence",
+  "productSha": "6533489586ce51f03296a4191dc0806a88f4c66b",
+  "testSourceSha": "be4f050e5b7ea4882815957a2ff6fb6c3a0bf2df",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via Provider registry and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-directory-actions-discovery.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3b-directory-actions-discovery=PASS",
+  "priorEvidence": {
+    "phase9b3bS01": {
+      "session": "cc-phase9b3b-file-picker-navigation-selection-s01",
+      "evidenceCommit": "d9f4bba6c496d27417e0d6780ca47385133bbfed",
+      "result": "23 PASS / 1 FAIL / 0 BLOCKED",
+      "finding": "blind AXConfirm returned kAXErrorActionUnsupported (-25206)"
+    },
+    "phase9b3bS02": {
+      "session": "cc-phase9b3b-file-picker-navigation-selection-s02",
+      "evidenceCommit": "55c2a3859f652b5e36e5d319275481d92078ff53",
+      "result": "23 PASS / 1 FAIL / 0 BLOCKED",
+      "finding": "an advertised candidate directory-open action returned kAXErrorAttributeUnsupported (-25205)"
+    }
+  },
+  "safetyBoundary": {
+    "readOnly": true,
+    "filePickerMutation": false,
+    "filesystemEnumeration": false,
+    "filesystemMutation": false,
+    "coordinateTargeting": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "nativeHandlesPublic": false,
+    "actionDelivery": false,
+    "purpose": "record native Accessibility action names/descriptions for FolderA row/subtree and relevant picker controls before choosing another implementation primitive",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "filePicker.observe remains PHYSICALLY_VALIDATED",
+    "filePicker.selectItem and filePicker.openDirectory remain IMPLEMENTED",
+    "a real NSOpenPanel opens on PickerRoot",
+    "FolderA is located as an AXRow through read-only Accessibility observation",
+    "the complete row/subtree action names and descriptions are logged",
+    "the native ListView, sheet and OKButton action names are logged",
+    "no AX action is performed by the discovery helper",
+    "the picker remains open on PickerRoot after discovery"
+  ]
+}
