@@ -1,0 +1,38 @@
+{
+  "sessionId": "cc-phase9b3a-file-picker-discovery-s01",
+  "scope": "Computer Control Phase 9B3A native NSOpenPanel Accessibility topology discovery",
+  "productSha": "5a7f6a00888838d042ce127f405fc050c07e4872",
+  "testSourceSha": "ede6fc11061d53cae4ece54439508ba24e250250",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel plus system-wide native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-topology-discovery.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-discovery/main.swift",
+  "probe": "tests/products/computer-control/physical-tests/helpers/macos-file-picker-ax-topology.swift",
+  "terminalMarker": "physical-phase9b3a-file-picker-discovery=PASS",
+  "purpose": "discover the actual macOS 26.5.2 Accessibility ownership and hierarchy of a real NSOpenPanel before declaring any public file-picker API",
+  "safetyBoundary": {
+    "productMutation": false,
+    "pickerMutation": false,
+    "filesystemMutationByPicker": false,
+    "testOwnedFilesystemSetupOnly": true,
+    "systemWideAXObservation": true,
+    "publicFilePickerAPI": false,
+    "cleanup": "physical harness stops only its test-owned fixture and removes only its temporary test directory"
+  },
+  "expectedDiscovery": [
+    "Provider fixture process is identified",
+    "system-wide focused application is identified while NSOpenPanel is visible",
+    "at least one Accessibility-owned picker surface containing deterministic marker content is found",
+    "owner process name, bundle identifier and pid are recorded as discovery evidence",
+    "whether picker owner equals or differs from Provider host is recorded rather than assumed",
+    "AX window/tree topology containing picker marker content is recorded",
+    "no public 9B3 product capability is promoted by this discovery session"
+  ]
+}
