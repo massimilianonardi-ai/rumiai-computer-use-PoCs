@@ -1,0 +1,57 @@
+{
+  "sessionId": "cc-phase9c2a-dock-observation-s02",
+  "scope": "Computer Control Phase 9C2A global OS-owned native macOS Dock read-only observation after historical discovery-guard correction",
+  "productSha": "b9d04f5213c5dcb00ca8dc0363f8248caa9a8916",
+  "testSourceSha": "c928f3dacd3c3456072d21baaef2742e042e5b0d",
+  "platform": "macOS Dock via native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-dock-observation.js",
+  "terminalMarker": "physical-phase9c2a-dock-observation=PASS",
+  "prerequisiteEvidence": {
+    "phase9c23DiscoverySession": "cc-phase9c23-system-chrome-discovery-s01",
+    "phase9c23DiscoveryEvidenceCommit": "f68f5bc4bc3e2fec2aa1219b402b7016107a6e6f",
+    "phase9c23DiscoveryResult": "32 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9c2aHistoricalSession": "cc-phase9c2a-dock-observation-s01",
+    "phase9c2aHistoricalEvidenceCommit": "3da618a37d813d9cfc3e8003301388a03eea7b20",
+    "phase9c2aHistoricalOverallResult": "32 PASS / 1 FAIL / 0 BLOCKED",
+    "phase9c2aHistoricalPhysicalResult": "PASS",
+    "phase9c2aHistoricalFailCause": "system-chrome-discovery.test.js still asserted that dock.observe must not exist after Phase 9C2A had intentionally introduced the public read-only API",
+    "phase9c2aCorrection": "advance only the historical discovery guard so it permits dock.observe while continuing to prohibit dock.invoke, menuExtras.observe, menuExtras.invoke and systemChrome.* at the frozen product checkpoint"
+  },
+  "safetyBoundary": {
+    "addressing": "global OS-owned Dock process resolved internally by bundle identity; no caller-supplied native identity",
+    "readOnly": true,
+    "implicitLaunchByProductApi": false,
+    "implicitActivationByProductApi": false,
+    "axPerformAction": false,
+    "axSetAttribute": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "appleScriptFallback": false,
+    "filesystemMutation": false,
+    "nativeHandlesPublic": false,
+    "nativeIdentifiersPublic": false,
+    "nativeActionsPublic": false
+  },
+  "expectedCoverage": [
+    "all structure and contract guards pass at the frozen product SHA",
+    "historical Phase 9C2+9C3 discovery remains read-only evidence while allowing the now-implemented dock.observe surface",
+    "dock.observe capability reports IMPLEMENTED before physical promotion",
+    "public dock.observe returns OBSERVED through the real runtime and SDK",
+    "public Dock items expose only kind, title, running and status",
+    "application, separator and exactly one trash semantics are observed on the reference host",
+    "public result exposes no AX roles, subroles, actions, identifiers, URLs, coordinates, native handles or PID",
+    "an independent native AX topology observer agrees with public Dock item kind/title order",
+    "repeated observation remains read-only and preserves core Dock kinds",
+    "no Dock action or UI mutation is performed"
+  ]
+}
