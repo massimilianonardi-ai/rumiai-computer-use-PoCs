@@ -24,9 +24,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView?.addSubview(resultLabel)
 
         let mainMenu = NSMenu()
+        mainMenu.autoenablesItems = false
 
         let appItem = NSMenuItem(title: "RumiAI Menu Fixture", action: nil, keyEquivalent: "")
         let appMenu = NSMenu(title: "RumiAI Menu Fixture")
+        appMenu.autoenablesItems = false
         appMenu.addItem(NSMenuItem(title: "About RumiAI Menu Fixture", action: nil, keyEquivalent: ""))
         appMenu.addItem(.separator())
         let quit = NSMenuItem(title: "Quit RumiAI Menu Fixture", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
@@ -36,9 +38,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let actionsItem = NSMenuItem(title: "RumiAI Actions", action: nil, keyEquivalent: "")
         let actionsMenu = NSMenu(title: "RumiAI Actions")
+        actionsMenu.autoenablesItems = false
 
         let alpha = NSMenuItem(title: "Alpha Action", action: #selector(alphaAction), keyEquivalent: "a")
         alpha.target = self
+        alpha.isEnabled = true
         actionsMenu.addItem(alpha)
 
         let disabled = NSMenuItem(title: "Disabled Action", action: #selector(disabledAction), keyEquivalent: "")
@@ -48,8 +52,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let submenuItem = NSMenuItem(title: "Nested Group", action: nil, keyEquivalent: "")
         let submenu = NSMenu(title: "Nested Group")
+        submenu.autoenablesItems = false
         let nested = NSMenuItem(title: "Nested Action", action: #selector(nestedAction), keyEquivalent: "n")
         nested.target = self
+        nested.isEnabled = true
         submenu.addItem(nested)
         submenuItem.submenu = submenu
         actionsMenu.addItem(submenuItem)
