@@ -32,7 +32,7 @@ test("Phase 9C1A macOS helper is native AX read-only observation",()=>{
 
 test("Phase 9C1A backend and public surfaces expose semantic tree only",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(source,/menuBar\.observe.*IMPLEMENTED/);
+  assert.match(source,/menuBar\.observe.*PHYSICALLY_VALIDATED/);
   assert.match(source,/provider-scoped-native-AX-menu-bar-observation/);
   assert.match(source,/async observeMenuBar/);
   const schema=JSON.stringify(JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/menu-bar-observe-result.schema.json"),"utf8")));
@@ -43,14 +43,17 @@ test("Phase 9C1A backend and public surfaces expose semantic tree only",()=>{
   for(const text of[sdk,types,adapter])assert.match(text,/observeMenuBar/);
 });
 
-test("Phase 9C1A documentation records discovery and keeps invocation separate",()=>{
+test("Phase 9C1A documentation records physical promotion and keeps invocation separate",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-menu-bar.md"),"utf8");
-  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c1-menu-bar-discovery.md"),"utf8");
-  assert.match(docs,/Phase 9C1A validation state: `IMPLEMENTED`/);
+  const discovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c1-menu-bar-discovery.md"),"utf8");
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c1a-menu-bar-observation-physical.md"),"utf8");
+  assert.match(docs,/Phase 9C1A validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(docs,/delivery is not success/i);
   assert.match(docs,/Phase 9C1B remains pending/);
-  assert.match(evidence,/fe203eceec6a3976c911786860b8803794d6880a/);
-  assert.match(evidence,/30 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(discovery,/fe203eceec6a3976c911786860b8803794d6880a/);
+  assert.match(evidence,/decc4ccd989c694e624e3c3db69884b6903b0cee/);
+  assert.match(evidence,/31 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(evidence,/d0d1d23eedb7258d1fc292e3647559cf96d726d5/);
 });
 
 test("Phase 9C1A final fixture disables AppKit automatic menu enabling",()=>{
@@ -60,9 +63,9 @@ test("Phase 9C1A final fixture disables AppKit automatic menu enabling",()=>{
   assert.match(fixture,/submenu\.autoenablesItems = false/);
 });
 
-test("Phase 9C1A physical checkpoint inspects capability through the real SDK runtimeInfo surface",()=>{
-  const physical=fs.readFileSync(path.join(__dirname,"../physical-tests/macos-menu-bar-observation.js"),"utf8");
-  assert.match(physical,/client\.runtimeInfo\(\)/);
-  assert.doesNotMatch(physical,/client\.info\(\)/);
-  assert.match(physical,/phase9c1a-capability-implemented/);
+test("Phase 9C1A authoritative physical evidence remains immutable",()=>{
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c1a-menu-bar-observation-physical.md"),"utf8");
+  assert.match(evidence,/cc-phase9c1a-menu-bar-observation-s02/);
+  assert.match(evidence,/0cb4359a18040d0d51c0ab3546375e6d7ac5cf7f/);
+  assert.match(evidence,/PHYSICALLY_VALIDATED/);
 });
