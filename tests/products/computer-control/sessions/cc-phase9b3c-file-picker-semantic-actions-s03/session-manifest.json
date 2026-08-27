@@ -1,0 +1,69 @@
+{
+  "sessionId": "cc-phase9b3c-file-picker-semantic-actions-s03",
+  "scope": "Computer Control Phase 9B3C native file picker explicit accept/cancel with independent AppKit completion observation",
+  "productSha": "2be349b1fdf2a6ea08ee893be423942d926a2c0b",
+  "testSourceSha": "2f107d05bdce5650929db8ead670f12da2f59f54",
+  "platform": "macOS Cocoa/AppKit NSOpenPanel via registered Provider and native Accessibility",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-file-picker-semantic-actions-v2.js",
+  "fixture": "tests/products/computer-control/fixtures/macos-appkit-file-picker-observation/main.swift",
+  "terminalMarker": "physical-phase9b3c-file-picker-semantic-actions-v2=PASS",
+  "historicalEvidence": {
+    "blockedSession": "cc-phase9b3c-file-picker-semantic-actions-s01",
+    "blockedEvidenceCommit": "53239bbb4b1da389e65e24f7dc484bd119b1a31f",
+    "blockedReason": "NSOpenPanel did not expose AXDefaultButton/AXCancelButton relationships on the supported picker surface",
+    "failedSession": "cc-phase9b3c-file-picker-semantic-actions-s02",
+    "failedEvidenceCommit": "bc593924b065975dc52227ae6e4f81395c92e35b",
+    "failedReason": "native OKButton accept delivery and picker dismissal succeeded, but the generic client.find-based fixture result observer failed to observe the completion label",
+    "diagnosticSession": "cc-phase9b3c-file-picker-accept-result-diagnostic-s01",
+    "diagnosticEvidenceCommit": "d37b848c8abdb6d27da7c453627b2edcfbf2a518",
+    "diagnosticResult": "PASS; independent read-only AX observer captured Picker Result: accepted Alpha.txt"
+  },
+  "prerequisiteEvidence": {
+    "phase9b3bSession": "cc-phase9b3b-file-picker-selection-expansion-s01",
+    "phase9b3bEvidenceCommit": "36ca5eb400954457f44467d9028e6f26a21e70cd",
+    "phase9b3bValidatedProduct": "805ec5126f991bd6a19945bfda5d0fc2778ae221",
+    "phase9b3bResult": "26 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "addressing": "registered application Provider only; exactly one running Provider process and one supported native picker",
+    "acceptTarget": "one backend-private native AXButton with physically observed identifier OKButton",
+    "cancelTarget": "one backend-private native AXButton with physically observed identifier CancelButton",
+    "publicNativeIdentifiers": false,
+    "implicitLaunch": false,
+    "implicitActivation": false,
+    "labelBasedTargeting": false,
+    "labelBasedAuthorization": false,
+    "coordinateTargeting": false,
+    "mouseFallback": false,
+    "keyboardFallback": false,
+    "clipboardFallback": false,
+    "filesystemEnumeration": false,
+    "filesystemMutation": false,
+    "syntheticKeypress": false,
+    "nativeHandlesPublic": false,
+    "postcondition": "after advertised native AXPress, Provider remains running and independent fresh filePicker.observe reports picker null; separate read-only AX observer verifies the AppKit completion result",
+    "cleanup": "physical harness may stop only its temporary test-owned fixture process"
+  },
+  "expectedCoverage": [
+    "filePicker.observe, filePicker.selectItem and filePicker.expandDirectory remain PHYSICALLY_VALIDATED",
+    "filePicker.accept and filePicker.cancel remain IMPLEMENTED until this session passes",
+    "a real AppKit NSOpenPanel opens at PickerRoot",
+    "Alpha.txt is selected through already validated native selection semantics before accept",
+    "filePicker.accept targets the backend-private physically observed OKButton AXButton and delivers only advertised AXPress",
+    "accept succeeds only when picker is independently absent while Provider remains running",
+    "independent read-only AX observer records Picker Result: accepted Alpha.txt",
+    "picker can be reopened after accept",
+    "filePicker.cancel targets the backend-private physically observed CancelButton AXButton and delivers only advertised AXPress",
+    "cancel succeeds only when picker is independently absent while Provider remains running",
+    "independent read-only AX observer records Picker Result: cancelled",
+    "no label matching, coordinate, mouse, keyboard, clipboard, synthetic keypress or filesystem fallback is used"
+  ]
+}
