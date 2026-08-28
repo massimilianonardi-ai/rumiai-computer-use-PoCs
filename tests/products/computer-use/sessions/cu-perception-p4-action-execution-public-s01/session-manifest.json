@@ -1,0 +1,96 @@
+{
+  "sessionId": "cu-perception-p4-action-execution-public-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "5dc3607ff18b20ab806b9bf455b68f962a005e9f",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "6c776dc0f811835850ccf3933b9b247364f8c1a3",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js",
+    "tests/products/computer-use/perception-p2b-provider-contract.test.js",
+    "tests/products/computer-use/perception-p3a-target-resolution.test.js",
+    "tests/products/computer-use/perception-p3b-action-policy.test.js",
+    "tests/products/computer-use/perception-p4-action-execution.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p4-action-execution-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p4-action-execution-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2b-provider-contract-public-s02",
+      "evidence": "82ca0c0d1fb383a3102d19238cfe885cd0b8d8a4",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p3a-target-resolution-public-s01",
+      "evidence": "c2a1e704f99b5cf528fb15287a785875c454a400",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p3b-action-policy-public-s01",
+      "evidence": "3ba45950619a9e3cf9249b830609e7ca9ccd9faf",
+      "result": "PASS"
+    }
+  ],
+  "purpose": "Physically validate the first complete visual fallback loop: real mapped capture, provider-neutral OCR observations, deterministic target resolution, explicit fallback authorization, public Computer Control left-click delivery, then a fresh independent capture/OCR postcondition that alone can verify semantic success.",
+  "requiredClaims": [
+    "the pre-action path uses the real P1B mapped frame, P2B provider-neutral text-region contract, P3A target resolver and P3B action-policy gate",
+    "the P4 product executor accepts only the exact P3B AUTHORIZED READY primary left-click plan",
+    "the product executes the action through the external public Computer Control clickPointer API",
+    "Computer Control returns CLICK_POSTED with positionVerified true, buttonDelivery POSTED and semanticConsequenceVerified false",
+    "CLICK_POSTED is recorded as delivery only and is not treated as semantic success",
+    "post-action observation is invoked only after posted delivery",
+    "the post-action observation performs a new real mapped display capture and a new local OCR interpretation",
+    "the test-owned nonactivating AppKit fixture changes from its pre-action visual text to a distinct post-action visual text only after mouseDown",
+    "the original pre-action text is absent and the expected postcondition text is present exactly once in the independent post-action OCR observations",
+    "VERIFIED_SUCCESS is returned only after the independent post-action observation satisfies the exact-text postcondition",
+    "frame payloads, recognized text and coordinates are not persisted or logged",
+    "the test restores the initial pointer position using a separate cleanup-only Computer Control pointer.move when the initial pointer is on the primary display",
+    "fixture, pointer position and Computer Control runtime cleanup complete successfully",
+    "both product working trees remain clean"
+  ],
+  "nonClaims": [
+    "CLICK_POSTED alone is not task success",
+    "the visual target still does not claim semantic UI identity",
+    "macOS Vision is not made a built-in Computer Use dependency",
+    "no arbitrary user-content OCR accuracy claim is made",
+    "no right-click, drag, wheel or keyboard visual fallback is authorized by this checkpoint",
+    "no fuzzy text, object, icon or VLM target resolution is validated",
+    "no causal claim is made outside the controlled test-owned fixture and exact postcondition",
+    "the cleanup pointer.move is test restoration and is not part of the product action under verification"
+  ],
+  "promotionOnPass": {
+    "visualFallbackExecutionState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "initialVisualEndToEndPoC": "COMPLETE",
+    "remainingWork": "hardening and capability expansion only"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
