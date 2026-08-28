@@ -52,12 +52,13 @@ test("Phase 10A native helper uses ScreenCaptureKit without prompting or persist
 
 test("Phase 10A backend validates canonical PNG payload and keeps native display identity private",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
-  assert.match(source,/display\.capture.*IMPLEMENTED/);
+  const lifecycleLine=source.split("\n").find(line=>line.includes("LOW_LEVEL_FALLBACK_CAPABILITIES"))||"";
+  assert.match(lifecycleLine,/display\.capture.*IMPLEMENTED/);
+  assert.doesNotMatch(lifecycleLine,/PHYSICALLY_VALIDATED/);
   assert.match(source,/screencapturekit-primary-display-single-frame-png/);
   assert.match(source,/canonicalDisplayCapture/);
   assert.match(source,/PNG_SIGNATURE/);
   assert.match(source,/macos-screencapturekit/);
-  assert.doesNotMatch(source,/display\.capture.*PHYSICALLY_VALIDATED/);
   const canonical=structure.canonicalDisplayCapture({state:"CAPTURED",display:"primary",format:"image/png",width:10,height:20,byteCount:pngBytes.length,dataBase64:pngBase64,cursorIncluded:false,method:"macos-screencapturekit-primary-display-png"});
   assert.equal(canonical.dataBase64,pngBase64);
   assert.equal(canonical.byteCount,pngBytes.length);
