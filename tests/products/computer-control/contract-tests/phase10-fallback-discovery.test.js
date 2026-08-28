@@ -46,7 +46,7 @@ test("Phase 10 screen probe uses modern ScreenCaptureKit only after non-promptin
   assert.match(physical,/screen-capture-api-mismatch/);
 });
 
-test("Phase 10 permits only evidence-backed 10A capture and implemented 10B move/click surfaces",()=>{
+test("Phase 10 permits only physically validated 10A/10B public surfaces before 10C discovery",()=>{
   const router=["router.js","router-core.js","router-low-level.js"].map(name=>fs.readFileSync(path.join(productRoot,"runtime/src",name),"utf8")).join("\n");
   for(const method of["display.capture","pointer.move","pointer.click"])assert.equal(router.includes(`\"${method}\"`),true,method);
   for(const method of[
@@ -63,6 +63,7 @@ test("Phase 10 remains an explicit fallback layer and cannot weaken semantic API
   assert.match(roadmap,/working semantic operation always takes precedence/);
   assert.match(roadmap,/coordinate delivery is not itself semantic success/);
   assert.match(phase10,/Phase 10A capture\s+PHYSICALLY_VALIDATED/);
-  assert.match(phase10,/Phase 10B pointer\s+IMPLEMENTED/);
+  assert.match(phase10,/Phase 10B pointer\s+PHYSICALLY_VALIDATED/);
+  assert.match(phase10,/Phase 10C drag\/drop\s+PENDING/);
   assert.match(phase10,/A working semantic capability always takes precedence/);
 });
