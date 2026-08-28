@@ -32,5 +32,9 @@ test("Phase 10B physical harness compiles as library and logs no coordinates",()
 });
 
 test("Phase 10B keeps semantic operations preferred over coordinate delivery",()=>{
-  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");assert.match(phase10,/working semantic capability always takes precedence/i);assert.match(phase10,/primary-display-local/i);assert.match(phase10,/must never replace a semantic element target/i);assert.match(phase10,/buttonDelivery:\"POSTED\".*not as verified semantic success/i);assert.match(phase10,/semanticConsequenceVerified.*always false/i);
+  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
+  assert.match(phase10,/working semantic capability always takes precedence/i);
+  assert.match(phase10,/client\.movePointer/);assert.match(phase10,/client\.clickPointer/);
+  assert.match(phase10,/CLICK_POSTED.*low-level button posting only/i);
+  assert.match(phase10,/does not mean the intended semantic action succeeded/i);
 });
