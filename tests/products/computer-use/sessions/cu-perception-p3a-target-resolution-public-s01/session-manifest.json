@@ -1,0 +1,88 @@
+{
+  "sessionId": "cu-perception-p3a-target-resolution-public-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "32a49d08bd235e906b992e093e2184144f76136c",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "1fce015120f6bee490c50141c7f38d4dd0070e27",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js",
+    "tests/products/computer-use/perception-p2b-provider-contract.test.js",
+    "tests/products/computer-use/perception-p3a-target-resolution.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p3a-target-resolution-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p3a-target-resolution-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2a-local-ocr-discovery-s02",
+      "evidence": "9bf876dd35190776b9276d1e98db9e16733b5c50",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2b-provider-contract-public-s02",
+      "evidence": "82ca0c0d1fb383a3102d19238cfe885cd0b8d8a4",
+      "validatedRuntime": "839d53d100e31da2fec839351f94f197d377ab36",
+      "result": "PASS"
+    }
+  ],
+  "purpose": "Physically validate the Computer Use P3A deterministic observation-to-target resolution boundary using a real P2B text-region interpretation and a single exact-text match, without authorizing or executing an input action.",
+  "requiredClaims": [
+    "the real P1B mapped-frame path supplies the captured PNG",
+    "the real P2B provider-neutral contract normalizes local OCR observations",
+    "the real P3A product resolver selects exactly one text-region observation for an exact-text query",
+    "the resolved target uses the exact-text-single-match policy",
+    "the resolved target region center is mapped through the physically validated P1B transform into primary-display-logical coordinates",
+    "the resolved logical point falls inside the independently known test-owned target window",
+    "semanticIdentity remains null",
+    "actionable remains false",
+    "actionPolicy remains NOT_EVALUATED",
+    "zero-match and multiple-match cases remain fail-closed in contract tests",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload, recognized text and coordinates are not persisted or logged",
+    "fixture and Computer Control runtime are cleaned up",
+    "both product working trees remain clean"
+  ],
+  "nonClaims": [
+    "the visual target is not a semantic UI identity",
+    "no fuzzy, contains, ranked or model-based target matching is validated",
+    "no VLM/object/icon target resolution is validated",
+    "no target is authorized for action",
+    "no low-level action derived from the resolved target is executed",
+    "no arbitrary user-content OCR accuracy claim is made",
+    "event delivery is not equated with semantic task success"
+  ],
+  "promotionOnPass": {
+    "targetResolutionState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "nextPhase": "P3B target action-policy authorization boundary, followed by P4 action plus independent postcondition verification"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
