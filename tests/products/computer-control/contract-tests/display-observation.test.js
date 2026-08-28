@@ -66,9 +66,9 @@ test("Phase 9D1A canonicalization strips native display identity and fails close
   assert.throws(()=>macBackend.canonicalDisplay({...observed,frame:{x:0,y:0,width:-1,height:1},visibleFrame:{x:0,y:0,width:1,height:1},backingScaleFactor:1,rotationDegrees:0,main:true,builtin:true,active:true,online:true}),e=>e.code==="DISPLAY_OBSERVATION_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D1A public schema and surfaces expose semantic display state only",()=>{
+test("Phase 9D1A public schema and surfaces remain semantic after physical promotion",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(source,/display\.list.*IMPLEMENTED/);
+  assert.match(source,/display\.list.*PHYSICALLY_VALIDATED/);
   assert.match(source,/os-owned-native-display-observation/);
   assert.match(source,/async listDisplays/);
   const schema=JSON.stringify(JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/display-list-result.schema.json"),"utf8")));
@@ -82,13 +82,18 @@ test("Phase 9D1A public schema and surfaces expose semantic display state only",
   for(const text of[sdk,types,adapter])assert.match(text,/listDisplays/);
 });
 
-test("Phase 9D1A documentation records discovery provenance without premature physical promotion",()=>{
+test("Phase 9D1A documentation records authoritative physical promotion and discovery provenance",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-displays.md"),"utf8");
-  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d-display-clipboard-discovery.md"),"utf8");
-  assert.match(docs,/Phase 9D1A validation state: `IMPLEMENTED`/);
-  assert.doesNotMatch(docs,/Phase 9D1A validation state: `PHYSICALLY_VALIDATED`/);
+  const discovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d-display-clipboard-discovery.md"),"utf8");
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d1a-display-observation-physical.md"),"utf8");
+  assert.match(docs,/Phase 9D1A validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(docs,/does not expose `CGDirectDisplayID`/);
   assert.match(docs,/does not expose a `pixelWidth` \/ `pixelHeight` claim/);
-  assert.match(evidence,/c70e0e581c54ee67d9f56c4400ef3a942012629e/);
-  assert.match(evidence,/generalPasteboardUnchanged: true/);
+  assert.match(discovery,/c70e0e581c54ee67d9f56c4400ef3a942012629e/);
+  assert.match(discovery,/generalPasteboardUnchanged: true/);
+  assert.match(evidence,/cc-phase9d1a-display-observation-s01/);
+  assert.match(evidence,/a7788371d7b6d446e783a714112643ba093f2814/);
+  assert.match(evidence,/25c9052c514926f783d6c315cad2e14a5fa55311/);
+  assert.match(evidence,/36 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(evidence,/one built-in Retina display/i);
 });
