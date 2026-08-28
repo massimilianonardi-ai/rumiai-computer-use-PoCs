@@ -19,7 +19,7 @@ test("Phase 10B starts only after authoritative Phase 10A physical promotion",()
   assert.match(phase10,/Phase 10B pointer\s+PENDING/);
 });
 
-test("Phase 10B discovery posts only into a test-owned AppKit fixture and restores pointer/focus",()=>{
+test("Phase 10B discovery posts only into a test-owned AppKit fixture, pumps delivery, and restores pointer/focus",()=>{
   const helper=fs.readFileSync(helperPath,"utf8");
   assert.match(helper,/ProbeWindow/);
   assert.match(helper,/ProbeView/);
@@ -30,9 +30,13 @@ test("Phase 10B discovery posts only into a test-owned AppKit fixture and restor
   assert.match(helper,/move\.post\(tap:\s*\.cghidEventTap\)/);
   assert.match(helper,/leftDown\.post\(tap:\s*\.cghidEventTap\)/);
   assert.match(helper,/rightDown\.post\(tap:\s*\.cghidEventTap\)/);
+  assert.match(helper,/nextEvent\(matching:\s*\.any/);
+  assert.match(helper,/app\.sendEvent\(event\)/);
+  assert.match(helper,/pump\(app,\s*0\.22\)/);
   assert.match(helper,/CGWarpMouseCursorPosition\(original\)/);
   assert.match(helper,/previousApp\.activate/);
   assert.match(helper,/func cleanup\(\) -> Bool/);
+  assert.match(helper,/let restored = cleanup\(\)/);
   assert.doesNotMatch(helper,/osascript|AppleScript|systemEvents|cliclick/);
 });
 
