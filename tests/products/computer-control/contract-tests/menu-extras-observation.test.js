@@ -34,9 +34,9 @@ test("Phase 9C3A macOS helper is OS-owned native AX read-only observation",()=>{
   assert.doesNotMatch(wrapper,/agent-ctrl|clipboard|keyboard|click|mouse/);
 });
 
-test("Phase 9C3A backend and public surfaces expose semantic menu-extra state only",()=>{
+test("Phase 9C3A backend and public surfaces expose semantic menu-extra state only after promotion",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(source,/menuExtras\.observe.*IMPLEMENTED/);
+  assert.match(source,/menuExtras\.observe.*PHYSICALLY_VALIDATED/);
   assert.match(source,/os-owned-native-AX-menu-extras-observation/);
   assert.match(source,/async observeMenuExtras/);
   const schema=JSON.stringify(JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/menu-extras-observe-result.schema.json"),"utf8")));
@@ -50,18 +50,19 @@ test("Phase 9C3A backend and public surfaces expose semantic menu-extra state on
   for(const text of[sdk,types,adapter])assert.match(text,/observeMenuExtras/);
 });
 
-test("Phase 9C3A documentation records discovery provenance without premature physical promotion",()=>{
+test("Phase 9C3A documentation records authoritative physical promotion and preserves mutation boundary",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-menu-extras.md"),"utf8");
   const discovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c23-system-chrome-discovery.md"),"utf8");
-  const dockEvidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c2a-dock-observation-physical.md"),"utf8");
-  assert.match(docs,/Phase 9C3A validation state: `IMPLEMENTED`/);
-  assert.doesNotMatch(docs,/Phase 9C3A validation state: `PHYSICALLY_VALIDATED`/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9c3a-menu-extras-observation-physical.md"),"utf8");
+  assert.match(docs,/Phase 9C3A validation state: `PHYSICALLY_VALIDATED`/);
+  assert.match(docs,/5cc824a2209da7ad0de4feaa3cf0eff75ce42e55/);
+  assert.match(docs,/34 PASS \/ 0 FAIL \/ 0 BLOCKED/);
   assert.match(docs,/Phase 9C3A introduces no generic menu-extra invocation API/i);
   assert.match(docs,/delivery must not be reported as semantic success/i);
   assert.match(discovery,/cc-phase9c23-system-chrome-discovery-s01/);
-  assert.match(discovery,/f68f5bc4bc3e2fec2aa1219b402b7016107a6e6f/);
-  assert.match(discovery,/32 PASS \/ 0 FAIL \/ 0 BLOCKED/);
-  assert.match(dockEvidence,/Phase 9C2A is therefore `PHYSICALLY_VALIDATED`/);
+  assert.match(evidence,/cc-phase9c3a-menu-extras-observation-s01/);
+  assert.match(evidence,/5cc824a2209da7ad0de4feaa3cf0eff75ce42e55/);
+  assert.match(evidence,/34 PASS \/ 0 FAIL \/ 0 BLOCKED/);
 });
 
 test("Phase 9C3A public result schema preserves anonymous semantic items",()=>{
