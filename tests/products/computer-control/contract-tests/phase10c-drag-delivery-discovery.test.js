@@ -37,6 +37,8 @@ test("Phase 10C discovery owns a complete left-button drag lifecycle inside one 
 
 test("Phase 10C discovery requires independent AppKit drag consequence, not event construction alone",()=>{
   const helper=fs.readFileSync(helperPath,"utf8");
+  assert.match(helper,/final class MarkerView/);
+  assert.match(helper,/override func hitTest\(_ point: NSPoint\) -> NSView\? \{ nil \}/);
   assert.match(helper,/override func mouseDown/);
   assert.match(helper,/override func mouseDragged/);
   assert.match(helper,/override func mouseUp/);
