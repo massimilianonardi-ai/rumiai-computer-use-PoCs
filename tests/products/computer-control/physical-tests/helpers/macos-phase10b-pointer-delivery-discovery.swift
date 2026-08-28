@@ -11,8 +11,17 @@ private func emit(_ value: [String: Any], exitCode: Int32) -> Never {
 }
 private func blocked(_ code: String) -> Never { emit(["ok": false, "state": "BLOCKED", "error": code], exitCode: 2) }
 private func failed(_ code: String) -> Never { emit(["ok": false, "state": "FAILED", "error": code], exitCode: 1) }
-private func spin(_ seconds: Double) { RunLoop.current.run(until: Date().addingTimeInterval(seconds)) }
 private func near(_ a: CGPoint, _ b: CGPoint, tolerance: CGFloat = 2.0) -> Bool { abs(a.x-b.x) <= tolerance && abs(a.y-b.y) <= tolerance }
+private func pump(_ app: NSApplication, _ seconds: Double) {
+    let deadline = Date().addingTimeInterval(seconds)
+    while Date() < deadline {
+        let slice = min(deadline.timeIntervalSinceNow, 0.01)
+        let until = Date().addingTimeInterval(max(slice, 0.001))
+        if let event = app.nextEvent(matching: .any, until: until, inMode: .default, dequeue: true) {
+            app.sendEvent(event)
+        }
+    }
+}
 
 private enum ProbeFailure: Error {
     case failed(String)
@@ -55,18 +64,19 @@ struct Phase10BPointerDeliveryDiscovery {
         window.level = .floating
         window.backgroundColor = .windowBackgroundColor
         window.acceptsMouseMovedEvents = true
+        window.ignoresMouseEvents = false
         window.makeKeyAndOrderFront(nil)
         app.activate(ignoringOtherApps: true)
-        spin(0.15)
+        pump(app, 0.15)
 
         func cleanup() -> Bool {
             window.orderOut(nil)
             CGWarpMouseCursorPosition(original)
-            spin(0.08)
+            pump(app, 0.08)
             let restored = CGEvent(source: nil).map { near($0.location, original) } ?? false
             if let previousApp, previousApp.processIdentifier != ProcessInfo.processInfo.processIdentifier {
                 _ = previousApp.activate(options: [.activateIgnoringOtherApps])
-                spin(0.05)
+                pump(app, 0.05)
             }
             return restored
         }
@@ -74,7 +84,7 @@ struct Phase10BPointerDeliveryDiscovery {
         do {
             guard let move = CGEvent(mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: target, mouseButton: .left) else { throw ProbeFailure.failed("MOVE_EVENT_CONSTRUCTION_FAILED") }
             move.post(tap: .cghidEventTap)
-            spin(0.12)
+            pump(app, 0.12)
             guard let moved = CGEvent(source: nil)?.location, near(moved, target) else { throw ProbeFailure.failed("MOVE_DELIVERY_NOT_OBSERVED") }
 
             guard
@@ -84,9 +94,11 @@ struct Phase10BPointerDeliveryDiscovery {
                 let rightUp = CGEvent(mouseEventSource: nil, mouseType: .rightMouseUp, mouseCursorPosition: target, mouseButton: .right)
             else { throw ProbeFailure.failed("BUTTON_EVENT_CONSTRUCTION_FAILED") }
 
-            leftDown.post(tap: .cghidEventTap); leftUp.post(tap: .cghidEventTap)
-            rightDown.post(tap: .cghidEventTap); rightUp.post(tap: .cghidEventTap)
-            spin(0.18)
+            leftDown.post(tap: .cghidEventTap)
+            leftUp.post(tap: .cghidEventTap)
+            rightDown.post(tap: .cghidEventTap)
+            rightUp.post(tap: .cghidEventTap)
+            pump(app, 0.22)
             guard probe.leftDownCount == 1, probe.leftUpCount == 1, probe.rightDownCount == 1, probe.rightUpCount == 1 else {
                 throw ProbeFailure.failed("BUTTON_DELIVERY_NOT_OBSERVED_BY_FIXTURE")
             }
@@ -109,7 +121,16 @@ struct Phase10BPointerDeliveryDiscovery {
         } catch let error as ProbeFailure {
             let restored = cleanup()
             if !restored { failed("POINTER_RESTORE_FAILED_AFTER_\(error.code)") }
-            failed(error.code)
+            emit([
+                "ok": false,
+                "state": "FAILED",
+                "error": error.code,
+                "leftDownCount": probe.leftDownCount,
+                "leftUpCount": probe.leftUpCount,
+                "rightDownCount": probe.rightDownCount,
+                "rightUpCount": probe.rightUpCount,
+                "pointerRestored": true
+            ], exitCode: 1)
         } catch {
             let restored = cleanup()
             if !restored { failed("POINTER_RESTORE_FAILED_AFTER_UNEXPECTED_ERROR") }
