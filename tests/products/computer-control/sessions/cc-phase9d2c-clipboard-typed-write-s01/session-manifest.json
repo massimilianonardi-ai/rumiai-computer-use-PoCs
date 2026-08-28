@@ -1,0 +1,59 @@
+{
+  "sessionId": "cc-phase9d2c-clipboard-typed-write-s01",
+  "scope": "Phase 9D2C public typed clipboard write physical validation",
+  "productSha": "a3bcb2cc9f9f374958b6816c32be06cb6c12908a",
+  "testSourceSha": "57d4d002d1ecaf1cb673eaa144dbd883502c2e93",
+  "platform": "macOS NSPasteboard general typed write",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-clipboard-typed-write.js",
+  "terminalMarker": "physical-phase9d2c-clipboard-typed-write=PASS",
+  "prerequisiteEvidence": {
+    "phase9dDiscoveryEvidence": "c70e0e581c54ee67d9f56c4400ef3a942012629e",
+    "phase9d2aEvidence": "521f41c2fcc499574b61b658440671faefe61708",
+    "phase9d2bEvidence": "ab2745383e7e3051d6d4bb797cd908fb7c5b3f77",
+    "phase9d2bResult": "38 PASS / 0 FAIL / 0 BLOCKED",
+    "restorationDiscoveryEvidence": "c9806844aecb3bde47f72ee37e2e731c8d6e6c99",
+    "restorationDiscoverySession": "cc-phase9d2c-clipboard-restoration-discovery-s02",
+    "restorationDiscoveryResult": "PASS"
+  },
+  "testOwnedFormats": ["text/plain", "text/html", "text/rtf", "image/png"],
+  "safetyBoundary": {
+    "generalPasteboardMutation": true,
+    "productTypedWriteInvoked": true,
+    "backupMustCompleteBeforeFirstMutation": true,
+    "backupHeldOnlyInGuardianMemory": true,
+    "maxInMemoryBackupBytes": 67108864,
+    "allOriginalItemsAndTypesRestored": true,
+    "exactTypeOrderCompared": true,
+    "exactBytesCompared": true,
+    "guardianRestoresOnEOF": true,
+    "userPayloadLogged": false,
+    "testPayloadLogged": false,
+    "base64Logged": false,
+    "digestLogged": false,
+    "nativeTypeNamesLogged": false,
+    "keyboardMouseAppleScriptFallback": false
+  },
+  "verification": {
+    "publicSDK": "ComputerControlClient.writeClipboardFormat",
+    "productPostcondition": "native-typed-readback-exact",
+    "independentNativeOracle": "long-lived AppKit NSPasteboard guardian",
+    "publicMetadataReobservation": true,
+    "publicTypedReadback": true,
+    "allCanonicalFormats": true,
+    "writeResultEchoesPayload": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The pre-mutation clipboard backup cannot be completed safely or the runtime/Swift environment is unavailable before meaningful product validation.",
+    "FAIL": "Any typed write, product readback, independent native readback, public reobservation, payload privacy assertion, or exact final restoration fails after mutation becomes possible.",
+    "PASS": "All four canonical formats are written through the public SDK, verified by product and independent native readback, observed through public metadata/read APIs, and the original clipboard is restored exactly."
+  },
+  "nextStepOnPass": "Promote clipboard.writeFormat to PHYSICALLY_VALIDATED with dedicated product evidence and mark Phase 9D richer clipboard complete on the macOS reference surface.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, do not promote 9D2C, and diagnose forward without weakening restoration or postcondition requirements."
+}
