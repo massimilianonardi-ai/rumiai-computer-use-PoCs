@@ -62,12 +62,12 @@ test("Phase 9D2B backend rejects malformed native payload state and preserves ex
   assert.throws(()=>macBackend.canonicalClipboardRead({...value,byteCount:16777217},requested),e=>e.code==="CLIPBOARD_TYPED_READ_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D2B is physically promoted while Phase 9D2C advances independently",()=>{
+test("Phase 9D2B and 9D2C are both physically promoted after richer clipboard completion",()=>{
   const phase9=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
   const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
   assert.match(phase9,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
   assert.match(structure,/clipboard\.readFormat.*PHYSICALLY_VALIDATED/);
-  assert.match(structure,/clipboard\.writeFormat.*IMPLEMENTED/);
+  assert.match(structure,/clipboard\.writeFormat.*PHYSICALLY_VALIDATED/);
   assert.match(structure,/os-owned-native-clipboard-typed-read/);
   assert.match(phase9,/async readClipboardFormat/);
 });
@@ -112,5 +112,5 @@ test("Phase 9D2B documentation records authoritative s02 physical promotion and 
   assert.match(docs,/CLIPBOARD_REVISION_STALE/);
   assert.match(docs,/CLIPBOARD_CHANGED_DURING_READ/);
   assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+IMPLEMENTED/);
+  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+PHYSICALLY_VALIDATED/);
 });
