@@ -1,0 +1,58 @@
+{
+  "sessionId": "cc-phase10-low-level-fallback-discovery-s01",
+  "scope": "Phase 10 macOS low-level fallback discovery: pointer coordinates, screen-capture permission/probe, and synthetic event constructibility without delivery",
+  "productSha": "82c7ac2cd1d842d50db5a27339a563e2cec919c6",
+  "testSourceSha": "ba6f2d54d902b8ebd81095140b0234b0a99b100d",
+  "platform": "macOS CoreGraphics/AppKit/ApplicationServices",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10-low-level-discovery.js",
+  "terminalMarker": "physical-phase10-low-level-fallback-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase9d2cTypedWriteEvidence": "358e22bca3b18bb835e91ae05fece1b3a757b722",
+    "phase9d2cResult": "39 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9d2cPromotedProduct": "82c7ac2cd1d842d50db5a27339a563e2cec919c6"
+  },
+  "purpose": "Observe the real macOS low-level control/capture primitives and permission state before defining any public Phase 10 fallback contract.",
+  "discoveryBoundary": {
+    "publicLowLevelAPIsIntroduced": false,
+    "pointerMoved": false,
+    "mouseButtonDelivered": false,
+    "scrollDelivered": false,
+    "keyboardDelivered": false,
+    "screenPermissionRequested": false,
+    "screenCaptureAttemptedOnlyWhenPreflightGranted": true,
+    "screenPixelsPersisted": false,
+    "pointerCoordinatesPersisted": false,
+    "syntheticEventsConstructedButNotPosted": true,
+    "semanticAPIsRemainPreferred": true
+  },
+  "observations": {
+    "quartzGlobalPointerCoordinates": true,
+    "appKitCompatibleUnflippedCoordinates": true,
+    "appKitMouseLocation": true,
+    "mainDisplayLogicalBounds": true,
+    "mainDisplayPixelDimensions": true,
+    "activeDisplayCount": true,
+    "accessibilityTrust": true,
+    "screenCapturePreflight": true,
+    "screenCapturePixelProbeWhenAlreadyAuthorized": true,
+    "onScreenWindowMetadataCount": true,
+    "mouseMoveEventConstructibility": true,
+    "leftRightButtonEventConstructibility": true,
+    "scrollEventConstructibility": true,
+    "keyboardEventConstructibility": true
+  },
+  "resultPolicy": {
+    "BLOCKED": "The discovery helper cannot compile/run, the current Quartz event is unavailable, or the macOS environment cannot be inspected. No permission request or synthetic input is delivered.",
+    "FAIL": "Observed coordinate relations, display state, event construction, or capture-preflight behavior contradict the discovery invariants.",
+    "PASS": "Coordinate systems and primitive availability are observed coherently without synthetic input delivery or permission prompts; screen capture is probed only if already authorized."
+  },
+  "nextStepOnPass": "Use evidence to split Phase 10 into explicit fallback capabilities, starting with non-mutating capture if available and then pointer/input delivery with independent postconditions. Do not infer public contracts before reading this evidence.",
+  "nextStepOnBlockedOrFail": "Preserve evidence, diagnose forward, and create a new immutable discovery session. Do not introduce low-level public APIs from assumptions."
+}
