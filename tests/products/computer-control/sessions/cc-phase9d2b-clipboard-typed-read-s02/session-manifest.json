@@ -1,0 +1,56 @@
+{
+  "sessionId": "cc-phase9d2b-clipboard-typed-read-s02",
+  "scope": "Phase 9D2B revision-scoped typed clipboard read validation after stale discovery-guard correction",
+  "productSha": "52339ec3c032ef62bae80113336b6588e7135771",
+  "testSourceSha": "8cf666fb16ad364795cb8e534f27ad2d1d2598ae",
+  "platform": "macOS NSPasteboard typed payload read",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-clipboard-typed-read.js",
+  "terminalMarker": "physical-phase9d2b-clipboard-typed-read=PASS",
+  "historicalSession": {
+    "sessionId": "cc-phase9d2b-clipboard-typed-read-s01",
+    "evidence": "835bbbbb8f90cd6fe50150077efab87a4e8694c6",
+    "result": "37 PASS / 1 FAIL / 0 BLOCKED",
+    "physicalTypedRead": "PASS",
+    "failureCause": "stale Phase 9D discovery contract guard still forbade clipboard.readFormat"
+  },
+  "prerequisiteEvidence": {
+    "phase9dDiscoveryEvidence": "c70e0e581c54ee67d9f56c4400ef3a942012629e",
+    "phase9d1aEvidence": "a7788371d7b6d446e783a714112643ba093f2814",
+    "phase9d2aEvidence": "521f41c2fcc499574b61b658440671faefe61708",
+    "phase9d2aResult": "37 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "safetyBoundary": {
+    "generalPasteboardMutation": false,
+    "contentRead": true,
+    "contentReadPurpose": "explicit physical validation of the typed-read capability",
+    "rawPayloadLogged": false,
+    "base64Logged": false,
+    "payloadDigestLogged": false,
+    "nativeTypeNamesPublic": false,
+    "testDataReplacement": false,
+    "clipboardBackupOrRestore": false,
+    "revisionScoped": true,
+    "staleRevisionRejected": true,
+    "maxPayloadBytes": 16777216,
+    "typedWrite": false
+  },
+  "expectedCoverage": [
+    "all Phase 9D historical discovery guards accept the canonical clipboard.readFormat lifecycle without permitting guessed typed APIs or typed write",
+    "clipboard.observe remains PHYSICALLY_VALIDATED",
+    "clipboard.readFormat remains IMPLEMENTED until this checkpoint passes",
+    "all canonical formats currently advertised by the general pasteboard are checked",
+    "public payload bytes match an independent native oracle digest without recording payload or digest",
+    "stale revision, missing item and non-advertised format fail explicitly",
+    "the general pasteboard revision remains stable throughout the checkpoint",
+    "legacy clipboard read/write/copy/paste semantics remain unchanged",
+    "no typed clipboard mutation is introduced"
+  ],
+  "scopeNote": "s02 tests the identical product SHA as s01. The only test-source change after s01 evidence is the forward correction of the stale historical Phase 9D discovery guard. The physical checkpoint can validate only canonical formats actually advertised by the user's current pasteboard state."
+}
