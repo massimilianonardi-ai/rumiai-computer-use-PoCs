@@ -13,13 +13,15 @@ assert.match(helper,/import Vision/);
 assert.match(helper,/VNRecognizeTextRequest/);
 assert.match(helper,/recognitionLevel\s*=\s*\.accurate/);
 assert.match(helper,/FileHandle\.standardInput\.readDataToEndOfFile/);
-assert.match(helper,/y:\(1\.0-Double\(b\.maxY\)\)\*Double\(height\)/);
+assert.match(helper,/y:\s*\(1\.0\s*-\s*Double\(bounds\.maxY\)\)\s*\*\s*Double\(height\)/);
 assert.doesNotMatch(helper,/URLSession|Network|NWConnection|http:\/\/|https:\/\//);
 assert.doesNotMatch(helper,/write\(to:|FileManager|temporaryDirectory/);
 
 assert.match(fixture,/RUMIAI ALPHA 731/);
 assert.match(fixture,/RUMIAI BETA 942/);
-assert.match(fixture,/ignoresMouseEvents=true/);
+assert.match(fixture,/ignoresMouseEvents\s*=\s*true/);
+assert.match(fixture,/window\.level\s*=\s*\.screenSaver/);
+assert.match(fixture,/contentView\.wantsLayer\s*=\s*true/);
 assert.match(harness,/acquireMappedPrimaryVisualFrame\(\)/);
 assert.match(harness,/mapCapturePointToPrimaryLogical/);
 assert.match(harness,/provider=macos-vision local=true networkUsed=false/);
