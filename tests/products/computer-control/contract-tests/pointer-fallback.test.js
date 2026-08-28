@@ -24,7 +24,7 @@ test("Phase 10B router exposes narrow primary-display move/click only",async()=>
   for(const params of[{display:"primary",x:1,y:1}, {display:"primary",x:1,y:1,button:"middle"}, {display:"primary",x:1,y:1,button:"left",clicks:2}])await assert.rejects(route("pointer.click",params));
 });
 
-test("Phase 10B native helper verifies position but reports button post only",()=>{
+test("Phase 10B native helper verifies position immediately before button post and reports posting only",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-pointer.swift"),"utf8");
   const wrapper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/app/computer-control/backends/macos-pointer.js"),"utf8");
   assert.match(helper,/AXIsProcessTrusted/);
@@ -32,9 +32,13 @@ test("Phase 10B native helper verifies position but reports button post only",()
   assert.match(helper,/CGDisplayBounds/);
   assert.match(helper,/mouseType:\s*\.mouseMoved/);
   assert.match(helper,/\.post\(tap:\s*\.cghidEventTap\)/);
-  assert.match(helper,/CGEvent\(source:\s*nil\)/);
-  assert.match(helper,/BUTTON.*POSTED|"buttonDelivery": "POSTED"/);
+  assert.match(helper,/guard let positionedEvent = CGEvent\(source:\s*nil\)/);
+  const positionedIndex=helper.indexOf("guard let positionedEvent");
+  const downPostIndex=helper.indexOf("down.post(tap: .cghidEventTap)");
+  assert.ok(positionedIndex>=0&&downPostIndex>positionedIndex,"position must be independently re-observed before button post");
+  assert.match(helper,/"buttonDelivery": "POSTED"/);
   assert.match(helper,/"semanticConsequenceVerified": false/);
+  assert.doesNotMatch(helper,/POINTER_CLICK_POSITION_UNVERIFIED|finalEvent/);
   assert.doesNotMatch(helper,/osascript|AppleScript|cliclick|CGRequestScreenCaptureAccess/);
   assert.match(wrapper,/"swiftc","-parse-as-library"/);
   assert.doesNotMatch(wrapper,/shell:true/);
