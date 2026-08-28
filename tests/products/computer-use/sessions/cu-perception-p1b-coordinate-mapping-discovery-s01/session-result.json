@@ -1,0 +1,74 @@
+{
+  "sessionId": "cu-perception-p1b-coordinate-mapping-discovery-s01",
+  "startedAt": "2026-08-28T20:36:33Z",
+  "endedAt": "2026-08-28T20:36:37Z",
+  "durationMs": 4710,
+  "productShaExpected": "98435ba98791f29a58fb2b5f55e27d7688d4e8b9",
+  "productShaObserved": "98435ba98791f29a58fb2b5f55e27d7688d4e8b9",
+  "dependencies": {
+    "computerControl": {
+      "shaExpected": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "shaObserved": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003"
+    }
+  },
+  "testSourceSha": "a1bef98ce1478777353ee764bc332c51c0ee65a3",
+  "pocShaTested": "01a907b366f105cab4369cde71a47810c78a8785",
+  "tests": [
+    {
+      "id": "contract:external-computer-control-boundary-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'",
+      "exitCode": 0,
+      "durationMs": 194,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:visual-frame-acquisition-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/visual-frame-acquisition-test.js'",
+      "exitCode": 1,
+      "durationMs": 62,
+      "result": "FAIL"
+    },
+    {
+      "id": "contract:perception-session-runner-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-session-runner-test.js'",
+      "exitCode": 0,
+      "durationMs": 59,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-physical-lifecycle-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-physical-lifecycle-test.js'",
+      "exitCode": 0,
+      "durationMs": 49,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p1b-coordinate-mapping-discovery.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p1b-coordinate-mapping-discovery.test.js'",
+      "exitCode": 0,
+      "durationMs": 55,
+      "result": "PASS"
+    },
+    {
+      "id": "physical:computer-use-perception-p1b-mapping-discovery",
+      "command": "AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/run-with-timeout.js' '45000' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/physical-tests/perception-p1b-coordinate-mapping-discovery.js'",
+      "exitCode": 1,
+      "durationMs": 3911,
+      "result": "FAIL"
+    },
+    {
+      "id": "post:product-trees-clean",
+      "command": "test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)\" && test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)\"",
+      "exitCode": 0,
+      "durationMs": 49,
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "pass": 5,
+    "fail": 2,
+    "blocked": 0,
+    "total": 7,
+    "overall": "FAIL"
+  }
+}
