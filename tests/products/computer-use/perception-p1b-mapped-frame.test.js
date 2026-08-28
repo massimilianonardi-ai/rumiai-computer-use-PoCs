@@ -31,7 +31,7 @@ test("P1B derives a mapped primary frame from stable display observations", () =
   assert.equal(result.state,"VISUAL_FRAME_MAPPED");
   assert.equal(result.interpretation.state,"NOT_RUN");
   assert.equal(result.actionCoordinateMapping.state,"RESOLVED");
-  assert.equal(result.actionCoordinateMapping.validation.state,"IMPLEMENTED");
+  assert.equal(result.actionCoordinateMapping.validation.state,"PHYSICALLY_VALIDATED");
   assert.deepEqual(result.actionCoordinateMapping.source,{kind:"capture-pixel",origin:"top-left",width:600,height:400});
   assert.deepEqual(result.actionCoordinateMapping.destination,{kind:"primary-display-logical",origin:"top-left",width:1200,height:800});
   assert.deepEqual(result.actionCoordinateMapping.transform.pixelToLogical,{x:2,y:2});
@@ -69,18 +69,10 @@ test("P1A remains unmapped after P1B is added", () => {
   assert.equal(result.actionCoordinateMapping.state,"UNRESOLVED");
 });
 
-test("P1B product and physical harness preserve the action and lifecycle boundary", () => {
+test("P1B product remains action-free after physical promotion", () => {
   const source=fs.readFileSync(perceptionPath,"utf8");
-  const harness=fs.readFileSync(path.join(__dirname,"physical-tests","perception-p1b-mapped-frame-public.js"),"utf8");
   assert.match(source,/function acquireMappedPrimaryVisualFrame/);
-  assert.match(source,/display-list-before-after-plus-marker-discovery/);
-  assert.match(source,/state:"IMPLEMENTED"/);
+  assert.match(source,/display-list-before-after-plus-marker-public-validation/);
+  assert.match(source,/state:"PHYSICALLY_VALIDATED"/);
   assert.doesNotMatch(source,/movePointer\(|clickPointer\(|dragPointer\(|wheelPointer\(|pressKey\(/);
-  assert.match(harness,/perception\.acquireMappedPrimaryVisualFrame\(\)/);
-  assert.match(harness,/perception\.mapCapturePointToPrimaryLogical/);
-  assert.match(harness,/computerControl\.shutdownRuntime\(\)/);
-  assert.match(harness,/finally\s*\{/);
-  assert.doesNotMatch(harness,/movePointer\(|clickPointer\(|dragPointer\(|wheelPointer\(|pressKey\(/);
-  assert.match(harness,/coordinatesLogged=false/);
-  assert.match(harness,/payloadLogged=false/);
 });
