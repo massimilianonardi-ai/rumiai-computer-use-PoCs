@@ -17,6 +17,8 @@ PRODUCT_ROOT="${RUMIAI_COMPUTER_USE_ROOT:-/Volumes/RumiAI/rumiai-portable-runtim
 CONTROL_ROOT="${RUMIAI_COMPUTER_CONTROL_ROOT:-/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control}"
 NODE="${RUMIAI_CC_NODE:-/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node}"
 AGENT_CTRL="${AGENT_CTRL:-/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl}"
+TIMEOUT_RUNNER="$POC_ROOT/tests/products/computer-use/run-with-timeout.js"
+PHYSICAL_TIMEOUT_MS="${PHYSICAL_TIMEOUT_MS:-45000}"
 
 fail_preflight() { printf 'SESSION_PREFLIGHT=BLOCKED\n%s\n' "$1" >&2; exit 2; }
 [ -n "$POC_ROOT" ] || fail_preflight "not inside the PoC git repository"
@@ -26,6 +28,7 @@ cd "$POC_ROOT" || fail_preflight "cannot enter PoC repository"
 [ -d "$CONTROL_ROOT/.git" ] || fail_preflight "Computer Control checkout missing: $CONTROL_ROOT"
 [ -x "$NODE" ] || fail_preflight "portable Node missing: $NODE"
 [ -x "$AGENT_CTRL" ] || fail_preflight "portable agent-ctrl missing: $AGENT_CTRL"
+[ -f "$TIMEOUT_RUNNER" ] || fail_preflight "timeout runner missing: $TIMEOUT_RUNNER"
 [ -f "$POC_ROOT/$PHYSICAL_TEST" ] || fail_preflight "physical test missing: $PHYSICAL_TEST"
 [ ! -e "$LOG_REL" ] || fail_preflight "session.log already exists; session IDs are immutable"
 [ ! -e "$RESULT_REL" ] || fail_preflight "session-result.json already exists; session IDs are immutable"
@@ -85,6 +88,7 @@ START_MS="$($NODE -e 'process.stdout.write(String(Date.now()))')"
   echo "macos_build=$(sw_vers -buildVersion 2>/dev/null || true)"
   echo "node=$($NODE --version 2>&1)"
   echo "agent_ctrl_present=true"
+  echo "physical_timeout_ms=$PHYSICAL_TIMEOUT_MS"
   echo
 } > "$LOG_REL"
 
@@ -133,7 +137,7 @@ run_test() {
 for test_file in $CONTRACT_TESTS; do
   run_test "contract:$(basename "$test_file")" "RUMIAI_COMPUTER_USE_ROOT='$PRODUCT_ROOT' '$NODE' '$POC_ROOT/$test_file'"
 done
-run_test "$PHYSICAL_TEST_ID" "AGENT_CTRL='$AGENT_CTRL' RUMIAI_COMPUTER_USE_ROOT='$PRODUCT_ROOT' RUMIAI_COMPUTER_CONTROL_HOME='$CONTROL_ROOT' RUMIAI_CC_NODE='$NODE' '$NODE' '$POC_ROOT/$PHYSICAL_TEST'"
+run_test "$PHYSICAL_TEST_ID" "AGENT_CTRL='$AGENT_CTRL' RUMIAI_COMPUTER_USE_ROOT='$PRODUCT_ROOT' RUMIAI_COMPUTER_CONTROL_HOME='$CONTROL_ROOT' RUMIAI_CC_NODE='$NODE' '$NODE' '$TIMEOUT_RUNNER' '$PHYSICAL_TIMEOUT_MS' '$NODE' '$POC_ROOT/$PHYSICAL_TEST'"
 run_test "post:product-trees-clean" "test -z \"\$(git -C '$PRODUCT_ROOT' status --porcelain)\" && test -z \"\$(git -C '$CONTROL_ROOT' status --porcelain)\""
 
 ENDED_AT="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
