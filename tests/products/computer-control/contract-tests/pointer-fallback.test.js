@@ -44,14 +44,13 @@ test("Phase 10B native helper verifies position immediately before button post a
   assert.doesNotMatch(wrapper,/shell:true/);
 });
 
-test("Phase 10B backend lifecycle is IMPLEMENTED and click result cannot masquerade as semantic verification",()=>{
+test("Phase 10B backend lifecycle is PHYSICALLY_VALIDATED and click result cannot masquerade as semantic verification",()=>{
   const backend=fs.readFileSync(path.join(productRoot,"backends/macos/backend-low-level.js"),"utf8");
-  assert.match(backend,/pointer\.move.*validationState:"IMPLEMENTED"/);
-  assert.match(backend,/pointer\.click.*validationState:"IMPLEMENTED"/);
+  assert.match(backend,/pointer\.move.*validationState:"PHYSICALLY_VALIDATED"/);
+  assert.match(backend,/pointer\.click.*validationState:"PHYSICALLY_VALIDATED"/);
   assert.match(backend,/quartz-current-pointer-location/);
   assert.match(backend,/buttonDelivery:"POSTED"/);
   assert.match(backend,/semanticConsequenceVerified:false/);
-  assert.doesNotMatch(backend,/pointer\.click.*PHYSICALLY_VALIDATED/);
   assert.doesNotMatch(backend,/semanticConsequenceVerified:true/);
 });
 
@@ -74,17 +73,18 @@ test("Phase 10B SDK, declarations and RumiAI adapter are thin projections",()=>{
   assert.doesNotMatch(sdk,/pointer\.down|pointer\.up|pointer\.drag/);
 });
 
-test("Phase 10B docs preserve fallback and delivery-not-success boundaries",()=>{
+test("Phase 10B docs record authoritative public physical validation and preserve delivery-not-success",()=>{
   const api=fs.readFileSync(path.join(productRoot,"docs/api-pointer.md"),"utf8");
   const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
-  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10b-pointer-delivery-discovery-physical.md"),"utf8");
-  assert.match(api,/Phase 10B public API state: `IMPLEMENTED`/);
-  assert.match(api,/buttonDelivery:\?\"?POSTED|buttonDelivery/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10b-pointer-public-physical.md"),"utf8");
+  assert.match(api,/Phase 10B public API state: `PHYSICALLY_VALIDATED`/);
+  assert.match(api,/a7b878ff25e56ee7c16705dfdec1468f6a47b0a1/);
+  assert.match(api,/43 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(api,/buttonDelivery:\"POSTED\"/);
   assert.match(api,/semanticConsequenceVerified:false|semanticConsequenceVerified/);
-  assert.match(api,/does \*\*not\*\* claim semantic success/);
-  assert.match(phase10,/Phase 10B pointer\s+IMPLEMENTED/);
+  assert.match(phase10,/Phase 10B pointer\s+PHYSICALLY_VALIDATED/);
   assert.match(phase10,/semantic capability always takes precedence/i);
-  assert.match(evidence,/4c973a4400660417cfb39fb8297cd363e8c13c63/);
-  assert.match(evidence,/phase10b-left-button-delivery=PASS down=1 up=1/);
-  assert.match(evidence,/phase10b-right-button-delivery=PASS down=1 up=1/);
+  assert.match(evidence,/phase10b-independent-left-delivery=PASS down=1 up=1/);
+  assert.match(evidence,/phase10b-independent-right-delivery=PASS down=1 up=1/);
+  assert.match(evidence,/semanticConsequenceVerified = false/);
 });
