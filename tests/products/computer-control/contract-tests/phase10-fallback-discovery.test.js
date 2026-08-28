@@ -46,18 +46,22 @@ test("Phase 10 screen probe uses modern ScreenCaptureKit only after non-promptin
   assert.match(physical,/screen-capture-api-mismatch/);
 });
 
-test("Phase 10 public low-level APIs remain absent until discovery fixes their semantics",()=>{
+test("Phase 10 discovery now permits only the evidence-backed 10A public capture surface",()=>{
   const router=fs.readFileSync(path.join(productRoot,"runtime/src/router.js"),"utf8")+"\n"+fs.readFileSync(path.join(productRoot,"runtime/src/router-core.js"),"utf8");
+  assert.equal(router.includes("\"display.capture\""),true,"display.capture");
   for(const method of[
     "pointer.move","pointer.click","pointer.down","pointer.up","pointer.drag",
-    "input.scroll","input.wheel","keyboard.key","display.capture","window.capture","ui.capture","ocr.read"
+    "input.scroll","input.wheel","keyboard.key","window.capture","ui.capture","ocr.read"
   ]) assert.equal(router.includes(`\"${method}\"`),false,method);
 });
 
 test("Phase 10 remains an explicit fallback layer and cannot weaken semantic APIs",()=>{
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
+  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
   assert.match(roadmap,/Phase 10\s+low-level fallbacks\s+PENDING/);
   assert.match(roadmap,/These are fallbacks/);
   assert.match(roadmap,/working semantic operation always takes precedence/);
   assert.match(roadmap,/coordinate delivery is not itself semantic success/);
+  assert.match(phase10,/Phase 10A capture\s+IMPLEMENTED/);
+  assert.match(phase10,/A working semantic capability always takes precedence/);
 });
