@@ -1,0 +1,57 @@
+{
+  "sessionId": "cc-phase10e-keyboard-delivery-discovery-s01",
+  "scope": "Phase 10E physical discovery of real Quartz keyboard delivery to a test-owned AppKit text fixture before any public keyboard API is frozen",
+  "productSha": "0f4d2c0378b12df50ed192721dded97edff9f72e",
+  "testSourceSha": "fd462455a0b989b459d63d5a3d5833420a191d2f",
+  "platform": "macOS Quartz/CoreGraphics + AppKit + Carbon symbolic key constants",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10e-keyboard-delivery-discovery.js",
+  "terminalMarker": "physical-phase10e-keyboard-delivery-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase10DPublicSession": "cc-phase10d-pointer-wheel-public-s01",
+    "phase10DPublicEvidence": "b1ed223bb401ab79b5b7e6cc11c8512347afe0be",
+    "phase10DValidatedProduct": "a3fcd4cbaa4f770e59bd974c0239b9af35701e99",
+    "phase10DPublicResult": "PASS"
+  },
+  "discoveryBoundary": {
+    "publicKeyboardApi": false,
+    "fixtureOwnedByTest": true,
+    "semanticTextMutationPreferred": true,
+    "nativeVirtualKeyNumbersPublic": false,
+    "symbolicNativeConstantsInternalOnly": ["kVK_ANSI_A", "kVK_Return", "kVK_Shift"],
+    "userContentTouched": false
+  },
+  "controlledEffects": {
+    "temporaryAppKitWindow": true,
+    "temporaryFocusChange": true,
+    "textEnteredOnlyIntoTestOwnedFixture": true,
+    "modifierStateMayTemporarilyChange": "shift only",
+    "previousFrontmostApplicationRestored": true,
+    "emergencyModifierReleaseOnFailure": true
+  },
+  "successEvidence": {
+    "printableKey": "test-owned NSTextView observes key-down/key-up and a real lowercase text consequence",
+    "specialKey": "test-owned NSTextView observes Return down/up and a real newline consequence",
+    "modifier": "fixture observes Shift flags on/off plus a shifted A key-down and uppercase text consequence",
+    "cleanup": "no emergency Shift release is required on PASS and previous frontmost application is restored",
+    "privacy": "numeric virtual-key identifiers and user text are not persisted in session markers"
+  },
+  "semanticBoundary": {
+    "rawDeliveryIsSemanticTextSuccess": false,
+    "existingStructuredTextApisWeakened": false,
+    "discoveryFreezesPublicVocabulary": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the controlled fixture from compiling or executing.",
+    "FAIL": "Printable, special-key or modifier delivery/consequence, complete key lifecycle, modifier cleanup, restoration, privacy or semantic-boundary invariants fail.",
+    "PASS": "Printable text, Return, and Shift-modified key delivery are physically observed with real fixture consequences, clean modifier lifecycle and restoration, without creating a public keyboard API."
+  },
+  "nextStepOnPass": "Use the physical delivery evidence to freeze a canonical public keyboard vocabulary and modifier contract, keeping native virtual-key identifiers private, then validate that public API separately.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not add or promote a public keyboard capability."
+}
