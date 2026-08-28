@@ -1,0 +1,67 @@
+{
+  "sessionId": "cc-phase10c-pointer-drag-public-s01",
+  "scope": "Phase 10C public pointer.drag physical validation through the real runtime/SDK against a test-owned AppKit fixture with an independent drag consequence",
+  "productSha": "43a26d1f369c39dbed6ca8131af8d02bd8e17b47",
+  "testSourceSha": "6877b2541c974f473067244bc939efc3ef82fcec",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10c-drag-public.js",
+  "terminalMarker": "physical-phase10c-pointer-drag-public=PASS",
+  "prerequisiteEvidence": {
+    "phase10BPublicSession": "cc-phase10b-pointer-public-s03",
+    "phase10BPublicEvidence": "a7b878ff25e56ee7c16705dfdec1468f6a47b0a1",
+    "phase10BPublicResult": "43 PASS / 0 FAIL / 0 BLOCKED",
+    "phase10CDiscoverySession": "cc-phase10c-drag-delivery-discovery-s01",
+    "phase10CDiscoveryEvidence": "47ee8e31a08597cffc0c773dfaf72a093501e5c4",
+    "phase10CDiscoveryResult": "PASS"
+  },
+  "publicBoundary": {
+    "api": "pointer.drag",
+    "displaySelector": "primary",
+    "coordinateSpace": "primary-display-local logical coordinates with top-left origin",
+    "button": "left",
+    "atomicLifecycle": true,
+    "publicHeldButtonApi": false,
+    "publicTimingControls": false,
+    "semanticConsequenceClaimed": false,
+    "successState": "DRAG_POSTED"
+  },
+  "productSafety": {
+    "sourcePositionVerifiedBeforeButtonDown": true,
+    "normalLifecycleConstructedBeforeButtonDown": true,
+    "zeroDistanceRejected": true,
+    "nativeSourceDestinationMustMatchCanonicalRequest": true,
+    "normalSuccessRequiresReleasePosted": true,
+    "emergencyReleaseCannotBeSuccess": true
+  },
+  "fixture": {
+    "ownedByTest": true,
+    "type": "temporary AppKit window with independent mouseDown/mouseDragged/mouseUp observation and hit-test-transparent movable marker",
+    "coordinatesPersisted": false,
+    "nativeDisplayIdsPersisted": false,
+    "userContentTouched": false,
+    "cleanupEmergencyReleaseIfDownWithoutUp": true
+  },
+  "successEvidence": {
+    "publicResult": "DRAG_POSTED with sourcePositionVerified=true, buttonLifecycle=POSTED, dragDelivery=POSTED, releasePosted=true and semanticConsequenceVerified=false",
+    "independentDown": "AppKit fixture observes exactly one mouseDown",
+    "independentDragged": "AppKit fixture observes at least one mouseDragged",
+    "independentUp": "AppKit fixture observes exactly one mouseUp",
+    "independentConsequence": "fixture marker reaches destination only from delivered AppKit drag events",
+    "restoration": "fixture restores original pointer and previous frontmost application",
+    "releaseSafety": "PASS requires fixture emergencyReleasePosted=false"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility/runtime environment prevents the controlled fixture or public runtime from executing.",
+    "FAIL": "A public contract, canonical-coordinate invariant, source verification, low-level result boundary, independent drag delivery/consequence, release safety or restoration invariant fails.",
+    "PASS": "The public SDK pointer.drag call satisfies its low-level contract, the independent fixture observes the complete drag lifecycle and consequence, no emergency release is needed, and restoration succeeds."
+  },
+  "nextStepOnPass": "Promote pointer.drag to PHYSICALLY_VALIDATED using this evidence, then proceed to Phase 10D raw wheel delivery while keeping semantic ui.scroll preferred.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote pointer.drag."
+}
