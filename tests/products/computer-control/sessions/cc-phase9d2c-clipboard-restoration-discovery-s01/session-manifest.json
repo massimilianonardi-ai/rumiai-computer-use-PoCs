@@ -1,0 +1,46 @@
+{
+  "sessionId": "cc-phase9d2c-clipboard-restoration-discovery-s01",
+  "scope": "Phase 9D2C general-pasteboard exact restoration safety discovery",
+  "productSha": "a3bcb2cc9f9f374958b6816c32be06cb6c12908a",
+  "testSourceSha": "c77d97a360e986aafe9c9cb4731a15c1769fd776",
+  "platform": "macOS NSPasteboard general restoration",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-clipboard-restoration-discovery.js",
+  "terminalMarker": "physical-phase9d2c-clipboard-restoration-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase9dDiscoveryEvidence": "c70e0e581c54ee67d9f56c4400ef3a942012629e",
+    "phase9d2aEvidence": "521f41c2fcc499574b61b658440671faefe61708",
+    "phase9d2bEvidence": "ab2745383e7e3051d6d4bb797cd908fb7c5b3f77",
+    "phase9d2bResult": "38 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "purpose": "Prove that the current user's general pasteboard can be completely materialized, temporarily replaced with test-owned data, and restored item/type/byte-exact before any public typed-write physical validation is attempted.",
+  "safetyBoundary": {
+    "generalPasteboardMutation": true,
+    "productTypedWriteInvoked": false,
+    "backupMustCompleteBeforeMutation": true,
+    "unmaterializableTypeBlocksBeforeMutation": true,
+    "maxInMemoryBackupBytes": 67108864,
+    "testOwnedMutationPayload": true,
+    "allOriginalItemsAndTypesRestored": true,
+    "exactTypeOrderCompared": true,
+    "exactBytesCompared": true,
+    "payloadLogged": false,
+    "base64Logged": false,
+    "digestLogged": false,
+    "nativeTypeNamesLogged": false,
+    "keyboardMouseAppleScriptFallback": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "Any current native pasteboard type cannot be materialized, the backup exceeds the safety budget, or the pasteboard changes during the pre-mutation backup. No mutation is allowed in these cases.",
+    "FAIL": "Mutation occurred but test-owned mutation or exact restoration could not be independently verified. The failure must remain immutable evidence.",
+    "PASS": "Backup completed before mutation, test-owned mutation was observed, and every original item/type/data byte was restored exactly."
+  },
+  "nextStepOnPass": "Prepare a separate Phase 9D2C public typed-write physical validation session that uses the proven restoration mechanism around actual runtime/SDK writeClipboardFormat calls.",
+  "nextStepOnBlockedOrFail": "Do not run public typed-write mutation validation. Diagnose restoration limitations and preserve this session as immutable evidence."
+}
