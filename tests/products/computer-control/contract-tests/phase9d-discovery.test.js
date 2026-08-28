@@ -60,7 +60,8 @@ test("Phase 9D discovery remains historical provenance while canonical public ph
   const core=fs.readFileSync(path.join(productRoot,"runtime/src/router-core.js"),"utf8");
   const source=router+"\n"+core;
   assert.match(source,/case"display\.list"/);
-  assert.doesNotMatch(source,/display\.(?:configure|setMode|rotate|move|resize|capture|screenshot)/);
+  assert.match(source,/case"display\.capture"/);
+  assert.doesNotMatch(source,/display\.(?:configure|setMode|rotate|move|resize|screenshot)/);
   assert.match(source,/case"clipboard\.observe"/);
   assert.match(source,/case"clipboard\.readFormat"/);
   assert.match(source,/case"clipboard\.writeFormat"/);
