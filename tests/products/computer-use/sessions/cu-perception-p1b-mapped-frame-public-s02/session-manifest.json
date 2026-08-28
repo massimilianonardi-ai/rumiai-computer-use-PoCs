@@ -1,0 +1,82 @@
+{
+  "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "29c269864def0a26d3254e913d2a5a87f6125103",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "807747c79ea2a46dac618afb520990548b2b53fe",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-coordinate-mapping-discovery.test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p1b-mapped-frame-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p1b-mapped-frame-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1a-visual-frame-acquisition-s04",
+      "evidence": "bdb4de64ea4471838e878a385e2f1f2b7f538ae7",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p1b-coordinate-mapping-discovery-s02",
+      "evidence": "89ef1c1b0b2ddab7de2c8e35bd9dca2d88fb7a57",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s01",
+      "evidence": "a2fa611b40d6db41a56b8e2d7cc42ea0c3a18de3",
+      "result": "FAIL",
+      "finding": "The product contract and physical public oracle both passed. Overall failure was solely a stale P1A documentation regex guard; runtime behavior is unchanged for s02."
+    }
+  ],
+  "purpose": "Repeat P1B product mapping validation after correcting only the stale P1A documentation guard. Validate the same product runtime and unchanged physical oracle end-to-end without executing input actions.",
+  "requiredClaims": [
+    "the real product acquireMappedPrimaryVisualFrame path returns VISUAL_FRAME_MAPPED",
+    "the product mapping is RESOLVED and remains validationState IMPLEMENTED during the validating run",
+    "the mapped path derives its transform from stable display observations surrounding the real P1A capture",
+    "the mapping source is capture-pixel/top-left and destination is primary-display-logical/top-left",
+    "the transform is axis-aligned with rotation zero in the initial scope",
+    "two independently known test-owned AppKit marker centers are found in the captured PNG",
+    "mapCapturePointToPrimaryLogical maps both observed capture-pixel centers to the independently known logical centers within bounded tolerance",
+    "P1A remains an unmapped acquisition path and its contract guard tracks the effective boundary rather than editorial wording",
+    "interpretation remains NOT_RUN",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload and marker coordinates are not persisted or logged",
+    "fixture and Computer Control runtime are cleaned up"
+  ],
+  "nonClaims": [
+    "no OCR or VLM provider is validated",
+    "no visual candidate is semantically identified",
+    "no action derived from visual perception is executed",
+    "no rotated-display mapping is validated",
+    "no secondary-display mapping is validated",
+    "event delivery is not equated with semantic task success"
+  ],
+  "promotionOnPass": {
+    "mappingValidationState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "nextPhase": "P2 perception provider contract and first local OCR/vision provider"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "markerCoordinatesLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
