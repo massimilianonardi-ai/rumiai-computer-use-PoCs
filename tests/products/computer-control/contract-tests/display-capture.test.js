@@ -44,6 +44,7 @@ test("Phase 10A native helper uses ScreenCaptureKit without prompting or persist
   assert.match(helper,/maximumPNGBytes\s*=\s*20\s*\*\s*1024\s*\*\s*1024/);
   assert.doesNotMatch(helper,/CGDisplayCreateImage|CGRequestScreenCaptureAccess|CGWarpMouseCursorPosition|CGEventPost|\.post\(/);
   assert.doesNotMatch(helper,/write\(to:|writeToFile|FileManager\.default\.createFile/);
+  assert.match(wrapper,/"swiftc","-parse-as-library",HELPER/);
   assert.match(wrapper,/-framework","ScreenCaptureKit"/);
   assert.match(wrapper,/MAX_CAPTURE_BYTES=20\*1024\*1024/);
   assert.match(wrapper,/MAX_BUFFER_BYTES=32\*1024\*1024/);
