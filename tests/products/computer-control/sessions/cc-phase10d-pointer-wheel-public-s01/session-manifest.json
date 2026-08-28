@@ -1,0 +1,61 @@
+{
+  "sessionId": "cc-phase10d-pointer-wheel-public-s01",
+  "scope": "Phase 10D physical validation of public pointer.wheel through the real runtime and SDK against an independent test-owned AppKit scroll oracle",
+  "productSha": "a3fcd4cbaa4f770e59bd974c0239b9af35701e99",
+  "testSourceSha": "7a0d62b2723bd0dca11e57a9b8aa931251a6f475",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10d-wheel-public.js",
+  "terminalMarker": "physical-phase10d-pointer-wheel-public=PASS",
+  "prerequisiteEvidence": {
+    "wheelDiscoverySession": "cc-phase10d-wheel-delivery-discovery-s02",
+    "wheelDiscoveryEvidence": "6e63c9e1450db6b32510bb17250722bb3efc2f3b",
+    "wheelDiscoveryProduct": "9cb037f688a82f733de520062b0adb30c0994a8b",
+    "wheelDiscoveryResult": "PASS",
+    "observedPrivateMapping": {
+      "canonicalDown": "negative Quartz wheel axis 1 -> increasing document y",
+      "canonicalUp": "positive Quartz wheel axis 1 -> decreasing document y"
+    }
+  },
+  "publicContract": {
+    "rpc": "pointer.wheel",
+    "sdk": "ComputerControlClient.wheelPointer",
+    "display": "primary",
+    "coordinates": "primary-display-local logical units, top-left origin",
+    "directions": ["up", "down"],
+    "amount": "integer line units 1..10",
+    "state": "WHEEL_POSTED",
+    "positionVerified": true,
+    "wheelDelivery": "POSTED",
+    "semanticConsequenceVerified": false,
+    "nativeWheelSignPublic": false,
+    "semanticUiScrollPreferred": true,
+    "prePromotionValidationState": "IMPLEMENTED"
+  },
+  "physicalOracle": {
+    "fixtureOwnedByTest": true,
+    "type": "AppKit NSScrollView in a separate process",
+    "firstCall": "public direction=down amount=3 must independently produce at least one scrollWheel event and increasing-y consequence",
+    "baselineReset": "exact interior baseline reset before second call",
+    "secondCall": "public direction=up amount=3 must independently produce at least one scrollWheel event and decreasing-y consequence",
+    "oppositeDirectionsRequired": true,
+    "pointerRestorationRequired": true,
+    "userContentTouched": false,
+    "coordinatesPersisted": false,
+    "offsetsPersisted": false,
+    "nativeDisplayIdsPersisted": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the product helper, runtime or independent fixture from compiling or executing.",
+    "FAIL": "The public contract, canonical mapping, independent delivery/consequence, baseline reset, restoration, privacy or semantic-boundary invariant fails.",
+    "PASS": "The real public SDK path posts both canonical wheel directions with the required delivery-only boundary while the independent AppKit oracle confirms the discovered end-to-end direction mapping and cleanup."
+  },
+  "nextStepOnPass": "Promote pointer.wheel to PHYSICALLY_VALIDATED without changing the validated runtime, record authoritative evidence, then proceed to Phase 10E keyboard fallback discovery.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote pointer.wheel."
+}
