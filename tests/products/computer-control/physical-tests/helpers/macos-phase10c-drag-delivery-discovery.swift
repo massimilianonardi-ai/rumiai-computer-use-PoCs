@@ -31,8 +31,11 @@ private final class ProbeWindow: NSWindow {
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { true }
 }
+private final class MarkerView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+}
 private final class ProbeView: NSView {
-    let marker = NSView(frame: NSRect(x: 0, y: 0, width: 28, height: 28))
+    let marker = MarkerView(frame: NSRect(x: 0, y: 0, width: 28, height: 28))
     var leftDownCount = 0
     var leftUpCount = 0
     var draggedCount = 0
