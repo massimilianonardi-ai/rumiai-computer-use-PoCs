@@ -1,0 +1,61 @@
+{
+  "sessionId": "cc-phase10c-pointer-drag-public-s02",
+  "scope": "Phase 10C public pointer.drag physical validation after fixing the test-owned fixture compile-only CGPoint/NSPoint near redeclaration",
+  "productSha": "43a26d1f369c39dbed6ca8131af8d02bd8e17b47",
+  "testSourceSha": "57f9036720f3b95af77b0803878a29bd223c63c1",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10c-drag-public.js",
+  "terminalMarker": "physical-phase10c-pointer-drag-public=PASS",
+  "history": {
+    "s01Session": "cc-phase10c-pointer-drag-public-s01",
+    "s01Evidence": "dc2bc5fc22429c1cffcba1aebf16e9fb0f506770",
+    "s01Result": "BLOCKED",
+    "s01Cause": "test-only Swift fixture compile failure caused by duplicate near overloads for CGPoint and NSPoint; public pointer.drag was not executed and no drag mutation began"
+  },
+  "prerequisiteEvidence": {
+    "phase10BPublicSession": "cc-phase10b-pointer-public-s03",
+    "phase10BPublicEvidence": "a7b878ff25e56ee7c16705dfdec1468f6a47b0a1",
+    "phase10CDiscoverySession": "cc-phase10c-drag-delivery-discovery-s01",
+    "phase10CDiscoveryEvidence": "47ee8e31a08597cffc0c773dfaf72a093501e5c4"
+  },
+  "publicBoundary": {
+    "api": "pointer.drag",
+    "displaySelector": "primary",
+    "coordinateSpace": "primary-display-local logical coordinates with top-left origin",
+    "button": "left",
+    "atomicLifecycle": true,
+    "publicHeldButtonApi": false,
+    "publicTimingControls": false,
+    "semanticConsequenceClaimed": false,
+    "successState": "DRAG_POSTED"
+  },
+  "fixtureFix": {
+    "productChanged": false,
+    "duplicateNearOverloadRemoved": true,
+    "canonicalNearHelperCount": 1,
+    "regressionGuardAdded": true
+  },
+  "successEvidence": {
+    "publicResult": "DRAG_POSTED with sourcePositionVerified=true, buttonLifecycle=POSTED, dragDelivery=POSTED, releasePosted=true and semanticConsequenceVerified=false",
+    "independentDown": "AppKit fixture observes exactly one mouseDown",
+    "independentDragged": "AppKit fixture observes at least one mouseDragged",
+    "independentUp": "AppKit fixture observes exactly one mouseUp",
+    "independentConsequence": "fixture marker reaches destination only from delivered AppKit drag events",
+    "restoration": "fixture restores original pointer and previous frontmost application",
+    "releaseSafety": "PASS requires fixture emergencyReleasePosted=false"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility/runtime environment prevents the controlled fixture or public runtime from executing.",
+    "FAIL": "A public contract, canonical-coordinate invariant, source verification, low-level result boundary, independent drag delivery/consequence, release safety or restoration invariant fails.",
+    "PASS": "The public SDK pointer.drag call satisfies its low-level contract, the independent fixture observes the complete drag lifecycle and consequence, no emergency release is needed, and restoration succeeds."
+  },
+  "nextStepOnPass": "Promote pointer.drag to PHYSICALLY_VALIDATED using this evidence, then proceed to Phase 10D raw wheel delivery while keeping semantic ui.scroll preferred.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote pointer.drag."
+}
