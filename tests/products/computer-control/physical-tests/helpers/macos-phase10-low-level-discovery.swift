@@ -2,6 +2,7 @@ import AppKit
 import ApplicationServices
 import CoreGraphics
 import Foundation
+import ScreenCaptureKit
 
 func point(_ value: CGPoint) -> [String: Double] {
     ["x": Double(value.x), "y": Double(value.y)]
@@ -20,6 +21,8 @@ func finite(_ value: CGFloat) -> Bool { value.isFinite }
 
 let mainDisplay = CGMainDisplayID()
 let mainBounds = CGDisplayBounds(mainDisplay)
+let mainPixelWidth = Int(CGDisplayPixelsWide(mainDisplay))
+let mainPixelHeight = Int(CGDisplayPixelsHigh(mainDisplay))
 
 var activeCount: UInt32 = 0
 let countError = CGGetActiveDisplayList(0, nil, &activeCount)
@@ -65,15 +68,47 @@ let accessibilityTrusted = AXIsProcessTrusted()
 let screenCapturePreflight = CGPreflightScreenCaptureAccess()
 var captureAttempted = false
 var captureAvailable = false
-var captureWidth: Int? = nil
-var captureHeight: Int? = nil
+var captureWidth = 0
+var captureHeight = 0
+var captureDiscoveryError: String? = nil
 
 if screenCapturePreflight {
     captureAttempted = true
-    if let image = CGDisplayCreateImage(mainDisplay) {
-        captureAvailable = true
-        captureWidth = image.width
-        captureHeight = image.height
+    let semaphore = DispatchSemaphore(value: 0)
+    var completed = false
+    SCShareableContent.getExcludingDesktopWindows(false, onScreenWindowsOnly: true) { content, error in
+        if let error = error {
+            captureDiscoveryError = "shareable-content-error:\(type(of: error))"
+            completed = true
+            semaphore.signal()
+            return
+        }
+        guard let display = content?.displays.first(where: { $0.displayID == mainDisplay }) else {
+            captureDiscoveryError = "main-display-not-shareable"
+            completed = true
+            semaphore.signal()
+            return
+        }
+        let filter = SCContentFilter(display: display, excludingWindows: [])
+        let configuration = SCStreamConfiguration()
+        configuration.width = mainPixelWidth
+        configuration.height = mainPixelHeight
+        SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration) { image, error in
+            if let error = error {
+                captureDiscoveryError = "capture-error:\(type(of: error))"
+            } else if let image = image {
+                captureAvailable = true
+                captureWidth = image.width
+                captureHeight = image.height
+            } else {
+                captureDiscoveryError = "capture-returned-no-image"
+            }
+            completed = true
+            semaphore.signal()
+        }
+    }
+    if semaphore.wait(timeout: .now() + 10) == .timedOut || !completed {
+        captureDiscoveryError = "screen-capture-probe-timeout"
     }
 }
 
@@ -110,8 +145,8 @@ let output: [String: Any] = [
         "activeListError": Int(listError.rawValue),
         "activeCountError": Int(countError.rawValue),
         "mainBounds": rect(mainBounds),
-        "mainPixelWidth": Int(CGDisplayPixelsWide(mainDisplay)),
-        "mainPixelHeight": Int(CGDisplayPixelsHigh(mainDisplay)),
+        "mainPixelWidth": mainPixelWidth,
+        "mainPixelHeight": mainPixelHeight,
     ],
     "permissions": [
         "accessibilityTrusted": accessibilityTrusted,
@@ -122,8 +157,10 @@ let output: [String: Any] = [
         "preflight": screenCapturePreflight,
         "attempted": captureAttempted,
         "available": captureAvailable,
-        "width": captureWidth as Any,
-        "height": captureHeight as Any,
+        "width": captureWidth,
+        "height": captureHeight,
+        "modernAPI": "ScreenCaptureKit.SCScreenshotManager",
+        "error": captureDiscoveryError ?? NSNull(),
     ],
     "windowMetadata": [
         "onScreenNonDesktopCount": windowCount,
