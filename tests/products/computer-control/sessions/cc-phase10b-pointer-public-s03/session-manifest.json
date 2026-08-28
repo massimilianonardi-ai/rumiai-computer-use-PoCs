@@ -1,0 +1,69 @@
+{
+  "sessionId": "cc-phase10b-pointer-public-s03",
+  "scope": "Phase 10B public pointer.move and pointer.click physical validation after correcting only a stale documentation regex in the PoC guard",
+  "productSha": "3f68502848f127d73f72cac023deed511f3ce75d",
+  "testSourceSha": "a3cd3f6b143d4c2e74d1d831218778ea19a3e48b",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10b-pointer-public.js",
+  "terminalMarker": "physical-phase10b-pointer-public=PASS",
+  "prerequisiteEvidence": {
+    "phase10BDeliveryDiscoverySession": "cc-phase10b-pointer-delivery-discovery-s02",
+    "phase10BDeliveryDiscoveryEvidence": "4c973a4400660417cfb39fb8297cd363e8c13c63",
+    "phase10BDeliveryDiscoveryResult": "42 PASS / 0 FAIL / 0 BLOCKED",
+    "phase10BPublicS01Evidence": "7a21ce6e84046b31700d36bda9adc794ef41ea92",
+    "phase10BPublicS02Evidence": "3d8176d5ce1e198af1d4922dc6e3fe85670b3dcf",
+    "phase10BPublicS02Result": "42 PASS / 1 FAIL / 0 BLOCKED",
+    "phase10BPublicS02PhysicalResult": "PASS"
+  },
+  "historicalS02Diagnosis": {
+    "physicalResult": "The full public runtime/SDK physical test passed: move verified, left/right CLICK_POSTED boundaries passed, independent AppKit left/right down/up counters were exactly 1/1, pointer restoration passed, and no user content or coordinates/native IDs were persisted.",
+    "onlySessionFailure": "A PoC documentation guard searched for 'primary-display local coordinates' while the product document canonically says 'primary-display-local'.",
+    "productChangeRequired": false,
+    "testCorrection": "The guard now matches the exact documented coordinate wording and separately checks semantic-target precedence plus POSTED/not-verified application-delivery boundaries."
+  },
+  "publicBoundary": {
+    "moveApi": "pointer.move",
+    "clickApi": "pointer.click",
+    "displaySelector": "primary",
+    "coordinateSpace": "primary-display-local logical coordinates, top-left origin",
+    "buttons": ["left", "right"],
+    "publicHeldButtonApi": false,
+    "publicDragApi": false,
+    "semanticConsequenceClaimed": false
+  },
+  "fixture": {
+    "ownedByTest": true,
+    "type": "temporary AppKit window with independent NSView left/right mouse event counters",
+    "userContentClicked": false,
+    "coordinatesPersisted": false,
+    "nativeDisplayIdsPersisted": false
+  },
+  "stateRestoration": {
+    "pointerOriginalPositionCaptured": true,
+    "pointerRestoredBeforeFixtureExit": true,
+    "previousFrontmostApplicationCaptured": true,
+    "previousFrontmostApplicationReactivated": true,
+    "cleanupAllowedToCompleteOnHarnessFailure": true
+  },
+  "successEvidence": {
+    "pointerMove": "public SDK result MOVED + product current-location postcondition",
+    "leftButton": "public CLICK_POSTED result + independent AppKit mouseDown/mouseUp exactly 1/1",
+    "rightButton": "public CLICK_POSTED result + independent AppKit rightMouseDown/rightMouseUp exactly 1/1",
+    "semanticBoundary": "button delivery is not semantic success",
+    "restoration": "fixture reports pointer restored"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility/runtime environment prevents the controlled fixture or public runtime from executing.",
+    "FAIL": "A public contract, move postcondition, left/right independent delivery observation, documentation invariant, or required restoration invariant fails.",
+    "PASS": "All contract guards pass, both public pointer APIs behave according to contract, independent fixture delivery is exact for left/right clicks, and pointer restoration succeeds."
+  },
+  "nextStepOnPass": "Promote pointer.move and pointer.click to PHYSICALLY_VALIDATED using this evidence, then proceed to compound Phase 10C drag without exposing held-button state across RPC calls.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote the Phase 10B public APIs."
+}
