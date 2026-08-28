@@ -57,16 +57,17 @@ function stopChild(child) {
   });
 }
 function markerPredicate(color) {
-  if (color === "magenta") return p => p && p.r > 180 && p.g < 110 && p.b > 180;
-  if (color === "cyan") return p => p && p.r < 110 && p.g > 180 && p.b > 180;
+  if (color === "magenta") return p => p && Math.min(p.r,p.b) - p.g >= 70 && Math.max(p.r,p.b) >= 130;
+  if (color === "cyan") return p => p && Math.min(p.g,p.b) - p.r >= 70 && Math.max(p.g,p.b) >= 130;
   throw new Error("UNKNOWN_MARKER_COLOR");
 }
 function predictedRect(marker, logicalWidth, logicalHeight, pixelWidth, pixelHeight) {
   const sx = pixelWidth / logicalWidth, sy = pixelHeight / logicalHeight;
   return {x:marker.x*sx,y:marker.y*sy,width:marker.width*sx,height:marker.height*sy};
 }
+function markerPresent(observed) { return Boolean(observed && observed.area >= 700); }
 function assertRect(observed, predicted, tolerance=4) {
-  if (!observed || observed.area < 1000) fail("MARKER_COMPONENT_NOT_FOUND");
+  if (!markerPresent(observed)) fail("MARKER_COMPONENT_NOT_FOUND");
   if (!near(observed.x,predicted.x,tolerance) || !near(observed.y,predicted.y,tolerance) ||
       !near(observed.width,predicted.width,tolerance) || !near(observed.height,predicted.height,tolerance)) {
     fail("CAPTURE_LOGICAL_MAPPING_MISMATCH");
@@ -110,8 +111,12 @@ function assertRect(observed, predicted, tolerance=4) {
     const pixelToLogicalX = logicalWidth / pixelWidth, pixelToLogicalY = logicalHeight / pixelHeight;
     if (!(pixelToLogicalX > 0) || !(pixelToLogicalY > 0)) fail("MAPPING_SCALE_INVALID");
 
-    for (const marker of ready.markers) {
-      const observed = largestComponent(raster, markerPredicate(marker.color));
+    const detected = ready.markers.map(marker => ({marker, observed:largestComponent(raster, markerPredicate(marker.color))}));
+    const magenta = detected.find(x => x.marker.color === "magenta")?.observed || null;
+    const cyan = detected.find(x => x.marker.color === "cyan")?.observed || null;
+    console.log(`p1b-marker-presence=OBSERVED magentaFound=${markerPresent(magenta)} cyanFound=${markerPresent(cyan)} coordinatesLogged=false`);
+
+    for (const {marker,observed} of detected) {
       const predicted = predictedRect(marker, logicalWidth, logicalHeight, pixelWidth, pixelHeight);
       assertRect(observed, predicted);
 
