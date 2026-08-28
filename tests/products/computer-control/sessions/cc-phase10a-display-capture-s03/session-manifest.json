@@ -1,0 +1,87 @@
+{
+  "sessionId": "cc-phase10a-display-capture-s03",
+  "scope": "Phase 10A macOS public primary-display capture through runtime/SDK with independent PNG decode and ScreenCaptureKit oracle after fixing product helper Swift compilation mode",
+  "productSha": "ec3cd5f07defacdbe8b634a61b99d5510f77d832",
+  "testSourceSha": "2375e53952ef72afd32c61a5d79e9b97d374f88c",
+  "platform": "macOS ScreenCaptureKit/CoreGraphics/AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10a-display-capture.js",
+  "terminalMarker": "physical-phase10a-display-capture=PASS",
+  "prerequisiteEvidence": {
+    "phase10DiscoverySession": "cc-phase10-low-level-fallback-discovery-s03",
+    "phase10DiscoveryEvidence": "ae385e0746d58bcf4c1c41ba6a8641fa8d258fc5",
+    "phase10DiscoveryResult": "40 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "immutableHistory": [
+    {
+      "session": "cc-phase10a-display-capture-s01",
+      "evidence": "1f42dd6646f9602de2b49d13a7b9c16adfc33f13",
+      "result": "38 PASS / 2 FAIL / 1 BLOCKED",
+      "diagnosis": "Two stale/test-only contract assertions and an oracle compile block prevented public capture execution."
+    },
+    {
+      "session": "cc-phase10a-display-capture-s02",
+      "evidence": "a1f9561eb8d65d45b90c980d58b2857da50b2a23",
+      "result": "40 PASS / 1 FAIL / 0 BLOCKED",
+      "diagnosis": "All contract tests passed; public display.capture reached the product helper and failed because the product wrapper compiled its async @main Swift helper without -parse-as-library."
+    }
+  ],
+  "forwardFix": {
+    "productCommit": "ec3cd5f07defacdbe8b634a61b99d5510f77d832",
+    "productChange": "Compile macos-display-capture.swift with swiftc -parse-as-library.",
+    "productDiffScope": "one file, one compilation-argument change",
+    "testGuard": "display-capture.test.js requires the product wrapper to retain -parse-as-library"
+  },
+  "publicContract": {
+    "rpc": "display.capture",
+    "sdk": "captureDisplay({display:'primary'})",
+    "selector": "primary",
+    "format": "image/png",
+    "cursorIncluded": false,
+    "validationStateBeforeSession": "IMPLEMENTED",
+    "backend": "macos-screencapturekit",
+    "strategy": "primary-display-single-frame-png"
+  },
+  "physicalOracle": {
+    "source": "tests/products/computer-control/physical-tests/helpers/macos-phase10a-display-capture-oracle.swift",
+    "independentPNGDecode": true,
+    "independentPrimaryDisplayDimensions": true,
+    "independentScreenCaptureKitFrame": true,
+    "byteForByteFrameComparison": false,
+    "reasonNotByteForByte": "Separate real screen frames may legitimately differ because visible content can change between captures."
+  },
+  "privacyBoundary": {
+    "screenPixelsRead": true,
+    "screenPermissionRequested": false,
+    "requiresExistingScreenRecordingPermission": true,
+    "productScreenshotPersisted": false,
+    "oracleScreenshotPersisted": false,
+    "payloadLogged": false,
+    "base64Logged": false,
+    "digestLogged": false,
+    "productPayloadPassedToOracleViaStdinOnly": true,
+    "nativeDisplayIdentifiersPublic": false
+  },
+  "semanticBoundary": {
+    "lowLevelFallback": true,
+    "semanticAPIsRemainPreferred": true,
+    "captureIsSemanticSuccess": false,
+    "ocrOrVisionIncluded": false,
+    "pointerOrKeyboardInputDelivered": false,
+    "physicalPanelPixelIdentityClaimed": false,
+    "widthHeightMeaning": "returned PNG image dimensions only"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/ScreenCaptureKit environment or pre-existing Screen Recording permission prevents the physical checkpoint from running. No permission request is made.",
+    "FAIL": "The public runtime/SDK capture, PNG integrity, capability metadata, privacy boundary, or independent oracle observation is inconsistent.",
+    "PASS": "The public display.capture path returns a valid primary-display PNG whose metadata and decode agree with an independent ScreenCaptureKit/CoreGraphics oracle, without persisting or logging screenshot bytes."
+  },
+  "nextStepOnPass": "Promote display.capture to PHYSICALLY_VALIDATED in a separate product commit/evidence update, then continue Phase 10B pointer delivery discovery/fixture work without weakening semantic UI APIs.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and create a new session ID. Do not promote Phase 10A on a non-PASS checkpoint."
+}
