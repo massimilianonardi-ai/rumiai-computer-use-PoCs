@@ -1,0 +1,76 @@
+{
+  "sessionId": "cc-phase10b-pointer-delivery-discovery-s02",
+  "scope": "Phase 10B macOS pointer movement and left/right button delivery discovery using a test-owned AppKit fixture with explicit NSApplication event pumping",
+  "productSha": "085f0015291419b945540b59a1d56855507f6098",
+  "testSourceSha": "48f750f7bb22718f713d47c149311178169110ac",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10b-pointer-delivery-discovery.js",
+  "terminalMarker": "physical-phase10b-pointer-delivery-discovery=PASS",
+  "historicalS01": {
+    "session": "cc-phase10b-pointer-delivery-discovery-s01",
+    "evidence": "47a0895ca5c1df9fc5dfd93c7d01f11275a32a22",
+    "result": "40 PASS / 2 FAIL / 0 BLOCKED",
+    "contractFailure": "phase10-fallback-discovery guard still expected Phase 10A capture IMPLEMENTED after its physical promotion",
+    "physicalFailure": "pointer move delivery passed its internal observation gate, but AppKit ProbeView did not observe all left/right button events",
+    "diagnosis": "RunLoop waiting alone did not explicitly drain and dispatch NSApplication events to the fixture view",
+    "historyImmutable": true
+  },
+  "prerequisiteEvidence": {
+    "phase10ADisplayCaptureSession": "cc-phase10a-display-capture-s03",
+    "phase10ADisplayCaptureEvidence": "4d215cace1cf30fa5837852e17dcb273f8e969c3",
+    "phase10AStateAfterPromotion": "PHYSICALLY_VALIDATED"
+  },
+  "s02CorrectionBoundary": {
+    "productChanged": false,
+    "phase10ALifecycleGuardAdvanced": true,
+    "appKitEventPump": "NSApplication.nextEvent(matching:until:inMode:dequeue:) followed by sendEvent during delivery windows",
+    "failureDiagnostics": "anonymous left/right down/up counters only after cleanup",
+    "publicPointerApiAdded": false,
+    "publicClickApiAdded": false,
+    "semanticConsequenceClaimed": false
+  },
+  "fixture": {
+    "ownedByTest": true,
+    "type": "temporary borderless AppKit window with custom NSView mouse event counters",
+    "userContentClicked": false,
+    "leftButton": "down/up delivered only at fixture center",
+    "rightButton": "down/up delivered only at fixture center",
+    "windowClosedAfterTest": true
+  },
+  "stateRestoration": {
+    "pointerOriginalPositionCaptured": true,
+    "pointerRestoredBeforeExit": true,
+    "previousFrontmostApplicationCaptured": true,
+    "previousFrontmostApplicationReactivated": true,
+    "cleanupRunsBeforeAnyPostMutationFailureExit": true,
+    "recoveryPointerMethod": "CGWarpMouseCursorPosition test-only safety restoration"
+  },
+  "deliveryEvidence": {
+    "pointerMove": "Quartz CGEvent post followed by independent CGEvent current-location observation",
+    "leftButton": "test-owned AppKit NSView mouseDown/mouseUp counters after explicit NSApplication event pumping",
+    "rightButton": "test-owned AppKit NSView rightMouseDown/rightMouseUp counters after explicit NSApplication event pumping",
+    "coordinatesLogged": false,
+    "nativeIdentifiersLogged": false
+  },
+  "userVisibleEffects": {
+    "temporaryFixtureWindow": true,
+    "temporaryCursorMovement": true,
+    "temporaryFocusChange": true,
+    "externalApplicationClick": false,
+    "persistentStateMutationExpected": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the controlled fixture from running before delivery can be established.",
+    "FAIL": "Move/button delivery, fixture observation, or required pointer restoration is not observed exactly as specified.",
+    "PASS": "Pointer movement is observed at the target, left/right down/up are observed by the test-owned fixture after explicit event pumping, the cursor is restored, and no semantic consequence is claimed."
+  },
+  "nextStepOnPass": "Use the physical delivery evidence to define a narrow public Phase 10B pointer contract that distinguishes verified movement from button delivery and keeps semantic UI operations preferred.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, use safe anonymous event counters to diagnose forward, and do not introduce or promote a public pointer API from this checkpoint."
+}
