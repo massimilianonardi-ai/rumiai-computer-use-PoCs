@@ -1,0 +1,458 @@
+RumiAI Computer Use physical session
+session_id=cu-perception-p2b-provider-contract-public-s01
+started_at=2026-08-28T21:33:21Z
+computer_use_root=/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use
+computer_use_expected_sha=839d53d100e31da2fec839351f94f197d377ab36
+computer_use_observed_sha=839d53d100e31da2fec839351f94f197d377ab36
+computer_control_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+computer_control_expected_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+computer_control_observed_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=0f61c2b533b87ac85ebecfd12316a20218d95d58
+poc_tested_sha=576a9063ff01bab6a5b7ba2b1093c5b93fc79fcf
+poc_origin_main=576a9063ff01bab6a5b7ba2b1093c5b93fc79fcf
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+agent_ctrl_present=true
+physical_timeout_ms=45000
+
+================================================================================
+TEST: contract:external-computer-control-boundary-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'
+START: 2026-08-28T21:33:21Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+external wrapper syntax: PASS
+external adapter environment override: PASS
+external installation home override: PASS
+external wrapper has no development-volume path: PASS
+external wrapper has no user-profile install: PASS
+external wrapper has no bundled fallback: PASS
+bundled Computer Control source absent: PASS
+direct backend facade absent: PASS
+agent-loop.js syntax: PASS
+agent-loop.js uses external boundary: PASS
+agent-loop.js no direct internal facade: PASS
+agent-loop.js no direct agent-ctrl: PASS
+agent-loop.js no backend module paths: PASS
+executors.js syntax: PASS
+executors.js uses external boundary: PASS
+executors.js no direct internal facade: PASS
+executors.js no direct agent-ctrl: PASS
+executors.js no backend module paths: PASS
+recovery.js syntax: PASS
+recovery.js uses external boundary: PASS
+recovery.js no direct internal facade: PASS
+recovery.js no direct agent-ctrl: PASS
+recovery.js no backend module paths: PASS
+semantic-ui.js syntax: PASS
+semantic-ui.js uses external boundary: PASS
+semantic-ui.js no direct internal facade: PASS
+semantic-ui.js no direct agent-ctrl: PASS
+semantic-ui.js no backend module paths: PASS
+perception.js syntax: PASS
+perception.js uses external boundary: PASS
+perception.js no direct internal facade: PASS
+perception.js no direct agent-ctrl: PASS
+perception.js no backend module paths: PASS
+external-computer-control-boundary=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 190
+RESULT: PASS
+END: 2026-08-28T21:33:21Z
+================================================================================
+
+================================================================================
+TEST: contract:visual-frame-acquisition-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/visual-frame-acquisition-test.js'
+START: 2026-08-28T21:33:21Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P1A acquires one exact primary visual frame through injected Computer Control capture (0.700917ms)
+✔ P1A rejects malformed capture payload/state instead of inventing perception (0.099791ms)
+✔ P1A propagates Computer Control BLOCKED/FAILED state without fallback capture (0.066042ms)
+✖ P1A source and docs preserve perception/action separation (1.156375ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.059708
+
+✖ failing tests:
+
+test at tests/products/computer-use/visual-frame-acquisition-test.js:79:1
+✖ P1A source and docs preserve perception/action separation (1.156375ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /perform no OCR, object detection, icon recognition, target ranking or semantic inference/i. Input:
+  
+  '# Computer Use perception boundary\n' +
+    '\n' +
+    'Computer Use owns interpretation and task decisions. Computer Control owns desktop observation/action mechanics.\n' +
+    '\n' +
+    'The visual perception path therefore begins by consuming an already-defined Computer Control observation rather than implementing screen capture itself:\n' +
+    '\n' +
+    '```text\n' +
+    'Computer Control display.capture\n' +
+    '        ↓\n' +
+    'Computer Use visual frame\n' +
+    '        ↓\n' +
+    'interpretation provider (OCR / VLM / detector)\n' +
+    '        ↓\n' +
+    'target candidate\n' +
+    '        ↓\n' +
+    'decision / policy\n' +
+    '        ↓\n' +
+    'Computer Control semantic operation when available\n' +
+    '        ↓\n' +
+    'explicit low-level fallback only when necessary\n' +
+    '        ↓\n' +
+    'postcondition / re-observation\n' +
+    '```\n' +
+    '\n' +
+    '## P1A — visual frame acquisition\n' +
+    '\n' +
+    'Status: `PHYSICALLY_VALIDATED` on the reference Mac.\n' +
+    '\n' +
+    '`app/perception.js` exposes:\n' +
+    '\n' +
+    '```js\n' +
+    'acquirePrimaryVisualFrame()\n' +
+    '```\n' +
+    '\n' +
+    'It calls the external Computer Control adapter only:\n' +
+    '\n' +
+    '```js\n' +
+    'captureDisplay({display:"primary"})\n' +
+    '```\n' +
+    '\n' +
+    'Computer Use does not include a native capture backend, ScreenCaptureKit helper, display identifier or alternate screenshot implementation.\n' +
+    '\n' +
+    'A successful acquisition returns `VISUAL_FRAME_ACQUIRED` with:\n' +
+    '\n' +
+    '- the exact canonical PNG bytes returned by Computer Control, held as base64 in memory;\n' +
+    '- image width and height;\n' +
+    '- `coordinateSpace.kind = "capture-pixel"` with top-left origin;\n' +
+    '- provenance identifying `computer-control / display.capture / primary`;\n' +
+    '- `interpretation.state = "NOT_RUN"` and no candidates;\n' +
+    '- `actionCoordinateMapping.state = "UNRESOLVED"`;\n' +
+    '- an explicit ephemeral/no-persistence policy.\n' +
+    '\n' +
+    'Authoritative physical evidence is recorded in `docs/evidence/perception-p1a-visual-frame-acquisition-physical.md`.\n' +
+    '\n' +
+    '## P1B — action-coordinate mapping\n' +
+    '\n' +
+    'Discovery status: `PHYSICALLY_OBSERVED` on the reference Mac.\n' +
+    '\n' +
+    'Product mapping status: `PHYSICALLY_VALIDATED` on the reference Mac.\n' +
+    '\n' +
+    'Capture image dimensions are image-pixel dimensions. Computer Control pointer APIs use primary-display-local logical coordinates. P1A therefore continues to leave `actionCoordinateMapping.state = "UNRESOLVED"`.\n' +
+    '\n' +
+    'The P1B discovery used two independently positioned, noninteractive AppKit marker windows and located both markers in a real captured PNG. It physically established for the tested stable, unrotated primary-display topology that:\n' +
+    '\n' +
+    '- capture row zero and Computer Control logical coordinates both use a top-left origin for this mapping boundary;\n' +
+    '- the transform is axis-aligned;\n' +
+    '- `pixelToLogical.x = logicalWidth / pixelWidth`;\n' +
+    '- `pixelToLogical.y = logicalHeight / pixelHeight`;\n' +
+    '- the inverse uses `pixelWidth / logicalWidth` and `pixelHeight / logicalHeight`;\n' +
+    '- the mapping must be derived from observations, not inferred from equal dimensions;\n' +
+    '- display geometry must remain stable across the capture.\n' +
+    '\n' +
+    'On the reference Mac both observed spaces were `1710 × 1107`, so the measured scale happened to be 1:1. Identity is not encoded as an assumption.\n' +
+    '\n' +
+    'Authoritative discovery evidence is recorded in `docs/evidence/perception-p1b-coordinate-mapping-discovery-physical.md`.\n' +
+    '\n' +
+    '### Mapped acquisition contract\n' +
+    '\n' +
+    '`app/perception.js` additionally exposes:\n' +
+    '\n' +
+    '```js\n' +
+    'acquireMappedPrimaryVisualFrame()\n' +
+    'mapCapturePointToPrimaryLogical(mapping, point)\n' +
+    '```\n' +
+    '\n' +
+    '`acquireMappedPrimaryVisualFrame()` performs:\n' +
+    '\n' +
+    '1. `display.list` and exact selection of one active/online primary display;\n' +
+    '2. rejection of rotated primary displays in the initial contract;\n' +
+    '3. P1A `display.capture` acquisition;\n' +
+    '4. a second `display.list` observation;\n' +
+    '5. fail-closed rejection if primary geometry, scale or rotation changed;\n' +
+    '6. derivation of both pixel→logical and logical→pixel scales from the observed dimensions.\n' +
+    '\n' +
+    'A successful mapped acquisition returns `VISUAL_FRAME_MAPPED` and `actionCoordinateMapping.state = "RESOLVED"`. The mapping contains no native display identifier and does not perform an input action.\n' +
+    '\n' +
+    'The public runtime path was independently validated in session `cu-perception-p1b-mapped-frame-public-s02` with evidence commit `09692cd9b16eb36a10bb0ee294162b901afcfd17`. The validated runtime SHA is `29c269864def0a26d3254e913d2a5a87f6125103`. Two test-owned marker centers were detected in capture pixels and converted by the product-owned mapper to independently known logical centers; no pointer or keyboard action was performed.\n' +
+    '\n' +
+    'The initial validated scope is deliberately narrow: one stable, unrotated primary display. Secondary displays and rotated topologies require separate evidence.\n' +
+    '\n' +
+    '## P2A — local OCR provider discovery\n' +
+    '\n' +
+    'Status: `PHYSICALLY_OBSERVED` on the reference Mac.\n' +
+    '\n' +
+    'Session `cu-perception-p2a-local-ocr-discovery-s02`, evidence commit `9bf876dd35190776b9276d1e98db9e16733b5c50`, established the first interpretation-provider evidence. A PoC-only macOS Vision provider recognized two fixed test-owned strings from the real P1B PNG and returned localized text observations. The bounding regions were converted to `capture-pixel` / top-left coordinates and their centers mapped through P1B into independently known fixture windows.\n' +
+    '\n' +
+    'The provider was local, used no external account or network API, received image bytes in memory, and did not persist or log frame payloads, recognized text or coordinates. It performed no input action.\n' +
+    '\n' +
+    'macOS Vision remains a PoC provider, not a built-in Computer Use dependency. Authoritative evidence is recorded in `docs/evidence/perception-p2a-local-ocr-discovery-physical.md`.\n' +
+    '\n' +
+    '## P2B — provider-neutral text-region contract\n' +
+    '\n' +
+    'Status: `IMPLEMENTED`, pending physical runtime validation.\n' +
+    '\n' +
+    '`app/perception-provider.js` exposes:\n' +
+    '\n' +
+    '```js\n' +
+    'interpretMappedVisualFrame(mappedFrame, provider)\n' +
+    '```\n' +
+    '\n' +
+    "The first provider-neutral capability is deliberately evidence-bounded to `text-region`. A provider declares an `id`, `locality`, `capabilities` containing `text-region`, and an `observe(frame)` function. The provider receives a mapped PNG frame in memory and returns observations in the frame's exact `capture-pixel` / top-left coordinate space.\n" +
+    '\n' +
+    'Computer Use validates fail-closed that:\n' +
+    '\n' +
+    '- the input is a P1B mapped frame whose mapping is `PHYSICALLY_VALIDATED`;\n' +
+    '- provider identity, locality and capability declaration are explicit;\n' +
+    '- provider frame geometry exactly matches the captured frame;\n' +
+    '- each observation is `text-region`, has non-empty text and confidence in `[0,1]`;\n' +
+    '- each region is finite, positive, in bounds, and explicitly `capture-pixel` / top-left.\n' +
+    '\n' +
+    'Validated observations are normalized with `semanticIdentity = null` and `actionable = false`. A successful call returns `VISUAL_INTERPRETATION_OBSERVED`, `semanticTarget.state = "UNRESOLVED"`, and `actionPolicy.state = "NOT_EVALUATED"`.\n' +
+    '\n' +
+    'This contract does not make OCR output a semantic UI identity and does not authorize pointer or keyboard actions. VLM/object/icon observation types require their own evidence before being added to this provider boundary.\n' +
+    '\n' +
+    '## Interpretation boundary\n' +
+    '\n' +
+    'A visual observation is not a semantic element identity and is not proof that an action will succeed. P2 adds perception observations while deliberately keeping semantic target resolution and action policy as separate later stages.\n' +
+    '\n' +
+    'The preferred execution order remains:\n' +
+    '\n' +
+    '1. use structured semantic Computer Control observation/action when available;\n' +
+    '2. use visual perception to propose observations only when structured semantics are insufficient;\n' +
+    '3. resolve an observation to a target through an explicit policy boundary;\n' +
+    '4. use an explicit low-level Computer Control fallback only after target/mapping policy accepts it;\n' +
+    '5. re-observe an appropriate postcondition instead of treating event delivery as task success.\n' +
+    '\n' +
+    '## Privacy and persistence\n' +
+    '\n' +
+    'Screen pixels and recognized text may contain sensitive information. P1/P2 keep frame payloads and provider observations in memory and do not themselves write screenshots, derived images, OCR text or frame payloads to disk or logs.\n' +
+    '\n' +
+    'Callers must not log `dataBase64`, decoded frame bytes, or recognized text as ordinary diagnostics.\n'
+  
+      at TestContext.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/visual-frame-acquisition-test.js:95:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '# Computer Use perception boundary\n\nComputer Use owns interpretation and task decisions. Computer Control owns desktop observation/action mechanics.\n\nThe visual perception path therefore begins by consuming an already-defined Computer Control observation rather than implementing screen capture itself:\n\n```text\nComputer Control display.capture\n        ↓\nComputer Use visual frame\n...',
+    expected: /perform no OCR, object detection, icon recognition, target ranking or semantic inference/i,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 58
+RESULT: FAIL
+END: 2026-08-28T21:33:21Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-session-runner-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-session-runner-test.js'
+START: 2026-08-28T21:33:21Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Computer Use physical runner provides portable agent-ctrl explicitly (0.391208ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2.540584
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 55
+RESULT: PASS
+END: 2026-08-28T21:33:21Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-physical-lifecycle-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-physical-lifecycle-test.js'
+START: 2026-08-28T21:33:21Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+perception-physical-lifecycle=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 52
+RESULT: PASS
+END: 2026-08-28T21:33:21Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p1b-mapped-frame.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p1b-mapped-frame.test.js'
+START: 2026-08-28T21:33:21Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P1B derives a mapped primary frame from stable display observations (0.726667ms)
+✔ P1B maps capture points without invoking an action (0.104958ms)
+✔ P1B fails closed for rotated or unstable primary topology (0.094417ms)
+✔ P1A remains unmapped after P1B is added (0.061625ms)
+✔ P1B product remains action-free after physical promotion (0.176375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3.653375
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 57
+RESULT: PASS
+END: 2026-08-28T21:33:21Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p2a-local-ocr-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js'
+START: 2026-08-28T21:33:22Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+perception-p2a-local-ocr-discovery-contract=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 51
+RESULT: PASS
+END: 2026-08-28T21:33:22Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p2b-provider-contract.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p2b-provider-contract.test.js'
+START: 2026-08-28T21:33:22Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P2B normalizes provider-neutral text-region observations without resolving a target (0.716666ms)
+✔ P2B rejects invalid mapped frames and invalid provider declarations (0.087375ms)
+✔ P2B fails closed on provider geometry and observation errors (0.092417ms)
+✔ P2B product boundary is provider-neutral, action-free and persistence-free (1.943209ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5.492583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 60
+RESULT: PASS
+END: 2026-08-28T21:33:22Z
+================================================================================
+
+================================================================================
+TEST: physical:computer-use-perception-p2b-provider-contract-public
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/run-with-timeout.js' '45000' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/physical-tests/perception-p2b-provider-contract-public.js'
+START: 2026-08-28T21:33:22Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+p2b-provider-contract=PASS providerNeutral=true capability=text-region
+p2b-real-provider-oracle=PASS provider=macos-vision matchedCount=2 textLogged=false
+p2b-observation-normalization=PASS semanticIdentity=null actionable=false
+p2b-semantic-target-boundary=PASS state=UNRESOLVED
+p2b-action-policy-boundary=PASS state=NOT_EVALUATED pointerActionsPerformed=false keyboardActionsPerformed=false
+p2b-payload-policy=PASS persisted=false payloadLogged=false ocrTextLogged=false coordinatesLogged=false
+p2b-runtime-cleanup=PASS
+physical-computer-use-perception-p2b=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 5079
+RESULT: PASS
+END: 2026-08-28T21:33:27Z
+================================================================================
+
+================================================================================
+TEST: post:product-trees-clean
+COMMAND: test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)" && test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)"
+START: 2026-08-28T21:33:27Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 51
+RESULT: PASS
+END: 2026-08-28T21:33:27Z
+================================================================================
+
+session_ended_at=2026-08-28T21:33:27Z
+session_duration_ms=6070
+session_overall=FAIL
