@@ -25,7 +25,12 @@ var activeCount: UInt32 = 0
 let countError = CGGetActiveDisplayList(0, nil, &activeCount)
 var displays = Array(repeating: CGDirectDisplayID(0), count: Int(activeCount))
 var returnedCount: UInt32 = 0
-let listError = activeCount > 0 ? CGGetActiveDisplayList(activeCount, &displays, &returnedCount) : .success
+var listError = CGError.success
+if activeCount > 0 {
+    listError = displays.withUnsafeMutableBufferPointer { buffer in
+        CGGetActiveDisplayList(activeCount, buffer.baseAddress, &returnedCount)
+    }
+}
 if returnedCount < activeCount { displays = Array(displays.prefix(Int(returnedCount))) }
 
 let currentEvent = CGEvent(source: nil)
