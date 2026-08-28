@@ -1,0 +1,1289 @@
+RumiAI Computer Control physical session
+session_id=cc-phase9d2b-clipboard-typed-read-s01
+started_at=2026-08-28T07:58:43Z
+product_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+product_expected_sha=52339ec3c032ef62bae80113336b6588e7135771
+product_observed_sha=52339ec3c032ef62bae80113336b6588e7135771
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=a7015bed44057253c37a4c026854df6b6cbad1ad
+poc_tested_sha=29c64ed45f0be20c4084997191584d9bf361c5de
+poc_origin_main=29c64ed45f0be20c4084997191584d9bf361c5de
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+swift=swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101) Target: arm64-apple-macosx26.0 
+agent_ctrl=agent-ctrl 0.1.4 on macos/aarch64 recommended surface: ax home: /Users/massimilianonardi/.agent-ctrl active sessions: 0 macOS Accessibility: ✓ trusted  surfaces:   ✓  mock        ready   -  uia         wrong-os   ✓  ax          ready   -  atspi       wrong-os   ·  android     not-implemented   ·  ios         not-implemented 
+
+================================================================================
+TEST: structure
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' /bin/sh '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/check-structure.sh'
+START: 2026-08-28T07:58:44Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+computer-control-structure=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 2929
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:application-lifecycle.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-lifecycle.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A1 router validates application lifecycle inputs before dispatch (0.883875ms)
+✔ Phase 9A1 public surfaces remain provider-scoped after Phase 9A2 extension (0.748542ms)
+✔ Phase 8C through 9B2 are physically validated before Phase 9B3 discovery (0.24925ms)
+✔ Phase 9A lifecycle documentation records physical evidence and preserves separation (0.693458ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.045583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 107
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:application-termination.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-termination.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A2 router validates graceful termination inputs before dispatch (0.577791ms)
+✔ Phase 9A2 requires a resolved native identity and exposes APPLICATION_TERMINATED (0.494542ms)
+✔ Phase 9A2 macOS implementation is graceful-only and fail-closed (0.561791ms)
+✔ Phase 9A2 public surfaces remain explicit after physical promotion (0.192625ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.652958
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:clipboard-metadata-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/clipboard-metadata-observation.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D2A router exposes global parameterless clipboard metadata observation (0.791167ms)
+✔ Phase 9D2A native helper remains metadata-only and race-safe after promotion (0.342084ms)
+✔ Phase 9D2A canonicalization exposes only closed semantic format metadata (0.411208ms)
+✔ Phase 9D2A is physically promoted while Phase 9D2B may advance independently (0.165875ms)
+✔ Phase 9D2A public schema contains canonical metadata and no native type identity or payload fields (0.439542ms)
+✔ Phase 9D2A preserves legacy text clipboard semantics and thin SDK/adapter projection (0.160875ms)
+✔ Phase 9D2A documentation records authoritative s03 physical promotion (0.228166ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51.025583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 103
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:clipboard-typed-read.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/clipboard-typed-read.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D2B router requires revision-scoped canonical typed-read addressing (0.854292ms)
+✔ Phase 9D2B native helper is read-only, revision-guarded and format-advertisement-guarded (0.309208ms)
+✔ Phase 9D2B backend rejects malformed native payload state and preserves exact bytes (0.24225ms)
+✔ Phase 9D2B capability follows physically validated metadata observation without typed write (0.133916ms)
+✔ Phase 9D2B schemas expose canonical lossless transport only (0.150458ms)
+✔ Phase 9D2B SDK and adapter are thin projections and legacy clipboard remains unchanged (0.174ms)
+✔ Phase 9D2B docs fix stale/content/size boundaries without premature physical promotion (0.210625ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.747958
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-observation.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B1 router validates application before dialog observation (0.588583ms)
+✔ Phase 9B1 remains native read-only observation after physical promotion (0.75125ms)
+✔ Phase 9B1 canonical surface omits native handles and action semantics (0.456625ms)
+✔ Phase 9B1 and 9B2 are physically validated before file-picker discovery (0.14275ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.453042
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T07:58:47Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-semantic-actions.test.js'
+START: 2026-08-28T07:58:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B2 router exposes only default/cancel semantic intents (0.607917ms)
+✔ Phase 9B2 resolves native semantic relationships and never targets labels (0.775125ms)
+✔ Phase 9B2 requires an independently observed dialog-absence postcondition (0.137125ms)
+✔ Phase 9B2 public contract exposes no label, coordinates or native handle (0.462167ms)
+✔ Phase 9B2 capabilities and evidence are physically promoted (0.266625ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.445
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:display-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/display-observation.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D1A router exposes global parameterless display observation (0.729042ms)
+✔ Phase 9D1A native helper is read-only AppKit/CoreGraphics display observation (0.3465ms)
+✔ Phase 9D1A canonicalization strips native display identity and fails closed on malformed geometry (0.170416ms)
+✔ Phase 9D1A public schema and surfaces remain semantic after physical promotion (0.274959ms)
+✔ Phase 9D1A documentation records authoritative physical promotion and discovery provenance (0.33575ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.90425
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:dock-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dock-observation.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2A router exposes global parameterless read-only Dock observation (0.767708ms)
+✔ Phase 9C2A macOS helper remains OS-owned native AX read-only observation (0.682042ms)
+✔ Phase 9C2A backend and public surfaces remain semantic after physical promotion (0.345ms)
+✔ Phase 9C2A documentation records authoritative physical promotion and immutable history (1.079166ms)
+✔ Phase 9C2A public result schema remains stable semantic data (0.088292ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.3755
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-accept-result-diagnostic.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-accept-result-diagnostic.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C accept-result diagnostic observes fixture completion without direct UI mutation (0.573ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.252917
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 88
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-actions-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-actions-discovery.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B directory-action discovery is read-only and action-introspection only (0.881ms)
+✔ Phase 9B3B historical action discovery remains preserved after physical promotion (0.1755ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.785542
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-disclosure-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-disclosure-discovery.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B disclosure discovery probes only native outline disclosure semantics (1.008875ms)
+✔ Phase 9B3B disclosure discovery remains preserved after physical promotion (0.189167ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.096042
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-discovery.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A discovery used a real NSOpenPanel and system-wide AX observation (0.949583ms)
+✔ Phase 9B3A discovery treats global focus as optional evidence, not picker identity (0.092292ms)
+✔ Phase 9B3A discovery evidence is preserved and informs the product contract (0.194792ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.490792
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 89
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-navigation-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-navigation-selection.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B router validates exact visible item addressing before dispatch (1.089333ms)
+✔ Phase 9B3B native helper uses only discovered outline disclosure semantics (0.73575ms)
+✔ Phase 9B3B backend keeps independently verified semantic postconditions after promotion (0.213625ms)
+✔ Phase 9B3B public contract exposes names but not paths or native identity (0.792125ms)
+✔ Phase 9B3B stable evidence records the immutable physical checkpoint (0.142042ms)
+✔ Phase 9B3A and Phase 9B3B are physically validated before Phase 9B3C (0.084459ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.590208
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T07:58:48Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-observation.test.js'
+START: 2026-08-28T07:58:48Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A router exposes read-only Provider-scoped file picker observation (0.553ms)
+✔ Phase 9B3A canonical result exposes semantic location and entries only (0.376375ms)
+✔ Phase 9B3A macOS implementation remains fresh native AX observation after physical promotion (0.522542ms)
+✔ Phase 9B3A public SDK, adapter and physical evidence remain explicit (0.246625ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.772083
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 98
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions-physical-observer.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C final physical observer validates AppKit completion independently (0.388041ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.564709
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C router exposes only explicit accept/cancel semantic intents (1.046875ms)
+✔ Phase 9B3C resolves physically observed native picker identifiers and presses only that target (0.560333ms)
+✔ Phase 9B3C backend requires picker absence while application remains running (0.193333ms)
+✔ Phase 9B3C public contract contains no picker button label or native identity (0.446166ms)
+✔ Phase 9B3C fixture records accepted and cancelled AppKit completion independently (0.157542ms)
+✔ Phase 9B3C history remains immutable and canonical s03 evidence is promoted (1.120875ms)
+✔ Phase 9B3C documentation is physically promoted (0.073333ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.027708
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-discovery.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1 menu bar discovery is Provider-scoped and read-only (1.164208ms)
+✔ Phase 9C1 historical s01 FAIL is preserved as a readiness-harness defect (0.366875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.684041
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-observation.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1A router exposes Provider-scoped read-only menu bar observation (0.791333ms)
+✔ Phase 9C1A macOS helper is native AX read-only observation (0.861291ms)
+✔ Phase 9C1A backend and public surfaces expose semantic tree only (0.331708ms)
+✔ Phase 9C1A documentation records physical promotion and keeps invocation separate (0.672042ms)
+✔ Phase 9C1A final fixture disables AppKit automatic menu enabling (0.077583ms)
+✔ Phase 9C1A authoritative physical evidence remains immutable (0.054334ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.009083
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-extras-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-extras-observation.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C3A router exposes global parameterless read-only menu-extras observation (0.784959ms)
+✔ Phase 9C3A macOS helper is OS-owned native AX read-only observation (0.671334ms)
+✔ Phase 9C3A backend and public surfaces expose semantic menu-extra state only after promotion (0.325167ms)
+✔ Phase 9C3A documentation records authoritative physical promotion and preserves mutation boundary (0.351458ms)
+✔ Phase 9C3A public result schema preserves anonymous semantic items (0.105083ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.490833
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-appkit-fixture.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-appkit-fixture.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ physical fixture exposes deterministic native AppKit disclosure and hierarchy (0.340208ms)
+✔ physical harness validates Cocoa controls without browser substitutes (0.161917ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.703291
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T07:58:49Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-children.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-children.test.js'
+START: 2026-08-28T07:58:49Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native JSON tree preserves scope and bounded depth (1.317083ms)
+✔ ui.children accepts observation scopes but action APIs do not (0.392459ms)
+✔ children contract uses native tree rather than indentation (0.153208ms)
+✔ native JSON snapshots remain compatible with agent-ctrl 0.1.4 (0.069209ms)
+✔ ui.children is physically validated on the AppKit hierarchy fixture (0.33325ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 50.233041
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 104
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-describe.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-describe.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.describe routes an actionable target without backend-specific fields (0.54525ms)
+✔ ui.describe rejects missing or malformed element handles before backend dispatch (0.212917ms)
+✔ control description schema makes unavailable state explicit (0.521417ms)
+✔ SDK and RumiAI adapter expose the canonical operation (0.182208ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.9235
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-disclosure.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-disclosure.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.expand and ui.collapse route actionable native targets (0.480917ms)
+✔ disclosure is physically validated on the AppKit reference control (0.35ms)
+✔ disclosure contract and SDK remain directly exposed (0.385375ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.680292
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-invoke.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-invoke.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.invoke routes an actionable target and preserves delivery semantics (0.550209ms)
+✔ ui.invoke rejects missing or malformed element handles before dispatch (0.216834ms)
+✔ macOS mapping reports action delivery without inventing the semantic consequence (0.4065ms)
+✔ macOS mapping keeps role, state and visibility failures distinct (0.147042ms)
+✔ invoke schemas, SDK and RumiAI adapter expose the canonical operation (0.244375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.976375
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 102
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-role-adapter.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-role-adapter.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ macOS agent-ctrl adapter translates canonical text-area to backend text-field (1.079583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.9935
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-scroll.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-scroll.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.scroll validates direction and bounded semantic units (0.687125ms)
+✔ macOS scroll requires native scroll-area observation change (0.314834ms)
+✔ semantic down maps to negative native content delta (0.382334ms)
+✔ scrollIntoView uses native action plus geometry rather than visible flag (0.198ms)
+✔ scrollIntoView falls back to verified wheel geometry when AXScrollToVisible is unsupported (0.081125ms)
+✔ AppKit scroll groups are recognized by their native scrollbar child (0.57825ms)
+✔ wheel pivot center must be inside the AppKit viewport (0.166542ms)
+✔ scroll capabilities are physically validated on the AppKit scroll fixture (0.323208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.476291
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 106
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-stateful.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-stateful.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.toggle requires explicit boolean and ui.select requires actionable refs (0.661417ms)
+✔ stateful macOS capabilities are physically validated on AppKit reference controls (0.355083ms)
+✔ toggle implementation exposes native check/uncheck delivery (0.233ms)
+✔ schemas SDK adapter preserve stateful public surfaces (0.381958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51.02725
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 110
+RESULT: PASS
+END: 2026-08-28T07:58:50Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation-physical-observer.test.js'
+START: 2026-08-28T07:58:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C physical postcondition uses a test-owned fresh AXValue observer instead of cached ui.describe.value (0.370625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.908708
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C router validates canonical targets, ranges and text before dispatch (0.704625ms)
+✔ ui.replaceTextRange verifies fresh native AX full text even when describe.value is stale (0.811458ms)
+✔ ui.insertText requires an observed caret and never replaces a non-empty selection (0.186708ms)
+✔ ui.appendText derives the native text end independently of the current selection (0.1265ms)
+✔ Phase 8C rejects UTF-16 boundaries inside surrogate pairs before native mutation (0.116875ms)
+✔ empty replacement at an already collapsed caret is a verified idempotent no-op (0.125834ms)
+✔ Phase 8C capabilities are physically validated together with Phase 8A and 8B (0.255291ms)
+✔ Phase 8C public surfaces use native AX selected-text mutation without browser, keyboard or clipboard substitution (1.362042ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.518333
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 100
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-range-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-range-selection.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.selectTextRange validates the canonical request before backend dispatch (0.657625ms)
+✔ macOS Phase 8B writes native AX selection and independently verifies the exact range (0.680667ms)
+✔ Phase 8B is idempotent and rejects observed out-of-bounds ranges before mutation (0.135625ms)
+✔ Phase 8B is physically validated on the AppKit reference fixture (0.2605ms)
+✔ Phase 8B public surfaces and native mutation strategy remain explicit (0.497125ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.994917
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 97
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection-rebind.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection-rebind.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native text rebind only bridges text-field and text-area vocabularies (0.568125ms)
+✔ native text rebind retries only an exact stale-target failure (0.189458ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.212417
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.getTextSelection requires an actionable target (0.624458ms)
+✔ macOS text selection normalizes native AX range to explicit UTF-16 offsets (0.605458ms)
+✔ collapsed native range becomes an explicit caret (0.105334ms)
+✔ text selection fails closed for unsupported roles and inconsistent observations (0.133541ms)
+✔ Phase 8A is physically validated on the AppKit reference fixture (0.258458ms)
+✔ Phase 8A public surfaces and native source remain explicit (0.347875ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.236542
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-value.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-value.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ value mutations route canonical parameters (0.686625ms)
+✔ numeric value capabilities are physically validated on AppKit reference controls (0.37075ms)
+✔ SDK and schemas preserve value surfaces (0.419083ms)
+✔ numeric setValue steps native sliders instead of sending a text fill (1.1805ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.56175
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:phase9d-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase9d-discovery.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D discovery starts after Phase 9C observation physical completion (0.511417ms)
+✔ Phase 9D display discovery is read-only AppKit and CoreGraphics observation (0.526625ms)
+✔ Phase 9D clipboard discovery never mutates the user's general pasteboard (0.219333ms)
+✔ Phase 9D richer clipboard must extend rather than silently replace the existing text contract (0.379125ms)
+✖ Phase 9D discovery remains historical provenance while display observation advances independently (0.559417ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.368708
+
+✖ failing tests:
+
+test at tests/products/computer-control/contract-tests/phase9d-discovery.test.js:58:1
+✖ Phase 9D discovery remains historical provenance while display observation advances independently (0.559417ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /clipboard\.(?:readRich|writeRich|observeFormats|listFormats|readTyped|writeTyped|readFormat|writeFormat)/. Input:
+  
+  '"use strict";\n' +
+    'const prior=require("./router-structure");const {ComputerControlError}=require("./errors");\n' +
+    'const CLIPBOARD_FORMATS=new Set(["text/plain","text/html","text/rtf","image/png"]);\n' +
+    'function validateTextRange(params,method="ui.selectTextRange"){const range=params?.range;if(!range||typeof range!=="object"||Array.isArray(range))throw new ComputerControlError("INVALID_TEXT_RANGE",`${method} requires range`,"NONE");if(range.unit!=="utf16-code-unit")throw new ComputerControlError("UNSUPPORTED_TEXT_INDEX_UNIT",`${method} requires unit=utf16-code-unit`,"NONE");if(!Number.isInteger(range.start)||!Number.isInteger(range.end)||range.start<0||range.end<range.start)throw new ComputerControlError("INVALID_TEXT_RANGE",`${method} requires integer offsets with 0 <= start <= end`,"NONE");}\n' +
+    'function validateTextPayload(params,method){if(typeof params?.text!=="string")throw new ComputerControlError("TEXT_REQUIRED",`${method} requires text as a string`,"NONE");}\n' +
+    'function validateApplication(params,method){if(typeof params?.application!=="string"||!params.application.trim())throw new ComputerControlError("APP_REQUIRED",`${method} requires a non-empty application`,"NONE");if(params.timeoutMs!=null&&(!Number.isInteger(params.timeoutMs)||params.timeoutMs<100||params.timeoutMs>60000))throw new ComputerControlError("INVALID_TIMEOUT",`${method} timeoutMs must be an integer from 100 to 60000`,"NONE");}\n' +
+    'function validateFilePickerItem(params,method){validateApplication(params,method);if(typeof params?.name!=="string"||!params.name.trim())throw new ComputerControlError("FILE_PICKER_ITEM_NAME_REQUIRED",`${method} requires a non-empty item name`,"NONE");for(const key of Object.keys(params)){if(!["application","name","timeoutMs"].includes(key))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS",`${method} accepts only application, name and timeoutMs`,"NONE");}}\n' +
+    'function validateFilePickerAction(params,method){validateApplication(params,method);for(const key of Object.keys(params)){if(!["application","timeoutMs"].includes(key))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS",`${method} accepts only application and timeoutMs`,"NONE");}}\n' +
+    'function validateClipboardTypedRead(params){if(!params||typeof params!=="object"||Array.isArray(params))throw new ComputerControlError("INVALID_CLIPBOARD_TYPED_READ_PARAMS","clipboard.readFormat requires revision, itemIndex and format","NONE");for(const key of Object.keys(params)){if(!["revision","itemIndex","format"].includes(key))throw new ComputerControlError("INVALID_CLIPBOARD_TYPED_READ_PARAMS","clipboard.readFormat accepts only revision, itemIndex and format","NONE");}if(typeof params.revision!=="string"||params.revision.length===0)throw new ComputerControlError("CLIPBOARD_REVISION_REQUIRED","clipboard.readFormat requires a non-empty revision from clipboard.observe","NONE");if(!Number.isInteger(params.itemIndex)||params.itemIndex<0)throw new ComputerControlError("CLIPBOARD_ITEM_INDEX_INVALID","clipboard.readFormat requires a non-negative integer itemIndex","NONE");if(typeof params.format!=="string"||!CLIPBOARD_FORMATS.has(params.format))throw new ComputerControlError("CLIPBOARD_FORMAT_UNSUPPORTED","clipboard.readFormat requires a supported canonical format","NONE");}\n' +
+    'function createRouter(backend){const routePrior=prior.createRouter(backend);return async function route(method,params={}){switch(method){case"application.list":if(params.availableOnly!=null&&typeof params.availableOnly!=="boolean")throw new ComputerControlError("INVALID_AVAILABLE_ONLY","application.list availableOnly must be boolean","NONE");return backend.listApplications({availableOnly:params.availableOnly===true});case"application.launch":validateApplication(params,"application.launch");return backend.launchApplication(params);case"application.activate":validateApplication(params,"application.activate");return backend.activateApplication(params);case"application.terminate":validateApplication(params,"application.terminate");return backend.terminateApplication(params);case"dialog.list":validateApplication(params,"dialog.list");if(params.timeoutMs!=null)throw new ComputerControlError("INVALID_DIALOG_PARAMS","dialog.list accepts only application","NONE");return backend.listDialogs({application:params.application});case"dialog.invokeDefault":validateApplication(params,"dialog.invokeDefault");return backend.performDialogAction({application:params.application,action:"default",timeoutMs:params.timeoutMs});case"dialog.invokeCancel":validateApplication(params,"dialog.invokeCancel");return backend.performDialogAction({application:params.application,action:"cancel",timeoutMs:params.timeoutMs});case"menuBar.observe":validateApplication(params,"menuBar.observe");if(Object.keys(params).some(key=>key!=="application"))throw new ComputerControlError("INVALID_MENU_BAR_PARAMS","menuBar.observe accepts only application","NONE");return backend.observeMenuBar({application:params.application});case"dock.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_DOCK_PARAMS","dock.observe accepts no parameters","NONE");return backend.observeDock();case"menuExtras.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_MENU_EXTRAS_PARAMS","menuExtras.observe accepts no parameters","NONE");return backend.observeMenuExtras();case"display.list":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_DISPLAY_PARAMS","display.list accepts no parameters","NONE");return backend.listDisplays();case"clipboard.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_CLIPBOARD_OBSERVE_PARAMS","clipboard.observe accepts no parameters","NONE");return backend.observeClipboard();case"clipboard.readFormat":validateClipboardTypedRead(params);return backend.readClipboardFormat(params);case"filePicker.observe":validateApplication(params,"filePicker.observe");if(Object.keys(params).some(key=>key!=="application"))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS","filePicker.observe accepts only application","NONE");return backend.observeFilePicker({application:params.application});case"filePicker.selectItem":validateFilePickerItem(params,"filePicker.selectItem");return backend.selectFilePickerItem({application:params.application,name:params.name,timeoutMs:params.timeoutMs});case"filePicker.expandDirectory":validateFilePickerItem(params,"filePicker.expandDirectory");return backend.expandFilePickerDirectory({application:params.application,name:params.name,timeoutMs:params.timeoutMs});case"filePicker.accept":validateFilePickerAction(params,"filePicker.accept");return backend.performFilePickerAction({application:params.application,action:"accept",timeoutMs:params.timeoutMs});case"filePicker.cancel":validateFilePickerAction(params,"filePicker.cancel");return backend.performFilePickerAction({application:params.application,action:"cancel",timeoutMs:params.timeoutMs});case"ui.scroll":prior.validateElementParams(params,"ui.scroll");if(!["up","down"].includes(params.direction))throw new ComputerControlError("INVALID_SCROLL_DIRECTION","ui.scroll direction must be up or down","NONE");if(params.amount!=null&&(!Number.isInteger(params.amount)||params.amount<1||params.amount>10))throw new ComputerControlError("INVALID_SCROLL_AMOUNT","ui.scroll amount must be an integer from 1 to 10 semantic units","NONE");return backend.scroll(params);case"ui.scrollIntoView":prior.validateElementParams(params,"ui.scrollIntoView");return backend.scrollIntoView(params);case"ui.getTextSelection":prior.validateElementParams(params,"ui.getTextSelection");return backend.getTextSelection(params);case"ui.selectTextRange":prior.validateElementParams(params,"ui.selectTextRange");validateTextRange(params);return backend.selectTextRange(params);case"ui.replaceTextRange":prior.validateElementParams(params,"ui.replaceTextRange");validateTextRange(params,"ui.replaceTextRange");validateTextPayload(params,"ui.replaceTextRange");return backend.replaceTextRange(params);case"ui.insertText":prior.validateElementParams(params,"ui.insertText");validateTextPayload(params,"ui.insertText");return backend.insertText(params);case"ui.appendText":prior.validateElementParams(params,"ui.appendText");validateTextPayload(params,"ui.appendText");return backend.appendText(params);default:return routePrior(method,params);}};}\n' +
+    'module.exports={...prior,createRouter,validateTextRange,validateTextPayload,validateApplication,validateFilePickerItem,validateFilePickerAction,validateClipboardTypedRead};\n' +
+    '\n' +
+    '"use strict";\n' +
+    '\n' +
+    'const os = require("node:os");\n' +
+    'const {ComputerControlError} = require("./errors");\n' +
+    '\n' +
+    'const CONTRACT_VERSION = "0.9.0";\n' +
+    'const RUNTIME_VERSION = "0.9.0";\n' +
+    '\n' +
+    'function createRouter(backend) {\n' +
+    '  if (!backend || typeof backend.info !== "function") {\n' +
+    '    throw new TypeError("A Computer Control backend is required");\n' +
+    '  }\n' +
+    '\n' +
+    '  return async function route(method, params = {}) {\n' +
+    '    switch (method) {\n' +
+    '      case "runtime.info": {\n' +
+    '        const backendInfo = await backend.info();\n' +
+    '        return {\n' +
+    '          contractVersion:CONTRACT_VERSION,\n' +
+    '          runtimeVersion:RUNTIME_VERSION,\n' +
+    '          backend:{name:backendInfo.name, version:backendInfo.version},\n' +
+    '          platform:{\n' +
+    '            os:backendInfo.platform,\n' +
+    '            version:os.release(),\n' +
+    '            architecture:os.arch(),\n' +
+    '          },\n' +
+    '          capabilities:backendInfo.capabilities,\n' +
+    '        };\n' +
+    '      }\n' +
+    '\n' +
+    '      case "runtime.ensureReady":\n' +
+    '        return backend.ensureRuntime();\n' +
+    '\n' +
+    '      case "runtime.shutdown":\n' +
+    '        return backend.shutdown();\n' +
+    '\n' +
+    '      case "ui.setText":\n' +
+    '        validateSetTextParams(params);\n' +
+    '        return backend.setText(params);\n' +
+    '\n' +
+    '      case "ui.snapshot":\n' +
+    '        validateSnapshotParams(params);\n' +
+    '        return backend.snapshot(params);\n' +
+    '\n' +
+    '      case "ui.describe":\n' +
+    '        validateElementParams(params, "ui.describe");\n' +
+    '        return backend.describe(params);\n' +
+    '\n' +
+    '      case "ui.invoke":\n' +
+    '        validateElementParams(params, "ui.invoke");\n' +
+    '        return backend.invoke(para'... 7140 more characters
+  
+      at TestContext.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase9d-discovery.test.js:64:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '"use strict";\nconst prior=require("./router-structure");const {ComputerControlError}=require("./errors");\nconst CLIPBOARD_FORMATS=new Set(["text/plain","text/html","text/rtf","image/png"]);\nfunction validateTextRange(params,method="ui.selectTextRange"){const range=params?.range;if(!range||typeof range!=="object"||Array.isArray(range))throw new ComputerControlError("INVALID_TEXT_RANGE",`${method} requires range`,"NONE");if(range.unit!=="utf16-code-unit")throw new ComputerControlError("UNSUPPORTED_TEXT_INDEX_UNIT",`${method} requires unit=utf16-code-unit`,"NONE");if(!Number.isInteger(range.start)||!Number.isInteger(range.end)||range.start<0||range.end<range.start)throw new ComputerControlError("INVALID_TEXT_RANGE",`${method} requires integer offsets with 0 <= start <= end`,"NONE");}\nfunction validateTextPayload(params,method){if(typeof params?.text!=="string")throw new ComputerControlError("TEXT_REQUIRED",`${method} requires text as a string`,"NONE");}\nfunction validateApplication(params,method){if(typeof params?.application!=="string"||!params.application.trim())throw new ComputerControlError("APP_REQUIRED",`${method} requires a non-empty application`,"NONE");if(params.timeoutMs!=null&&(!Number.isInteger(params.timeoutMs)||params.timeoutMs<100||params.timeoutMs>60000))throw new ComputerControlError("INVALID_TIMEOUT",`${method} timeoutMs must be an integer from 100 to 60000`,"NONE");}\nfunction validateFilePickerItem(params,method){validateApplication(params,method);if(typeof params?.name!=="string"||!params.name.trim())throw new ComputerControlError("FILE_PICKER_ITEM_NAME_REQUIRED",`${method} requires a non-empty item name`,"NONE");for(const key of Object.keys(params)){if(!["application","name","timeoutMs"].includes(key))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS",`${method} accepts only application, name and timeoutMs`,"NONE");}}\nfunction validateFilePickerAction(params,method){validateApplication(params,method);for(const key of Object.keys(params)){if(!["application","timeoutMs"].includes(key))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS",`${method} accepts only application and timeoutMs`,"NONE");}}\nfunction validateClipboardTypedRead(params){if(!params||typeof params!=="object"||Array.isArray(params))throw new ComputerControlError("INVALID_CLIPBOARD_TYPED_READ_PARAMS","clipboard.readFormat requires revision, itemIndex and format","NONE");for(const key of Object.keys(params)){if(!["revision","itemIndex","format"].includes(key))throw new ComputerControlError("INVALID_CLIPBOARD_TYPED_READ_PARAMS","clipboard.readFormat accepts only revision, itemIndex and format","NONE");}if(typeof params.revision!=="string"||params.revision.length===0)throw new ComputerControlError("CLIPBOARD_REVISION_REQUIRED","clipboard.readFormat requires a non-empty revision from clipboard.observe","NONE");if(!Number.isInteger(params.itemIndex)||params.itemIndex<0)throw new ComputerControlError("CLIPBOARD_ITEM_INDEX_INVALID","clipboard.readFormat requires a non-negative integer itemIndex","NONE");if(typeof params.format!=="string"||!CLIPBOARD_FORMATS.has(params.format))throw new ComputerControlError("CLIPBOARD_FORMAT_UNSUPPORTED","clipboard.readFormat requires a supported canonical format","NONE");}\nfunction createRouter(backend){const routePrior=prior.createRouter(backend);return async function route(method,params={}){switch(method){case"application.list":if(params.availableOnly!=null&&typeof params.availableOnly!=="boolean")throw new ComputerControlError("INVALID_AVAILABLE_ONLY","application.list availableOnly must be boolean","NONE");return backend.listApplications({availableOnly:params.availableOnly===true});case"application.launch":validateApplication(params,"application.launch");return backend.launchApplication(params);case"application.activate":validateApplication(params,"application.activate");return backend.activateApplication(params);case"application.terminate":validateApplication(params,"application.terminate");return backend.terminateApplication(params);case"dialog.list":validateApplication(params,"dialog.list");if(params.timeoutMs!=null)throw new ComputerControlError("INVALID_DIALOG_PARAMS","dialog.list accepts only application","NONE");return backend.listDialogs({application:params.application});case"dialog.invokeDefault":validateApplication(params,"dialog.invokeDefault");return backend.performDialogAction({application:params.application,action:"default",timeoutMs:params.timeoutMs});case"dialog.invokeCancel":validateApplication(params,"dialog.invokeCancel");return backend.performDialogAction({application:params.application,action:"cancel",timeoutMs:params.timeoutMs});case"menuBar.observe":validateApplication(params,"menuBar.observe");if(Object.keys(params).some(key=>key!=="application"))throw new ComputerControlError("INVALID_MENU_BAR_PARAMS","menuBar.observe accepts only application","NONE");return backend.observeMenuBar({application:params.application});case"dock.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_DOCK_PARAMS","dock.observe accepts no parameters","NONE");return backend.observeDock();case"menuExtras.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_MENU_EXTRAS_PARAMS","menuExtras.observe accepts no parameters","NONE");return backend.observeMenuExtras();case"display.list":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_DISPLAY_PARAMS","display.list accepts no parameters","NONE");return backend.listDisplays();case"clipboard.observe":if(Object.keys(params).length!==0)throw new ComputerControlError("INVALID_CLIPBOARD_OBSERVE_PARAMS","clipboard.observe accepts no parameters","NONE");return backend.observeClipboard();case"clipboard.readFormat":validateClipboardTypedRead(params);return backend.readClipboardFormat(params);case"filePicker.observe":validateApplication(params,"filePicker.observe");if(Object.keys(params).some(key=>key!=="application"))throw new ComputerControlError("INVALID_FILE_PICKER_PARAMS","filePicker.observe accepts only application","NONE");return backend.observeFilePicker({application:params.application});case"filePicker.selectItem":validateFilePickerItem(params,"filePicker.selectItem");return backend.selectFilePickerItem({application:params.application,name:params.name,timeoutMs:params.timeoutMs});case"filePicker.expandDirectory":validateFilePickerItem(params,"filePicker.expandDirectory");return backend.expandFilePickerDirectory({application:params.application,name:params.name,timeoutMs:params.timeoutMs});case"filePicker.accept":validateFilePickerAction(params,"filePicker.accept");return backend.performFilePickerAction({application:params.application,action:"accept",timeoutMs:params.timeoutMs});case"filePicker.cancel":validateFilePickerAction(params,"filePicker.cancel");return backend.performFilePickerAction({application:params.application,action:"cancel",timeoutMs:params.timeoutMs});case"ui.scroll":prior.validateElementParams(params,"ui.scroll");if(!["up","down"].includes(params.direction))throw new ComputerControlError("INVALID_SCROLL_DIRECTION","ui.scroll direction must be up or down","NONE");if(params.amount!=null&&(!Number.isInteger(params.amount)||params.amount<1||params.amount>10))throw new ComputerControlError("INVALID_SCROLL_AMOUNT","ui.scroll amount must be an integer from 1 to 10 semantic units","NONE");return backend.scroll(params);case"ui.scrollIntoView":prior.validateElementParams(params,"ui.scrollIntoView");return backend.scrollIntoView(params);case"ui.getTextSelection":prior.validateElementParams(params,"ui.getTextSelection");return backend.getTextSelection(params);case"ui.selectTextRange":prior.validateElementParams(params,"ui.selectTextRange");validateTextRange(params);return backend.selectTextRange(params);case"ui.replaceTextRange":prior.validateElementParams(params,"ui.replaceTextRange");validateTextRange(params,"ui.replaceTextRange");validateTextPayload(params,"ui.replaceTextRange");return backend.replaceTextRange(params);case"ui.insertText":prior.validateElementParams(params,"ui.insertText");validateTextPayload(params,"ui.insertText");return backend.insertText(params);case"ui.appendText":prior.validateElementParams(params,"ui.appendText");validateTextPayload(params,"ui.appendText");return backend.appendText(params);default:return routePrior(method,params);}};}\nmodule.exports={...prior,createRouter,validateTextRange,validateTextPayload,validateApplication,validateFilePickerItem,validateFilePickerAction,validateClipboardTypedRead};\n\n"use strict";\n\nconst os = require("node:os");\nconst {ComputerControlError} = require("./errors");\n\nconst CONTRACT_VERSION = "0.9.0";\nconst RUNTIME_VERSION = "0.9.0";\n\nfunction createRouter(backend) {\n  if (!backend || typeof backend.info !== "function") {\n    throw new TypeError("A Computer Control backend is required");\n  }\n\n  return async function route(method, params = {}) {\n    switch (method) {\n      case "runtime.info": {\n        const backendInfo = await backend.info();\n        return {\n          contractVersion:CONTRACT_VERSION,\n          runtimeVersion:RUNTIME_VERSION,\n          backend:{name:backendInfo.name, version:backendInfo.version},\n          platform:{\n            os:backendInfo.platform,\n            version:os.release(),\n            architecture:os.arch(),\n          },\n          capabilities:backendInfo.capabilities,\n        };\n      }\n\n      case "runtime.ensureReady":\n        return backend.ensureRuntime();\n\n      case "runtime.shutdown":\n        return backend.shutdown();\n\n      case "ui.setText":\n        validateSetTextParams(params);\n        return backend.setText(params);\n\n      case "ui.snapshot":\n        validateSnapshotParams(params);\n        return backend.snapshot(params);\n\n      case "ui.describe":\n        validateElementParams(params, "ui.describe");\n        return backend.describe(params);\n\n      case "ui.invoke":\n        validateElementParams(params, "ui.invoke");\n        return backend.invoke(para'... 7140 more characters,
+    expected: /clipboard\.(?:readRich|writeRich|observeFormats|listFormats|readTyped|writeTyped|readFormat|writeFormat)/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 94
+RESULT: FAIL
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:runtime-set-text.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ runtime.info and ui.setText cross the local RPC boundary (9.779375ms)
+✔ ui.find performs normalized semantic matching over caller observation (0.258625ms)
+✔ native ui.find translates canonical radio-button to the agent-ctrl radio role (0.057792ms)
+✔ ui.setText rejects empty text without invoking GUI recovery (0.211375ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52.503791
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 105
+RESULT: PASS
+END: 2026-08-28T07:58:51Z
+================================================================================
+
+================================================================================
+TEST: contract:system-chrome-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/system-chrome-discovery.test.js'
+START: 2026-08-28T07:58:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2+9C3 combined discovery is read-only and OS-owned (0.809458ms)
+✔ Phase 9C2+9C3 discovery starts only after Phase 9C1A physical promotion (0.214125ms)
+✔ Phase 9C2+9C3 discovery remains historical provenance while observation APIs advance separately (0.217042ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.493042
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T07:58:52Z
+================================================================================
+
+================================================================================
+TEST: physical:phase9d2b-clipboard-typed-read
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/physical-tests/macos-clipboard-typed-read.js'
+START: 2026-08-28T07:58:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+phase9d2b-prior-metadata-validated=PASS {"name":"clipboard.observe","available":true,"validationState":"PHYSICALLY_VALIDATED","strategies":["os-owned-native-clipboard-metadata-observation"]}
+phase9d2b-capability-implemented=PASS {"name":"clipboard.readFormat","available":true,"validationState":"IMPLEMENTED","strategies":["os-owned-native-clipboard-typed-read"]}
+phase9d2b-capability-strategy=PASS {"name":"clipboard.readFormat","available":true,"validationState":"IMPLEMENTED","strategies":["os-owned-native-clipboard-typed-read"]}
+phase9d2b-legacy-clipboard.read-validated=PASS {"name":"clipboard.read","available":true,"validationState":"PHYSICALLY_VALIDATED","strategies":["system-clipboard"]}
+phase9d2b-legacy-clipboard.write-validated=PASS {"name":"clipboard.write","available":true,"validationState":"PHYSICALLY_VALIDATED","strategies":["system-clipboard-readback"]}
+phase9d2b-legacy-clipboard.copy-validated=PASS {"name":"clipboard.copy","available":true,"validationState":"PHYSICALLY_VALIDATED","strategies":["keyboard-copy-delivery"]}
+phase9d2b-legacy-clipboard.paste-validated=PASS {"name":"clipboard.paste","available":true,"validationState":"PHYSICALLY_VALIDATED","strategies":["keyboard-paste-delivery"]}
+phase9d2b-metadata-observed=PASS {"state":"OBSERVED","itemCount":1}
+phase9d2b-advertised-target-count=1
+phase9d2b-oracle-before-0-text/plain=PASS format=text/plain
+phase9d2b-read-state-0-text/plain=PASS format=text/plain
+phase9d2b-canonical-base64-0-text/plain=PASS format=text/plain
+phase9d2b-byte-count-0-text/plain=PASS format=text/plain
+phase9d2b-digest-match-0-text/plain=PASS format=text/plain
+phase9d2b-method-0-text/plain=PASS format=text/plain
+phase9d2b-backend-0-text/plain=PASS format=text/plain
+phase9d2b-oracle-after-0-text/plain=PASS format=text/plain
+phase9d2b-stale-revision-rejected=PASS code=CLIPBOARD_REVISION_STALE
+phase9d2b-missing-item-rejected=PASS code=CLIPBOARD_ITEM_NOT_FOUND
+phase9d2b-nonadvertised-format-rejected=PASS code=CLIPBOARD_FORMAT_NOT_AVAILABLE
+phase9d2b-final-metadata-stable=PASS {"itemCount":1}
+physical-phase9d2b-clipboard-typed-read=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 1884
+RESULT: PASS
+END: 2026-08-28T07:58:54Z
+================================================================================
+
+session_ended_at=2026-08-28T07:58:54Z
+session_duration_ms=10095
+session_overall=FAIL
