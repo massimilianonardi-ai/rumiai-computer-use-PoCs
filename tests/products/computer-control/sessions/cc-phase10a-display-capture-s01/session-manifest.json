@@ -1,0 +1,68 @@
+{
+  "sessionId": "cc-phase10a-display-capture-s01",
+  "scope": "Phase 10A macOS public primary-display capture through runtime/SDK with independent PNG decode and ScreenCaptureKit oracle",
+  "productSha": "06c55cfd47f6ca4032826538c48ee52e583b9a81",
+  "testSourceSha": "f8621087fd976822b57bb3041ac8e30d8f0732a0",
+  "platform": "macOS ScreenCaptureKit/CoreGraphics/AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10a-display-capture.js",
+  "terminalMarker": "physical-phase10a-display-capture=PASS",
+  "prerequisiteEvidence": {
+    "phase10DiscoverySession": "cc-phase10-low-level-fallback-discovery-s03",
+    "phase10DiscoveryEvidence": "ae385e0746d58bcf4c1c41ba6a8641fa8d258fc5",
+    "phase10DiscoveryResult": "40 PASS / 0 FAIL / 0 BLOCKED",
+    "phase10DiscoveryProduct": "82c7ac2cd1d842d50db5a27339a563e2cec919c6"
+  },
+  "publicContract": {
+    "rpc": "display.capture",
+    "sdk": "captureDisplay({display:'primary'})",
+    "selector": "primary",
+    "format": "image/png",
+    "cursorIncluded": false,
+    "validationStateBeforeSession": "IMPLEMENTED",
+    "backend": "macos-screencapturekit",
+    "strategy": "primary-display-single-frame-png"
+  },
+  "physicalOracle": {
+    "source": "tests/products/computer-control/physical-tests/helpers/macos-phase10a-display-capture-oracle.swift",
+    "independentPNGDecode": true,
+    "independentPrimaryDisplayDimensions": true,
+    "independentScreenCaptureKitFrame": true,
+    "byteForByteFrameComparison": false,
+    "reasonNotByteForByte": "Separate real screen frames may legitimately differ because visible content can change between captures."
+  },
+  "privacyBoundary": {
+    "screenPixelsRead": true,
+    "screenPermissionRequested": false,
+    "requiresExistingScreenRecordingPermission": true,
+    "productScreenshotPersisted": false,
+    "oracleScreenshotPersisted": false,
+    "payloadLogged": false,
+    "base64Logged": false,
+    "digestLogged": false,
+    "productPayloadPassedToOracleViaStdinOnly": true,
+    "nativeDisplayIdentifiersPublic": false
+  },
+  "semanticBoundary": {
+    "lowLevelFallback": true,
+    "semanticAPIsRemainPreferred": true,
+    "captureIsSemanticSuccess": false,
+    "ocrOrVisionIncluded": false,
+    "pointerOrKeyboardInputDelivered": false,
+    "physicalPanelPixelIdentityClaimed": false,
+    "widthHeightMeaning": "returned PNG image dimensions only"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/ScreenCaptureKit environment or pre-existing Screen Recording permission prevents the physical checkpoint from running. No permission request is made.",
+    "FAIL": "The public runtime/SDK capture, PNG integrity, capability metadata, privacy boundary, or independent oracle observation is inconsistent.",
+    "PASS": "The public display.capture path returns a valid primary-display PNG whose metadata and decode agree with an independent ScreenCaptureKit/CoreGraphics oracle, without persisting or logging screenshot bytes."
+  },
+  "nextStepOnPass": "Promote display.capture to PHYSICALLY_VALIDATED in a separate product commit/evidence update, then continue Phase 10B pointer delivery discovery/fixture work without weakening semantic UI APIs.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and create a new session ID. Do not promote Phase 10A on a non-PASS checkpoint."
+}
