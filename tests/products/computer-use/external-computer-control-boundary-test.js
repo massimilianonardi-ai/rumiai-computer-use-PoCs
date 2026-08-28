@@ -10,7 +10,7 @@ const root = path.join(
   "app"
 );
 const wrapper = path.join(root, "computer-control-external.js");
-const consumers = ["agent-loop.js", "executors.js", "recovery.js", "semantic-ui.js"];
+const consumers = ["agent-loop.js", "executors.js", "recovery.js", "semantic-ui.js", "perception.js"];
 let failed = false;
 
 function check(label, condition) {
