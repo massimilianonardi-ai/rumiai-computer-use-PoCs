@@ -1,0 +1,57 @@
+{
+  "sessionId": "cc-phase9d-display-clipboard-discovery-s01",
+  "scope": "Computer Control Phase 9D physical discovery for macOS displays/multi-monitor topology and richer clipboard format mechanics without defining a public contract",
+  "productSha": "6e651f4c226e670ea45ed4b0139b3fe0eff8baac",
+  "testSourceSha": "68c76aa89d838641baac95abff4f89f47ac96d19",
+  "platform": "macOS AppKit/CoreGraphics displays plus safe NSPasteboard metadata and isolated format probes",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase9d-display-clipboard-discovery.js",
+  "terminalMarker": "physical-phase9d-display-clipboard-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase9c3aSession": "cc-phase9c3a-menu-extras-observation-s01",
+    "phase9c3aEvidenceCommit": "5cc824a2209da7ad0de4feaa3cf0eff75ce42e55",
+    "phase9c3aValidatedProduct": "042d587299852f517022e6792874ec4fae7d826c",
+    "phase9c3aResult": "34 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9cObservationState": "COMPLETE on the current macOS reference surface"
+  },
+  "existingClipboardBoundary": {
+    "legacyRead": "clipboard.read returns text",
+    "legacyWrite": "clipboard.write accepts text and verifies exact text readback",
+    "legacyCopy": "clipboard.copy is keyboard copy delivery",
+    "legacyPaste": "clipboard.paste is keyboard paste delivery",
+    "discoveryRule": "richer clipboard must extend compatible semantics rather than silently replacing the existing text contract"
+  },
+  "safetyBoundary": {
+    "displayReadOnly": true,
+    "displayConfigurationMutation": false,
+    "generalPasteboardPayloadRead": false,
+    "generalPasteboardMutation": false,
+    "generalPasteboardObservedMetadata": ["changeCount", "itemCount", "type identifiers"],
+    "isolatedPasteboardOnlyForFormatWrites": true,
+    "isolatedFormats": ["string", "html", "rtf", "png"],
+    "keyboardFallback": false,
+    "mouseFallback": false,
+    "clipboardCommandFallback": false,
+    "appleScriptFallback": false,
+    "filesystemMutation": false,
+    "publicApiIntroduced": false
+  },
+  "expectedCoverage": [
+    "all structure and contract guards pass after Phase 9C3A physical promotion",
+    "at least one active online macOS display is observed",
+    "exactly one observed display corresponds to CGMainDisplayID",
+    "display geometry, visible geometry, pixel dimensions, scale, rotation, builtin, active and online state are physically observable",
+    "the user's general pasteboard is not modified and no clipboard payload is logged",
+    "general pasteboard format identifiers and item topology can be observed read-only",
+    "an isolated test-owned pasteboard round-trips string, HTML, RTF and PNG typed data",
+    "existing text clipboard APIs remain distinct historical contract surface",
+    "no display or richer-clipboard public API is defined by discovery"
+  ]
+}
