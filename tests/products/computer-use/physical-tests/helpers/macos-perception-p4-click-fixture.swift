@@ -45,8 +45,8 @@ final class ClickSurface: NSView {
         let attributed = NSAttributedString(string: text, attributes: attributes)
         let size = attributed.size()
         let point = NSPoint(
-            x: max(8, (bounds.width - size.width) / 2),
-            y: max(8, (bounds.height - size.height) / 2)
+            x: max(CGFloat(8), (bounds.width - size.width) / 2),
+            y: max(CGFloat(8), (bounds.height - size.height) / 2)
         )
         attributed.draw(at: point)
     }
@@ -65,10 +65,10 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
         }
 
         let screenFrame = screen.frame
-        let width = 430.0
-        let height = 120.0
-        let logicalX = floor(Double(screenFrame.width) * 0.34)
-        let logicalY = floor(Double(screenFrame.height) * 0.39)
+        let width: CGFloat = 430
+        let height: CGFloat = 120
+        let logicalX: CGFloat = floor(screenFrame.width * 0.34)
+        let logicalY: CGFloat = floor(screenFrame.height * 0.39)
         let rect = NSRect(
             x: screenFrame.minX + logicalX,
             y: screenFrame.maxY - logicalY - height,
@@ -107,7 +107,12 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             let ready = Ready(
                 state: "READY",
-                target: TargetRect(x: logicalX, y: logicalY, width: width, height: height),
+                target: TargetRect(
+                    x: Double(logicalX),
+                    y: Double(logicalY),
+                    width: Double(width),
+                    height: Double(height)
+                ),
                 initialPointer: pointer
             )
             if let data = try? JSONEncoder().encode(ready) {
