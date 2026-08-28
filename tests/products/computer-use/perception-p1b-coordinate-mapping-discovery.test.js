@@ -6,7 +6,6 @@ const path = require("node:path");
 const zlib = require("node:zlib");
 const {decodePng,largestComponent} = require("./helpers/png-raster");
 
-const pocRoot = path.resolve(__dirname, "../../..");
 const productRoot = process.env.RUMIAI_COMPUTER_USE_ROOT;
 assert.ok(productRoot, "RUMIAI_COMPUTER_USE_ROOT required");
 
@@ -16,10 +15,14 @@ const harness = fs.readFileSync(path.join(__dirname,"physical-tests","perception
 const fixture = fs.readFileSync(path.join(__dirname,"physical-tests","helpers","macos-perception-p1b-marker-fixture.swift"),"utf8");
 
 assert.match(docs,/P1A[\s\S]*PHYSICALLY_VALIDATED/);
-assert.match(docs,/P1B[\s\S]*PENDING_PHYSICAL_DISCOVERY/);
-assert.match(docs,/equality of capture and display dimensions alone is not sufficient evidence/i);
+assert.match(docs,/P1B[\s\S]*PHYSICALLY_OBSERVED/);
+assert.match(docs,/Product mapping status:\s*`IMPLEMENTED`/i);
+assert.match(docs,/derived from observations/i);
 assert.match(perceptionSource,/actionCoordinateMapping:\s*\{[\s\S]*state:"UNRESOLVED"/);
-assert.doesNotMatch(perceptionSource,/resolvePrimaryActionCoordinateMapping|mapCapturePointToPrimaryLogical/);
+assert.match(perceptionSource,/function acquireMappedPrimaryVisualFrame/);
+assert.match(perceptionSource,/function mapCapturePointToPrimaryLogical/);
+assert.match(perceptionSource,/validation:\s*\{[\s\S]*state:"IMPLEMENTED"/);
+assert.doesNotMatch(perceptionSource,/validation:\s*\{[\s\S]*state:"PHYSICALLY_VALIDATED"/);
 
 assert.match(harness,/computerControl\.listDisplays\(\)/);
 assert.match(harness,/perception\.acquirePrimaryVisualFrame\(\)/);
