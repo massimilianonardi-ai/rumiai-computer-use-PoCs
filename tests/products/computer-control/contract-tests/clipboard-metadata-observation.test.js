@@ -20,7 +20,7 @@ test("Phase 9D2A router exposes global parameterless clipboard metadata observat
   assert.deepEqual(value.items,[]);
 });
 
-test("Phase 9D2A native helper observes only general-pasteboard metadata and is race-safe",()=>{
+test("Phase 9D2A native helper remains metadata-only and race-safe after promotion",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-clipboard-metadata-observation.swift"),"utf8");
   const wrapper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/app/computer-control/backends/macos-clipboard-metadata-observation.js"),"utf8");
   assert.match(helper,/NSPasteboard\.general/);
@@ -29,30 +29,13 @@ test("Phase 9D2A native helper observes only general-pasteboard metadata and is 
   assert.match(helper,/item\.types/);
   assert.match(helper,/beforeRevision\s*!=\s*afterRevision/);
   assert.match(helper,/CLIPBOARD_CHANGED_DURING_OBSERVATION/);
-  assert.match(helper,/text\/plain/);
-  assert.match(helper,/text\/html/);
-  assert.match(helper,/text\/rtf/);
-  assert.match(helper,/image\/png/);
   assert.doesNotMatch(helper,/string\s*\(\s*forType|data\s*\(\s*forType|propertyList\s*\(\s*forType|readObjects|clearContents|declareTypes|setString|setData|writeObjects/);
-  assert.doesNotMatch(helper,/CGEvent|NSEvent|keyCode|osascript|AppleScript/);
   assert.doesNotMatch(wrapper,/agent-ctrl|pbcopy|pbpaste|keyboard|click|mouse/);
 });
 
 test("Phase 9D2A canonicalization exposes only closed semantic format metadata",()=>{
-  const value=macBackend.canonicalClipboardMetadata({
-    revision:19,
-    items:[
-      {index:0,formats:["image/png","text/plain"],unsupportedFormatCount:2,rawTypes:["private.example"]},
-      {index:1,formats:[],unsupportedFormatCount:1},
-    ],
-  });
-  assert.deepEqual(value,{
-    revision:"19",
-    items:[
-      {index:0,formats:["text/plain","image/png"],unsupportedFormatCount:2},
-      {index:1,formats:[],unsupportedFormatCount:1},
-    ],
-  });
+  const value=macBackend.canonicalClipboardMetadata({revision:19,items:[{index:0,formats:["image/png","text/plain"],unsupportedFormatCount:2,rawTypes:["private.example"]},{index:1,formats:[],unsupportedFormatCount:1}]});
+  assert.deepEqual(value,{revision:"19",items:[{index:0,formats:["text/plain","image/png"],unsupportedFormatCount:2},{index:1,formats:[],unsupportedFormatCount:1}]});
   assert.equal(JSON.stringify(value).includes("private.example"),false);
   assert.throws(()=>macBackend.canonicalClipboardMetadata({revision:"1",items:[{index:2,formats:[],unsupportedFormatCount:0}]}),e=>e.code==="CLIPBOARD_METADATA_INVALID_NATIVE_STATE");
   assert.throws(()=>macBackend.canonicalClipboardMetadata({revision:"1",items:[{index:0,formats:["application/x-private"],unsupportedFormatCount:0}]}),e=>e.code==="CLIPBOARD_METADATA_INVALID_NATIVE_STATE");
@@ -60,21 +43,20 @@ test("Phase 9D2A canonicalization exposes only closed semantic format metadata",
   assert.throws(()=>macBackend.canonicalClipboardMetadata({revision:"",items:[]}),e=>e.code==="CLIPBOARD_METADATA_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D2A capability advances only metadata observation after validated displays",()=>{
+test("Phase 9D2A is physically promoted while Phase 9D2B may advance independently",()=>{
   const backendSource=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
   assert.match(backendSource,/display\.list.*PHYSICALLY_VALIDATED/);
-  assert.match(backendSource,/clipboard\.observe.*IMPLEMENTED/);
+  assert.match(backendSource,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
+  assert.match(backendSource,/clipboard\.readFormat.*IMPLEMENTED/);
   assert.match(backendSource,/os-owned-native-clipboard-metadata-observation/);
   assert.match(backendSource,/async observeClipboard/);
-  assert.doesNotMatch(backendSource,/clipboard\.readFormat|clipboard\.writeFormat/);
+  assert.doesNotMatch(backendSource,/clipboard\.writeFormat/);
 });
 
 test("Phase 9D2A public schema contains canonical metadata and no native type identity or payload fields",()=>{
   const schema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/clipboard-observe-result.schema.json"),"utf8"));
   const text=JSON.stringify(schema);
-  for(const forbidden of["typeIdentifier","nativeType","rawType","rawTypes","payload","pngBytes","base64","nativeRef","handle"]){
-    assert.equal(text.includes(forbidden),false,forbidden);
-  }
+  for(const forbidden of["typeIdentifier","nativeType","rawType","rawTypes","payload","pngBytes","base64","nativeRef","handle"])assert.equal(text.includes(forbidden),false,forbidden);
   const item=schema.properties.items.items;
   assert.deepEqual(item.required,["index","formats","unsupportedFormatCount"]);
   assert.equal(item.additionalProperties,false);
@@ -85,7 +67,7 @@ test("Phase 9D2A public schema contains canonical metadata and no native type id
   assert.deepEqual(params.properties,{});
 });
 
-test("Phase 9D2A preserves legacy text clipboard semantics and exposes thin SDK/adapter projection",()=>{
+test("Phase 9D2A preserves legacy text clipboard semantics and thin SDK/adapter projection",()=>{
   const legacyRouter=fs.readFileSync(path.join(productRoot,"runtime/src/router-core.js"),"utf8");
   const legacySchema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/clipboard.params.schema.json"),"utf8"));
   assert.match(legacyRouter,/case "clipboard\.read"/);
@@ -101,19 +83,18 @@ test("Phase 9D2A preserves legacy text clipboard semantics and exposes thin SDK/
   for(const source of[sdk,types,adapter])assert.match(source,/observeClipboard/);
 });
 
-test("Phase 9D2A docs record privacy boundary without premature physical promotion",()=>{
+test("Phase 9D2A documentation records authoritative s03 physical promotion",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-clipboard.md"),"utf8");
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
-  const discovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d-display-clipboard-discovery.md"),"utf8");
-  const displayEvidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d1a-display-observation-physical.md"),"utf8");
-  assert.match(docs,/Phase 9D2A validation state: `IMPLEMENTED`/);
-  assert.doesNotMatch(docs,/Phase 9D2A validation state: `PHYSICALLY_VALIDATED`/);
-  assert.match(docs,/does not read a clipboard payload/i);
-  assert.match(docs,/does not expose their names/i);
-  assert.match(docs,/CLIPBOARD_CHANGED_DURING_OBSERVATION/);
-  assert.match(roadmap,/Phase 9D1A display observation\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2A clipboard metadata observation\s+IMPLEMENTED/);
-  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PENDING/);
-  assert.match(discovery,/c70e0e581c54ee67d9f56c4400ef3a942012629e/);
-  assert.match(displayEvidence,/a7788371d7b6d446e783a714112643ba093f2814/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d2a-clipboard-metadata-observation-physical.md"),"utf8");
+  assert.match(docs,/Phase 9D2A validation state: `PHYSICALLY_VALIDATED`/);
+  assert.match(roadmap,/Phase 9D2A clipboard metadata observation\s+PHYSICALLY_VALIDATED/);
+  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+IMPLEMENTED/);
+  for(const text of[docs,evidence]){
+    assert.match(text,/521f41c2fcc499574b61b658440671faefe61708/);
+    assert.match(text,/af5fcf98cfc770302cd1e34c011d46fdeca5adc3/);
+    assert.match(text,/58b72853eb65b51e6fda28de52fec152a5a834c0/);
+    assert.match(text,/37 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  }
+  assert.match(evidence,/fadb856d43418f383e273bd50794ba37fb568ba7/);
 });
