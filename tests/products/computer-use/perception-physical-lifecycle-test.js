@@ -5,10 +5,10 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const root = path.resolve(__dirname, "../../..");
-const physical = path.join(root, "computer-use", "physical-tests", "visual-frame-acquisition-physical.js");
-const runner = path.join(root, "computer-use", "session-runner.sh");
-const timeout = path.join(root, "computer-use", "run-with-timeout.js");
+const root = __dirname;
+const physical = path.join(root, "physical-tests", "visual-frame-acquisition-physical.js");
+const runner = path.join(root, "session-runner.sh");
+const timeout = path.join(root, "run-with-timeout.js");
 
 const physicalSource = fs.readFileSync(physical, "utf8");
 const runnerSource = fs.readFileSync(runner, "utf8");
