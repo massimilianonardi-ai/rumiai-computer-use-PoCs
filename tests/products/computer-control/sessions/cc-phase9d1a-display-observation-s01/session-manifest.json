@@ -1,0 +1,57 @@
+{
+  "sessionId": "cc-phase9d1a-display-observation-s01",
+  "scope": "Computer Control Phase 9D1A physical validation of the public global read-only display.list contract on macOS",
+  "productSha": "25c9052c514926f783d6c315cad2e14a5fa55311",
+  "testSourceSha": "a7bd10dc6d522014e1c262a5691ad93c2f5245dd",
+  "platform": "macOS AppKit/CoreGraphics display observation",
+  "browserSurfaceAllowed": false,
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-display-observation.js",
+  "terminalMarker": "physical-phase9d1a-display-observation=PASS",
+  "prerequisiteEvidence": {
+    "phase9dDiscoverySession": "cc-phase9d-display-clipboard-discovery-s01",
+    "phase9dDiscoveryEvidenceCommit": "c70e0e581c54ee67d9f56c4400ef3a942012629e",
+    "phase9dDiscoveryProduct": "6e651f4c226e670ea45ed4b0139b3fe0eff8baac",
+    "phase9dDiscoveryTestSource": "68c76aa89d838641baac95abff4f89f47ac96d19",
+    "phase9dDiscoveryPocTested": "cb01e84d7e4901448d584c4075a7d28e97bda65b",
+    "phase9dDiscoveryResult": "PASS"
+  },
+  "contractBoundary": {
+    "rpc": "display.list",
+    "sdk": "client.listDisplays()",
+    "global": true,
+    "readOnly": true,
+    "publicFields": ["name", "bounds", "usableBounds", "scale", "rotationDegrees", "primary", "builtIn", "active", "online"],
+    "nativeDisplayIdPublic": false,
+    "nativePixelDimensionClaimPublic": false,
+    "arrayOrderIsDurableIdentity": false,
+    "displayMutation": false,
+    "screenshotCapture": false,
+    "keyboardFallback": false,
+    "mouseFallback": false,
+    "clipboardFallback": false,
+    "appleScriptFallback": false
+  },
+  "independentOracle": {
+    "source": "tests/products/computer-control/physical-tests/helpers/macos-display-oracle.swift",
+    "mechanism": "independent AppKit NSScreen plus CoreGraphics observation",
+    "sharesProductHelper": false,
+    "comparison": "exact canonical semantic display vector"
+  },
+  "expectedCoverage": [
+    "all structure and contract guards pass with Phase 9D1A implemented and Phase 9D discovery preserved as historical provenance",
+    "runtime.info reports display.list as IMPLEMENTED with os-owned-native-display-observation strategy",
+    "at least one native display is observed and exactly one is primary",
+    "public display count and canonical semantic vector exactly match the independent native oracle",
+    "logical bounds, usable bounds, scale, rotation, primary, built-in, active and online state are exposed",
+    "CGDirectDisplayID, NSScreenNumber and native pixel-dimension claims do not cross the public boundary",
+    "repeated public observation is stable while topology is unchanged",
+    "observation performs no display mutation, screenshot, keyboard, mouse, clipboard or AppleScript operation"
+  ]
+}
