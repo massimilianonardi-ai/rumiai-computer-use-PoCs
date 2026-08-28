@@ -102,7 +102,7 @@ test("Phase 10A docs preserve fallback, privacy, permission and validation bound
   assert.match(api,/SCREEN_CAPTURE_PERMISSION_REQUIRED/);
   assert.match(api,/does \*\*not\*\* automatically request Screen Recording permission/);
   assert.match(api,/not persist/i);
-  assert.match(api,/not a claim about physical panel pixels/);
+  assert.match(api,/not(?:\*\*)? a claim about physical panel pixels/);
   assert.match(phase10,/Phase 10A capture\s+IMPLEMENTED/);
   assert.match(phase10,/semantic capability always takes precedence/);
   assert.match(evidence,/ae385e0746d58bcf4c1c41ba6a8641fa8d258fc5/);
