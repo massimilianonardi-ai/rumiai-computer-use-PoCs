@@ -64,7 +64,9 @@ test("P1A rejects malformed capture payload/state instead of inventing perceptio
   assert.equal(validateCapturedPng(captureResult({format:"image/jpeg"})).error, "VISUAL_FRAME_INVALID_FORMAT");
   assert.equal(validateCapturedPng(captureResult({width:0})).error, "VISUAL_FRAME_INVALID_WIDTH");
   assert.equal(validateCapturedPng(captureResult({byteCount:999})).error, "VISUAL_FRAME_BYTE_COUNT_MISMATCH");
-  assert.equal(validateCapturedPng(captureResult({dataBase64:"not-base64"})).error, "VISUAL_FRAME_NON_CANONICAL_BASE64");
+  const nonCanonical = captureResult();
+  nonCanonical.dataBase64 += "\n";
+  assert.equal(validateCapturedPng(nonCanonical).error, "VISUAL_FRAME_NON_CANONICAL_BASE64");
   const badSignature = Buffer.from("abcdefghijk");
   assert.equal(validateCapturedPng(captureResult({byteCount:badSignature.length,dataBase64:badSignature.toString("base64")})).error, "VISUAL_FRAME_INVALID_PNG_SIGNATURE");
 });
