@@ -1,0 +1,63 @@
+{
+  "sessionId": "cc-phase10e-keyboard-public-s02",
+  "scope": "Phase 10E public keyboard re-validation after forward-fixing shifted modifier delivery timing",
+  "productSha": "e2eb419c352f5996ce45ad6c13b37d7ea52c8c21",
+  "testSourceSha": "cfc8460f31772f5e6f6a10505fbc71fc9f6d8887",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10e-keyboard-public.js",
+  "terminalMarker": "physical-phase10e-keyboard-public=PASS",
+  "prerequisiteEvidence": {
+    "keyboardDiscoverySession": "cc-phase10e-keyboard-delivery-discovery-s01",
+    "keyboardDiscoveryEvidence": "1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324",
+    "keyboardDiscoveryResult": "PASS",
+    "publicS01Session": "cc-phase10e-keyboard-public-s01",
+    "publicS01Evidence": "707a97154f652e8e21f2e54f87c61144f996c80a",
+    "publicS01Result": "FAIL",
+    "publicS01Finding": "plain a and Enter passed end-to-end; Shift+A product result passed but the independent fixture did not observe the shifted lifecycle when events were posted without inter-event settling"
+  },
+  "forwardFix": {
+    "product": "insert short internal settling intervals between Shift-down, key-down, key-up and Shift-up; no public contract change",
+    "poc": "forward-fix two stale documentation guards and add a regression guard for modifier-delivery settling",
+    "physicalOracleChanged": false
+  },
+  "publicContract": {
+    "rpc": "keyboard.press",
+    "sdk": "ComputerControlClient.pressKey",
+    "supportedTuples": [
+      {"key": "a", "modifiers": []},
+      {"key": "enter", "modifiers": []},
+      {"key": "a", "modifiers": ["shift"]}
+    ],
+    "state": "KEY_POSTED",
+    "keyLifecycle": "POSTED",
+    "semanticConsequenceVerified": false,
+    "numericVirtualKeyPublic": false,
+    "prePromotionValidationState": "IMPLEMENTED"
+  },
+  "physicalOracle": {
+    "fixtureOwnedByTest": true,
+    "type": "AppKit NSTextView in a separate process",
+    "plainA": "exactly one down/up plus lowercase consequence",
+    "enter": "exactly one down/up plus newline consequence",
+    "shiftedA": "exactly one Shift on/off plus shifted key down/up and uppercase consequence",
+    "frontmostApplicationRestorationRequired": true,
+    "emergencyShiftReleaseAllowedOnPass": false,
+    "userContentTouched": false,
+    "numericKeycodesPersisted": false,
+    "userTextPersisted": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the product helper, runtime or independent fixture from compiling or executing.",
+    "FAIL": "The public contract, independent delivery/consequence, modifier lifecycle, restoration, privacy or semantic-boundary invariant fails.",
+    "PASS": "The real public SDK path posts all three grounded keyboard tuples with the delivery-only boundary while the independent AppKit oracle confirms exact delivery, consequences and cleanup."
+  },
+  "nextStepOnPass": "Promote keyboard.press to PHYSICALLY_VALIDATED without changing the validated runtime and close Phase 10A-10E low-level mechanics.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote keyboard.press."
+}
