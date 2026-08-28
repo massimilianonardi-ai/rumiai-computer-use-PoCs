@@ -28,7 +28,7 @@ test("Phase 9D2B router requires revision-scoped canonical typed-read addressing
   assert.deepEqual(value,{state:"READ",revision:"1",itemIndex:0,format:"text/plain",byteCount:3,dataBase64:"YWJj"});
 });
 
-test("Phase 9D2B native helper is read-only, revision-guarded and format-advertisement-guarded",()=>{
+test("Phase 9D2B native helper remains read-only, revision-guarded and format-advertisement-guarded after promotion",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-clipboard-typed-read.swift"),"utf8");
   const wrapper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/app/computer-control/backends/macos-clipboard-typed-read.js"),"utf8");
   assert.match(helper,/NSPasteboard\.general/);
@@ -62,13 +62,14 @@ test("Phase 9D2B backend rejects malformed native payload state and preserves ex
   assert.throws(()=>macBackend.canonicalClipboardRead({...value,byteCount:16777217},requested),e=>e.code==="CLIPBOARD_TYPED_READ_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D2B capability follows physically validated metadata observation without typed write",()=>{
-  const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(source,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
-  assert.match(source,/clipboard\.readFormat.*IMPLEMENTED/);
-  assert.match(source,/os-owned-native-clipboard-typed-read/);
-  assert.match(source,/async readClipboardFormat/);
-  assert.doesNotMatch(source,/clipboard\.writeFormat/);
+test("Phase 9D2B is physically promoted while Phase 9D2C advances independently",()=>{
+  const phase9=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
+  const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
+  assert.match(phase9,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
+  assert.match(structure,/clipboard\.readFormat.*PHYSICALLY_VALIDATED/);
+  assert.match(structure,/clipboard\.writeFormat.*IMPLEMENTED/);
+  assert.match(structure,/os-owned-native-clipboard-typed-read/);
+  assert.match(phase9,/async readClipboardFormat/);
 });
 
 test("Phase 9D2B schemas expose canonical lossless transport only",()=>{
@@ -98,17 +99,18 @@ test("Phase 9D2B SDK and adapter are thin projections and legacy clipboard remai
   assert.equal(legacySchema.additionalProperties,false);
 });
 
-test("Phase 9D2B docs fix stale/content/size boundaries without premature physical promotion",()=>{
+test("Phase 9D2B documentation records authoritative s02 physical promotion and precise format coverage",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-clipboard.md"),"utf8");
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
-  assert.match(docs,/Phase 9D2B validation state: `IMPLEMENTED`/);
-  assert.doesNotMatch(docs,/Phase 9D2B validation state: `PHYSICALLY_VALIDATED`/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d2b-clipboard-typed-read-physical.md"),"utf8");
+  assert.match(docs,/Phase 9D2B validation state: `PHYSICALLY_VALIDATED`/);
+  assert.match(docs,/ab2745383e7e3051d6d4bb797cd908fb7c5b3f77/);
+  assert.match(evidence,/38 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(evidence,/text\/plain/);
+  assert.match(evidence,/text\/html/);
+  assert.match(evidence,/additional real-pasteboard conformance/i);
   assert.match(docs,/CLIPBOARD_REVISION_STALE/);
   assert.match(docs,/CLIPBOARD_CHANGED_DURING_READ/);
-  assert.match(docs,/16 MiB/);
-  assert.match(docs,/lossless/i);
-  assert.match(docs,/intentionally reads clipboard content/i);
-  assert.match(roadmap,/Phase 9D2A clipboard metadata observation\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+IMPLEMENTED/);
-  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+PENDING/);
+  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PHYSICALLY_VALIDATED/);
+  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+IMPLEMENTED/);
 });
