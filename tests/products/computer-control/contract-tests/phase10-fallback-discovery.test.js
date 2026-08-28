@@ -6,6 +6,7 @@ const test=require("node:test");
 const portableRoot=path.resolve(__dirname,"../../../../../..");
 const productRoot=process.env.RUMIAI_COMPUTER_CONTROL_ROOT||path.join(portableRoot,"lib","computer-control");
 const helperPath=path.join(__dirname,"../physical-tests/helpers/macos-phase10-low-level-discovery.swift");
+const physicalPath=path.join(__dirname,"../physical-tests/macos-phase10-low-level-discovery.js");
 
 test("Phase 10 starts only after Phase 9D richer clipboard physical completion",()=>{
   const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
@@ -29,6 +30,20 @@ test("Phase 10 discovery is observation/probe only and does not deliver syntheti
   assert.match(helper,/CGEvent\(scrollWheelEvent2Source:/);
   assert.match(helper,/CGEvent\(keyboardEventSource:/);
   assert.doesNotMatch(helper,/\.post\(|CGEventPost|CGWarpMouseCursorPosition|CGAssociateMouseAndMouseCursorPosition|CGRequestScreenCaptureAccess|NSEvent\.mouseEvent|osascript|AppleScript/);
+});
+
+test("Phase 10 screen probe uses modern ScreenCaptureKit only after non-prompting preflight",()=>{
+  const helper=fs.readFileSync(helperPath,"utf8");
+  const physical=fs.readFileSync(physicalPath,"utf8");
+  assert.match(helper,/import ScreenCaptureKit/);
+  assert.match(helper,/if screenCapturePreflight/);
+  assert.match(helper,/SCShareableContent\.getExcludingDesktopWindows/);
+  assert.match(helper,/SCContentFilter\(display:/);
+  assert.match(helper,/SCScreenshotManager\.captureImage/);
+  assert.match(helper,/ScreenCaptureKit\.SCScreenshotManager/);
+  assert.doesNotMatch(helper,/CGDisplayCreateImage/);
+  assert.match(physical,/-framework","ScreenCaptureKit"/);
+  assert.match(physical,/screen-capture-api-mismatch/);
 });
 
 test("Phase 10 public low-level APIs remain absent until discovery fixes their semantics",()=>{
