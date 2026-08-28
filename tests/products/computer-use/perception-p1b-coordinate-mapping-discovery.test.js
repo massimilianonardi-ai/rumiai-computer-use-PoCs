@@ -25,12 +25,18 @@ assert.match(harness,/computerControl\.listDisplays\(\)/);
 assert.match(harness,/perception\.acquirePrimaryVisualFrame\(\)/);
 assert.match(harness,/stableDisplay\(before, after\)/);
 assert.match(harness,/largestComponent/);
+assert.match(harness,/Math\.min\(p\.r,p\.b\)\s*-\s*p\.g/);
+assert.match(harness,/Math\.min\(p\.g,p\.b\)\s*-\s*p\.r/);
+assert.match(harness,/p1b-marker-presence=OBSERVED/);
 assert.match(harness,/pixelToLogicalX\s*=\s*logicalWidth\s*\/\s*pixelWidth/);
 assert.match(harness,/pixelToLogicalY\s*=\s*logicalHeight\s*\/\s*pixelHeight/);
 assert.match(harness,/identityAssumed=false/);
 assert.match(harness,/mappingState=UNRESOLVED/);
 assert.doesNotMatch(harness,/movePointer\(|clickPointer\(|dragPointer\(|wheelPointer\(|pressKey\(/);
 assert.match(fixture,/ignoresMouseEvents\s*=\s*true/);
+assert.match(fixture,/NSColor\(srgbRed:/);
+assert.match(fixture,/final class MarkerView/);
+assert.match(fixture,/deadline:\s*\.now\(\)\s*\+\s*0\.9/);
 assert.match(fixture,/marker\.y/);
 assert.match(fixture,/screenFrame\.maxY\s*-\s*marker\.y\s*-\s*marker\.height/);
 
@@ -45,7 +51,7 @@ const png=Buffer.concat([signature,chunk("IHDR",ihdr),chunk("IDAT",zlib.deflateS
 const raster=decodePng(png);
 assert.deepEqual(raster.pixel(0,0),{r:255,g:0,b:255,a:255},"PNG row zero must be top capture row");
 assert.deepEqual(raster.pixel(0,1),{r:0,g:255,b:255,a:255},"PNG row one must remain below row zero");
-const magenta=largestComponent(raster,p=>p.r>200&&p.g<50&&p.b>200);
+const magenta=largestComponent(raster,p=>Math.min(p.r,p.b)-p.g>=70&&Math.max(p.r,p.b)>=130);
 assert.deepEqual(magenta,{area:1,x:0,y:0,width:1,height:1});
 
 console.log("perception-p1b-coordinate-mapping-discovery-contract=PASS");
