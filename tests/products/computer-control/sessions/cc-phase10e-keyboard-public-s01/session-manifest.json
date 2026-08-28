@@ -1,0 +1,59 @@
+{
+  "sessionId": "cc-phase10e-keyboard-public-s01",
+  "scope": "Phase 10E physical validation of public keyboard.press through the real runtime and SDK against an independent test-owned AppKit text oracle",
+  "productSha": "7f0c67ea2b45db39a2bdaee811d1dafeb029a773",
+  "testSourceSha": "0fb3993ba9c088344d571040b38848608f6a39a6",
+  "platform": "macOS Quartz/CoreGraphics + Carbon symbolic key identities + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10e-keyboard-public.js",
+  "terminalMarker": "physical-phase10e-keyboard-public=PASS",
+  "prerequisiteEvidence": {
+    "keyboardDiscoverySession": "cc-phase10e-keyboard-delivery-discovery-s01",
+    "keyboardDiscoveryEvidence": "1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324",
+    "keyboardDiscoveryProduct": "0f4d2c0378b12df50ed192721dded97edff9f72e",
+    "keyboardDiscoveryResult": "PASS",
+    "physicallyEstablishedTuples": ["a + no modifiers", "enter + no modifiers", "a + shift"]
+  },
+  "publicContract": {
+    "rpc": "keyboard.press",
+    "sdk": "ComputerControlClient.pressKey",
+    "acceptedTuples": [
+      {"key": "a", "modifiers": []},
+      {"key": "enter", "modifiers": []},
+      {"key": "a", "modifiers": ["shift"]}
+    ],
+    "state": "KEY_POSTED",
+    "keyLifecycle": "POSTED",
+    "modifierLifecycle": "POSTED or NOT_REQUIRED according to tuple",
+    "semanticConsequenceVerified": false,
+    "numericNativeKeycodesPublic": false,
+    "heldKeyOrModifierApiPublic": false,
+    "semanticOperationsPreferred": true,
+    "prePromotionValidationState": "IMPLEMENTED"
+  },
+  "physicalOracle": {
+    "fixtureOwnedByTest": true,
+    "type": "AppKit NSTextView first responder in a separate process",
+    "plainA": "public a press must independently produce exactly one down/up pair and lowercase text consequence",
+    "enter": "public enter press must independently produce exactly one down/up pair and newline consequence",
+    "shiftA": "public shift+a press must independently produce exactly one Shift on/off transition, one shifted a down/up pair and uppercase text consequence",
+    "modifierEmergencyReleaseMustNotBeNeededOnPass": true,
+    "frontmostApplicationRestorationRequired": true,
+    "userContentTouched": false,
+    "numericKeycodesPersisted": false,
+    "userTextPersisted": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the product helper, runtime or independent fixture from compiling or executing.",
+    "FAIL": "The public contract, tuple restriction, independent key/modifier delivery, text consequence, cleanup, restoration, privacy or semantic-boundary invariant fails.",
+    "PASS": "The real public SDK path posts all three physically grounded keyboard tuples with the required delivery-only boundary while the independent AppKit oracle confirms exact delivery/consequence and clean modifier lifecycle."
+  },
+  "nextStepOnPass": "Promote keyboard.press to PHYSICALLY_VALIDATED without changing the validated runtime, record authoritative evidence, then close Phase 10 low-level fallback mechanics and keep OCR/vision as a separate interpretation layer.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote keyboard.press."
+}
