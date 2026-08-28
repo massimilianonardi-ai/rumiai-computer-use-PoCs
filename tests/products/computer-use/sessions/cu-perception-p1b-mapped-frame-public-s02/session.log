@@ -1,0 +1,255 @@
+RumiAI Computer Use physical session
+session_id=cu-perception-p1b-mapped-frame-public-s02
+started_at=2026-08-28T21:11:06Z
+computer_use_root=/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use
+computer_use_expected_sha=29c269864def0a26d3254e913d2a5a87f6125103
+computer_use_observed_sha=29c269864def0a26d3254e913d2a5a87f6125103
+computer_control_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+computer_control_expected_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+computer_control_observed_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=807747c79ea2a46dac618afb520990548b2b53fe
+poc_tested_sha=87380831a0f35a76fe093f900ffe5b1855bbbf52
+poc_origin_main=87380831a0f35a76fe093f900ffe5b1855bbbf52
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+agent_ctrl_present=true
+physical_timeout_ms=45000
+
+================================================================================
+TEST: contract:external-computer-control-boundary-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'
+START: 2026-08-28T21:11:06Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+external wrapper syntax: PASS
+external adapter environment override: PASS
+external installation home override: PASS
+external wrapper has no development-volume path: PASS
+external wrapper has no user-profile install: PASS
+external wrapper has no bundled fallback: PASS
+bundled Computer Control source absent: PASS
+direct backend facade absent: PASS
+agent-loop.js syntax: PASS
+agent-loop.js uses external boundary: PASS
+agent-loop.js no direct internal facade: PASS
+agent-loop.js no direct agent-ctrl: PASS
+agent-loop.js no backend module paths: PASS
+executors.js syntax: PASS
+executors.js uses external boundary: PASS
+executors.js no direct internal facade: PASS
+executors.js no direct agent-ctrl: PASS
+executors.js no backend module paths: PASS
+recovery.js syntax: PASS
+recovery.js uses external boundary: PASS
+recovery.js no direct internal facade: PASS
+recovery.js no direct agent-ctrl: PASS
+recovery.js no backend module paths: PASS
+semantic-ui.js syntax: PASS
+semantic-ui.js uses external boundary: PASS
+semantic-ui.js no direct internal facade: PASS
+semantic-ui.js no direct agent-ctrl: PASS
+semantic-ui.js no backend module paths: PASS
+perception.js syntax: PASS
+perception.js uses external boundary: PASS
+perception.js no direct internal facade: PASS
+perception.js no direct agent-ctrl: PASS
+perception.js no backend module paths: PASS
+external-computer-control-boundary=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 173
+RESULT: PASS
+END: 2026-08-28T21:11:06Z
+================================================================================
+
+================================================================================
+TEST: contract:visual-frame-acquisition-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/visual-frame-acquisition-test.js'
+START: 2026-08-28T21:11:06Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P1A acquires one exact primary visual frame through injected Computer Control capture (0.794375ms)
+✔ P1A rejects malformed capture payload/state instead of inventing perception (0.097125ms)
+✔ P1A propagates Computer Control BLOCKED/FAILED state without fallback capture (0.060167ms)
+✔ P1A source and docs preserve perception/action separation (1.203292ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.5535
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 56
+RESULT: PASS
+END: 2026-08-28T21:11:06Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-session-runner-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-session-runner-test.js'
+START: 2026-08-28T21:11:06Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Computer Use physical runner provides portable agent-ctrl explicitly (0.418709ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2.687666
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 57
+RESULT: PASS
+END: 2026-08-28T21:11:06Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-physical-lifecycle-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-physical-lifecycle-test.js'
+START: 2026-08-28T21:11:06Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+perception-physical-lifecycle=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 51
+RESULT: PASS
+END: 2026-08-28T21:11:06Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p1b-coordinate-mapping-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p1b-coordinate-mapping-discovery.test.js'
+START: 2026-08-28T21:11:06Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+perception-p1b-coordinate-mapping-discovery-contract=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 54
+RESULT: PASS
+END: 2026-08-28T21:11:07Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p1b-mapped-frame.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p1b-mapped-frame.test.js'
+START: 2026-08-28T21:11:07Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P1B derives a mapped primary frame from stable display observations (0.804375ms)
+✔ P1B maps capture points without invoking an action (0.105458ms)
+✔ P1B fails closed for rotated or unstable primary topology (0.087041ms)
+✔ P1A remains unmapped after P1B is added (0.052458ms)
+✔ P1B product and physical harness preserve the action and lifecycle boundary (0.874ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.085792
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 56
+RESULT: PASS
+END: 2026-08-28T21:11:07Z
+================================================================================
+
+================================================================================
+TEST: physical:computer-use-perception-p1b-mapped-frame-public
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/run-with-timeout.js' '45000' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/physical-tests/perception-p1b-mapped-frame-public.js'
+START: 2026-08-28T21:11:07Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+p1b-public-mapped-frame=PASS sourceWidth=1710 sourceHeight=1107 destinationWidth=1710 destinationHeight=1107
+p1b-public-marker-oracle=PASS count=2 coordinatesLogged=false
+p1b-public-origin=PASS topLeft=true
+p1b-public-transform=PASS axisAligned=true identityAssumed=false
+p1b-public-product-state=PASS mapping=RESOLVED validation=IMPLEMENTED interpretation=NOT_RUN
+p1b-public-action-boundary=PASS pointerActionsPerformed=false keyboardActionsPerformed=false
+p1b-public-payload-policy=PASS persisted=false payloadLogged=false
+p1b-public-runtime-cleanup=PASS
+physical-computer-use-perception-p1b-public=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 4061
+RESULT: PASS
+END: 2026-08-28T21:11:11Z
+================================================================================
+
+================================================================================
+TEST: post:product-trees-clean
+COMMAND: test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)" && test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)"
+START: 2026-08-28T21:11:11Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 50
+RESULT: PASS
+END: 2026-08-28T21:11:11Z
+================================================================================
+
+session_ended_at=2026-08-28T21:11:11Z
+session_duration_ms=4920
+session_overall=PASS
