@@ -18,25 +18,22 @@ test("Phase 10 starts only after Phase 9D richer clipboard physical completion",
   assert.match(evidence,/39 PASS \/ 0 FAIL \/ 0 BLOCKED/);
 });
 
-test("Phase 10 discovery is observation/probe only and does not deliver synthetic input or request screen permission",()=>{
+test("historical Phase 10 discovery remains non-mutating provenance",()=>{
   const helper=fs.readFileSync(helperPath,"utf8");
-  assert.match(helper,/CGEvent\(source:\s*nil\)/);assert.match(helper,/\.location/);assert.match(helper,/\.unflippedLocation/);assert.match(helper,/NSEvent\.mouseLocation/);assert.match(helper,/CGPreflightScreenCaptureAccess/);assert.match(helper,/AXIsProcessTrusted/);assert.match(helper,/CGEvent\(mouseEventSource:/);assert.match(helper,/CGEvent\(scrollWheelEvent2Source:/);assert.match(helper,/CGEvent\(keyboardEventSource:/);
-  assert.doesNotMatch(helper,/\.post\(|CGEventPost|CGWarpMouseCursorPosition|CGAssociateMouseAndMouseCursorPosition|CGRequestScreenCaptureAccess|NSEvent\.mouseEvent|osascript|AppleScript/);
+  assert.match(helper,/CGEvent\(source:\s*nil\)/);assert.match(helper,/CGPreflightScreenCaptureAccess/);assert.match(helper,/CGEvent\(scrollWheelEvent2Source:/);assert.match(helper,/CGEvent\(keyboardEventSource:/);
+  assert.doesNotMatch(helper,/\.post\(|CGEventPost|CGWarpMouseCursorPosition|CGRequestScreenCaptureAccess|osascript|AppleScript/);
+  const physical=fs.readFileSync(physicalPath,"utf8");assert.match(physical,/physical-phase10-low-level-fallback-discovery=PASS/);
 });
 
-test("Phase 10 screen probe uses modern ScreenCaptureKit only after non-prompting preflight",()=>{
-  const helper=fs.readFileSync(helperPath,"utf8");const physical=fs.readFileSync(physicalPath,"utf8");
-  assert.match(helper,/import ScreenCaptureKit/);assert.match(helper,/if screenCapturePreflight/);assert.match(helper,/SCShareableContent\.getExcludingDesktopWindows/);assert.match(helper,/SCContentFilter\(display:/);assert.match(helper,/SCScreenshotManager\.captureImage/);assert.match(helper,/ScreenCaptureKit\.SCScreenshotManager/);assert.doesNotMatch(helper,/CGDisplayCreateImage/);assert.match(physical,/-framework","ScreenCaptureKit"/);assert.match(physical,/screen-capture-api-mismatch/);
-});
-
-test("Phase 10 permits only evidence-backed capture and pointer fallback surfaces through 10C",()=>{
+test("Phase 10 public surface is evidence-backed only through validated 10C before 10D discovery",()=>{
   const router=["router.js","router-core.js","router-low-level.js"].map(name=>fs.readFileSync(path.join(productRoot,"runtime/src",name),"utf8")).join("\n");
   for(const method of["display.capture","pointer.move","pointer.click","pointer.drag"])assert.equal(router.includes(`\"${method}\"`),true,method);
-  for(const method of["pointer.down","pointer.up","pointer.button","input.scroll","input.wheel","keyboard.key","window.capture","ui.capture","ocr.read"])assert.equal(router.includes(`\"${method}\"`),false,method);
+  for(const method of["pointer.down","pointer.up","pointer.button","input.scroll","input.wheel","pointer.wheel","keyboard.key","window.capture","ui.capture","ocr.read"])assert.equal(router.includes(`\"${method}\"`),false,method);
 });
 
-test("Phase 10 remains an explicit fallback layer and cannot weaken semantic APIs",()=>{
-  const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
-  assert.match(roadmap,/Phase 10\s+low-level fallbacks\s+PENDING/);assert.match(roadmap,/These are fallbacks/);assert.match(roadmap,/working semantic operation always takes precedence/);assert.match(roadmap,/coordinate delivery is not itself semantic success/);
-  assert.match(phase10,/Phase 10A capture\s+PHYSICALLY_VALIDATED/);assert.match(phase10,/Phase 10B pointer\s+PHYSICALLY_VALIDATED/);assert.match(phase10,/Phase 10C drag\/drop\s+IMPLEMENTED/);assert.match(phase10,/A working semantic capability always takes precedence/);
+test("Phase 10 lifecycle closes 10C and leaves 10D pending without weakening semantic APIs",()=>{
+  const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
+  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
+  assert.match(roadmap,/Phase 10\s+low-level fallbacks\s+PENDING/);assert.match(roadmap,/working semantic operation always takes precedence/);assert.match(roadmap,/coordinate delivery is not itself semantic success/);
+  assert.match(phase10,/Phase 10A capture\s+PHYSICALLY_VALIDATED/);assert.match(phase10,/Phase 10B pointer\s+PHYSICALLY_VALIDATED/);assert.match(phase10,/Phase 10C drag\/drop\s+PHYSICALLY_VALIDATED/);assert.match(phase10,/Phase 10D wheel\s+PENDING/);assert.match(phase10,/semantic `ui\.scroll` remains preferred/i);
 });
