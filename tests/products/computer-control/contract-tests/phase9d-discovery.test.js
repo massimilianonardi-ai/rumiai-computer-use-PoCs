@@ -55,13 +55,15 @@ test("Phase 9D richer clipboard must extend rather than silently replace the exi
   assert.equal(schema.additionalProperties,false);
 });
 
-test("Phase 9D discovery remains historical provenance while display observation advances independently",()=>{
+test("Phase 9D discovery remains historical provenance while public phases advance independently",()=>{
   const router=fs.readFileSync(path.join(productRoot,"runtime/src/router.js"),"utf8");
   const core=fs.readFileSync(path.join(productRoot,"runtime/src/router-core.js"),"utf8");
   const source=router+"\n"+core;
   assert.match(source,/case"display\.list"/);
   assert.doesNotMatch(source,/display\.(?:configure|setMode|rotate|move|resize|capture|screenshot)/);
-  assert.doesNotMatch(source,/clipboard\.(?:readRich|writeRich|observeFormats|listFormats|readTyped|writeTyped|readFormat|writeFormat)/);
+  assert.match(source,/case"clipboard\.observe"/);
+  assert.match(source,/case"clipboard\.readFormat"/);
+  assert.doesNotMatch(source,/clipboard\.(?:readRich|writeRich|observeFormats|listFormats|readTyped|writeTyped|writeFormat)/);
   const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d-display-clipboard-discovery.md"),"utf8");
   assert.match(evidence,/c70e0e581c54ee67d9f56c4400ef3a942012629e/);
   assert.match(evidence,/PHYSICALLY_VALIDATED_DISCOVERY/);
