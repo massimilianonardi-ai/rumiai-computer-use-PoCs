@@ -2,12 +2,14 @@
 "use strict";
 
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
 
 const productRoot = process.env.RUMIAI_COMPUTER_USE_ROOT;
 assert.ok(productRoot, "RUMIAI_COMPUTER_USE_ROOT required");
-const perception = require(path.join(productRoot,"app","perception.js"));
+const perceptionPath=path.join(productRoot,"app","perception.js");
+const perception = require(perceptionPath);
 
 function captureResult(width=600,height=400) {
   const bytes=Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a,0x50,0x31,0x42]);
@@ -65,4 +67,20 @@ test("P1A remains unmapped after P1B is added", () => {
   const result=perception.acquirePrimaryVisualFrame({captureDisplay:()=>captureResult()});
   assert.equal(result.state,"VISUAL_FRAME_ACQUIRED");
   assert.equal(result.actionCoordinateMapping.state,"UNRESOLVED");
+});
+
+test("P1B product and physical harness preserve the action and lifecycle boundary", () => {
+  const source=fs.readFileSync(perceptionPath,"utf8");
+  const harness=fs.readFileSync(path.join(__dirname,"physical-tests","perception-p1b-mapped-frame-public.js"),"utf8");
+  assert.match(source,/function acquireMappedPrimaryVisualFrame/);
+  assert.match(source,/display-list-before-after-plus-marker-discovery/);
+  assert.match(source,/state:"IMPLEMENTED"/);
+  assert.doesNotMatch(source,/movePointer\(|clickPointer\(|dragPointer\(|wheelPointer\(|pressKey\(/);
+  assert.match(harness,/perception\.acquireMappedPrimaryVisualFrame\(\)/);
+  assert.match(harness,/perception\.mapCapturePointToPrimaryLogical/);
+  assert.match(harness,/computerControl\.shutdownRuntime\(\)/);
+  assert.match(harness,/finally\s*\{/);
+  assert.doesNotMatch(harness,/movePointer\(|clickPointer\(|dragPointer\(|wheelPointer\(|pressKey\(/);
+  assert.match(harness,/coordinatesLogged=false/);
+  assert.match(harness,/payloadLogged=false/);
 });
