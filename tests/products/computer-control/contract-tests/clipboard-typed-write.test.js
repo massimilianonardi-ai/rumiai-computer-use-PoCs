@@ -48,10 +48,10 @@ test("Phase 9D2C native writer mutates only NSPasteboard general and reports del
   assert.doesNotMatch(wrapper,/agent-ctrl|keyboard|click|mouse/);
 });
 
-test("Phase 9D2C backend requires a separate exact typed-read postcondition",()=>{
+test("Phase 9D2C backend remains exact-readback verified after physical promotion",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
   assert.match(source,/clipboard\.readFormat.*PHYSICALLY_VALIDATED/);
-  assert.match(source,/clipboard\.writeFormat.*IMPLEMENTED/);
+  assert.match(source,/clipboard\.writeFormat.*PHYSICALLY_VALIDATED/);
   assert.match(source,/clipboardTypedWrite\.write/);
   assert.match(source,/clipboardTypedRead\.read/);
   assert.match(source,/observed\.dataBase64!==dataBase64/);
@@ -100,14 +100,20 @@ test("Phase 9D2C SDK/adapter are thin projections and legacy text clipboard rema
   assert.equal(legacySchema.additionalProperties,false);
 });
 
-test("Phase 9D2C docs preserve delivery-not-success and pending physical mutation boundary",()=>{
+test("Phase 9D2C docs record authoritative physical promotion and closed Phase 9D",()=>{
   const docs=fs.readFileSync(path.join(productRoot,"docs/api-clipboard.md"),"utf8");
   const roadmap=fs.readFileSync(path.join(productRoot,"docs/native-controls-roadmap.md"),"utf8");
-  assert.match(docs,/Phase 9D2C validation state: `IMPLEMENTED`/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d2c-clipboard-typed-write-physical.md"),"utf8");
+  assert.match(docs,/Phase 9D2C validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(docs,/Delivery is not success/);
   assert.match(docs,/native-typed-readback-exact/);
   assert.match(docs,/stdin/i);
   assert.match(docs,/does not echo `dataBase64`/);
+  assert.match(docs,/358e22bca3b18bb835e91ae05fece1b3a757b722/);
+  assert.match(evidence,/39 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  for(const format of["text/plain","text/html","text/rtf","image/png"])assert.match(evidence,new RegExp(format.replace("/","\\/")));
+  assert.match(evidence,/c9806844aecb3bde47f72ee37e2e731c8d6e6c99/);
   assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+IMPLEMENTED/);
+  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+PHYSICALLY_VALIDATED/);
+  assert.match(roadmap,/Phase 9D — displays and richer clipboard — COMPLETE/);
 });
