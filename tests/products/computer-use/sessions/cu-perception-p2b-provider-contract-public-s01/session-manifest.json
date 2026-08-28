@@ -1,0 +1,79 @@
+{
+  "sessionId": "cu-perception-p2b-provider-contract-public-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "839d53d100e31da2fec839351f94f197d377ab36",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "0f61c2b533b87ac85ebecfd12316a20218d95d58",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js",
+    "tests/products/computer-use/perception-p2b-provider-contract.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p2b-provider-contract-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p2b-provider-contract-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2a-local-ocr-discovery-s02",
+      "evidence": "9bf876dd35190776b9276d1e98db9e16733b5c50",
+      "result": "PASS"
+    }
+  ],
+  "purpose": "Physically validate the Computer Use P2B provider-neutral text-region interpretation contract using the already observed local macOS Vision OCR provider as an oracle, without resolving semantic identity or executing an action.",
+  "requiredClaims": [
+    "the real P1B mapped-frame path supplies a physically validated mapped PNG",
+    "the real product perception-provider contract accepts an injected provider declaring text-region capability",
+    "the provider-neutral contract validates exact capture-pixel top-left frame geometry",
+    "two test-owned strings observed by the local Vision provider are normalized by Computer Use as text-region observations",
+    "normalized observations have semanticIdentity null and actionable false",
+    "the observation centers still map through P1B into independently known logical fixture windows",
+    "semanticTarget remains UNRESOLVED",
+    "actionPolicy remains NOT_EVALUATED",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload, recognized text and coordinates are not persisted or logged",
+    "fixture and Computer Control runtime are cleaned up",
+    "both product working trees remain clean"
+  ],
+  "nonClaims": [
+    "macOS Vision is not made a built-in Computer Use dependency by this test",
+    "no VLM, object detector or icon-recognition contract is validated",
+    "text-region observations are not semantic UI identities",
+    "no observation is selected as an actionable target",
+    "no low-level action derived from visual perception is executed",
+    "no arbitrary user-content OCR accuracy claim is made",
+    "event delivery is not equated with semantic task success"
+  ],
+  "promotionOnPass": {
+    "providerContractState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "nextPhase": "P3 observation-to-target resolution and policy boundary"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
