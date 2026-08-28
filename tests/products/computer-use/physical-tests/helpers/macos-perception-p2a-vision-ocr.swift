@@ -27,10 +27,10 @@ struct Result: Codable { let state: String; let width: Int; let height: Int; let
                 text:candidate.string,
                 confidence:candidate.confidence,
                 box:Box(
-                    x:b.minX*Double(width),
-                    y:(1.0-b.maxY)*Double(height),
-                    width:b.width*Double(width),
-                    height:b.height*Double(height)
+                    x:Double(b.minX)*Double(width),
+                    y:(1.0-Double(b.maxY))*Double(height),
+                    width:Double(b.width)*Double(width),
+                    height:Double(b.height)*Double(height)
                 )
             )
         }
