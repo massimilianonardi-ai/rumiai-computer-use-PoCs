@@ -1,0 +1,70 @@
+{
+  "sessionId": "cc-phase10d-wheel-delivery-discovery-s02",
+  "scope": "Phase 10D physical discovery rerun of real vertical Quartz wheel delivery after correcting two stale documentation guards; no public raw-wheel API is frozen",
+  "productSha": "9cb037f688a82f733de520062b0adb30c0994a8b",
+  "testSourceSha": "a438ce771cbd1278dbefea7c4c209e77bf2a9217",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10d-wheel-delivery-discovery.js",
+  "terminalMarker": "physical-phase10d-wheel-delivery-discovery=PASS",
+  "historicalS01": {
+    "session": "cc-phase10d-wheel-delivery-discovery-s01",
+    "evidence": "34739f019fbbf098144b9010b76c14e89b57fa6e",
+    "productSha": "9cb037f688a82f733de520062b0adb30c0994a8b",
+    "testSourceSha": "e9eb48cdc821bd2f3614e0d99756df10b9511aae",
+    "pocShaTested": "d69182ea49539d0bdaeb3cba15a25209923325de",
+    "sessionOverall": "FAIL",
+    "physicalDiscovery": "PASS",
+    "contractFailures": [
+      "Phase 10B semantic fallback documentation regex expected an older phrase no longer present in the canonical compressed Phase 10 document",
+      "Phase 10C evidence regex expected 'no emergency release' without the now-canonical 'fixture' qualifier"
+    ],
+    "productChangedForS02": false,
+    "physicalHarnessChangedForS02": false
+  },
+  "s02Corrections": {
+    "changedPaths": [
+      "tests/products/computer-control/contract-tests/phase10b-pointer-delivery-discovery.test.js",
+      "tests/products/computer-control/contract-tests/pointer-drag-fallback.test.js"
+    ],
+    "purpose": "Make documentation guards assert current semantic boundaries rather than brittle editorial wording while preserving all historical evidence and the exact wheel physical harness."
+  },
+  "discoveryBoundary": {
+    "publicRawWheelApi": false,
+    "semanticScrollApiPreferred": "ui.scroll",
+    "fixtureOwnedByTest": true,
+    "verticalOnly": true,
+    "quartzUnits": "line",
+    "negativeWheel1": -3,
+    "positiveWheel1": 3,
+    "baselineResetBetweenSigns": true,
+    "eventPostingAloneIsSuccess": false
+  },
+  "expectedPhysicalEvidence": {
+    "negativeDelivery": "ProbeScrollView observes at least one scrollWheel event after wheel1=-3",
+    "negativeConsequence": "documentVisibleRect origin changes in the observed qualitative direction",
+    "positiveDelivery": "ProbeScrollView observes at least one scrollWheel event after wheel1=+3",
+    "positiveConsequence": "documentVisibleRect origin changes in the opposite qualitative direction after baseline reset",
+    "signMappingFromS01": "wheel1=-3 produced increasing-y; wheel1=+3 produced decreasing-y on the reference Mac",
+    "restoration": "original pointer and previous frontmost application are restored",
+    "privacy": "fixture coordinates, numeric scroll offsets and native display identifiers are not persisted"
+  },
+  "semanticBoundary": {
+    "semanticUiScrollWeakened": false,
+    "rawWheelSemanticSuccessClaimed": false,
+    "discoveryFreezesPublicVocabulary": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the controlled fixture from compiling or executing.",
+    "FAIL": "A contract guard, delivery, real scroll consequence, opposite-sign mapping, baseline reset, restoration, privacy or semantic-boundary invariant fails.",
+    "PASS": "All contract tests pass and both raw wheel signs are physically delivered to the test-owned AppKit scroll fixture, independently change scroll state in opposite directions, and cleanup succeeds without creating a public API."
+  },
+  "nextStepOnPass": "Use authoritative s02 physical sign/delivery evidence to freeze a narrow public raw-wheel contract while keeping semantic ui.scroll preferred, then validate that public API separately.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not add or promote a raw-wheel public capability."
+}
