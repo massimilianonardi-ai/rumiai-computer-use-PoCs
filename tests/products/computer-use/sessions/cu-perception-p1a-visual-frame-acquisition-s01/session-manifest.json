@@ -12,7 +12,7 @@
       "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
     }
   },
-  "testSourceSha": "5fa91cec3adf0e476b01393220ffbe5b3bcd4f42",
+  "testSourceSha": "ea3a6b74ddcfef453723cf54195270d0bc113f11",
   "contractTests": [
     "tests/products/computer-use/external-computer-control-boundary-test.js",
     "tests/products/computer-use/visual-frame-acquisition-test.js"
