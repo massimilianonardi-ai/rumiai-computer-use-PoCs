@@ -43,14 +43,15 @@ test("Phase 9D2A canonicalization exposes only closed semantic format metadata",
   assert.throws(()=>macBackend.canonicalClipboardMetadata({revision:"",items:[]}),e=>e.code==="CLIPBOARD_METADATA_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D2A is physically promoted while Phase 9D2B may advance independently",()=>{
-  const backendSource=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
-  assert.match(backendSource,/display\.list.*PHYSICALLY_VALIDATED/);
-  assert.match(backendSource,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
-  assert.match(backendSource,/clipboard\.readFormat.*IMPLEMENTED/);
-  assert.match(backendSource,/os-owned-native-clipboard-metadata-observation/);
-  assert.match(backendSource,/async observeClipboard/);
-  assert.doesNotMatch(backendSource,/clipboard\.writeFormat/);
+test("Phase 9D2A stays physically validated while richer typed phases advance independently",()=>{
+  const phase9=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
+  const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
+  assert.match(phase9,/display\.list.*PHYSICALLY_VALIDATED/);
+  assert.match(phase9,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
+  assert.match(structure,/clipboard\.readFormat.*PHYSICALLY_VALIDATED/);
+  assert.match(structure,/clipboard\.writeFormat.*IMPLEMENTED/);
+  assert.match(phase9,/os-owned-native-clipboard-metadata-observation/);
+  assert.match(phase9,/async observeClipboard/);
 });
 
 test("Phase 9D2A public schema contains canonical metadata and no native type identity or payload fields",()=>{
@@ -89,7 +90,8 @@ test("Phase 9D2A documentation records authoritative s03 physical promotion",()=
   const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase9d2a-clipboard-metadata-observation-physical.md"),"utf8");
   assert.match(docs,/Phase 9D2A validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(roadmap,/Phase 9D2A clipboard metadata observation\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+IMPLEMENTED/);
+  assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PHYSICALLY_VALIDATED/);
+  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+IMPLEMENTED/);
   for(const text of[docs,evidence]){
     assert.match(text,/521f41c2fcc499574b61b658440671faefe61708/);
     assert.match(text,/af5fcf98cfc770302cd1e34c011d46fdeca5adc3/);
