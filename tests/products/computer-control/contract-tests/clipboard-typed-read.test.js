@@ -50,7 +50,7 @@ test("Phase 9D2B native helper is read-only, revision-guarded and format-adverti
 
 test("Phase 9D2B backend rejects malformed native payload state and preserves exact bytes",()=>{
   const requested={revision:"42",itemIndex:0,format:"image/png"};
-  const bytes=Buffer.from([0,1,2,253,254,255]);
+  const bytes=Buffer.from([0,1,2,253,254]);
   const value=macBackend.canonicalClipboardRead({revision:"42",itemIndex:0,format:"image/png",byteCount:bytes.length,dataBase64:bytes.toString("base64")},requested);
   assert.equal(Buffer.from(value.dataBase64,"base64").equals(bytes),true);
   assert.equal(value.byteCount,bytes.length);
