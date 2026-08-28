@@ -1,0 +1,62 @@
+{
+  "sessionId": "cu-perception-p1b-coordinate-mapping-discovery-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "98435ba98791f29a58fb2b5f55e27d7688d4e8b9",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "a1bef98ce1478777353ee764bc332c51c0ee65a3",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-coordinate-mapping-discovery.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p1b-mapping-discovery",
+    "path": "tests/products/computer-use/physical-tests/perception-p1b-coordinate-mapping-discovery.js",
+    "timeoutMs": 45000
+  },
+  "purpose": "Physically discover and validate the relationship between primary-display capture-pixel coordinates and Computer Control primary-display-local logical coordinates without yet freezing a product mapping API.",
+  "authoritativeP1A": {
+    "sessionId": "cu-perception-p1a-visual-frame-acquisition-s04",
+    "evidence": "bdb4de64ea4471838e878a385e2f1f2b7f538ae7",
+    "result": "PASS"
+  },
+  "requiredClaims": [
+    "Computer Control display.list observes one stable active online primary display before and after capture",
+    "Computer Use acquires the real primary-display frame through the P1A path",
+    "a test-owned AppKit fixture renders two noninteractive markers at independently known primary-display-local logical coordinates",
+    "the PNG is decoded entirely in memory with PNG scanline row zero treated as top capture row",
+    "both marker regions are independently located in capture-pixel coordinates without logging their coordinates",
+    "the logical-to-capture projection derived from observed logical and capture dimensions matches both marker rectangles within bounded tolerance",
+    "the inverse capture-pixel-to-logical transform maps both observed marker centers back to their independently known logical centers",
+    "the transform is derived from observations rather than assuming identity even if both dimensions happen to match",
+    "Computer Use product mapping remains UNRESOLVED and interpretation remains NOT_RUN during discovery",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload is not persisted or logged",
+    "test-owned fixture and Computer Control runtime are cleaned up"
+  ],
+  "nonClaims": [
+    "no OCR or VLM interpretation is validated",
+    "no visual target is semantically identified",
+    "no public action-coordinate mapping contract is frozen by this discovery alone",
+    "no rotated primary display topology is supported by this first discovery",
+    "no secondary-display mapping is validated"
+  ],
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "markerCoordinatesLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
