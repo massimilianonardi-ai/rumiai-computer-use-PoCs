@@ -10,12 +10,19 @@ const root = path.join(
   "app"
 );
 const wrapper = path.join(root, "computer-control-external.js");
-const consumers = ["agent-loop.js", "executors.js", "recovery.js", "semantic-ui.js", "perception.js"];
+const directConsumers = ["agent-loop.js", "executors.js", "recovery.js", "semantic-ui.js", "perception.js"];
+const indirectPerceptionModules = ["perception-provider.js", "perception-target.js"];
 let failed = false;
 
 function check(label, condition) {
   console.log(`${label}: ${condition ? "PASS" : "FAIL"}`);
   if (!condition) failed = true;
+}
+
+function checkNoBackendBypass(name, source) {
+  check(`${name} no direct internal facade`, !source.includes('require("./computer-control")'));
+  check(`${name} no direct agent-ctrl`, !source.includes('require("./agent-ctrl")'));
+  check(`${name} no backend module paths`, !source.includes("computer-control/backends") && !source.includes("computer-control/desktop"));
 }
 
 check("external wrapper syntax", spawnSync(process.execPath, ["--check", wrapper]).status === 0);
@@ -28,14 +35,20 @@ check("external wrapper has no bundled fallback", !wrapperSource.includes('"bin"
 check("bundled Computer Control source absent", !fs.existsSync(path.join(root, "computer-control")));
 check("direct backend facade absent", !fs.existsSync(path.join(root, "agent-ctrl.js")));
 
-for (const name of consumers) {
+for (const name of directConsumers) {
   const file = path.join(root, name);
   const source = fs.readFileSync(file, "utf8");
   check(`${name} syntax`, spawnSync(process.execPath, ["--check", file]).status === 0);
   check(`${name} uses external boundary`, source.includes('require("./computer-control-external")'));
-  check(`${name} no direct internal facade`, !source.includes('require("./computer-control")'));
-  check(`${name} no direct agent-ctrl`, !source.includes('require("./agent-ctrl")'));
-  check(`${name} no backend module paths`, !source.includes("computer-control/backends") && !source.includes("computer-control/desktop"));
+  checkNoBackendBypass(name, source);
+}
+
+for (const name of indirectPerceptionModules) {
+  const file = path.join(root, name);
+  const source = fs.readFileSync(file, "utf8");
+  check(`${name} syntax`, spawnSync(process.execPath, ["--check", file]).status === 0);
+  check(`${name} does not call Computer Control directly`, !source.includes('require("./computer-control-external")'));
+  checkNoBackendBypass(name, source);
 }
 
 console.log(`external-computer-control-boundary=${failed ? "FAIL" : "PASS"}`);
