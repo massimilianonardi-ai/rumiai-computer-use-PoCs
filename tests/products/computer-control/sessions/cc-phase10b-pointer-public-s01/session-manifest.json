@@ -1,0 +1,69 @@
+{
+  "sessionId": "cc-phase10b-pointer-public-s01",
+  "scope": "Phase 10B public pointer.move and pointer.click physical validation on macOS using a test-owned AppKit receiver fixture",
+  "productSha": "a02b9e0dbac6ca50e882657eba46a96f7582aa4b",
+  "testSourceSha": "cd8a75594331cf30d776b9c6749e6fcfe0045a73",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10b-pointer-public.js",
+  "terminalMarker": "physical-phase10b-pointer-public=PASS",
+  "prerequisiteEvidence": {
+    "phase10ADisplayCaptureEvidence": "4d215cace1cf30fa5837852e17dcb273f8e969c3",
+    "phase10ADisplayCaptureState": "PHYSICALLY_VALIDATED",
+    "phase10BDeliveryDiscoverySession": "cc-phase10b-pointer-delivery-discovery-s02",
+    "phase10BDeliveryDiscoveryEvidence": "4c973a4400660417cfb39fb8297cd363e8c13c63",
+    "phase10BDiscoveryObservedProduct": "085f0015291419b945540b59a1d56855507f6098"
+  },
+  "publicContract": {
+    "moveRpc": "pointer.move",
+    "moveSdk": "movePointer",
+    "clickRpc": "pointer.click",
+    "clickSdk": "clickPointer",
+    "displaySelector": "primary",
+    "coordinateSpace": "primary-display-local top-left logical display units",
+    "buttons": ["left", "right"],
+    "rawDownUpPublic": false,
+    "dragPublic": false
+  },
+  "semantics": {
+    "pointerMove": "MOVED with verified=true only after current Quartz pointer location is independently re-observed at requested coordinates",
+    "pointerClick": "CLICK_POSTED after verified positioning; buttonDelivery=POSTED; semanticConsequenceVerified=false",
+    "deliveryEqualsSemanticSuccess": false,
+    "semanticOperationsPreferred": true
+  },
+  "fixture": {
+    "ownedByTest": true,
+    "temporaryAppKitWindow": true,
+    "target": "fixture center on current primary display",
+    "leftDeliveryOracle": "NSView mouseDown/mouseUp exact counters",
+    "rightDeliveryOracle": "NSView rightMouseDown/rightMouseUp exact counters",
+    "userContentClicked": false,
+    "coordinatesLogged": false,
+    "nativeDisplayIdentifiersLogged": false
+  },
+  "stateRestoration": {
+    "originalPointerPositionCaptured": true,
+    "pointerRestoredByFixtureBeforeExit": true,
+    "previousFrontmostApplicationCaptured": true,
+    "previousFrontmostApplicationReactivated": true,
+    "fixtureTimeoutPerformsCleanup": true,
+    "harnessDoesNotImmediatelyKillFixtureOnPostActivationFailure": true
+  },
+  "expectedCapabilityStateBeforeValidation": {
+    "pointer.move": "IMPLEMENTED",
+    "pointer.click": "IMPLEMENTED"
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment or test-owned fixture cannot be established before public pointer behavior can be evaluated.",
+    "FAIL": "Public runtime/SDK behavior, pointer position postcondition, left/right delivery oracle, or required restoration does not match the contract.",
+    "PASS": "Public move is position-verified, both public click calls retain delivery-only semantics, the independent AppKit fixture receives exactly one left and one right down/up pair, no user content is clicked, and the pointer is restored."
+  },
+  "nextStepOnPass": "Promote pointer.move and pointer.click to PHYSICALLY_VALIDATED on the current macOS reference surface, record dedicated evidence, then begin Phase 10C drag discovery without exposing held-button state across RPC calls.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not promote Phase 10B."
+}
