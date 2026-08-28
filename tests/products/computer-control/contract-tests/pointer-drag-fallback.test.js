@@ -14,7 +14,7 @@ function fixtureBackend(){return new Proxy({},{get(_target,name){
 
 test("Phase 10C router exposes one atomic primary-display left drag contract",async()=>{
   const route=createRouter(fixtureBackend());const value=await route("pointer.drag",{display:"primary",source:{x:10,y:20},destination:{x:30,y:40},button:"left"});assert.equal(value.state,"DRAG_POSTED");assert.equal(value.semanticConsequenceVerified,false);
-  const bad=[{}, {display:"secondary",source:{x:1,y:1},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:-1,y:1},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:NaN},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:2},button:"right"},{display:"primary",source:{x:1,y:1,z:0},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:2},button:"left",duration:1}];for(const params of bad)await assert.rejects(route("pointer.drag",params));
+  const bad=[{}, {display:"secondary",source:{x:1,y:1},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:-1,y:1},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:NaN},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:2},button:"right"},{display:"primary",source:{x:1,y:1,z:0},destination:{x:2,y:2},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:1,y:1},button:"left"},{display:"primary",source:{x:1,y:1},destination:{x:2,y:2},button:"left",duration:1}];for(const params of bad)await assert.rejects(route("pointer.drag",params));
 });
 
 test("Phase 10C helper owns source verification and complete preconstructed drag lifecycle",()=>{
@@ -25,7 +25,7 @@ test("Phase 10C helper owns source verification and complete preconstructed drag
 });
 
 test("Phase 10C backend lifecycle is IMPLEMENTED and delivery cannot masquerade as semantic drop success",()=>{
-  const backend=fs.readFileSync(path.join(productRoot,"backends/macos/backend-low-level.js"),"utf8");assert.match(backend,/pointer\.drag.*validationState:"IMPLEMENTED"/);assert.match(backend,/atomic-button-lifecycle/);assert.match(backend,/state:"DRAG_POSTED"/);assert.match(backend,/dragDelivery:"POSTED"/);assert.match(backend,/releasePosted:true/);assert.match(backend,/semanticConsequenceVerified:false/);assert.doesNotMatch(backend,/pointer\.drag.*PHYSICALLY_VALIDATED/);assert.doesNotMatch(backend,/semanticConsequenceVerified:true/);
+  const backend=fs.readFileSync(path.join(productRoot,"backends/macos/backend-low-level.js"),"utf8");assert.match(backend,/pointer\.drag.*validationState:"IMPLEMENTED"/);assert.match(backend,/atomic-button-lifecycle/);assert.match(backend,/state:"DRAG_POSTED"/);assert.match(backend,/dragDelivery:"POSTED"/);assert.match(backend,/releasePosted:true/);assert.match(backend,/pointNear\(sourcePoint,source\)/);assert.match(backend,/pointNear\(destinationPoint,destination\)/);assert.match(backend,/semanticConsequenceVerified:false/);assert.doesNotMatch(backend,/pointer\.drag.*PHYSICALLY_VALIDATED/);assert.doesNotMatch(backend,/semanticConsequenceVerified:true/);
 });
 
 test("Phase 10C schemas expose canonical logical points only",()=>{
