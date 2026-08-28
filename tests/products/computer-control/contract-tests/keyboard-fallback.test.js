@@ -18,11 +18,15 @@ test("Phase 10E router exposes only the three physically discovered keyboard.pre
   for(const params of[{}, {key:"b",modifiers:[]},{key:"enter",modifiers:["shift"]},{key:"a",modifiers:["command"]},{key:"a",modifiers:["shift","shift"]},{key:"a",modifiers:"shift"},{key:"a",modifiers:[],keyCode:0}])await assert.rejects(route("keyboard.press",params));
 });
 
-test("Phase 10E helper uses symbolic native identities privately and constructs complete lifecycle before posting",()=>{
+test("Phase 10E helper uses symbolic native identities privately, constructs the full lifecycle first, and settles modifier delivery",()=>{
   const helper=fs.readFileSync(path.join(productRoot,"backends/macos/runtime/tools/macos-keyboard.swift"),"utf8");
   assert.match(helper,/Carbon\.HIToolbox/);assert.match(helper,/kVK_ANSI_A/);assert.match(helper,/kVK_Return/);assert.match(helper,/kVK_Shift/);
   assert.match(helper,/let keyDown = keyboardEvent/);assert.match(helper,/let keyUp = keyboardEvent/);assert.ok(helper.indexOf("let keyUp = keyboardEvent")<helper.indexOf("keyDown.post"));
   assert.match(helper,/shiftDown = keyboardEvent/);assert.match(helper,/shiftUp = keyboardEvent/);assert.ok(helper.indexOf("shiftUp = keyboardEvent")<helper.indexOf("shiftDown!.post"));
+  assert.match(helper,/settleModifierDelivery/);assert.match(helper,/settleKeyDelivery/);assert.match(helper,/Thread\.sleep\(forTimeInterval:\s*0\.05\)/);assert.match(helper,/Thread\.sleep\(forTimeInterval:\s*0\.04\)/);
+  const shiftPost=helper.indexOf("shiftDown!.post");const keyDownPost=helper.indexOf("keyDown.post");const keyUpPost=helper.indexOf("keyUp.post");const shiftUpPost=helper.indexOf("shiftUp!.post");
+  assert.ok(shiftPost>=0&&keyDownPost>shiftPost&&keyUpPost>keyDownPost&&shiftUpPost>keyUpPost);
+  assert.match(helper.slice(shiftPost,keyDownPost),/settleModifierDelivery\(\)/);assert.match(helper.slice(keyDownPost,keyUpPost),/settleKeyDelivery\(\)/);assert.match(helper.slice(keyUpPost,shiftUpPost),/settleKeyDelivery\(\)/);
   assert.doesNotMatch(helper,/virtualKey:\s*(?:0x[0-9A-Fa-f]+|[0-9]+)/);assert.match(helper,/semanticConsequenceVerified.*false/);
 });
 
