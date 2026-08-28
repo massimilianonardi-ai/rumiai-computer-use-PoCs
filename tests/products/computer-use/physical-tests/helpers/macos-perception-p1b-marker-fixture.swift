@@ -17,6 +17,24 @@ struct Ready: Codable {
     let markers: [Marker]
 }
 
+final class MarkerView: NSView {
+    let fillColor: NSColor
+
+    init(frame: NSRect, fillColor: NSColor) {
+        self.fillColor = fillColor
+        super.init(frame: frame)
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    override var isOpaque: Bool { true }
+
+    override func draw(_ dirtyRect: NSRect) {
+        fillColor.setFill()
+        bounds.fill()
+    }
+}
+
 final class FixtureDelegate: NSObject, NSApplicationDelegate {
     var windows: [NSWindow] = []
 
@@ -48,10 +66,10 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
             color: "cyan"
         )
 
-        makeWindow(screen: screen, marker: markerA, color: NSColor(deviceRed: 1, green: 0, blue: 1, alpha: 1))
-        makeWindow(screen: screen, marker: markerB, color: NSColor(deviceRed: 0, green: 1, blue: 1, alpha: 1))
+        makeWindow(screen: screen, marker: markerA, color: NSColor(srgbRed: 1, green: 0, blue: 1, alpha: 1))
+        makeWindow(screen: screen, marker: markerB, color: NSColor(srgbRed: 0, green: 1, blue: 1, alpha: 1))
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
             let ready = Ready(state: "READY", displayWidth: w, displayHeight: h, markers: [markerA, markerB])
             let data = try! JSONEncoder().encode(ready)
             FileHandle.standardOutput.write(data)
@@ -73,11 +91,12 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
             screen: screen
         )
         window.isOpaque = true
-        window.backgroundColor = color
+        window.backgroundColor = .black
         window.hasShadow = false
         window.level = .screenSaver
         window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
         window.ignoresMouseEvents = true
+        window.contentView = MarkerView(frame: NSRect(origin: .zero, size: rect.size), fillColor: color)
         window.orderFrontRegardless()
         windows.append(window)
     }
