@@ -92,7 +92,7 @@ test("P1A source and docs preserve perception/action separation", () => {
 
   assert.match(docs, /does not assume these coordinate spaces are identical/i);
   assert.match(docs, /not directly executable/i);
-  assert.match(docs, /performs no OCR, object detection, icon recognition, target ranking or semantic inference/i);
+  assert.match(docs, /perform no OCR, object detection, icon recognition, target ranking or semantic inference/i);
   assert.match(docs, /structured semantic Computer Control observation\/action when available/i);
   assert.match(docs, /does not itself write screenshots/i);
 });
