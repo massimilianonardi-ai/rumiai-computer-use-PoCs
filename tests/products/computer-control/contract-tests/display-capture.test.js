@@ -51,11 +51,10 @@ test("Phase 10A native helper uses ScreenCaptureKit without prompting or persist
   assert.doesNotMatch(wrapper,/shell:true|osascript|screencapture\s/);
 });
 
-test("Phase 10A backend validates canonical PNG payload and keeps native display identity private",()=>{
+test("Phase 10A backend validates canonical PNG payload and is physically promoted",()=>{
   const source=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
   const lifecycleLine=source.split("\n").find(line=>line.includes("LOW_LEVEL_FALLBACK_CAPABILITIES"))||"";
-  assert.match(lifecycleLine,/display\.capture.*IMPLEMENTED/);
-  assert.doesNotMatch(lifecycleLine,/PHYSICALLY_VALIDATED/);
+  assert.match(lifecycleLine,/display\.capture.*PHYSICALLY_VALIDATED/);
   assert.match(source,/screencapturekit-primary-display-single-frame-png/);
   assert.match(source,/canonicalDisplayCapture/);
   assert.match(source,/PNG_SIGNATURE/);
@@ -95,18 +94,20 @@ test("Phase 10A SDK and RumiAI adapter are thin projections",()=>{
   assert.match(types,/DisplayCaptureResult/);
 });
 
-test("Phase 10A docs preserve fallback, privacy, permission and validation boundaries",()=>{
+test("Phase 10A docs record authoritative physical validation and preserve boundaries",()=>{
   const api=fs.readFileSync(path.join(productRoot,"docs/api-display-capture.md"),"utf8");
   const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
-  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10-low-level-fallback-discovery-physical.md"),"utf8");
-  assert.match(api,/Phase 10A state: `IMPLEMENTED`/);
+  const evidence=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10a-display-capture-physical.md"),"utf8");
+  assert.match(api,/Phase 10A state: `PHYSICALLY_VALIDATED`/);
   assert.match(api,/SCREEN_CAPTURE_PERMISSION_REQUIRED/);
   assert.match(api,/does \*\*not\*\* automatically request Screen Recording permission/);
   assert.match(api,/not persist/i);
   assert.match(api,/not(?:\*\*)? a claim about physical panel pixels/);
-  assert.match(phase10,/Phase 10A capture\s+IMPLEMENTED/);
+  assert.match(phase10,/Phase 10A capture\s+PHYSICALLY_VALIDATED/);
   assert.match(phase10,/semantic capability always takes precedence/);
-  assert.match(evidence,/ae385e0746d58bcf4c1c41ba6a8641fa8d258fc5/);
-  assert.match(evidence,/40 PASS \/ 0 FAIL \/ 0 BLOCKED/);
-  assert.match(evidence,/constructibility only, not delivery/i);
+  assert.match(evidence,/4d215cace1cf30fa5837852e17dcb273f8e969c3/);
+  assert.match(evidence,/ec3cd5f07defacdbe8b634a61b99d5510f77d832/);
+  assert.match(evidence,/1710 × 1107/);
+  assert.match(evidence,/1025899/);
+  assert.match(evidence,/payload\/base64 was not logged/);
 });
