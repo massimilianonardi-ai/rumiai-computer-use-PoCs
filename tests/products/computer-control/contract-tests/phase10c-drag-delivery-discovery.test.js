@@ -27,7 +27,11 @@ test("Phase 10C discovery requires independent AppKit drag consequence, not even
 });
 
 test("Phase 10C public surface remains atomic pointer.drag with no held-button API",()=>{
-  const router=fs.readFileSync(path.join(productRoot,"runtime/src/router-low-level.js"),"utf8");assert.match(router,/pointer\.drag/);for(const method of["pointer.down","pointer.up","pointer.button"]){assert.equal(router.includes(`\"${method}\"`),false,method);}const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");assert.match(phase10,/one atomic primary-display fallback operation/i);assert.match(phase10,/complete normal down\/drag\/up lifecycle is constructed before button-down/i);assert.match(phase10,/public `pointer\.down`\/`pointer\.up` remain absent/i);
+  const router=fs.readFileSync(path.join(productRoot,"runtime/src/router-low-level.js"),"utf8");
+  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
+  const api=fs.readFileSync(path.join(productRoot,"docs/api-pointer.md"),"utf8");
+  assert.match(router,/pointer\.drag/);for(const method of["pointer.down","pointer.up","pointer.button"]){assert.equal(router.includes(`\"${method}\"`),false,method);}
+  assert.match(phase10,/client\.dragPointer/);assert.match(api,/one atomic fallback operation/i);assert.match(api,/DRAG_POSTED/);assert.match(api,/There are no public `pointer\.down` or `pointer\.up` calls/i);
 });
 
 test("Phase 10C historical discovery harness remains privacy-bounded and immutable",()=>{
