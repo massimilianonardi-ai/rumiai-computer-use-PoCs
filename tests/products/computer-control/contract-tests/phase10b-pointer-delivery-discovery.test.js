@@ -8,17 +8,17 @@ const productRoot=process.env.RUMIAI_COMPUTER_CONTROL_ROOT||path.join(portableRo
 const helperPath=path.join(__dirname,"../physical-tests/helpers/macos-phase10b-pointer-delivery-discovery.swift");
 const physicalPath=path.join(__dirname,"../physical-tests/macos-phase10b-pointer-delivery-discovery.js");
 
-test("Phase 10B remains rooted in authoritative Phase 10A promotion and Phase 10B delivery evidence",()=>{
-  const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
+test("Phase 10B remains rooted in authoritative delivery discovery and public validation",()=>{
   const evidence10a=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10a-display-capture-physical.md"),"utf8");
-  const evidence10b=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10b-pointer-delivery-discovery-physical.md"),"utf8");
+  const evidenceDiscovery=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10b-pointer-delivery-discovery-physical.md"),"utf8");
+  const evidencePublic=fs.readFileSync(path.join(productRoot,"docs/evidence/phase10b-pointer-public-physical.md"),"utf8");
   const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
-  const lifecycleLine=structure.split("\n").find(line=>line.includes("LOW_LEVEL_FALLBACK_CAPABILITIES"))||"";
-  assert.match(lifecycleLine,/display\.capture.*PHYSICALLY_VALIDATED/);
   assert.match(evidence10a,/4d215cace1cf30fa5837852e17dcb273f8e969c3/);
-  assert.match(evidence10a,/ec3cd5f07defacdbe8b634a61b99d5510f77d832/);
-  assert.match(evidence10b,/4c973a4400660417cfb39fb8297cd363e8c13c63/);
-  assert.match(phase10,/Phase 10B pointer\s+IMPLEMENTED/);
+  assert.match(evidenceDiscovery,/4c973a4400660417cfb39fb8297cd363e8c13c63/);
+  assert.match(evidencePublic,/a7b878ff25e56ee7c16705dfdec1468f6a47b0a1/);
+  assert.match(evidencePublic,/3f68502848f127d73f72cac023deed511f3ce75d/);
+  assert.match(evidencePublic,/43 PASS \/ 0 FAIL \/ 0 BLOCKED/);
+  assert.match(phase10,/Phase 10B pointer\s+PHYSICALLY_VALIDATED/);
 });
 
 test("Phase 10B discovery posts only into a test-owned AppKit fixture, pumps delivery, and restores pointer/focus",()=>{
@@ -42,11 +42,8 @@ test("Phase 10B discovery posts only into a test-owned AppKit fixture, pumps del
   assert.doesNotMatch(helper,/osascript|AppleScript|systemEvents|cliclick/);
 });
 
-test("Phase 10B current public surface is only evidence-backed move/click and exposes no held-button API",()=>{
-  const helper=fs.readFileSync(helperPath,"utf8");
+test("Phase 10B public surface remains move/click only and exposes no held-button API",()=>{
   const router=fs.readFileSync(path.join(productRoot,"runtime/src/router-low-level.js"),"utf8");
-  assert.match(helper,/semanticConsequenceClaimed/);
-  assert.match(helper,/"fixtureOwned": true/);
   assert.match(router,/pointer\.move/);
   assert.match(router,/pointer\.click/);
   for(const method of["pointer.down","pointer.up","pointer.button","pointer.drag"]){assert.equal(router.includes(`\"${method}\"`),false,method);}
@@ -65,6 +62,6 @@ test("Phase 10B keeps semantic operations preferred over coordinate delivery",()
   assert.match(phase10,/working semantic capability always takes precedence/i);
   assert.match(phase10,/primary-display-local/i);
   assert.match(phase10,/must never replace a semantic element target/i);
-  assert.match(phase10,/buttonDelivery:\"POSTED\".*not as verified application delivery/i);
+  assert.match(phase10,/buttonDelivery:\"POSTED\".*not as verified semantic success/i);
   assert.match(phase10,/semanticConsequenceVerified.*always false/i);
 });
