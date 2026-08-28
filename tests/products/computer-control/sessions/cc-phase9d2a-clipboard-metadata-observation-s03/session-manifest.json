@@ -1,0 +1,45 @@
+{
+  "sessionId": "cc-phase9d2a-clipboard-metadata-observation-s03",
+  "scope": "Phase 9D2A metadata-only macOS clipboard observation validation after structural-comparison test correction",
+  "productSha": "bbf6579a2d291d16cde02c3371e5b31495a92287",
+  "testSourceSha": "af5fcf98cfc770302cd1e34c011d46fdeca5adc3",
+  "platform": "macOS NSPasteboard metadata observation",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-clipboard-metadata-observation.js",
+  "terminalMarker": "physical-phase9d2a-clipboard-metadata-observation=PASS",
+  "prerequisiteEvidence": {
+    "phase9dDiscoveryEvidence": "c70e0e581c54ee67d9f56c4400ef3a942012629e",
+    "phase9d1aEvidence": "a7788371d7b6d446e783a714112643ba093f2814",
+    "phase9d1aResult": "36 PASS / 0 FAIL / 0 BLOCKED",
+    "phase9d2aS02Evidence": "fadb856d43418f383e273bd50794ba37fb568ba7",
+    "phase9d2aS02Result": "FAIL: product and independent oracle matched semantically under stable revision 1504; test compared JSON property insertion order"
+  },
+  "safetyBoundary": {
+    "metadataOnly": true,
+    "contentRead": false,
+    "generalPasteboardMutation": false,
+    "nativeTypeNamesPublic": false,
+    "canonicalFormats": ["text/plain", "text/html", "text/rtf", "image/png"],
+    "revisionOpaque": true,
+    "itemIndexObservationScoped": true,
+    "revisionRaceFails": true,
+    "typedRead": false,
+    "typedWrite": false
+  },
+  "expectedCoverage": [
+    "display.list remains PHYSICALLY_VALIDATED",
+    "clipboard.observe remains IMPLEMENTED until this checkpoint passes",
+    "independent oracle and public metadata match structurally under one stable revision",
+    "two public observations remain stable",
+    "native type names remain private",
+    "legacy clipboard methods remain unchanged",
+    "no typed read or write method is introduced"
+  ],
+  "history": "s01 was prepared but not executed because of an over-broad schema guard. s02 executed and preserved immutable FAIL evidence caused solely by JSON object property-order comparison despite semantically identical metadata and a stable clipboard revision. s03 changes only the physical test comparison to canonical structural comparison; product SHA is unchanged."
+}
