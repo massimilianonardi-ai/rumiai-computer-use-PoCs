@@ -1,0 +1,48 @@
+{
+  "sessionId": "cu-perception-p1a-visual-frame-acquisition-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "322b5cdf3d7003a64910fcc46927225405150213",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "5fa91cec3adf0e476b01393220ffbe5b3bcd4f42",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p1a",
+    "path": "tests/products/computer-use/physical-tests/visual-frame-acquisition-physical.js"
+  },
+  "purpose": "Physically validate Computer Use P1A acquisition of one ephemeral primary-display visual frame through the external, already physically validated Computer Control display.capture boundary.",
+  "requiredClaims": [
+    "Computer Use receives VISUAL_FRAME_ACQUIRED from the real Computer Control display.capture path",
+    "the returned payload is canonical PNG with exact byteCount and positive image dimensions",
+    "frame coordinateSpace remains capture-pixel with top-left origin",
+    "interpretation remains NOT_RUN with zero candidates",
+    "actionCoordinateMapping remains UNRESOLVED",
+    "Computer Use declares the frame EPHEMERAL and does not persist it",
+    "session evidence does not log dataBase64 or decoded image bytes",
+    "Computer Use and Computer Control git worktrees remain clean after the physical call"
+  ],
+  "nonClaims": [
+    "no OCR or vision interpretation is validated",
+    "no semantic target is identified",
+    "capture-pixel coordinates are not claimed to equal Computer Control logical pointer coordinates",
+    "no pointer, keyboard, drag or wheel action is performed",
+    "the screenshot is not semantic proof of application state"
+  ],
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
