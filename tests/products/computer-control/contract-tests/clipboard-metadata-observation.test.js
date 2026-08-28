@@ -43,13 +43,13 @@ test("Phase 9D2A canonicalization exposes only closed semantic format metadata",
   assert.throws(()=>macBackend.canonicalClipboardMetadata({revision:"",items:[]}),e=>e.code==="CLIPBOARD_METADATA_INVALID_NATIVE_STATE");
 });
 
-test("Phase 9D2A stays physically validated while richer typed phases advance independently",()=>{
+test("Phase 9D2A remains physically validated after richer clipboard completion",()=>{
   const phase9=fs.readFileSync(path.join(productRoot,"backends/macos/backend.js"),"utf8");
   const structure=fs.readFileSync(path.join(productRoot,"backends/macos/backend-structure.js"),"utf8");
   assert.match(phase9,/display\.list.*PHYSICALLY_VALIDATED/);
   assert.match(phase9,/clipboard\.observe.*PHYSICALLY_VALIDATED/);
   assert.match(structure,/clipboard\.readFormat.*PHYSICALLY_VALIDATED/);
-  assert.match(structure,/clipboard\.writeFormat.*IMPLEMENTED/);
+  assert.match(structure,/clipboard\.writeFormat.*PHYSICALLY_VALIDATED/);
   assert.match(phase9,/os-owned-native-clipboard-metadata-observation/);
   assert.match(phase9,/async observeClipboard/);
 });
@@ -91,7 +91,7 @@ test("Phase 9D2A documentation records authoritative s03 physical promotion",()=
   assert.match(docs,/Phase 9D2A validation state: `PHYSICALLY_VALIDATED`/);
   assert.match(roadmap,/Phase 9D2A clipboard metadata observation\s+PHYSICALLY_VALIDATED/);
   assert.match(roadmap,/Phase 9D2B typed clipboard read\s+PHYSICALLY_VALIDATED/);
-  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+IMPLEMENTED/);
+  assert.match(roadmap,/Phase 9D2C typed clipboard write\s+PHYSICALLY_VALIDATED/);
   for(const text of[docs,evidence]){
     assert.match(text,/521f41c2fcc499574b61b658440671faefe61708/);
     assert.match(text,/af5fcf98cfc770302cd1e34c011d46fdeca5adc3/);
