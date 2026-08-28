@@ -19,6 +19,36 @@ func rect(_ value: CGRect) -> [String: Double] {
 
 func finite(_ value: CGFloat) -> Bool { value.isFinite }
 
+final class CaptureProbeState: @unchecked Sendable {
+    private let lock = NSLock()
+    private var available = false
+    private var width = 0
+    private var height = 0
+    private var error: String? = nil
+
+    func succeed(width: Int, height: Int) {
+        lock.lock()
+        available = true
+        self.width = width
+        self.height = height
+        error = nil
+        lock.unlock()
+    }
+
+    func fail(_ message: String) {
+        lock.lock()
+        if error == nil && !available { error = message }
+        lock.unlock()
+    }
+
+    func snapshot() -> (available: Bool, width: Int, height: Int, error: String?) {
+        lock.lock()
+        let value = (available, width, height, error)
+        lock.unlock()
+        return value
+    }
+}
+
 let mainDisplay = CGMainDisplayID()
 let mainBounds = CGDisplayBounds(mainDisplay)
 let mainPixelWidth = Int(CGDisplayPixelsWide(mainDisplay))
@@ -67,25 +97,19 @@ let keyUp = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: false)
 let accessibilityTrusted = AXIsProcessTrusted()
 let screenCapturePreflight = CGPreflightScreenCaptureAccess()
 var captureAttempted = false
-var captureAvailable = false
-var captureWidth = 0
-var captureHeight = 0
-var captureDiscoveryError: String? = nil
+let captureState = CaptureProbeState()
 
 if screenCapturePreflight {
     captureAttempted = true
     let semaphore = DispatchSemaphore(value: 0)
-    var completed = false
     SCShareableContent.getExcludingDesktopWindows(false, onScreenWindowsOnly: true) { content, error in
         if let error = error {
-            captureDiscoveryError = "shareable-content-error:\(type(of: error))"
-            completed = true
+            captureState.fail("shareable-content-error:\(type(of: error))")
             semaphore.signal()
             return
         }
         guard let display = content?.displays.first(where: { $0.displayID == mainDisplay }) else {
-            captureDiscoveryError = "main-display-not-shareable"
-            completed = true
+            captureState.fail("main-display-not-shareable")
             semaphore.signal()
             return
         }
@@ -95,21 +119,26 @@ if screenCapturePreflight {
         configuration.height = mainPixelHeight
         SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration) { image, error in
             if let error = error {
-                captureDiscoveryError = "capture-error:\(type(of: error))"
+                captureState.fail("capture-error:\(type(of: error))")
             } else if let image = image {
-                captureAvailable = true
-                captureWidth = image.width
-                captureHeight = image.height
+                captureState.succeed(width: image.width, height: image.height)
             } else {
-                captureDiscoveryError = "capture-returned-no-image"
+                captureState.fail("capture-returned-no-image")
             }
-            completed = true
             semaphore.signal()
         }
     }
-    if semaphore.wait(timeout: .now() + 10) == .timedOut || !completed {
-        captureDiscoveryError = "screen-capture-probe-timeout"
+    if semaphore.wait(timeout: .now() + 10) == .timedOut {
+        captureState.fail("screen-capture-probe-timeout")
     }
+}
+
+let capture = captureState.snapshot()
+let captureErrorJSON: Any
+if let error = capture.error {
+    captureErrorJSON = error
+} else {
+    captureErrorJSON = NSNull()
 }
 
 let windowInfo = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]]
@@ -156,11 +185,11 @@ let output: [String: Any] = [
     "screenCapture": [
         "preflight": screenCapturePreflight,
         "attempted": captureAttempted,
-        "available": captureAvailable,
-        "width": captureWidth,
-        "height": captureHeight,
+        "available": capture.available,
+        "width": capture.width,
+        "height": capture.height,
         "modernAPI": "ScreenCaptureKit.SCScreenshotManager",
-        "error": captureDiscoveryError ?? NSNull(),
+        "error": captureErrorJSON,
     ],
     "windowMetadata": [
         "onScreenNonDesktopCount": windowCount,
