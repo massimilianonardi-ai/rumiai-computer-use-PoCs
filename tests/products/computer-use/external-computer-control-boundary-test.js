@@ -11,7 +11,7 @@ const root = path.join(
 );
 const wrapper = path.join(root, "computer-control-external.js");
 const directConsumers = ["agent-loop.js", "executors.js", "recovery.js", "semantic-ui.js", "perception.js"];
-const indirectPerceptionModules = ["perception-provider.js", "perception-target.js"];
+const indirectPerceptionModules = ["perception-provider.js", "perception-target.js", "perception-action-policy.js"];
 let failed = false;
 
 function check(label, condition) {
