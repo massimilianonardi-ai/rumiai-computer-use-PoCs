@@ -17,6 +17,9 @@ struct Snapshot {
     let totalBytes: Int
     let totalTypes: Int
 }
+struct SnapshotFailure: Error {
+    let code: String
+}
 
 func emit(_ object: [String: Any], code: Int32) -> Never {
     let data = try! JSONSerialization.data(withJSONObject: object, options: [.sortedKeys])
@@ -25,7 +28,7 @@ func emit(_ object: [String: Any], code: Int32) -> Never {
     exit(code)
 }
 
-func snapshot(_ pasteboard: NSPasteboard) -> Result<Snapshot, String> {
+func snapshot(_ pasteboard: NSPasteboard) -> Result<Snapshot, SnapshotFailure> {
     let revision = pasteboard.changeCount
     var items: [ItemSnapshot] = []
     var totalBytes = 0
@@ -34,19 +37,19 @@ func snapshot(_ pasteboard: NSPasteboard) -> Result<Snapshot, String> {
         var types: [TypeSnapshot] = []
         for type in item.types {
             guard let data = item.data(forType: type) else {
-                return .failure("CLIPBOARD_RESTORATION_BACKUP_UNMATERIALIZABLE")
+                return .failure(SnapshotFailure(code: "CLIPBOARD_RESTORATION_BACKUP_UNMATERIALIZABLE"))
             }
             totalBytes += data.count
             totalTypes += 1
             if totalBytes > maxBackupBytes {
-                return .failure("CLIPBOARD_RESTORATION_BACKUP_TOO_LARGE")
+                return .failure(SnapshotFailure(code: "CLIPBOARD_RESTORATION_BACKUP_TOO_LARGE"))
             }
             types.append(TypeSnapshot(type: type, data: data))
         }
         items.append(ItemSnapshot(types: types))
     }
     guard pasteboard.changeCount == revision else {
-        return .failure("CLIPBOARD_CHANGED_DURING_RESTORATION_BACKUP")
+        return .failure(SnapshotFailure(code: "CLIPBOARD_CHANGED_DURING_RESTORATION_BACKUP"))
     }
     return .success(Snapshot(revision: revision, items: items, totalBytes: totalBytes, totalTypes: totalTypes))
 }
@@ -84,7 +87,7 @@ case .failure(let error):
     emit([
         "ok": false,
         "state": "BLOCKED",
-        "error": error,
+        "error": error.code,
         "mutated": false,
         "method": method,
     ], code: 2)
@@ -116,7 +119,7 @@ var restoreError: String? = nil
 
 switch restoredResult {
 case .failure(let error):
-    restoreError = error
+    restoreError = error.code
 case .success(let restored):
     restoredItemCount = restored.items.count
     restoredTypeCount = restored.totalTypes
