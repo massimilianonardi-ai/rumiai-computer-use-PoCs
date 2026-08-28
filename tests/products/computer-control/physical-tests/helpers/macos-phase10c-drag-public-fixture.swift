@@ -31,7 +31,6 @@ private final class ProbeView: NSView {
 }
 private func line(_ value:[String:Any]) { let data=try! JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]);FileHandle.standardOutput.write(data);FileHandle.standardOutput.write(Data([0x0a])) }
 private func near(_ a:CGPoint,_ b:CGPoint,tolerance:CGFloat=8)->Bool { abs(a.x-b.x)<=tolerance && abs(a.y-b.y)<=tolerance }
-private func near(_ a:NSPoint,_ b:NSPoint,tolerance:CGFloat=8)->Bool { abs(a.x-b.x)<=tolerance && abs(a.y-b.y)<=tolerance }
 private func pump(_ app:NSApplication,until deadline:Date){while Date()<deadline{if let event=app.nextEvent(matching:.any,until:Date().addingTimeInterval(0.01),inMode:.default,dequeue:true){app.sendEvent(event)}}}
 
 @main
