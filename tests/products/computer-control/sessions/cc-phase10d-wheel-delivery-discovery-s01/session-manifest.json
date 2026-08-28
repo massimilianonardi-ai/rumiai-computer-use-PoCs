@@ -1,0 +1,54 @@
+{
+  "sessionId": "cc-phase10d-wheel-delivery-discovery-s01",
+  "scope": "Phase 10D physical discovery of real vertical Quartz wheel delivery to a test-owned AppKit scroll fixture before any public raw-wheel API is frozen",
+  "productSha": "9cb037f688a82f733de520062b0adb30c0994a8b",
+  "testSourceSha": "e9eb48cdc821bd2f3614e0d99756df10b9511aae",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10d-wheel-delivery-discovery.js",
+  "terminalMarker": "physical-phase10d-wheel-delivery-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase10CPublicSession": "cc-phase10c-pointer-drag-public-s02",
+    "phase10CPublicEvidence": "1e0286c271cefddc36be7fc84008083d0658bd82",
+    "phase10CValidatedProduct": "43a26d1f369c39dbed6ca8131af8d02bd8e17b47",
+    "phase10CPublicResult": "PASS"
+  },
+  "discoveryBoundary": {
+    "publicRawWheelApi": false,
+    "semanticScrollApiPreferred": "ui.scroll",
+    "fixtureOwnedByTest": true,
+    "verticalOnly": true,
+    "quartzUnits": "line",
+    "negativeWheel1": -3,
+    "positiveWheel1": 3,
+    "baselineResetBetweenSigns": true,
+    "eventPostingAloneIsSuccess": false
+  },
+  "successEvidence": {
+    "negativeDelivery": "ProbeScrollView observes at least one scrollWheel event after wheel1=-3",
+    "negativeConsequence": "documentVisibleRect origin changes from an interior baseline",
+    "positiveDelivery": "ProbeScrollView observes at least one scrollWheel event after wheel1=+3",
+    "positiveConsequence": "documentVisibleRect origin changes after exact baseline reset",
+    "signMapping": "the two signs produce opposite qualitative content directions",
+    "restoration": "original pointer and previous frontmost application are restored",
+    "privacy": "fixture coordinates, numeric scroll offsets and native display identifiers are not persisted"
+  },
+  "semanticBoundary": {
+    "semanticUiScrollWeakened": false,
+    "rawWheelSemanticSuccessClaimed": false,
+    "discoveryFreezesPublicVocabulary": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment prevents the controlled fixture from compiling or executing.",
+    "FAIL": "Delivery, real scroll consequence, opposite-sign mapping, baseline reset, restoration, privacy or semantic-boundary invariants fail.",
+    "PASS": "Both raw wheel signs are physically delivered to the test-owned AppKit scroll fixture, independently change scroll state in opposite directions, and cleanup succeeds without creating a public API."
+  },
+  "nextStepOnPass": "Use physical sign/delivery evidence to freeze a narrow public raw-wheel contract while keeping semantic ui.scroll preferred, then validate that public API separately.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not add or promote a raw-wheel public capability."
+}
