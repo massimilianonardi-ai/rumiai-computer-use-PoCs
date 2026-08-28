@@ -86,6 +86,7 @@ test("P1A source and docs preserve perception/action separation", () => {
   assert.match(source, /policy:"EPHEMERAL"/);
   assert.doesNotMatch(source, /ScreenCaptureKit|CGDisplayCreateImage|CGWindowListCreateImage|screencapture/);
   assert.doesNotMatch(source, /clickPointer|movePointer|dragPointer|wheelPointer|pressKey/);
+  assert.doesNotMatch(source, /node:fs|require\(["']fs["']\)|writeFile|writeFileSync|createWriteStream/);
 
   assert.match(docs, /does not assume these coordinate spaces are identical/i);
   assert.match(docs, /not directly executable/i);
