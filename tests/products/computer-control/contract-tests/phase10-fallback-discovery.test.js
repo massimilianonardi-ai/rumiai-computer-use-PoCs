@@ -62,6 +62,6 @@ test("Phase 10 remains an explicit fallback layer and cannot weaken semantic API
   assert.match(roadmap,/These are fallbacks/);
   assert.match(roadmap,/working semantic operation always takes precedence/);
   assert.match(roadmap,/coordinate delivery is not itself semantic success/);
-  assert.match(phase10,/Phase 10A capture\s+IMPLEMENTED/);
+  assert.match(phase10,/Phase 10A capture\s+PHYSICALLY_VALIDATED/);
   assert.match(phase10,/A working semantic capability always takes precedence/);
 });
