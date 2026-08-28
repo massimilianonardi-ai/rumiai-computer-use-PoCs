@@ -10,6 +10,7 @@ const physical = path.join(root, "physical-tests", "visual-frame-acquisition-phy
 const p2bPhysical = path.join(root, "physical-tests", "perception-p2b-provider-contract-public.js");
 const p3aPhysical = path.join(root, "physical-tests", "perception-p3a-target-resolution-public.js");
 const p3bPhysical = path.join(root, "physical-tests", "perception-p3b-action-policy-public.js");
+const p4Physical = path.join(root, "physical-tests", "perception-p4-action-execution-public.js");
 const runner = path.join(root, "session-runner.sh");
 const timeout = path.join(root, "run-with-timeout.js");
 
@@ -17,6 +18,7 @@ const physicalSource = fs.readFileSync(physical, "utf8");
 const p2bPhysicalSource = fs.readFileSync(p2bPhysical, "utf8");
 const p3aPhysicalSource = fs.readFileSync(p3aPhysical, "utf8");
 const p3bPhysicalSource = fs.readFileSync(p3bPhysical, "utf8");
+const p4PhysicalSource = fs.readFileSync(p4Physical, "utf8");
 const runnerSource = fs.readFileSync(runner, "utf8");
 const timeoutSource = fs.readFileSync(timeout, "utf8");
 
@@ -43,6 +45,13 @@ assert.match(p3bPhysicalSource, /computerControl\.shutdownRuntime\(\)/);
 assert.match(p3bPhysicalSource, /p3b-runtime-cleanup=/);
 assert.match(p3bPhysicalSource, /process\.exitCode\s*=/);
 assert.doesNotMatch(p3bPhysicalSource, /function fail[\s\S]*process\.exit\(/);
+
+assert.match(p4PhysicalSource, /finally\s*\{/);
+assert.match(p4PhysicalSource, /computerControl\.shutdownRuntime\(\)/);
+assert.match(p4PhysicalSource, /p4-test-cleanup=/);
+assert.match(p4PhysicalSource, /movePointer\(/);
+assert.match(p4PhysicalSource, /process\.exitCode\s*=/);
+assert.doesNotMatch(p4PhysicalSource, /function fail[\s\S]*process\.exit\(/);
 
 assert.match(runnerSource, /TIMEOUT_RUNNER=/);
 assert.match(runnerSource, /PHYSICAL_TIMEOUT_MS=.*45000/);
