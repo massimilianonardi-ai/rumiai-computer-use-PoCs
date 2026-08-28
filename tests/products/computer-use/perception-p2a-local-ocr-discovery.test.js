@@ -13,7 +13,7 @@ assert.match(helper,/import Vision/);
 assert.match(helper,/VNRecognizeTextRequest/);
 assert.match(helper,/recognitionLevel\s*=\s*\.accurate/);
 assert.match(helper,/FileHandle\.standardInput\.readDataToEndOfFile/);
-assert.match(helper,/y:\(1\.0-b\.maxY\)\*Double\(height\)/);
+assert.match(helper,/y:\(1\.0-Double\(b\.maxY\)\)\*Double\(height\)/);
 assert.doesNotMatch(helper,/URLSession|Network|NWConnection|http:\/\/|https:\/\//);
 assert.doesNotMatch(helper,/write\(to:|FileManager|temporaryDirectory/);
 
