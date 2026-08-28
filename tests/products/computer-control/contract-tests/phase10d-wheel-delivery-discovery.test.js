@@ -25,5 +25,8 @@ test("historical Phase 10D discovery remains fixture-owned and private",()=>{
 });
 
 test("Phase 10D public advancement keeps semantic ui.scroll preferred",()=>{
-  const semantic=fs.readFileSync(path.join(productRoot,"backends/macos/backend-controls.js"),"utf8");const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");assert.match(semantic,/ui\.scroll|scroll/i);assert.match(phase10,/semantic `ui\.scroll` remains preferred/i);assert.match(phase10,/success state is `WHEEL_POSTED`/i);assert.match(phase10,/semanticConsequenceVerified.*always false/i);
+  const semantic=fs.readFileSync(path.join(productRoot,"backends/macos/backend-controls.js"),"utf8");
+  const phase10=fs.readFileSync(path.join(productRoot,"docs/phase10-low-level-fallbacks.md"),"utf8");
+  const api=fs.readFileSync(path.join(productRoot,"docs/api-pointer.md"),"utf8");
+  assert.match(semantic,/ui\.scroll|scroll/i);assert.match(phase10,/semantic `ui\.scroll` remains preferred/i);assert.match(api,/WHEEL_POSTED/);assert.match(api,/semanticConsequenceVerified.*false/i);
 });
