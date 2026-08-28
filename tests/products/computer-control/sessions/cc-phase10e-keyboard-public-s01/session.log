@@ -1,0 +1,1925 @@
+RumiAI Computer Control physical session
+session_id=cc-phase10e-keyboard-public-s01
+started_at=2026-08-28T18:51:46Z
+product_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+product_expected_sha=7f0c67ea2b45db39a2bdaee811d1dafeb029a773
+product_observed_sha=7f0c67ea2b45db39a2bdaee811d1dafeb029a773
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=0fb3993ba9c088344d571040b38848608f6a39a6
+poc_tested_sha=5352d87edb35f90ba84b377f3e3888599666a6d3
+poc_origin_main=5352d87edb35f90ba84b377f3e3888599666a6d3
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+swift=swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101) Target: arm64-apple-macosx26.0 
+agent_ctrl=agent-ctrl 0.1.4 on macos/aarch64 recommended surface: ax home: /Users/massimilianonardi/.agent-ctrl active sessions: 0 macOS Accessibility: ✓ trusted  surfaces:   ✓  mock        ready   -  uia         wrong-os   ✓  ax          ready   -  atspi       wrong-os   ·  android     not-implemented   ·  ios         not-implemented 
+
+================================================================================
+TEST: structure
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' /bin/sh '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/check-structure.sh'
+START: 2026-08-28T18:51:47Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+computer-control-structure=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 3421
+RESULT: PASS
+END: 2026-08-28T18:51:50Z
+================================================================================
+
+================================================================================
+TEST: contract:application-lifecycle.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-lifecycle.test.js'
+START: 2026-08-28T18:51:50Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A1 router validates application lifecycle inputs before dispatch (0.990666ms)
+✔ Phase 9A1 public surfaces remain provider-scoped after Phase 9A2 extension (0.869042ms)
+✔ Phase 8C through 9B2 are physically validated before Phase 9B3 discovery (0.688417ms)
+✔ Phase 9A lifecycle documentation records physical evidence and preserves separation (1.273916ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58.399541
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 130
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:application-termination.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/application-termination.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9A2 router validates graceful termination inputs before dispatch (0.598083ms)
+✔ Phase 9A2 requires a resolved native identity and exposes APPLICATION_TERMINATED (0.523084ms)
+✔ Phase 9A2 macOS implementation is graceful-only and fail-closed (0.769792ms)
+✔ Phase 9A2 public surfaces remain explicit after physical promotion (0.25425ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.15475
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:clipboard-metadata-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/clipboard-metadata-observation.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D2A router exposes global parameterless clipboard metadata observation (1.212792ms)
+✔ Phase 9D2A native helper remains metadata-only and race-safe after promotion (0.372084ms)
+✔ Phase 9D2A canonicalization exposes only closed semantic format metadata (0.801209ms)
+✔ Phase 9D2A remains physically validated after richer clipboard completion (0.207625ms)
+✔ Phase 9D2A public schema contains canonical metadata and no native type identity or payload fields (0.386459ms)
+✔ Phase 9D2A preserves legacy text clipboard semantics and thin SDK/adapter projection (0.202459ms)
+✔ Phase 9D2A documentation records authoritative s03 physical promotion (0.774333ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.136125
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 121
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:clipboard-typed-read.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/clipboard-typed-read.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D2B router requires revision-scoped canonical typed-read addressing (0.870458ms)
+✔ Phase 9D2B native helper remains read-only, revision-guarded and format-advertisement-guarded after promotion (0.454917ms)
+✔ Phase 9D2B backend rejects malformed native payload state and preserves exact bytes (0.839208ms)
+✔ Phase 9D2B and 9D2C are both physically promoted after richer clipboard completion (0.173416ms)
+✔ Phase 9D2B schemas expose canonical lossless transport only (0.241333ms)
+✔ Phase 9D2B SDK and adapter are thin projections and legacy clipboard remains unchanged (0.307417ms)
+✔ Phase 9D2B documentation records authoritative s02 physical promotion and precise format coverage (0.302833ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 50.889875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 106
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:clipboard-typed-write.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/clipboard-typed-write.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D2C router accepts only canonical typed-write input (0.692875ms)
+✔ Phase 9D2C native writer mutates only NSPasteboard general and reports delivery, not semantic success (0.380292ms)
+✔ Phase 9D2C backend remains exact-readback verified after physical promotion (0.153959ms)
+✔ Phase 9D2C base64 boundary is canonical and byte preserving (0.110667ms)
+✔ Phase 9D2C schemas expose verification metadata but never echo payload (0.399625ms)
+✔ Phase 9D2C SDK/adapter are thin projections and legacy text clipboard remains unchanged (0.201375ms)
+✔ Phase 9D2C docs record authoritative physical promotion and closed Phase 9D (0.812708ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.551083
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 103
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-observation.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B1 router validates application before dialog observation (0.585792ms)
+✔ Phase 9B1 remains native read-only observation after physical promotion (0.866709ms)
+✔ Phase 9B1 canonical surface omits native handles and action semantics (0.521459ms)
+✔ Phase 9B1 and 9B2 are physically validated before file-picker discovery (0.169ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.388792
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:dialog-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dialog-semantic-actions.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B2 router exposes only default/cancel semantic intents (0.616375ms)
+✔ Phase 9B2 resolves native semantic relationships and never targets labels (0.891333ms)
+✔ Phase 9B2 requires an independently observed dialog-absence postcondition (0.137334ms)
+✔ Phase 9B2 public contract exposes no label, coordinates or native handle (0.474333ms)
+✔ Phase 9B2 capabilities and evidence are physically promoted (0.47875ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.696667
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:display-capture.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/display-capture.test.js'
+START: 2026-08-28T18:51:51Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10A router exposes only explicit primary display capture (0.650083ms)
+✔ Phase 10A native helper uses ScreenCaptureKit without prompting or persistence (0.443459ms)
+✔ Phase 10A backend validates canonical PNG payload and is physically promoted (0.59425ms)
+✔ Phase 10A schemas expose PNG bytes and image dimensions but no native display handle (0.3905ms)
+✔ Phase 10A SDK and RumiAI adapter are thin projections (0.134667ms)
+✔ Phase 10A docs record authoritative physical validation and preserve boundaries (0.648958ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.120541
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:51Z
+================================================================================
+
+================================================================================
+TEST: contract:display-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/display-observation.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D1A router exposes global parameterless display observation (0.742791ms)
+✔ Phase 9D1A native helper is read-only AppKit/CoreGraphics display observation (0.364125ms)
+✔ Phase 9D1A canonicalization strips native display identity and fails closed on malformed geometry (0.200792ms)
+✔ Phase 9D1A public schema and surfaces remain semantic after physical promotion (0.384792ms)
+✔ Phase 9D1A documentation records authoritative physical promotion and discovery provenance (0.334166ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.267458
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 100
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:dock-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/dock-observation.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2A router exposes global parameterless read-only Dock observation (0.785917ms)
+✔ Phase 9C2A macOS helper remains OS-owned native AX read-only observation (0.756792ms)
+✔ Phase 9C2A backend and public surfaces remain semantic after physical promotion (0.358667ms)
+✔ Phase 9C2A documentation records authoritative physical promotion and immutable history (1.253875ms)
+✔ Phase 9C2A public result schema remains stable semantic data (0.088708ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.688375
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-accept-result-diagnostic.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-accept-result-diagnostic.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C accept-result diagnostic observes fixture completion without direct UI mutation (0.702166ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.838291
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-actions-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-actions-discovery.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B directory-action discovery is read-only and action-introspection only (0.987666ms)
+✔ Phase 9B3B historical action discovery remains preserved after physical promotion (0.183209ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.028167
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-directory-disclosure-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-directory-disclosure-discovery.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B disclosure discovery probes only native outline disclosure semantics (0.926125ms)
+✔ Phase 9B3B disclosure discovery remains preserved after physical promotion (0.213875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.105959
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-discovery.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A discovery used a real NSOpenPanel and system-wide AX observation (1.032209ms)
+✔ Phase 9B3A discovery treats global focus as optional evidence, not picker identity (0.093459ms)
+✔ Phase 9B3A discovery evidence is preserved and informs the product contract (0.362667ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.612709
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-navigation-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-navigation-selection.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3B router validates exact visible item addressing before dispatch (1.167584ms)
+✔ Phase 9B3B native helper uses only discovered outline disclosure semantics (1.342209ms)
+✔ Phase 9B3B backend keeps independently verified semantic postconditions after promotion (0.217833ms)
+✔ Phase 9B3B public contract exposes names but not paths or native identity (0.93775ms)
+✔ Phase 9B3B stable evidence records the immutable physical checkpoint (0.147208ms)
+✔ Phase 9B3A and Phase 9B3B are physically validated before Phase 9B3C (0.084625ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.334458
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 97
+RESULT: PASS
+END: 2026-08-28T18:51:52Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-observation.test.js'
+START: 2026-08-28T18:51:52Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3A router exposes read-only Provider-scoped file picker observation (0.591083ms)
+✔ Phase 9B3A canonical result exposes semantic location and entries only (0.392708ms)
+✔ Phase 9B3A macOS implementation remains fresh native AX observation after physical promotion (0.472083ms)
+✔ Phase 9B3A public SDK, adapter and physical evidence remain explicit (0.304542ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.615875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 101
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions-physical-observer.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C final physical observer validates AppKit completion independently (0.389584ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.856458
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:file-picker-semantic-actions.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/file-picker-semantic-actions.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9B3C router exposes only explicit accept/cancel semantic intents (1.085583ms)
+✔ Phase 9B3C resolves physically observed native picker identifiers and presses only that target (1.245459ms)
+✔ Phase 9B3C backend requires picker absence while application remains running (0.188292ms)
+✔ Phase 9B3C public contract contains no picker button label or native identity (0.460041ms)
+✔ Phase 9B3C fixture records accepted and cancelled AppKit completion independently (0.154666ms)
+✔ Phase 9B3C history remains immutable and canonical s03 evidence is promoted (1.530791ms)
+✔ Phase 9B3C documentation is physically promoted (0.074166ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41.788625
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 98
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:keyboard-fallback.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/keyboard-fallback.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10E router exposes only the three physically discovered keyboard.press tuples (0.920292ms)
+✔ Phase 10E helper uses symbolic native identities privately and constructs complete lifecycle before posting (0.271792ms)
+✔ Phase 10E backend is IMPLEMENTED and fail-closed on lifecycle or semantic-success mismatch (0.139334ms)
+✔ Phase 10E schemas and SDK expose no numeric keycode or held-key state (0.283084ms)
+✔ Phase 10E docs preserve semantic precedence and authoritative discovery provenance (0.175958ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.104458
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-discovery.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1 menu bar discovery is Provider-scoped and read-only (1.143834ms)
+✔ Phase 9C1 historical s01 FAIL is preserved as a readiness-harness defect (0.298958ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.4175
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 90
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-bar-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-bar-observation.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C1A router exposes Provider-scoped read-only menu bar observation (0.798916ms)
+✔ Phase 9C1A macOS helper is native AX read-only observation (0.867042ms)
+✔ Phase 9C1A backend and public surfaces expose semantic tree only (0.325625ms)
+✔ Phase 9C1A documentation records physical promotion and keeps invocation separate (0.851583ms)
+✔ Phase 9C1A final fixture disables AppKit automatic menu enabling (0.07425ms)
+✔ Phase 9C1A authoritative physical evidence remains immutable (0.053458ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.603125
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:menu-extras-observation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/menu-extras-observation.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C3A router exposes global parameterless read-only menu-extras observation (0.799792ms)
+✔ Phase 9C3A macOS helper is OS-owned native AX read-only observation (0.744125ms)
+✔ Phase 9C3A backend and public surfaces expose semantic menu-extra state only after promotion (0.417833ms)
+✔ Phase 9C3A documentation records authoritative physical promotion and preserves mutation boundary (0.549834ms)
+✔ Phase 9C3A public result schema preserves anonymous semantic items (0.119ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.407
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-appkit-fixture.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-appkit-fixture.test.js'
+START: 2026-08-28T18:51:53Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ physical fixture exposes deterministic native AppKit disclosure and hierarchy (0.347875ms)
+✔ physical harness validates Cocoa controls without browser substitutes (0.890041ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.340084
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T18:51:53Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-children.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-children.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native JSON tree preserves scope and bounded depth (1.371042ms)
+✔ ui.children accepts observation scopes but action APIs do not (0.414417ms)
+✔ children contract uses native tree rather than indentation (0.165084ms)
+✔ native JSON snapshots remain compatible with agent-ctrl 0.1.4 (0.071917ms)
+✔ ui.children is physically validated on the AppKit hierarchy fixture (0.379708ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47.096542
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 104
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-describe.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-describe.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.describe routes an actionable target without backend-specific fields (0.545417ms)
+✔ ui.describe rejects missing or malformed element handles before backend dispatch (0.21325ms)
+✔ control description schema makes unavailable state explicit (0.523459ms)
+✔ SDK and RumiAI adapter expose the canonical operation (0.193583ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.468959
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-disclosure.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-disclosure.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.expand and ui.collapse route actionable native targets (0.488833ms)
+✔ disclosure is physically validated on the AppKit reference control (0.373375ms)
+✔ disclosure contract and SDK remain directly exposed (0.389958ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.03475
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 96
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-invoke.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-invoke.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.invoke routes an actionable target and preserves delivery semantics (0.551416ms)
+✔ ui.invoke rejects missing or malformed element handles before dispatch (0.227667ms)
+✔ macOS mapping reports action delivery without inventing the semantic consequence (0.40475ms)
+✔ macOS mapping keeps role, state and visibility failures distinct (0.142958ms)
+✔ invoke schemas, SDK and RumiAI adapter expose the canonical operation (0.256875ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.339958
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-role-adapter.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-role-adapter.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ macOS agent-ctrl adapter translates canonical text-area to backend text-field (0.969083ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.932666
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-scroll.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-scroll.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.scroll validates direction and bounded semantic units (0.656792ms)
+✔ macOS scroll requires native scroll-area observation change (0.307209ms)
+✔ semantic down maps to negative native content delta (0.353833ms)
+✔ scrollIntoView uses native action plus geometry rather than visible flag (0.189958ms)
+✔ scrollIntoView falls back to verified wheel geometry when AXScrollToVisible is unsupported (0.094834ms)
+✔ AppKit scroll groups are recognized by their native scrollbar child (0.406959ms)
+✔ wheel pivot center must be inside the AppKit viewport (0.117041ms)
+✔ scroll capabilities are physically validated on the AppKit scroll fixture (0.286542ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.015459
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-stateful.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-stateful.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.toggle requires explicit boolean and ui.select requires actionable refs (0.651708ms)
+✔ stateful macOS capabilities are physically validated on AppKit reference controls (0.359625ms)
+✔ toggle implementation exposes native check/uncheck delivery (0.260542ms)
+✔ schemas SDK adapter preserve stateful public surfaces (0.457667ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.683916
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 99
+RESULT: PASS
+END: 2026-08-28T18:51:54Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation-physical-observer.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation-physical-observer.test.js'
+START: 2026-08-28T18:51:54Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C physical postcondition uses a test-owned fresh AXValue observer instead of cached ui.describe.value (0.372ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.005333
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-mutation.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-mutation.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 8C router validates canonical targets, ranges and text before dispatch (0.751083ms)
+✔ ui.replaceTextRange verifies fresh native AX full text even when describe.value is stale (0.84225ms)
+✔ ui.insertText requires an observed caret and never replaces a non-empty selection (0.193333ms)
+✔ ui.appendText derives the native text end independently of the current selection (0.1285ms)
+✔ Phase 8C rejects UTF-16 boundaries inside surrogate pairs before native mutation (0.120375ms)
+✔ empty replacement at an already collapsed caret is a verified idempotent no-op (0.133416ms)
+✔ Phase 8C capabilities are physically validated together with Phase 8A and 8B (0.279791ms)
+✔ Phase 8C public surfaces use native AX selected-text mutation without browser, keyboard or clipboard substitution (1.460292ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.665625
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 104
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-range-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-range-selection.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.selectTextRange validates the canonical request before backend dispatch (0.705ms)
+✔ macOS Phase 8B writes native AX selection and independently verifies the exact range (0.689541ms)
+✔ Phase 8B is idempotent and rejects observed out-of-bounds ranges before mutation (0.132167ms)
+✔ Phase 8B is physically validated on the AppKit reference fixture (0.289708ms)
+✔ Phase 8B public surfaces and native mutation strategy remain explicit (0.549625ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.474542
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 102
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection-rebind.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection-rebind.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ native text rebind only bridges text-field and text-area vocabularies (0.597584ms)
+✔ native text rebind retries only an exact stale-target failure (0.189291ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.509583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-text-selection.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-text-selection.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ ui.getTextSelection requires an actionable target (0.615667ms)
+✔ macOS text selection normalizes native AX range to explicit UTF-16 offsets (0.585416ms)
+✔ collapsed native range becomes an explicit caret (0.101625ms)
+✔ text selection fails closed for unsupported roles and inconsistent observations (0.1305ms)
+✔ Phase 8A is physically validated on the AppKit reference fixture (0.287375ms)
+✔ Phase 8A public surfaces and native source remain explicit (0.413291ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.781709
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 100
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:native-controls-value.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/native-controls-value.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ value mutations route canonical parameters (0.694583ms)
+✔ numeric value capabilities are physically validated on AppKit reference controls (0.378666ms)
+✔ SDK and schemas preserve value surfaces (0.403541ms)
+✔ numeric setValue steps native sliders instead of sending a text fill (1.426625ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.234458
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 100
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10-fallback-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10-fallback-discovery.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10 starts only after Phase 9D richer clipboard physical completion (0.509417ms)
+✔ historical Phase 10 discovery remains non-mutating provenance (0.729208ms)
+✔ Phase 10 public surface advances only through implemented 10E keyboard (0.36125ms)
+✔ Phase 10 lifecycle validates through 10D and implements 10E without weakening semantic APIs (0.353666ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36.822292
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 92
+RESULT: PASS
+END: 2026-08-28T18:51:55Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10b-pointer-delivery-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10b-pointer-delivery-discovery.test.js'
+START: 2026-08-28T18:51:55Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10B remains rooted in authoritative delivery discovery and public validation (0.841583ms)
+✔ Phase 10B discovery posts only into a test-owned AppKit fixture, pumps delivery, and restores pointer/focus (0.4685ms)
+✔ Phase 10B move/click remain public while 10C adds only atomic drag and no held-button API (0.106959ms)
+✔ Phase 10B physical harness compiles as library and logs no coordinates (0.62225ms)
+✔ Phase 10B keeps semantic operations preferred over coordinate delivery (0.199875ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.852333
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 95
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10c-drag-delivery-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10c-drag-delivery-discovery.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10C preserves authoritative discovery provenance after public physical promotion (0.713208ms)
+✔ Phase 10C discovery owns a complete left-button drag lifecycle inside one process (0.461542ms)
+✔ Phase 10C discovery requires independent AppKit drag consequence, not event construction alone (0.086417ms)
+✖ Phase 10C public surface remains atomic pointer.drag with no held-button API (1.126125ms)
+✔ Phase 10C historical discovery harness remains privacy-bounded and immutable (0.31675ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.654917
+
+✖ failing tests:
+
+test at tests/products/computer-control/contract-tests/phase10c-drag-delivery-discovery.test.js:29:1
+✖ Phase 10C public surface remains atomic pointer.drag with no held-button API (1.126125ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /one atomic primary-display fallback operation/i. Input:
+  
+  '# Phase 10 — explicit low-level fallbacks\n' +
+    '\n' +
+    'Phase 10 contains fallback mechanics that are used only when a higher-level semantic Computer Control operation cannot satisfy the task.\n' +
+    '\n' +
+    'A working semantic capability always takes precedence. Low-level delivery must never silently weaken an existing semantic API or its postconditions.\n' +
+    '\n' +
+    '## Lifecycle\n' +
+    '\n' +
+    '```text\n' +
+    'Phase 10 discovery   PHYSICALLY_OBSERVED\n' +
+    'Phase 10A capture    PHYSICALLY_VALIDATED\n' +
+    'Phase 10B pointer    PHYSICALLY_VALIDATED\n' +
+    'Phase 10C drag/drop  PHYSICALLY_VALIDATED\n' +
+    'Phase 10D wheel      PHYSICALLY_VALIDATED\n' +
+    'Phase 10E keyboard   IMPLEMENTED\n' +
+    'OCR / vision         PENDING (separate interpretation layer)\n' +
+    '```\n' +
+    '\n' +
+    '`PHYSICALLY_OBSERVED` for discovery means native primitives or delivery behavior were inspected on real hardware; it is not by itself a public capability validation state.\n' +
+    '\n' +
+    '## 10A — primary display capture\n' +
+    '\n' +
+    '`client.captureDisplay({display:"primary"})` is `PHYSICALLY_VALIDATED` on the current macOS reference surface. See `docs/api-display-capture.md` and `docs/evidence/phase10a-display-capture-physical.md`.\n' +
+    '\n' +
+    '## 10B — pointer move/click fallback\n' +
+    '\n' +
+    'Public APIs:\n' +
+    '\n' +
+    '```js\n' +
+    'client.movePointer({display:"primary", x, y})\n' +
+    'client.clickPointer({display:"primary", x, y, button:"left"|"right"})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10b-pointer-public-s03\n' +
+    'evidence: a7b878ff25e56ee7c16705dfdec1468f6a47b0a1\n' +
+    'validated product: 3f68502848f127d73f72cac023deed511f3ce75d\n' +
+    'result: 43 PASS / 0 FAIL / 0 BLOCKED\n' +
+    '```\n' +
+    '\n' +
+    '`CLICK_POSTED` reports low-level button posting only. It does not mean the intended semantic action succeeded.\n' +
+    '\n' +
+    '## 10C — drag/drop fallback\n' +
+    '\n' +
+    'Public API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.dragPointer({display:"primary", source:{x,y}, destination:{x,y}, button:"left"})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10c-pointer-drag-public-s02\n' +
+    'evidence: 1e0286c271cefddc36be7fc84008083d0658bd82\n' +
+    'validated product: 43a26d1f369c39dbed6ca8131af8d02bd8e17b47\n' +
+    'test source: 57f9036720f3b95af77b0803878a29bd223c63c1\n' +
+    'poc SHA tested: 0def3a8ba72e8cceffc03ec23721e63c2504decf\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The public SDK call returned the expected low-level `DRAG_POSTED` boundary. A separate test-owned AppKit oracle independently observed exactly one mouse-down, four mouse-dragged events and one mouse-up; its hit-test-transparent marker reached the destination. The pointer was restored, no emergency release was needed, no user content was touched and no fixture coordinates or native display identifiers were persisted.\n' +
+    '\n' +
+    '## 10D — raw wheel delivery\n' +
+    '\n' +
+    'Public API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.wheelPointer({display:"primary", x, y, direction:"up"|"down", amount:1})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Existing semantic `ui.scroll` remains preferred whenever a semantic scroll target exists. `pointer.wheel` is an explicit coordinate fallback and must not weaken or bypass `ui.scroll` postcondition semantics.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10d-pointer-wheel-public-s01\n' +
+    'evidence: b1ed223bb401ab79b5b7e6cc11c8512347afe0be\n' +
+    'validated product: a3fcd4cbaa4f770e59bd974c0239b9af35701e99\n' +
+    'test source: 7a0d62b2723bd0dca11e57a9b8aa931251a6f475\n' +
+    'poc SHA tested: 37b03c1e7a59f712bfa674122fb636b5ca24447b\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The real SDK/runtime path was exercised twice against a separate test-owned AppKit `NSScrollView` oracle. Canonical `direction:"down", amount:3` produced one independently observed wheel event and an `increasing-y` viewport consequence. After exact baseline reset, canonical `direction:"up", amount:3` produced one independently observed wheel event and a `decreasing-y` consequence. The native sign mapping remains backend-private.\n' +
+    '\n' +
+    '## 10E — keyboard fallback\n' +
+    '\n' +
+    'Public candidate API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.pressKey({key:"a", modifiers:[]})\n' +
+    'client.pressKey({key:"a", modifiers:["shift"]})\n' +
+    'client.pressKey({key:"enter", modifiers:[]})\n' +
+    '```\n' +
+    '\n' +
+    'State: `IMPLEMENTED`. A dedicated public runtime/SDK physical checkpoint is required before promotion.\n' +
+    '\n' +
+    'Existing semantic text mutation, invoke and other structured APIs remain preferred. `keyboard.press` is a low-level fallback and does not claim that an arbitrary application accepted text, triggered a shortcut or reached an intended semantic state.\n' +
+    '\n' +
+    'Authoritative delivery discovery:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10e-keyboard-delivery-discovery-s01\n' +
+    'evidence: 1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324\n' +
+    'observed product: 0f4d2c0378b12df50ed192721dded97edff9f72e\n' +
+    'test source: fd462455a0b989b459d63d5a3d5833420a191d2f\n' +
+    'poc SHA tested: ddd7f69cffe3b2eed67b9e3dfc2a7bd57179d589\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The test-owned AppKit text fixture independently established three physically grounded tuples:\n' +
+    '\n' +
+    '- `a` with no modifiers: one key-down, one key-up, lowercase text consequence;\n' +
+    '- `enter` with no modifiers: one key-down, one key-up, newline consequence;\n' +
+    '- `a` with `shift`: Shift on/off transitions, shifted key observation and uppercase text consequence.\n' +
+    '\n' +
+    'The public contract is deliberately narrower than a general keyboard API:\n' +
+    '\n' +
+    '- only canonical key `a` and `enter`;\n' +
+    '- only modifier `shift`;\n' +
+    '- only the three discovered key/modifier tuples are accepted;\n' +
+    '- complete key/modifier lifecycle belongs to one call;\n' +
+    '- no public key-down, key-up or held-modifier state;\n' +
+    '- numeric virtual-key codes and platform flags remain private;\n' +
+    '- success state is `KEY_POSTED`;\n' +
+    '- `semanticConsequenceVerified` is always false;\n' +
+    '- any future vocabulary expansion requires separate evidence rather than guessed native identifiers.\n' +
+    '\n' +
+    'See `docs/api-keyboard.md` and `docs/evidence/phase10e-keyboard-delivery-discovery-physical.md`.\n' +
+    '\n' +
+    '## OCR and vision\n' +
+    '\n' +
+    'Image interpretation is not part of `display.capture`.\n' +
+    '\n' +
+    'OCR/vision consumes captured or otherwise supplied image data as a separate layer. It must not convert screen coordinates or visual guesses into semantic success without an appropriate postcondition.\n'
+  
+      at TestContext.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10c-drag-delivery-discovery.test.js:30:368)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '# Phase 10 — explicit low-level fallbacks\n\nPhase 10 contains fallback mechanics that are used only when a higher-level semantic Computer Control operation cannot satisfy the task.\n\nA working semantic capability always takes precedence. Low-level delivery must never silently weaken an existing semantic API or its postconditions.\n\n## Lifecycle\n\n```text\nPhase 10 discovery   PHYSICALLY_OBSERVED\nPhase 10A capture    PHYSICALLY_VALIDATED\nPhase 10B pointer    PHYSICALLY_VALIDATED\nPhase 10C drag/drop  PHYSICALLY_VALIDATED\nPhase 10D wheel      PHYSICALLY_VALIDATED\nPhase 10E keyboard   IMPLEMENTED\nOCR / vision         PENDING (separate interpretation layer)\n```\n\n`PHYSICALLY_OBSERVED` for discovery means native primitives or delivery behavior were inspected on real hardware; it is not by itself a public capability validation state.\n\n## 10A — primary display capture\n\n`client.captureDisplay({display:"primary"})` is `PHYSICALLY_VALIDATED` on the current macOS reference surface. See `docs/api-display-capture.md` and `docs/evidence/phase10a-display-capture-physical.md`.\n\n## 10B — pointer move/click fallback\n\nPublic APIs:\n\n```js\nclient.movePointer({display:"primary", x, y})\nclient.clickPointer({display:"primary", x, y, button:"left"|"right"})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10b-pointer-public-s03\nevidence: a7b878ff25e56ee7c16705dfdec1468f6a47b0a1\nvalidated product: 3f68502848f127d73f72cac023deed511f3ce75d\nresult: 43 PASS / 0 FAIL / 0 BLOCKED\n```\n\n`CLICK_POSTED` reports low-level button posting only. It does not mean the intended semantic action succeeded.\n\n## 10C — drag/drop fallback\n\nPublic API:\n\n```js\nclient.dragPointer({display:"primary", source:{x,y}, destination:{x,y}, button:"left"})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10c-pointer-drag-public-s02\nevidence: 1e0286c271cefddc36be7fc84008083d0658bd82\nvalidated product: 43a26d1f369c39dbed6ca8131af8d02bd8e17b47\ntest source: 57f9036720f3b95af77b0803878a29bd223c63c1\npoc SHA tested: 0def3a8ba72e8cceffc03ec23721e63c2504decf\nresult: PASS\n```\n\nThe public SDK call returned the expected low-level `DRAG_POSTED` boundary. A separate test-owned AppKit oracle independently observed exactly one mouse-down, four mouse-dragged events and one mouse-up; its hit-test-transparent marker reached the destination. The pointer was restored, no emergency release was needed, no user content was touched and no fixture coordinates or native display identifiers were persisted.\n\n## 10D — raw wheel delivery\n\nPublic API:\n\n```js\nclient.wheelPointer({display:"primary", x, y, direction:"up"|"down", amount:1})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nExisting semantic `ui.scroll` remains preferred whenever a semantic scroll target exists. `pointer.wheel` is an explicit coordinate fallback and must not weaken or bypass `ui.scroll` postcondition semantics.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10d-pointer-wheel-public-s01\nevidence: b1ed223bb401ab79b5b7e6cc11c8512347afe0be\nvalidated product: a3fcd4cbaa4f770e59bd974c0239b9af35701e99\ntest source: 7a0d62b2723bd0dca11e57a9b8aa931251a6f475\npoc SHA tested: 37b03c1e7a59f712bfa674122fb636b5ca24447b\nresult: PASS\n```\n\nThe real SDK/runtime path was exercised twice against a separate test-owned AppKit `NSScrollView` oracle. Canonical `direction:"down", amount:3` produced one independently observed wheel event and an `increasing-y` viewport consequence. After exact baseline reset, canonical `direction:"up", amount:3` produced one independently observed wheel event and a `decreasing-y` consequence. The native sign mapping remains backend-private.\n\n## 10E — keyboard fallback\n\nPublic candidate API:\n\n```js\nclient.pressKey({key:"a", modifiers:[]})\nclient.pressKey({key:"a", modifiers:["shift"]})\nclient.pressKey({key:"enter", modifiers:[]})\n```\n\nState: `IMPLEMENTED`. A dedicated public runtime/SDK physical checkpoint is required before promotion.\n\nExisting semantic text mutation, invoke and other structured APIs remain preferred. `keyboard.press` is a low-level fallback and does not claim that an arbitrary application accepted text, triggered a shortcut or reached an intended semantic state.\n\nAuthoritative delivery discovery:\n\n```text\nsession: cc-phase10e-keyboard-delivery-discovery-s01\nevidence: 1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324\nobserved product: 0f4d2c0378b12df50ed192721dded97edff9f72e\ntest source: fd462455a0b989b459d63d5a3d5833420a191d2f\npoc SHA tested: ddd7f69cffe3b2eed67b9e3dfc2a7bd57179d589\nresult: PASS\n```\n\nThe test-owned AppKit text fixture independently established three physically grounded tuples:\n\n- `a` with no modifiers: one key-down, one key-up, lowercase text consequence;\n- `enter` with no modifiers: one key-down, one key-up, newline consequence;\n- `a` with `shift`: Shift on/off transitions, shifted key observation and uppercase text consequence.\n\nThe public contract is deliberately narrower than a general keyboard API:\n\n- only canonical key `a` and `enter`;\n- only modifier `shift`;\n- only the three discovered key/modifier tuples are accepted;\n- complete key/modifier lifecycle belongs to one call;\n- no public key-down, key-up or held-modifier state;\n- numeric virtual-key codes and platform flags remain private;\n- success state is `KEY_POSTED`;\n- `semanticConsequenceVerified` is always false;\n- any future vocabulary expansion requires separate evidence rather than guessed native identifiers.\n\nSee `docs/api-keyboard.md` and `docs/evidence/phase10e-keyboard-delivery-discovery-physical.md`.\n\n## OCR and vision\n\nImage interpretation is not part of `display.capture`.\n\nOCR/vision consumes captured or otherwise supplied image data as a separate layer. It must not convert screen coordinates or visual guesses into semantic success without an appropriate postcondition.\n',
+    expected: /one atomic primary-display fallback operation/i,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 99
+RESULT: FAIL
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10c-pointer-drag-public-build.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10c-pointer-drag-public-build.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10C public fixture has one canonical near helper and compiles without CGPoint/NSPoint redeclaration (0.782334ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.412375
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10d-wheel-delivery-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10d-wheel-delivery-discovery.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10D remains rooted in discovery and authoritative public validation (0.9835ms)
+✔ historical Phase 10D discovery delivered two opposite Quartz wheel signs to one test-owned AppKit scroll fixture (0.568417ms)
+✔ historical Phase 10D discovery required real scroll consequence and opposite mapping (0.09375ms)
+✔ historical Phase 10D discovery remains fixture-owned and private (0.56525ms)
+✖ Phase 10D public advancement keeps semantic ui.scroll preferred (0.642375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.445
+
+✖ failing tests:
+
+test at tests/products/computer-control/contract-tests/phase10d-wheel-delivery-discovery.test.js:27:1
+✖ Phase 10D public advancement keeps semantic ui.scroll preferred (0.642375ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /success state is `WHEEL_POSTED`/i. Input:
+  
+  '# Phase 10 — explicit low-level fallbacks\n' +
+    '\n' +
+    'Phase 10 contains fallback mechanics that are used only when a higher-level semantic Computer Control operation cannot satisfy the task.\n' +
+    '\n' +
+    'A working semantic capability always takes precedence. Low-level delivery must never silently weaken an existing semantic API or its postconditions.\n' +
+    '\n' +
+    '## Lifecycle\n' +
+    '\n' +
+    '```text\n' +
+    'Phase 10 discovery   PHYSICALLY_OBSERVED\n' +
+    'Phase 10A capture    PHYSICALLY_VALIDATED\n' +
+    'Phase 10B pointer    PHYSICALLY_VALIDATED\n' +
+    'Phase 10C drag/drop  PHYSICALLY_VALIDATED\n' +
+    'Phase 10D wheel      PHYSICALLY_VALIDATED\n' +
+    'Phase 10E keyboard   IMPLEMENTED\n' +
+    'OCR / vision         PENDING (separate interpretation layer)\n' +
+    '```\n' +
+    '\n' +
+    '`PHYSICALLY_OBSERVED` for discovery means native primitives or delivery behavior were inspected on real hardware; it is not by itself a public capability validation state.\n' +
+    '\n' +
+    '## 10A — primary display capture\n' +
+    '\n' +
+    '`client.captureDisplay({display:"primary"})` is `PHYSICALLY_VALIDATED` on the current macOS reference surface. See `docs/api-display-capture.md` and `docs/evidence/phase10a-display-capture-physical.md`.\n' +
+    '\n' +
+    '## 10B — pointer move/click fallback\n' +
+    '\n' +
+    'Public APIs:\n' +
+    '\n' +
+    '```js\n' +
+    'client.movePointer({display:"primary", x, y})\n' +
+    'client.clickPointer({display:"primary", x, y, button:"left"|"right"})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10b-pointer-public-s03\n' +
+    'evidence: a7b878ff25e56ee7c16705dfdec1468f6a47b0a1\n' +
+    'validated product: 3f68502848f127d73f72cac023deed511f3ce75d\n' +
+    'result: 43 PASS / 0 FAIL / 0 BLOCKED\n' +
+    '```\n' +
+    '\n' +
+    '`CLICK_POSTED` reports low-level button posting only. It does not mean the intended semantic action succeeded.\n' +
+    '\n' +
+    '## 10C — drag/drop fallback\n' +
+    '\n' +
+    'Public API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.dragPointer({display:"primary", source:{x,y}, destination:{x,y}, button:"left"})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10c-pointer-drag-public-s02\n' +
+    'evidence: 1e0286c271cefddc36be7fc84008083d0658bd82\n' +
+    'validated product: 43a26d1f369c39dbed6ca8131af8d02bd8e17b47\n' +
+    'test source: 57f9036720f3b95af77b0803878a29bd223c63c1\n' +
+    'poc SHA tested: 0def3a8ba72e8cceffc03ec23721e63c2504decf\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The public SDK call returned the expected low-level `DRAG_POSTED` boundary. A separate test-owned AppKit oracle independently observed exactly one mouse-down, four mouse-dragged events and one mouse-up; its hit-test-transparent marker reached the destination. The pointer was restored, no emergency release was needed, no user content was touched and no fixture coordinates or native display identifiers were persisted.\n' +
+    '\n' +
+    '## 10D — raw wheel delivery\n' +
+    '\n' +
+    'Public API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.wheelPointer({display:"primary", x, y, direction:"up"|"down", amount:1})\n' +
+    '```\n' +
+    '\n' +
+    'State: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n' +
+    '\n' +
+    'Existing semantic `ui.scroll` remains preferred whenever a semantic scroll target exists. `pointer.wheel` is an explicit coordinate fallback and must not weaken or bypass `ui.scroll` postcondition semantics.\n' +
+    '\n' +
+    'Authoritative public checkpoint:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10d-pointer-wheel-public-s01\n' +
+    'evidence: b1ed223bb401ab79b5b7e6cc11c8512347afe0be\n' +
+    'validated product: a3fcd4cbaa4f770e59bd974c0239b9af35701e99\n' +
+    'test source: 7a0d62b2723bd0dca11e57a9b8aa931251a6f475\n' +
+    'poc SHA tested: 37b03c1e7a59f712bfa674122fb636b5ca24447b\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The real SDK/runtime path was exercised twice against a separate test-owned AppKit `NSScrollView` oracle. Canonical `direction:"down", amount:3` produced one independently observed wheel event and an `increasing-y` viewport consequence. After exact baseline reset, canonical `direction:"up", amount:3` produced one independently observed wheel event and a `decreasing-y` consequence. The native sign mapping remains backend-private.\n' +
+    '\n' +
+    '## 10E — keyboard fallback\n' +
+    '\n' +
+    'Public candidate API:\n' +
+    '\n' +
+    '```js\n' +
+    'client.pressKey({key:"a", modifiers:[]})\n' +
+    'client.pressKey({key:"a", modifiers:["shift"]})\n' +
+    'client.pressKey({key:"enter", modifiers:[]})\n' +
+    '```\n' +
+    '\n' +
+    'State: `IMPLEMENTED`. A dedicated public runtime/SDK physical checkpoint is required before promotion.\n' +
+    '\n' +
+    'Existing semantic text mutation, invoke and other structured APIs remain preferred. `keyboard.press` is a low-level fallback and does not claim that an arbitrary application accepted text, triggered a shortcut or reached an intended semantic state.\n' +
+    '\n' +
+    'Authoritative delivery discovery:\n' +
+    '\n' +
+    '```text\n' +
+    'session: cc-phase10e-keyboard-delivery-discovery-s01\n' +
+    'evidence: 1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324\n' +
+    'observed product: 0f4d2c0378b12df50ed192721dded97edff9f72e\n' +
+    'test source: fd462455a0b989b459d63d5a3d5833420a191d2f\n' +
+    'poc SHA tested: ddd7f69cffe3b2eed67b9e3dfc2a7bd57179d589\n' +
+    'result: PASS\n' +
+    '```\n' +
+    '\n' +
+    'The test-owned AppKit text fixture independently established three physically grounded tuples:\n' +
+    '\n' +
+    '- `a` with no modifiers: one key-down, one key-up, lowercase text consequence;\n' +
+    '- `enter` with no modifiers: one key-down, one key-up, newline consequence;\n' +
+    '- `a` with `shift`: Shift on/off transitions, shifted key observation and uppercase text consequence.\n' +
+    '\n' +
+    'The public contract is deliberately narrower than a general keyboard API:\n' +
+    '\n' +
+    '- only canonical key `a` and `enter`;\n' +
+    '- only modifier `shift`;\n' +
+    '- only the three discovered key/modifier tuples are accepted;\n' +
+    '- complete key/modifier lifecycle belongs to one call;\n' +
+    '- no public key-down, key-up or held-modifier state;\n' +
+    '- numeric virtual-key codes and platform flags remain private;\n' +
+    '- success state is `KEY_POSTED`;\n' +
+    '- `semanticConsequenceVerified` is always false;\n' +
+    '- any future vocabulary expansion requires separate evidence rather than guessed native identifiers.\n' +
+    '\n' +
+    'See `docs/api-keyboard.md` and `docs/evidence/phase10e-keyboard-delivery-discovery-physical.md`.\n' +
+    '\n' +
+    '## OCR and vision\n' +
+    '\n' +
+    'Image interpretation is not part of `display.capture`.\n' +
+    '\n' +
+    'OCR/vision consumes captured or otherwise supplied image data as a separate layer. It must not convert screen coordinates or visual guesses into semantic success without an appropriate postcondition.\n'
+  
+      at TestContext.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10d-wheel-delivery-discovery.test.js:28:317)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '# Phase 10 — explicit low-level fallbacks\n\nPhase 10 contains fallback mechanics that are used only when a higher-level semantic Computer Control operation cannot satisfy the task.\n\nA working semantic capability always takes precedence. Low-level delivery must never silently weaken an existing semantic API or its postconditions.\n\n## Lifecycle\n\n```text\nPhase 10 discovery   PHYSICALLY_OBSERVED\nPhase 10A capture    PHYSICALLY_VALIDATED\nPhase 10B pointer    PHYSICALLY_VALIDATED\nPhase 10C drag/drop  PHYSICALLY_VALIDATED\nPhase 10D wheel      PHYSICALLY_VALIDATED\nPhase 10E keyboard   IMPLEMENTED\nOCR / vision         PENDING (separate interpretation layer)\n```\n\n`PHYSICALLY_OBSERVED` for discovery means native primitives or delivery behavior were inspected on real hardware; it is not by itself a public capability validation state.\n\n## 10A — primary display capture\n\n`client.captureDisplay({display:"primary"})` is `PHYSICALLY_VALIDATED` on the current macOS reference surface. See `docs/api-display-capture.md` and `docs/evidence/phase10a-display-capture-physical.md`.\n\n## 10B — pointer move/click fallback\n\nPublic APIs:\n\n```js\nclient.movePointer({display:"primary", x, y})\nclient.clickPointer({display:"primary", x, y, button:"left"|"right"})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10b-pointer-public-s03\nevidence: a7b878ff25e56ee7c16705dfdec1468f6a47b0a1\nvalidated product: 3f68502848f127d73f72cac023deed511f3ce75d\nresult: 43 PASS / 0 FAIL / 0 BLOCKED\n```\n\n`CLICK_POSTED` reports low-level button posting only. It does not mean the intended semantic action succeeded.\n\n## 10C — drag/drop fallback\n\nPublic API:\n\n```js\nclient.dragPointer({display:"primary", source:{x,y}, destination:{x,y}, button:"left"})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10c-pointer-drag-public-s02\nevidence: 1e0286c271cefddc36be7fc84008083d0658bd82\nvalidated product: 43a26d1f369c39dbed6ca8131af8d02bd8e17b47\ntest source: 57f9036720f3b95af77b0803878a29bd223c63c1\npoc SHA tested: 0def3a8ba72e8cceffc03ec23721e63c2504decf\nresult: PASS\n```\n\nThe public SDK call returned the expected low-level `DRAG_POSTED` boundary. A separate test-owned AppKit oracle independently observed exactly one mouse-down, four mouse-dragged events and one mouse-up; its hit-test-transparent marker reached the destination. The pointer was restored, no emergency release was needed, no user content was touched and no fixture coordinates or native display identifiers were persisted.\n\n## 10D — raw wheel delivery\n\nPublic API:\n\n```js\nclient.wheelPointer({display:"primary", x, y, direction:"up"|"down", amount:1})\n```\n\nState: `PHYSICALLY_VALIDATED` on the current macOS reference surface.\n\nExisting semantic `ui.scroll` remains preferred whenever a semantic scroll target exists. `pointer.wheel` is an explicit coordinate fallback and must not weaken or bypass `ui.scroll` postcondition semantics.\n\nAuthoritative public checkpoint:\n\n```text\nsession: cc-phase10d-pointer-wheel-public-s01\nevidence: b1ed223bb401ab79b5b7e6cc11c8512347afe0be\nvalidated product: a3fcd4cbaa4f770e59bd974c0239b9af35701e99\ntest source: 7a0d62b2723bd0dca11e57a9b8aa931251a6f475\npoc SHA tested: 37b03c1e7a59f712bfa674122fb636b5ca24447b\nresult: PASS\n```\n\nThe real SDK/runtime path was exercised twice against a separate test-owned AppKit `NSScrollView` oracle. Canonical `direction:"down", amount:3` produced one independently observed wheel event and an `increasing-y` viewport consequence. After exact baseline reset, canonical `direction:"up", amount:3` produced one independently observed wheel event and a `decreasing-y` consequence. The native sign mapping remains backend-private.\n\n## 10E — keyboard fallback\n\nPublic candidate API:\n\n```js\nclient.pressKey({key:"a", modifiers:[]})\nclient.pressKey({key:"a", modifiers:["shift"]})\nclient.pressKey({key:"enter", modifiers:[]})\n```\n\nState: `IMPLEMENTED`. A dedicated public runtime/SDK physical checkpoint is required before promotion.\n\nExisting semantic text mutation, invoke and other structured APIs remain preferred. `keyboard.press` is a low-level fallback and does not claim that an arbitrary application accepted text, triggered a shortcut or reached an intended semantic state.\n\nAuthoritative delivery discovery:\n\n```text\nsession: cc-phase10e-keyboard-delivery-discovery-s01\nevidence: 1aa6efa523dab83d7dd5e2b14fb1b6deb83dc324\nobserved product: 0f4d2c0378b12df50ed192721dded97edff9f72e\ntest source: fd462455a0b989b459d63d5a3d5833420a191d2f\npoc SHA tested: ddd7f69cffe3b2eed67b9e3dfc2a7bd57179d589\nresult: PASS\n```\n\nThe test-owned AppKit text fixture independently established three physically grounded tuples:\n\n- `a` with no modifiers: one key-down, one key-up, lowercase text consequence;\n- `enter` with no modifiers: one key-down, one key-up, newline consequence;\n- `a` with `shift`: Shift on/off transitions, shifted key observation and uppercase text consequence.\n\nThe public contract is deliberately narrower than a general keyboard API:\n\n- only canonical key `a` and `enter`;\n- only modifier `shift`;\n- only the three discovered key/modifier tuples are accepted;\n- complete key/modifier lifecycle belongs to one call;\n- no public key-down, key-up or held-modifier state;\n- numeric virtual-key codes and platform flags remain private;\n- success state is `KEY_POSTED`;\n- `semanticConsequenceVerified` is always false;\n- any future vocabulary expansion requires separate evidence rather than guessed native identifiers.\n\nSee `docs/api-keyboard.md` and `docs/evidence/phase10e-keyboard-delivery-discovery-physical.md`.\n\n## OCR and vision\n\nImage interpretation is not part of `display.capture`.\n\nOCR/vision consumes captured or otherwise supplied image data as a separate layer. It must not convert screen coordinates or visual guesses into semantic success without an appropriate postcondition.\n',
+    expected: /success state is `WHEEL_POSTED`/i,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 100
+RESULT: FAIL
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:phase10e-keyboard-delivery-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase10e-keyboard-delivery-discovery.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10E remains rooted in authoritative public Phase 10D validation and keyboard discovery evidence (0.629041ms)
+✔ historical Phase 10E discovery uses symbolic platform constants rather than guessed numeric virtual-key ids (1.108542ms)
+✔ historical Phase 10E discovery owns an AppKit text fixture and observes printable, special-key and modifier consequences (0.110208ms)
+✔ historical Phase 10E discovery posts complete key lifecycles and owns modifier cleanup (0.582417ms)
+✔ Phase 10E public advancement exposes only keyboard.press and keeps semantic operations preferred (0.312625ms)
+✔ Phase 10E historical harness logs no numeric keycodes or user text (0.396125ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.071875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:phase9d-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/phase9d-discovery.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9D discovery starts after Phase 9C observation physical completion (0.527333ms)
+✔ Phase 9D display discovery is read-only AppKit and CoreGraphics observation (0.875459ms)
+✔ Phase 9D clipboard discovery never mutates the user's general pasteboard (0.173041ms)
+✔ Phase 9D richer clipboard must extend rather than silently replace the existing text contract (0.360209ms)
+✔ Phase 9D discovery remains historical provenance while canonical public phases advance independently (0.222583ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.653583
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:pointer-drag-fallback.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/pointer-drag-fallback.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10C router exposes one atomic primary-display left drag contract (0.97775ms)
+✔ Phase 10C helper owns source verification and complete preconstructed drag lifecycle (0.461709ms)
+✔ Phase 10C backend lifecycle is PHYSICALLY_VALIDATED and delivery cannot masquerade as semantic drop success (0.133ms)
+✔ Phase 10C schemas expose canonical logical points only (0.181916ms)
+✔ Phase 10C SDK declarations and RumiAI adapter are thin atomic projections with no held-button API (0.173375ms)
+✔ Phase 10C docs record authoritative public validation and preserve delivery-not-success (0.625333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.747958
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 97
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:pointer-fallback.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/pointer-fallback.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10B router preserves narrow primary-display move/click contracts (1.068041ms)
+✔ Phase 10B native helper verifies position immediately before button post and reports posting only (0.353417ms)
+✔ Phase 10B backend lifecycle remains PHYSICALLY_VALIDATED and click cannot masquerade as semantic verification (0.13525ms)
+✔ Phase 10B schemas expose local coordinates and no native display identity (0.22825ms)
+✔ Phase 10B SDK, declarations and RumiAI adapter remain thin projections after 10C addition (0.561541ms)
+✔ Phase 10B docs record authoritative public physical validation and preserve delivery-not-success (0.189042ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.912875
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 94
+RESULT: PASS
+END: 2026-08-28T18:51:56Z
+================================================================================
+
+================================================================================
+TEST: contract:pointer-wheel-fallback.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/pointer-wheel-fallback.test.js'
+START: 2026-08-28T18:51:56Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 10D router exposes bounded canonical vertical pointer.wheel only (0.846041ms)
+✔ Phase 10D helper keeps native sign private (0.173917ms)
+✔ Phase 10D backend is PHYSICALLY_VALIDATED and remains delivery-only (0.119041ms)
+✔ Phase 10D schemas expose no native wheel axes (0.387375ms)
+✔ Phase 10D docs record authoritative public validation (0.187125ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.363166
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 91
+RESULT: PASS
+END: 2026-08-28T18:51:57Z
+================================================================================
+
+================================================================================
+TEST: contract:runtime-set-text.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/runtime-set-text.test.js'
+START: 2026-08-28T18:51:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ runtime.info and ui.setText cross the local RPC boundary (11.244042ms)
+✔ ui.find performs normalized semantic matching over caller observation (0.533375ms)
+✔ native ui.find translates canonical radio-button to the agent-ctrl radio role (0.063958ms)
+✔ ui.setText rejects empty text without invoking GUI recovery (0.229916ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55.453584
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 110
+RESULT: PASS
+END: 2026-08-28T18:51:57Z
+================================================================================
+
+================================================================================
+TEST: contract:system-chrome-discovery.test.js
+COMMAND: RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' --test '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/contract-tests/system-chrome-discovery.test.js'
+START: 2026-08-28T18:51:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ Phase 9C2+9C3 combined discovery is read-only and OS-owned (0.811792ms)
+✔ Phase 9C2+9C3 discovery starts only after Phase 9C1A physical promotion (0.200625ms)
+✔ Phase 9C2+9C3 discovery remains historical provenance while observation APIs advance separately (0.216667ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.357
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 93
+RESULT: PASS
+END: 2026-08-28T18:51:57Z
+================================================================================
+
+================================================================================
+TEST: physical:phase10e-keyboard-public
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_CONTROL_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/physical-tests/macos-phase10e-keyboard-public.js'
+START: 2026-08-28T18:51:57Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+phase10e-public-keyboard-capability-implemented=PASS
+phase10e-public-keyboard-capability-strategies=PASS
+phase10e-public-fixture-ready=PASS
+phase10e-public-plain-state=PASS
+phase10e-public-plain-boundary=PASS
+phase10e-public-plain-verification=PASS
+phase10e-public-plain-backend=PASS
+phase10e-public-plain-native-keycode-private=PASS
+phase10e-independent-plain-delivery=PASS down=1 up=1
+phase10e-independent-plain-consequence=PASS
+phase10e-public-enter-state=PASS
+phase10e-public-enter-boundary=PASS
+phase10e-public-enter-verification=PASS
+phase10e-public-enter-backend=PASS
+phase10e-public-enter-native-keycode-private=PASS
+phase10e-independent-enter-delivery=PASS down=1 up=1
+phase10e-independent-enter-consequence=PASS
+phase10e-public-shifted-state=PASS
+phase10e-public-shifted-boundary=PASS
+phase10e-public-shifted-verification=PASS
+phase10e-public-shifted-backend=PASS
+phase10e-public-shifted-native-keycode-private=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+physical-phase10e-keyboard-public=FAIL
+Error: PUBLIC_SHIFTED_KEY_NOT_OBSERVED
+    at main (/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-control/physical-tests/macos-phase10e-keyboard-public.js:31:303)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 10915
+RESULT: FAIL
+END: 2026-08-28T18:52:08Z
+================================================================================
+
+session_ended_at=2026-08-28T18:52:08Z
+session_duration_ms=21342
+session_overall=FAIL
