@@ -1,0 +1,77 @@
+{
+  "sessionId": "cu-perception-p2a-local-ocr-discovery-s02",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "a47ada40d6c01dc703c745dc22d046329fe34aea",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "fc3b59a837c7858c78501d1e51c36b65ee5be661",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p2a-local-ocr-discovery",
+    "path": "tests/products/computer-use/physical-tests/perception-p2a-local-ocr-discovery.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1a-visual-frame-acquisition-s04",
+      "evidence": "bdb4de64ea4471838e878a385e2f1f2b7f538ae7",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "validatedRuntime": "29c269864def0a26d3254e913d2a5a87f6125103",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2a-local-ocr-discovery-s01",
+      "evidence": "508996e81e8c100412019dbbf18ad294eb179356",
+      "result": "FAIL",
+      "preservedFailure": "FIXTURE_COMPILE_FAILED"
+    }
+  ],
+  "purpose": "Repeat the first local OCR provider discovery after a PoC-only Swift 6 compatibility hardening of the test-owned text fixture and Vision helper; no product runtime behavior changes are included.",
+  "requiredClaims": [
+    "the real P1B mapped-frame path supplies the PNG used for interpretation",
+    "the OCR probe uses the local macOS Vision framework and receives image bytes through stdin",
+    "two fixed test-owned strings are recognized without logging recognized text",
+    "OCR bounding boxes are converted from Vision normalized lower-left coordinates to capture-pixel top-left coordinates",
+    "both recognized box centers map through the physically validated P1B transform into their independently known logical test-owned windows",
+    "OCR outputs remain observations and do not claim semantic UI identity",
+    "no network API, remote model or external account is used by the probe",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload, recognized text and coordinates are not persisted or logged",
+    "fixture and Computer Control runtime are cleaned up"
+  ],
+  "nonClaims": [
+    "macOS Vision is not yet a Computer Use product provider",
+    "no cross-platform OCR provider contract is frozen by this discovery alone",
+    "no VLM or general object detector is validated",
+    "recognized text does not prove semantic identity or task success",
+    "no action derived from OCR is executed",
+    "no arbitrary user-content OCR accuracy claim is made"
+  ],
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
