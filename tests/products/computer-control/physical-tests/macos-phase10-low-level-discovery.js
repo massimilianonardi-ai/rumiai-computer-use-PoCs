@@ -17,11 +17,12 @@ function failed(reason){console.log(`physical-phase10-low-level-fallback-discove
 function pass(label,details=""){console.log(`${label}=PASS${details?` ${details}`:""}`);}
 
 if(!fs.existsSync(helper))blocked("helper-missing");
-const compile=spawnSync("/usr/bin/xcrun",["swiftc",helper,"-o",binary,"-framework","AppKit","-framework","ApplicationServices","-framework","CoreGraphics"],{encoding:"utf8",maxBuffer:8*1024*1024});
+const compile=spawnSync("/usr/bin/xcrun",["swiftc",helper,"-o",binary,"-framework","AppKit","-framework","ApplicationServices","-framework","CoreGraphics","-framework","ScreenCaptureKit"],{encoding:"utf8",maxBuffer:8*1024*1024});
 if((compile.status??1)!==0){console.error(compile.stderr||compile.stdout||"");blocked("helper-compile-failed");}
 
 try{
-  const run=spawnSync(binary,[],{encoding:"utf8",maxBuffer:8*1024*1024});
+  const run=spawnSync(binary,[],{encoding:"utf8",maxBuffer:8*1024*1024,timeout:15000});
+  if(run.error?.code==="ETIMEDOUT")blocked("helper-timeout");
   let value;
   try{value=JSON.parse(String(run.stdout||"").trim());}catch{failed("helper-invalid-json");}
   if((run.status??1)===2||value?.state==="BLOCKED")blocked(value?.error||"helper-blocked");
@@ -33,7 +34,7 @@ try{
   if(pointer.finite!==true)failed("pointer-nonfinite");
   if(pointer.appKitMatchesUnflipped!==true)failed("appkit-unflipped-coordinate-mismatch");
   if(pointer.quartzFlipMatchesMainHeight!==true)failed("quartz-flip-coordinate-mismatch");
-  pass("phase10-pointer-coordinate-relation",`appKitMatchesUnflipped=true quartzFlipMatchesMainHeight=true`);
+  pass("phase10-pointer-coordinate-relation","appKitMatchesUnflipped=true quartzFlipMatchesMainHeight=true");
 
   const display=value.display||{};
   if(!Number.isInteger(display.activeCount)||display.activeCount<1||display.returnedActiveCount!==display.activeCount)failed("active-display-list-invalid");
@@ -43,7 +44,7 @@ try{
 
   const eventConstruction=value.eventConstruction||{};
   for(const key of["mouseMove","leftDown","leftUp","rightDown","rightUp","scroll","keyDown","keyUp"])if(eventConstruction[key]!==true)failed(`event-construction-${key}`);
-  pass("phase10-synthetic-event-construction",`mouse=true scroll=true keyboard=true delivered=false`);
+  pass("phase10-synthetic-event-construction","mouse=true scroll=true keyboard=true delivered=false");
 
   const permissions=value.permissions||{};
   if(typeof permissions.accessibilityTrusted!=="boolean"||typeof permissions.screenCapturePreflight!=="boolean")failed("permission-observation-invalid");
@@ -51,12 +52,13 @@ try{
 
   const capture=value.screenCapture||{};
   if(capture.preflight!==permissions.screenCapturePreflight)failed("screen-capture-preflight-mismatch");
+  if(capture.modernAPI!=="ScreenCaptureKit.SCScreenshotManager")failed("screen-capture-api-mismatch");
   if(capture.preflight===true){
-    if(capture.attempted!==true||capture.available!==true||!(capture.width>0&&capture.height>0))failed("screen-capture-preflight-granted-but-capture-unavailable");
-    pass("phase10-screen-capture-probe",`preflight=true available=true pixels=${capture.width}x${capture.height}`);
+    if(capture.attempted!==true||capture.available!==true||!(capture.width>0&&capture.height>0))failed(`screen-capture-preflight-granted-but-capture-unavailable:${capture.error||"unknown"}`);
+    pass("phase10-screen-capture-probe",`preflight=true available=true api=ScreenCaptureKit pixels=${capture.width}x${capture.height}`);
   }else{
-    if(capture.attempted!==false||capture.available!==false)failed("screen-capture-attempted-without-preflight");
-    pass("phase10-screen-capture-probe","preflight=false attempted=false available=false");
+    if(capture.attempted!==false||capture.available!==false||capture.width!==0||capture.height!==0)failed("screen-capture-attempted-without-preflight");
+    pass("phase10-screen-capture-probe","preflight=false attempted=false available=false api=ScreenCaptureKit");
   }
 
   const windows=value.windowMetadata||{};
