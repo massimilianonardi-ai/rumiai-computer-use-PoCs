@@ -1,0 +1,63 @@
+{
+  "sessionId": "cc-phase10c-drag-delivery-discovery-s01",
+  "scope": "Phase 10C physical discovery of one atomic left-button drag lifecycle against a test-owned AppKit fixture before any public pointer.drag contract is introduced",
+  "productSha": "37069dcf683c168c3b9727e5b4464ff457b1222c",
+  "testSourceSha": "6c13b1e8868ec5667cc9a6e4611d4f69799dda67",
+  "platform": "macOS Quartz/CoreGraphics + AppKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10c-drag-delivery-discovery.js",
+  "terminalMarker": "physical-phase10c-drag-delivery-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase10BPublicSession": "cc-phase10b-pointer-public-s03",
+    "phase10BPublicEvidence": "a7b878ff25e56ee7c16705dfdec1468f6a47b0a1",
+    "phase10BValidatedProduct": "3f68502848f127d73f72cac023deed511f3ce75d",
+    "phase10BResult": "43 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "discoveryBoundary": {
+    "publicDragApi": false,
+    "publicPointerDownApi": false,
+    "publicPointerUpApi": false,
+    "button": "left only for initial discovery",
+    "display": "current primary display fixture surface",
+    "sequenceOwnedByOneProcess": "move-to-source -> left-down -> one-or-more left-dragged -> left-up",
+    "semanticTargeting": false,
+    "arbitraryApplicationSemanticSuccessClaimed": false
+  },
+  "fixture": {
+    "ownedByTest": true,
+    "type": "temporary AppKit window with ProbeView and hit-test-transparent movable marker",
+    "sourceAndDestinationInsideFixture": true,
+    "independentObserver": "ProbeView mouseDown/mouseDragged/mouseUp handlers plus marker geometry",
+    "requiredDownCount": 1,
+    "requiredDraggedCount": ">=1",
+    "requiredUpCount": 1,
+    "requiredConsequence": "marker reaches destination region",
+    "userContentTouched": false
+  },
+  "cleanup": {
+    "originalPointerCaptured": true,
+    "buttonMayBeDownTracked": true,
+    "emergencyLeftMouseUpOnFailure": true,
+    "pointerRestored": true,
+    "previousFrontmostApplicationReactivated": true,
+    "successRequiresNoEmergencyRelease": true
+  },
+  "privacy": {
+    "coordinatesPersisted": false,
+    "nativeDisplayIdsPersisted": false,
+    "userContentLogged": false
+  },
+  "resultPolicy": {
+    "BLOCKED": "The macOS/Swift/Accessibility environment cannot execute the controlled drag fixture.",
+    "FAIL": "Drag down/dragged/up delivery, fixture consequence, required release cleanup, or pointer restoration fails.",
+    "PASS": "The complete drag lifecycle is observed in the test-owned AppKit fixture, the marker consequence is observed, no emergency release is needed on the success path, and pointer restoration succeeds."
+  },
+  "nextStepOnPass": "Use this discovery evidence to freeze a narrow atomic primary-display pointer.drag public contract and validate that public runtime/SDK path with an independent test-owned fixture.",
+  "nextStepOnBlockedOrFail": "Preserve immutable evidence, diagnose forward, and do not introduce or promote pointer.drag."
+}
