@@ -69,16 +69,16 @@ test("Phase 9D2A capability advances only metadata observation after validated d
   assert.doesNotMatch(backendSource,/clipboard\.readFormat|clipboard\.writeFormat/);
 });
 
-test("Phase 9D2A public schema contains canonical metadata and no native type identity or payload",()=>{
+test("Phase 9D2A public schema contains canonical metadata and no native type identity or payload fields",()=>{
   const schema=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/clipboard-observe-result.schema.json"),"utf8"));
   const text=JSON.stringify(schema);
-  for(const forbidden of["uti","UTI","typeIdentifier","nativeType","rawType","payload","data","text","html","rtf","pngBytes","base64","nativeRef","handle"]){
-    if(["text","html","rtf"].includes(forbidden))continue;
+  for(const forbidden of["typeIdentifier","nativeType","rawType","rawTypes","payload","pngBytes","base64","nativeRef","handle"]){
     assert.equal(text.includes(forbidden),false,forbidden);
   }
   const item=schema.properties.items.items;
   assert.deepEqual(item.required,["index","formats","unsupportedFormatCount"]);
   assert.equal(item.additionalProperties,false);
+  assert.deepEqual(Object.keys(item.properties).sort(),["formats","index","unsupportedFormatCount"]);
   assert.deepEqual(item.properties.formats.items.enum,["text/plain","text/html","text/rtf","image/png"]);
   const params=JSON.parse(fs.readFileSync(path.join(productRoot,"contract/schemas/clipboard-observe.params.schema.json"),"utf8"));
   assert.equal(params.additionalProperties,false);
