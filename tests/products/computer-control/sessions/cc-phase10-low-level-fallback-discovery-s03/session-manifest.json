@@ -1,0 +1,72 @@
+{
+  "sessionId": "cc-phase10-low-level-fallback-discovery-s03",
+  "scope": "Phase 10 macOS low-level fallback discovery after Swift 6-safe ScreenCaptureKit correction",
+  "productSha": "82c7ac2cd1d842d50db5a27339a563e2cec919c6",
+  "testSourceSha": "5a580668bf3e0edad1749f0c9c814b471599c9e6",
+  "platform": "macOS CoreGraphics/AppKit/ApplicationServices/ScreenCaptureKit",
+  "execution": {
+    "nonInteractive": true,
+    "failFast": false,
+    "sharedRunner": "tests/products/computer-control/session-runner.sh",
+    "evidenceCommit": true,
+    "outputs": ["session.log", "session-result.json"]
+  },
+  "physicalTest": "tests/products/computer-control/physical-tests/macos-phase10-low-level-discovery.js",
+  "terminalMarker": "physical-phase10-low-level-fallback-discovery=PASS",
+  "prerequisiteEvidence": {
+    "phase9d2cTypedWriteEvidence": "358e22bca3b18bb835e91ae05fece1b3a757b722",
+    "phase10DiscoveryS01": "71925f3613bf6c7b45bb2ea3e973726142ce6e26",
+    "phase10DiscoveryS01Result": "39 PASS / 0 FAIL / 1 BLOCKED",
+    "phase10DiscoveryS01Block": "CGDisplayCreateImage unavailable on macOS 26.5; ScreenCaptureKit required",
+    "phase10DiscoveryS02": "0680822ec3996d9cfaed78029e2791a8f63c747a",
+    "phase10DiscoveryS02Result": "39 PASS / 0 FAIL / 1 BLOCKED",
+    "phase10DiscoveryS02Block": "Swift JSON serialization expression mixed String? and NSNull before helper execution"
+  },
+  "purpose": "Execute the first real non-mutating Phase 10 primitive discovery after resolving both historical helper compilation blocks.",
+  "discoveryBoundary": {
+    "publicLowLevelAPIsIntroduced": false,
+    "productChangedSincePhase9d2cPromotion": false,
+    "pointerMoved": false,
+    "mouseButtonDelivered": false,
+    "scrollDelivered": false,
+    "keyboardDelivered": false,
+    "screenPermissionRequested": false,
+    "screenCaptureAttemptedOnlyWhenPreflightGranted": true,
+    "screenPixelsPersisted": false,
+    "pointerCoordinatesPersisted": false,
+    "syntheticEventsConstructedButNotPosted": true,
+    "semanticAPIsRemainPreferred": true
+  },
+  "screenCaptureBoundary": {
+    "legacyCGDisplayCreateImageUsed": false,
+    "modernFramework": "ScreenCaptureKit",
+    "modernAPI": "SCScreenshotManager.captureImage",
+    "shareableDisplayCorrelatedBy": "SCDisplay.displayID == CGMainDisplayID",
+    "preflight": "CGPreflightScreenCaptureAccess",
+    "permissionRequestAllowed": false,
+    "swiftConcurrencyState": "locked @unchecked Sendable test-only holder"
+  },
+  "observations": {
+    "quartzGlobalPointerCoordinates": true,
+    "appKitCompatibleUnflippedCoordinates": true,
+    "appKitMouseLocation": true,
+    "mainDisplayLogicalBounds": true,
+    "mainDisplayPixelDimensions": true,
+    "activeDisplayCount": true,
+    "accessibilityTrust": true,
+    "screenCapturePreflight": true,
+    "screenCapturePixelProbeWhenAlreadyAuthorized": true,
+    "onScreenWindowMetadataCount": true,
+    "mouseMoveEventConstructibility": true,
+    "leftRightButtonEventConstructibility": true,
+    "scrollEventConstructibility": true,
+    "keyboardEventConstructibility": true
+  },
+  "resultPolicy": {
+    "BLOCKED": "The corrected discovery helper still cannot compile/run, the current Quartz event is unavailable, or the macOS environment cannot be inspected. No permission request or synthetic input is delivered.",
+    "FAIL": "Executed discovery data contradict coordinate, display, event-construction or non-prompting capture invariants.",
+    "PASS": "Real coordinate systems and primitive availability are observed coherently without synthetic input delivery or permission prompts; ScreenCaptureKit capture is attempted only when already authorized."
+  },
+  "nextStepOnPass": "Read the concrete evidence before defining Phase 10 public APIs. Split capture from input mutation and validate each independently; semantic APIs remain higher priority than fallbacks.",
+  "nextStepOnBlockedOrFail": "Preserve this evidence and diagnose forward. Do not alter the product or infer low-level public contracts from failed discovery."
+}
