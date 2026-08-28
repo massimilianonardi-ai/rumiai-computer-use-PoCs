@@ -1,0 +1,88 @@
+{
+  "sessionId": "cu-perception-p3b-action-policy-public-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "a8f85143ae77ba79e4fb47a0931697714df908b6",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "2c85b563df214fda491866f8641c0cee1a6b5b15",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js",
+    "tests/products/computer-use/perception-p2b-provider-contract.test.js",
+    "tests/products/computer-use/perception-p3a-target-resolution.test.js",
+    "tests/products/computer-use/perception-p3b-action-policy.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p3b-action-policy-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p3b-action-policy-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2b-provider-contract-public-s02",
+      "evidence": "82ca0c0d1fb383a3102d19238cfe885cd0b8d8a4",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p3a-target-resolution-public-s01",
+      "evidence": "c2a1e704f99b5cf528fb15287a785875c454a400",
+      "validatedRuntime": "32a49d08bd235e906b992e093e2184144f76136c",
+      "result": "PASS"
+    }
+  ],
+  "purpose": "Physically validate the Computer Use P3B action-policy gate over the real capture, provider and target-resolution chain while proving that authorization creates only a low-level pointer-click plan and does not execute input.",
+  "requiredClaims": [
+    "the real P1B mapped-frame path supplies the frame",
+    "the real P2B provider-neutral path normalizes observations from the local Vision PoC oracle",
+    "the real P3A resolver selects exactly one test-owned visual text target",
+    "P3B authorizes only an explicit primary-display left-click request when visual fallback consent is true",
+    "the authorized action plan uses the P3A logical target point and independently falls inside the expected fixture window",
+    "the same resolved target is rejected when explicit visual fallback consent is false",
+    "the target retains semanticIdentity null and remains intrinsically actionable false",
+    "delivery remains NOT_ATTEMPTED and semantic consequence remains NOT_OBSERVED",
+    "no pointer, click, drag, wheel or keyboard action is performed",
+    "frame payload, recognized text, target coordinates and action-plan coordinates are not persisted or logged",
+    "fixture and Computer Control runtime are cleaned up",
+    "both product working trees remain clean"
+  ],
+  "nonClaims": [
+    "no click is executed by P3B",
+    "authorization is not event delivery",
+    "authorization is not semantic task success",
+    "the visual target is not a semantic UI identity",
+    "no right-click, drag, wheel, keyboard or arbitrary visual fallback action policy is validated",
+    "no VLM or non-text target policy is validated",
+    "no arbitrary user-content OCR accuracy claim is made"
+  ],
+  "promotionOnPass": {
+    "targetResolutionState": "PHYSICALLY_VALIDATED",
+    "actionPolicyState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "nextPhase": "P4 execute authorized visual fallback through Computer Control and verify an independent postcondition"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
