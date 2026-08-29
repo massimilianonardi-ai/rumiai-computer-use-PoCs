@@ -1,0 +1,68 @@
+{
+  "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s05",
+  "checkpoint": "P6B",
+  "validationKind": "physical-diagnostic-discovery",
+  "purpose": "Diagnose the remaining real Safari canvas OCR boundary without weakening P3A exact-text matching. Prove the loopback page is actually requested, establish the semantic NO_SEMANTIC_TARGET gap before visual resolution, and record only aggregate OCR diagnostics sufficient to distinguish raw exact matching from normalized/case representation mismatch.",
+  "expectedProductSha": "3a3148cdf89735d2d46d208bbe69dc1d26722e3b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "3bb58e38fe93656b1cac04a26938ea6fdfcb65bc",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6b-safari-canvas-discovery-public.js",
+  "requiredClaims": [
+    "If Safari is already running, execution blocks before immutable evidence is created.",
+    "The existing real Safari application Provider and real Safari process/bundle are used.",
+    "The loopback server confirms Safari actually requests the test-owned page before OCR diagnostics are evaluated.",
+    "A fresh Safari semantic snapshot is evaluated before visual resolution and yields structured NO_SEMANTIC_TARGET for the canvas-only target.",
+    "The real product local macOS Vision text-region provider is used unchanged.",
+    "P3A remains raw exact-text-single-match and no fuzzy or normalized product matching is introduced in s05.",
+    "If raw exact resolution fails, evidence may contain only aggregate diagnostics: observation count, normalized exact count and minimum normalized edit distance; no OCR strings or coordinates are printed.",
+    "If exactly one normalized equivalent exists while raw exact matching fails, the session fails explicitly with SAFARI_CANVAS_EXACT_NORMALIZATION_MISMATCH rather than bypassing P3A.",
+    "No click is performed unless the existing P3A exact resolver succeeds.",
+    "If exact resolution succeeds, CLICK_POSTED remains delivery only and VERIFIED_SUCCESS still requires the independent FINISHED post-observation.",
+    "No built-in Safari visual-fallback contract is created or enabled.",
+    "Pointer, Safari, loopback server, runtime/cache and temporary resources are cleaned up and product trees remain clean."
+  ],
+  "nonClaims": [
+    "P6B s05 does not change or validate normalized matching as product policy.",
+    "P6B s05 does not log raw OCR payloads to discover the mismatch.",
+    "P6B s05 does not validate generic Safari or arbitrary web automation.",
+    "P6B s05 does not ship a Safari caller contract or alter P1-P5/P6A/Computer Control contracts."
+  ],
+  "history": {
+    "s01": {"evidenceCommit":"af5497f239a587a32551dcb38ac1fdb84db0e1da","result":"FAIL","reason":"PoC oracle confused processed-unresolved with target presence."},
+    "s02": {"evidenceCommit":"23d486abcd053d837d0e9a39c7082f93f10786f7","result":"FAIL","reason":"Correct oracle; synthetic multi-token target had no raw exact Vision match."},
+    "s03": {"evidenceCommit":"08ebc0f508ca80e000880183b615eded1de01b4e","result":"FAIL","reason":"49 Vision observations but no raw exact match for OCR-hardened multi-token target."},
+    "s04": {"evidenceCommit":"4e7dca8124b0ca792a0b82bf66ba7e3f06411a2f","result":"FAIL","reason":"49 Vision observations but still no raw exact match for single-word uppercase PROCEED."}
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "safariUserState": "Preflight blocks before session creation if Safari is running; the physical test repeats the guard for races.",
+    "onFailure": "Preserve s05 unchanged. Use aggregate diagnostics to decide whether a narrowly justified product normalization contract is needed or whether the Safari canvas candidate should be rejected without weakening P3A.",
+    "sensitiveData": "Only test-owned canvas content is used. Screenshot bytes, OCR strings and coordinates remain ephemeral and out of session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p6bState": "PHYSICALLY_OBSERVED",
+      "builtInSafariContract": false,
+      "nextCheckpoint": "P6C evidence-backed bounded caller-contract integration"
+    },
+    "onNormalizationMismatch": {
+      "p6bState": "DIAGNOSED",
+      "nextCheckpoint": "Evaluate an explicit text-normalization contract separately; do not silently broaden P3A"
+    }
+  },
+  "prerequisites": {
+    "P5E": {"sessionId":"cu-perception-p5e-agent-loop-visual-fallback-public-s01","evidenceCommit":"d18e82d06456438f289eb0bf6c6f630973b5a99f","state":"PHYSICALLY_VALIDATED"},
+    "P6A": {"sessionId":"cu-perception-p6a-caller-contract-registry-public-s01","evidenceCommit":"21ad01e93a5de4e5276b49c193269a26ad66b164","state":"PHYSICALLY_VALIDATED"}
+  }
+}
