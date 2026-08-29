@@ -1,0 +1,74 @@
+{
+  "sessionId": "cu-perception-p5c-open-semantic-first-public-s04",
+  "checkpoint": "P5C",
+  "validationKind": "physical",
+  "purpose": "Validate the unchanged P5C OPEN semantic-first runtime using an already-supported Computer Control application Provider for the semantic branch and the already-physically-validated P4/P5A visual-only fixture for the visual branch. This removes the irrelevant requirement that a custom Swift fixture also behave as a complete semantic AX application Provider.",
+  "expectedProductSha": "7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "f84b5a4f365196f959a0abc8ef186e296401b3b2",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5c-open-semantic-first-public.js",
+  "requiredClaims": [
+    "The semantic branch uses the registered local System Settings Computer Control application Provider and performs only safe navigation to the deterministic Wi-Fi target; it does not mutate a system setting.",
+    "OPEN attempts the existing semantic operation before any visual perception.",
+    "The semantic OPEN path is physically delivered and independently re-observed through semantic evidence without invoking P5A, the visual provider, or the post-action visual observer.",
+    "The visual target RUMIAI CLICK 517 is absent from the System Settings semantic representation and therefore produces structured NO_SEMANTIC_TARGET.",
+    "The visual-only target belongs to a separate test-owned fixture; P5C does not require semantic and visual evidence to originate from the same application process.",
+    "Only the P5B-eligible structured NO_SEMANTIC_TARGET result reaches the P5C visual handoff.",
+    "Visual fallback requires an execution-context object separate from planner intent with explicit allowVisualFallback=true, an injected provider, an exact visual target matching the OPEN target, a primary-display left-click request, an exact deterministic postcondition and a post-action observer.",
+    "The planner/LLM schema remains semantic and contains no visualFallback, targetQuery, provider selection or screen-coordinate fields.",
+    "The visual branch reuses the P4/P5A fixture that was already physically validated; no P1-P4 physical session is rerun.",
+    "A real P5A-coordinated Computer Control click returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "OPEN returns task success on the visual path only when a fresh independent post-action visual observation satisfies the exact deterministic RUMIAI DONE 864 postcondition and P4 returns VERIFIED_SUCCESS.",
+    "Posted delivery without verified postcondition remains NOT_VERIFIED_SUCCESS in contract coverage.",
+    "Semantic delivery failure, semantic verification failure, readiness/backend/internal/invalid failures do not become visual retries.",
+    "The physical visual branch uses the local macOS Vision PoC only as an injected provider; P5C does not select or package a perception provider for product runtime.",
+    "Computer Use and Computer Control product trees remain clean and no screenshot bytes, OCR payload text or action coordinates are persisted in immutable evidence."
+  ],
+  "nonClaims": [
+    "P5C does not wire visual configuration or provider selection into the normal agent loop; that remains P5E after P5D.",
+    "P5C does not define concrete perception-provider discovery or selection; that is P5D.",
+    "System Settings is used only as a stable supported semantic surface for physical validation and is not a required product-specific OPEN implementation.",
+    "P5C does not require a visual fallback target to belong to the same application process as the semantic observability gap; policy and deterministic caller context remain authoritative.",
+    "P5C does not add coordinates, native identifiers, visual queries or postconditions to planner output.",
+    "P5C does not make arbitrary OPEN failures visually eligible.",
+    "P5C does not claim general OCR accuracy, fuzzy target matching, VLM/object/icon targeting, secondary/rotated display support or richer pointer actions.",
+    "The P1-P4 physical sessions are not rerun or rewritten; their immutable physical evidence remains authoritative.",
+    "P5A and P5B evidence is not rewritten by this session.",
+    "P5C s01 evidence commit 15976727c6b6a09b09b428c415c5daf74e6c0258 remains immutable as the historical unregistered custom-fixture failure.",
+    "P5C s02 evidence commit 86793f0077d0926554c71422e4394b3bf3c62b9a remains immutable as the historical registered-but-unsnapshotable custom-fixture failure.",
+    "P5C s03 evidence commit 26be209cfcdb9fa5ab81a2a23d823344c598a6d8 remains immutable as the historical LaunchServices custom-fixture snapshot failure."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s04 unchanged, diagnose the exact new failure, fix forward, and create s05.",
+    "sensitiveData": "Only test-owned visual fixture text is used for visual targeting. Screenshot bytes, OCR payloads and coordinates remain ephemeral and are not persisted or logged by the session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p5cOpenExecutorState": "PHYSICALLY_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P5D concrete perception-provider delivery and selection boundary"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "validatedProductSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "validatedProductSha": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+      "state": "CONTRACT_VALIDATED"
+    }
+  }
+}
