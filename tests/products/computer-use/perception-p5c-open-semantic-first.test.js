@@ -188,6 +188,11 @@ test("P5C boundary is executor-owned, planner-coordinate-free, provider-selectio
   assert.match(executorSource,/executeOpenSemanticIntent/);
   assert.match(executorSource,/SEMANTIC_ACTION_DELIVERY_FAILED/);
   assert.match(executorSource,/SEMANTIC_POSTCONDITION_VERIFICATION_FAILED/);
+  assert.match(executorSource,/const snapshotSelected = semanticTargetSelected/);
+  assert.match(executorSource,/describe\(\{/);
+  assert.match(executorSource,/const describedSelected = described\?\.ok === true && described\.selected === true/);
+  assert.match(executorSource,/const selected = snapshotSelected \|\| describedSelected/);
+  assert.match(executorSource,/Delivery\/focus alone is never treated as success/);
 
   assert.doesNotMatch(openSource,/provider-manager|selectProvider|discoverProvider/);
   assert.doesNotMatch(openSource,/computer-control-external|agent-ctrl|https?:\/\//);
