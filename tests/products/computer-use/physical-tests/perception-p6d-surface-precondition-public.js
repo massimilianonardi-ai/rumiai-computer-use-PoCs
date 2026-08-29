@@ -21,6 +21,26 @@ function fail(code){const e=new Error(code);e.code=code;throw e;}
 function asyncSleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1024*1024,...options});}
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
+function normDiagnosticText(value){return String(value||"").normalize("NFKC").toLocaleLowerCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
+function observedWindowTitle(result){
+  const candidate=result?.window;
+  const descriptor=candidate?.field==="window"&&candidate?.value&&typeof candidate.value==="object"?candidate.value:candidate;
+  return String(descriptor?.title||"").trim();
+}
+function titleDiagnostic(result,expected){
+  const observed=normDiagnosticText(observedWindowTitle(result));
+  const wanted=normDiagnosticText(expected);
+  return {
+    observedPresent:Boolean(observed),
+    observedLength:observed.length,
+    expectedLength:wanted.length,
+    exact:observed===wanted,
+    containsExpected:Boolean(wanted)&&observed.includes(wanted),
+    startsWithExpected:Boolean(wanted)&&observed.startsWith(wanted),
+    endsWithExpected:Boolean(wanted)&&observed.endsWith(wanted),
+    containsSafari:observed.includes("safari"),
+  };
+}
 
 function pageHtml(initialMode="bad"){
   const initialTitle=initialMode==="good"?SURFACE_GOOD:SURFACE_BAD;
@@ -134,13 +154,25 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     if(!selected?.ok||selected.state!=="VISUAL_FALLBACK_PLAN_CONTRACTS_SELECTED"||selected.contracts?.length!==1)fail(selected?.error||"SCOPED_CONTRACT_NOT_SELECTED");
     if(selected.contracts[0]?.surfacePrecondition?.kind!=="window-title"||selected.contracts[0]?.surfacePrecondition?.text!==SURFACE_GOOD)fail("SURFACE_PRECONDITION_NOT_MATERIALIZED");
 
-    const badWindowPreflight=computerControl.getCurrentWindow({app:"Safari"});
-    if(!badWindowPreflight?.ok||!badWindowPreflight.window)fail("BAD_SURFACE_WINDOW_NOT_OBSERVED");
-    const badPreflight=surface.evaluateSemanticSurfacePrecondition(
-      {kind:"window-title",match:"exact",text:SURFACE_BAD},
-      {currentWindow:badWindowPreflight.window}
-    );
-    if(!badPreflight?.ok)fail("BAD_SURFACE_TITLE_NOT_CURRENT");
+    let badWindowPreflight=null,badPreflight=null,badPreflightAttempts=0;
+    for(let i=0;i<40;i++){
+      badPreflightAttempts=i+1;
+      badWindowPreflight=computerControl.getCurrentWindow({app:"Safari"});
+      if(badWindowPreflight?.ok&&badWindowPreflight.window){
+        badPreflight=surface.evaluateSemanticSurfacePrecondition(
+          {kind:"window-title",match:"exact",text:SURFACE_BAD},
+          {currentWindow:badWindowPreflight.window}
+        );
+        if(badPreflight?.ok&&badPreflight.state==="SURFACE_PRECONDITION_VERIFIED")break;
+      }
+      await asyncSleep(100);
+    }
+    if(!badPreflight?.ok||badPreflight.state!=="SURFACE_PRECONDITION_VERIFIED"){
+      const d=titleDiagnostic(badWindowPreflight,SURFACE_BAD);
+      console.log(`p6d-bad-title-diagnostic=FAIL attempts=${badPreflightAttempts} observedPresent=${d.observedPresent} observedLength=${d.observedLength} expectedLength=${d.expectedLength} normalizedExact=${d.exact} containsExpected=${d.containsExpected} startsWithExpected=${d.startsWithExpected} endsWithExpected=${d.endsWithExpected} containsSafari=${d.containsSafari}`);
+      fail("BAD_SURFACE_TITLE_NOT_CURRENT");
+    }
+    console.log(`p6d-bad-title-preflight=PASS attempts=${badPreflightAttempts} exact=true`);
 
     let badSurfaceResult=null,badWindowObserveCalls=0,badProviderSelectCalls=0;
     const badTask=await agentLoop.runTask("P6D wrong Safari surface must fail closed",{
