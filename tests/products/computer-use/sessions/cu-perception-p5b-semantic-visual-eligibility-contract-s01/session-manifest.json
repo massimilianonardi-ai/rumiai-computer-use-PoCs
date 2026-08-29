@@ -1,0 +1,62 @@
+{
+  "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s01",
+  "checkpoint": "P5B",
+  "validationKind": "contract-only",
+  "purpose": "Validate the pure semantic-to-visual fallback eligibility classifier and the first structured semantic target-resolution failure codes without invoking visual fallback or claiming a physical UI validation.",
+  "expectedProductSha": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "013f841930e284dc7ff3f833eeb12a42d7a5aab6",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js"
+  ],
+  "requiredClaims": [
+    "NO_SEMANTIC_TARGET is visually eligible",
+    "SURFACE_NOT_OBSERVABLE is visually eligible",
+    "APPLICATION_NOT_READY is visually ineligible",
+    "PERMISSION_OR_BACKEND_BLOCKED is visually ineligible",
+    "SEMANTIC_ACTION_DELIVERY_FAILED is visually ineligible",
+    "SEMANTIC_POSTCONDITION_VERIFICATION_FAILED is visually ineligible",
+    "INTERNAL_EXCEPTION is visually ineligible",
+    "INVALID_INTENT is visually ineligible",
+    "INVALID_PRECONDITION is visually ineligible",
+    "unknown or unstructured semantic failures fail closed and are not visually eligible",
+    "free-form error text is not parsed for eligibility",
+    "successful semantic results are never visually eligible",
+    "resolveSemanticTarget emits structured NO_SEMANTIC_TARGET and INVALID_INTENT codes while preserving successful resolution behavior",
+    "P5B remains classification-only and does not invoke P5A, perception, Computer Control, provider selection or persistence",
+    "P5A regression contract still passes",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is not a physical UI validation and must not be described as one.",
+    "P5B does not wire visual fallback into OPEN or any executor; that is P5C.",
+    "P5B does not select or package a concrete perception provider; that is P5D.",
+    "P5B does not validate an agent-loop visual fallback task; that is P5E.",
+    "SURFACE_NOT_OBSERVABLE is defined as an eligible structured code but this checkpoint does not claim that every current executor already emits it.",
+    "No arbitrary action failure, delivery failure, verification failure, readiness failure, permission/backend failure or exception becomes visual-fallback eligible.",
+    "No free-form error-string compatibility shim is introduced."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, fix forward, and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR text, target coordinates or action coordinates are required by this contract-only session."
+  },
+  "promotion": {
+    "onPass": {
+      "p5bEligibilityState": "CONTRACT_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P5C OPEN semantic-first executor integration"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "validatedProductSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
