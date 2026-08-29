@@ -124,7 +124,7 @@ run_test() {
 }
 
 for test_file in $CONTRACT_TESTS; do
-  run_test "contract:$(basename "$test_file")" "RUMIAI_COMPUTER_USE_ROOT='$PRODUCT_ROOT' '$NODE' '$POC_ROOT/$test_file'"
+  run_test "contract:$(basename "$test_file")" "RUMIAI_COMPUTER_USE_ROOT='$PRODUCT_ROOT' RUMIAI_COMPUTER_CONTROL_HOME='$CONTROL_ROOT' RUMIAI_CC_NODE='$NODE' '$NODE' '$POC_ROOT/$test_file'"
 done
 run_test "post:product-trees-clean" "test -z \"\$(git -C '$PRODUCT_ROOT' status --porcelain)\" && test -z \"\$(git -C '$CONTROL_ROOT' status --porcelain)\""
 
