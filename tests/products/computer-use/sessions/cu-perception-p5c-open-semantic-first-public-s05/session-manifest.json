@@ -1,0 +1,76 @@
+{
+  "sessionId": "cu-perception-p5c-open-semantic-first-public-s05",
+  "checkpoint": "P5C",
+  "validationKind": "physical",
+  "purpose": "Validate the unchanged P5C OPEN semantic-first runtime with a test-owned AppKit semantic fixture that follows the exact application-Provider process/bundle pattern already physically validated by Computer Control Phase 9B.1, while retaining the independently validated P4/P5A visual-only fixture for the visual branch.",
+  "expectedProductSha": "7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "986ccab3bc20d7d5625c99ced2bc57028b5c5b9f",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5c-open-semantic-first-public.js",
+  "requiredClaims": [
+    "The semantic branch uses a temporary test-owned AppKit application bundle with a temporary Computer Control Provider whose product name, activation process, executable process and bundle identity follow the same separation used by the already-physically-validated Phase 9B.1 AppKit fixture.",
+    "The temporary application Provider registry is isolated through RUMIAI_PROVIDER_DIR and the Computer Control runtime socket is isolated per physical run; no installed Provider registry is modified.",
+    "OPEN attempts the existing semantic operation before any visual perception.",
+    "The deterministic semantic target RUMIAI SEMANTIC 731 is a real accessible NSButton and its delivered action changes the same AppKit window title to RUMIAI SEMANTIC 731, providing an independent semantic postcondition observable through Computer Control.",
+    "The semantic OPEN path must complete successfully without invoking P5A, the visual perception provider or the post-action visual observer.",
+    "The visual target RUMIAI CLICK 517 is absent from the semantic fixture accessibility representation and therefore produces structured NO_SEMANTIC_TARGET.",
+    "Only the P5B-eligible structured NO_SEMANTIC_TARGET result reaches the P5C visual handoff.",
+    "Visual fallback requires execution context separate from planner intent with explicit allowVisualFallback=true, an injected provider, an exact visual target matching the OPEN target, a primary-display left-click request, an exact deterministic postcondition and a post-action observer.",
+    "The planner/LLM schema remains semantic and contains no visualFallback, targetQuery, provider-selection or screen-coordinate fields.",
+    "The visual branch reuses the already-physically-validated P4/P5A visual-only fixture; P1-P4 physical sessions are not rerun.",
+    "A real P5A-coordinated Computer Control click returns CLICK_POSTED with semanticConsequenceVerified=false; delivery is not task success.",
+    "OPEN returns task success on the visual path only when a fresh independent post-action visual observation satisfies the exact deterministic RUMIAI DONE 864 postcondition and P4 returns VERIFIED_SUCCESS.",
+    "Posted delivery without verified postcondition remains NOT_VERIFIED_SUCCESS in contract coverage.",
+    "Semantic delivery failure, semantic verification failure, readiness/backend/internal/invalid failures do not become visual retries.",
+    "The local macOS Vision helper remains only an injected PoC perception provider; P5C does not select or package a concrete provider for product runtime.",
+    "Computer Use and Computer Control product trees remain clean and no screenshot bytes, OCR payload text or action coordinates are persisted in immutable evidence."
+  ],
+  "nonClaims": [
+    "P5C does not wire visual configuration or provider selection into the normal agent loop; that remains P5E after P5D.",
+    "P5C does not define concrete perception-provider discovery or selection; that is P5D.",
+    "The temporary semantic fixture is a physical-validation surface, not a product application Provider and not a new runtime dependency.",
+    "The semantic and visual branches do not need to originate from the same application process; explicit policy and deterministic caller context remain authoritative.",
+    "P5C does not add coordinates, native identifiers, visual queries or postconditions to planner output.",
+    "P5C does not make arbitrary OPEN failures visually eligible.",
+    "P5C does not claim general OCR accuracy, fuzzy target matching, VLM/object/icon targeting, secondary/rotated display support or richer pointer actions.",
+    "The P1-P4 physical sessions are not rerun or rewritten; their immutable physical evidence remains authoritative.",
+    "P5A and P5B evidence is not rewritten by this session.",
+    "P5C s01 evidence commit 15976727c6b6a09b09b428c415c5daf74e6c0258 remains immutable as the historical unregistered custom-fixture failure.",
+    "P5C s02 evidence commit 86793f0077d0926554c71422e4394b3bf3c62b9a remains immutable as the historical registered-but-unsnapshotable custom-fixture failure.",
+    "P5C s03 evidence commit 26be209cfcdb9fa5ab81a2a23d823344c598a6d8 remains immutable as the historical LaunchServices custom-fixture snapshot failure.",
+    "P5C s04 evidence commit 630ac6c68cc7c960c01455a85dadbfb9f51abca8 remains immutable as the historical System Settings surface mismatch: the installed agent-ctrl v0.1.4 checksum matched the installer, but both adapter and direct snapshot reported no AX window found for process name System Settings."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s05 unchanged, diagnose the exact new failure, fix forward, and create s06.",
+    "sensitiveData": "Only test-owned semantic and visual fixture content is used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and are not persisted or logged by the session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p5cOpenExecutorState": "PHYSICALLY_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P5D concrete perception-provider delivery and selection boundary"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "validatedProductSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "validatedProductSha": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+      "state": "CONTRACT_VALIDATED"
+    }
+  }
+}
