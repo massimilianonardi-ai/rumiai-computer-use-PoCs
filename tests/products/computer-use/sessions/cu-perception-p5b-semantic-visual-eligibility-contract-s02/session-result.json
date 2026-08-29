@@ -1,0 +1,54 @@
+{
+  "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+  "validationKind": "contract-only",
+  "startedAt": "2026-08-29T09:09:48Z",
+  "endedAt": "2026-08-29T09:09:49Z",
+  "durationMs": 634,
+  "productShaExpected": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+  "productShaObserved": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+  "dependencies": {
+    "computerControl": {
+      "shaExpected": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "shaObserved": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003"
+    }
+  },
+  "testSourceSha": "e5651329fa066ff41d07c98295102b3fa6bebcc1",
+  "pocShaTested": "25330bad74ce0455410d5ed3d3c66aa53adc25e8",
+  "tests": [
+    {
+      "id": "contract:external-computer-control-boundary-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'",
+      "exitCode": 0,
+      "durationMs": 261,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5a-visual-fallback-coordinator.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js'",
+      "exitCode": 0,
+      "durationMs": 61,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5b-semantic-visual-eligibility.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js'",
+      "exitCode": 0,
+      "durationMs": 61,
+      "result": "PASS"
+    },
+    {
+      "id": "post:product-trees-clean",
+      "command": "test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)\" && test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)\"",
+      "exitCode": 0,
+      "durationMs": 49,
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "pass": 4,
+    "fail": 0,
+    "blocked": 0,
+    "total": 4,
+    "overall": "PASS"
+  }
+}
