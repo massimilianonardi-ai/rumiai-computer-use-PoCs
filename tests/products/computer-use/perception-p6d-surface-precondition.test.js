@@ -39,6 +39,10 @@ function executionContract(){
   return selected.contracts[0];
 }
 
+function wrappedWindow(title){
+  return {field:"window",value:{id:"w1",title,process:"Safari",pid:123,focused:true,pinned:false}};
+}
+
 test("P6D carries an exact window-title surface precondition without planner or delivery details",()=>{
   const normalized=manager.normalizeContract(rawContract,"test");
   assert.deepEqual(normalized.surfacePrecondition,{
@@ -76,6 +80,17 @@ test("P6D keeps semantic-text surface preconditions exact, single-match and fail
   assert.equal(ambiguous.reason,"SURFACE_PRECONDITION_AMBIGUOUS");
 });
 
+test("P6D unwraps the real Computer Control current-window descriptor before exact title comparison",()=>{
+  const precondition={kind:"window-title",match:"exact",text:"P6D SURFACE ALPHA"};
+  const good=surface.evaluateSemanticSurfacePrecondition(precondition,{currentWindow:wrappedWindow("P6D SURFACE ALPHA")});
+  assert.equal(good.ok,true);
+  assert.equal(good.state,"SURFACE_PRECONDITION_VERIFIED");
+
+  const bad=surface.evaluateSemanticSurfacePrecondition(precondition,{currentWindow:wrappedWindow("P6D SURFACE BETA")});
+  assert.equal(bad.ok,false);
+  assert.equal(bad.reason,"SURFACE_PRECONDITION_NOT_MET");
+});
+
 test("P6D window-title precondition uses fresh window observation before provider selection",()=>{
   const contract=executionContract();
   let windowCalls=0,selectCalls=0;
@@ -86,7 +101,7 @@ test("P6D window-title precondition uses fresh window observation before provide
   },{
     observeCurrentWindow:()=>{
       windowCalls++;
-      return {ok:true,window:{title:"P6D SURFACE BETA"}};
+      return {ok:true,window:wrappedWindow("P6D SURFACE BETA")};
     },
     selectProvider:()=>{selectCalls++;return {ok:false,error:"SHOULD_NOT_RUN"};},
   });
@@ -108,7 +123,7 @@ test("P6D verified window-title surface allows the existing lazy provider path",
   },{
     observeCurrentWindow:()=>{
       windowCalls++;
-      return {ok:true,window:{title:"P6D SURFACE ALPHA"}};
+      return {ok:true,window:wrappedWindow("P6D SURFACE ALPHA")};
     },
     selectProvider:()=>{
       selectCalls++;
