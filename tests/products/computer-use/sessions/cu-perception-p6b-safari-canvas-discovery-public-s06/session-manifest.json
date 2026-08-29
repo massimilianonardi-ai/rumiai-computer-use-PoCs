@@ -1,0 +1,58 @@
+{
+  "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s06",
+  "checkpoint": "P6B",
+  "validationKind": "physical-discovery",
+  "purpose": "Repeat the real Safari canvas discovery after fixing only the PoC local-server bootstrap. The prior in-process HTTP server was starved by synchronous Atomics waits, so Safari never received the test-owned page. s06 must first prove the loopback page was actually served, then prove NO_SEMANTIC_TARGET, exact local Vision target resolution, real CLICK_POSTED delivery and independent visual postcondition without promoting any Safari caller contract.",
+  "expectedProductSha": "3a3148cdf89735d2d46d208bbe69dc1d26722e3b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "6d826092b93973905fa6f2c7f8ac1c1d68a92a31",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6b-safari-canvas-discovery-public.js",
+  "requiredClaims": [
+    "Safari user state is protected: if Safari is already running, execution blocks before evidence creation.",
+    "The loopback HTTP server is serviced by the Node event loop and Safari actually requests the test-owned /p6b page before semantic or visual observation begins.",
+    "The page requires no external network service and renders PROCEED only into HTML canvas with no accessible fallback text.",
+    "A fresh Safari semantic snapshot produces structured NO_SEMANTIC_TARGET for PROCEED.",
+    "The product-owned local macOS Vision text-region provider is selected through P5D.",
+    "P3A remains exact-text-single-match; no fuzzy or normalized product matching is introduced.",
+    "The initial visual observation resolves exactly one PROCEED target and FINISHED is absent.",
+    "Real Computer Control delivery returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "VERIFIED_SUCCESS requires a fresh independent post-action observation containing FINISHED and no PROCEED.",
+    "No built-in Safari visual-fallback caller contract exists or is created by this discovery.",
+    "Screenshot bytes, OCR strings and coordinates are not persisted or printed; diagnostics contain only aggregate state/count/distance information.",
+    "Pointer, Safari, loopback server, runtime/cache and temporary resources are cleaned up and product trees remain clean."
+  ],
+  "history": {
+    "s01": {"evidenceCommit": "af5497f239a587a32551dcb38ac1fdb84db0e1da", "result": "FAIL", "reason": "PoC unresolved-state oracle bug."},
+    "s02": {"evidenceCommit": "23d486abcd053d837d0e9a39c7082f93f10786f7", "result": "FAIL", "reason": "Reached apparent visual boundary before local-page serving was instrumented."},
+    "s03": {"evidenceCommit": "08ebc0f508ca80e000880183b615eded1de01b4e", "result": "FAIL", "reason": "Vision observed 49 regions but no exact synthetic target; later evidence showed the local page had not been served."},
+    "s04": {"evidenceCommit": "4e7dca8124b0ca792a0b82bf66ba7e3f06411a2f", "result": "FAIL", "reason": "Single-word target still absent because the test-owned page had not actually loaded."},
+    "s05": {"evidenceCommit": "f8021d654252a9cd10512f1c38250ea58309d461", "result": "FAIL", "reason": "Definitive SAFARI_LOCAL_PAGE_NOT_REQUESTED; in-process HTTP server was starved by blocking Atomics waits."}
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s06 unchanged, diagnose the next exact boundary and create s07 only after evidence-backed forward-only correction.",
+    "sensitiveData": "Only test-owned canvas content is used. Screenshot bytes, OCR payload strings and coordinates remain ephemeral and out of session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p6bState": "PHYSICALLY_OBSERVED",
+      "builtInSafariContract": false,
+      "nextCheckpoint": "P6C evidence-backed bounded caller-contract integration for the discovered Safari canvas case"
+    }
+  },
+  "prerequisites": {
+    "P5E": {"sessionId": "cu-perception-p5e-agent-loop-visual-fallback-public-s01", "evidenceCommit": "d18e82d06456438f289eb0bf6c6f630973b5a99f", "state": "PHYSICALLY_VALIDATED"},
+    "P6A": {"sessionId": "cu-perception-p6a-caller-contract-registry-public-s01", "evidenceCommit": "21ad01e93a5de4e5276b49c193269a26ad66b164", "state": "PHYSICALLY_VALIDATED"}
+  }
+}
