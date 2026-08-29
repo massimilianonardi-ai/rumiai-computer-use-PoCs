@@ -1,7 +1,8 @@
 #!/bin/bash
 set -u
-ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
-[ -n "$ROOT" ] || { echo "SESSION_PREFLIGHT=BLOCKED not inside PoC repository" >&2; exit 2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
+[ -n "$ROOT" ] || { echo "SESSION_PREFLIGHT=BLOCKED cannot resolve PoC repository from script path" >&2; exit 2; }
 export SESSION_ID="cu-perception-p5a-visual-fallback-coordinator-public-s01"
 export EXPECTED_PRODUCT_SHA="cc9e26e87aa83239378d466d64879229fe2302bc"
 export EXPECTED_CONTROL_SHA="e3a3f13d66546cf8f0fca50075bd4607c2c3d003"
