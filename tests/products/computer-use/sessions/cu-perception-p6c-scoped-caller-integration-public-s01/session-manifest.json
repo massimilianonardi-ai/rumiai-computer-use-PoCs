@@ -1,0 +1,69 @@
+{
+  "sessionId": "cu-perception-p6c-scoped-caller-integration-public-s01",
+  "checkpoint": "P6C",
+  "validationKind": "physical-integration",
+  "purpose": "Validate the first bounded evidence-backed caller integration: explicit scope plus semantic plan selects the exact Safari canvas caller contract, then the normal runTask path remains semantic-first and reaches visual fallback only after structured NO_SEMANTIC_TARGET.",
+  "expectedProductSha": "a1bdddc813a89a16552b08ccec6b3aec00eb3157",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "740be2179de17dd9e790f3c92025bb8c01376b16",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6c-scoped-caller-integration-public.js",
+  "requiredClaims": [
+    "If Safari is already running, execution is blocked before immutable evidence is created.",
+    "The real Safari application requests the loopback test-owned canvas surface physically observed in P6B.",
+    "The semantic planner output contains only ACTIVATE_APP and OPEN and contains no scope, postcondition, provider identity or coordinates.",
+    "The caller explicitly supplies scope p6b.safari.canvas.v1 outside the planner.",
+    "The product plan-aware caller helper matches scope plus application plus OPEN plus exact target and materializes exactly one execution contract.",
+    "A wrong scope selects no contract and therefore authorizes no fallback.",
+    "The materialized contract contains no concrete provider object or action coordinates.",
+    "The normal product runTask path executes semantic OPEN first and reaches visual fallback only after structured NO_SEMANTIC_TARGET.",
+    "Perception-provider selection remains lazy, Computer Use-owned and selects the local macOS Vision text-region provider only after the eligible gap.",
+    "Real Computer Control delivery returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "CLICK_POSTED is not task success; VERIFIED_SUCCESS requires the independent post-action observation basis.",
+    "No screenshot bytes, OCR payload strings or coordinates are logged in session evidence.",
+    "Pointer, Safari, loopback server, runtime/cache and temporary resources are cleaned up and product trees remain clean."
+  ],
+  "nonClaims": [
+    "P6C does not enable generic Safari or arbitrary web visual fallback.",
+    "P6C does not make the registry implicit for CLI/default runTask callers.",
+    "P6C does not put scope, target coordinates, provider selection or postconditions in planner output.",
+    "P6C does not broaden exact matching, gestures, displays or provider capabilities.",
+    "P6C does not alter Computer Control runtime contracts.",
+    "P6C does not claim a general production Safari skill; it validates the bounded caller-integration mechanism on the P6B evidence-backed surface."
+  ],
+  "prerequisites": {
+    "P6A": {
+      "sessionId": "cu-perception-p6a-caller-contract-registry-public-s01",
+      "evidenceCommit": "21ad01e93a5de4e5276b49c193269a26ad66b164",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P6B": {
+      "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s06",
+      "evidenceCommit": "e8a2899c58c5e6d3725d4457af18aefc25923580",
+      "state": "PHYSICALLY_OBSERVED"
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "safariUserState": "Preflight blocks before session creation if Safari is running; the physical test repeats the guard for races.",
+    "onFailure": "Preserve s01 unchanged, diagnose the exact boundary and create s02 only after a forward-only change justified by evidence.",
+    "sensitiveData": "Only test-owned canvas content is used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and out of session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p6cState": "PHYSICALLY_VALIDATED",
+      "nextCheckpoint": "P6D first real product skill/caller that supplies an explicit bounded scope, without weakening P5/P6 contracts"
+    }
+  }
+}
