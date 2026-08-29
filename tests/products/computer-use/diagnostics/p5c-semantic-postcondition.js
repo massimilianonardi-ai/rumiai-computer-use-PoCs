@@ -51,10 +51,14 @@ function detailBool(detail,key){
   try{
     console.log("p5c-semantic-postcondition-diagnostic=START");
     killFixture();sleep(150);
-    tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p5c-semantic-diagnostic-"));
+    // Keep the temporary path deliberately short. macOS Unix-domain socket
+    // paths have a small fixed limit; the previous diagnostic-only prefix was
+    // long enough to prevent Computer Control from binding its isolated socket.
+    tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p5c-"));
     const prepared=prepare(tmp);
     process.env.RUMIAI_PROVIDER_DIR=prepared.providerDir;
-    process.env.RUMIAI_CC_SOCKET=path.join(tmp,"computer-control.sock");
+    process.env.RUMIAI_CC_SOCKET=path.join(tmp,"cc.sock");
+    console.log(`socket-path-bytes=${Buffer.byteLength(process.env.RUMIAI_CC_SOCKET)}`);
     const executors=require(path.join(productRoot,"app","executors.js"));
     const semanticUi=require(path.join(productRoot,"app","semantic-ui.js"));
     cc=require(path.join(productRoot,"app","computer-control-external.js"));
