@@ -10,8 +10,8 @@ const {spawnSync}=require("node:child_process");
 const productRoot=process.env.RUMIAI_COMPUTER_USE_ROOT;
 if(!productRoot){console.error("physical-computer-use-perception-p6b=BLOCKED code=MISSING_PRODUCT_ROOT");process.exit(2);}
 
-const TARGET="RUMIAI CANVAS OPEN";
-const POSTCONDITION="RUMIAI CANVAS DONE";
+const TARGET="PROCEED";
+const POSTCONDITION="FINISHED";
 
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
@@ -22,12 +22,12 @@ function exactResolved(result){return Boolean(result?.ok===true&&result?.state==
 function exactUnresolved(result){return Boolean(result?.ok===true&&result?.state==="VISUAL_TARGET_UNRESOLVED"&&result?.semanticTarget?.state==="UNRESOLVED"&&result?.semanticTarget?.reason==="NO_EXACT_TEXT_MATCH"&&result?.semanticTarget?.matchCount===0);}
 
 function pageHtml(){return `<!doctype html>
-<html><head><meta charset="utf-8"><title>RumiAI P6B Canvas Discovery</title>
-<style>html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden}body{display:flex;align-items:center;justify-content:center}canvas{width:min(1200px,94vw);height:auto;background:#fff}</style></head>
-<body><canvas id="surface" width="1200" height="420"></canvas>
+<html><head><meta charset="utf-8"><title>P6B</title>
+<style>html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden}body{display:flex;align-items:center;justify-content:center}canvas{width:min(1000px,92vw);height:auto;background:#fff}</style></head>
+<body><canvas id="surface" width="1000" height="360"></canvas>
 <script>
 const c=document.getElementById('surface');const x=c.getContext('2d');let text=${JSON.stringify(TARGET)};
-function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 80px Arial, Helvetica, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
+function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 128px Arial, Helvetica, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
 c.addEventListener('pointerdown',()=>{text=${JSON.stringify(POSTCONDITION)};draw();});draw();
 </script></body></html>`;}
 
