@@ -1,0 +1,81 @@
+{
+  "sessionId": "cu-perception-p5e-agent-loop-visual-fallback-public-s01",
+  "checkpoint": "P5E",
+  "validationKind": "physical",
+  "purpose": "Validate the first normal Computer Use agent-loop visual fallback task: semantic planner output remains unchanged, OPEN executes semantic-first, an eligible NO_SEMANTIC_TARGET gap resolves a local perception provider lazily through P5D, P5A performs real Computer Control delivery, and task success is reported only after independent post-action visual verification.",
+  "expectedProductSha": "3e52ebaebc20398787d904d6ed6e2d2111fe5710",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "59094fe637d078eaa08436114e45d74308b45428",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5e-agent-loop-visual-fallback-public.js",
+  "requiredClaims": [
+    "The product runtime and Computer Control dependency exactly match the frozen SHAs.",
+    "The test invokes the product-owned normal agent-loop runTask path rather than calling the OPEN executor or P5A directly.",
+    "The deterministic test planner emits only ordinary semantic intents ACTIVATE_APP and OPEN; planner output contains no visual fallback fields, provider id, postcondition or coordinates.",
+    "The injected planner is test infrastructure only and preserves the same semantic-plan boundary as the normal planner; P5E does not claim LLM planning accuracy.",
+    "The agent loop executes OPEN through the existing semantic-first executor path before any perception-provider selection.",
+    "A structured NO_SEMANTIC_TARGET semantic gap is classified by P5B as visually eligible before lazy visual execution-context resolution occurs.",
+    "Only after that eligible gap, Computer Use selects the real optional local macOS Vision text-region provider through the P5D provider manager.",
+    "The deterministic visual target, primary-display left-click request, explicit allowVisualFallback policy and exact postcondition come from caller/skill execution context, not planner output.",
+    "P5A performs real mapped visual perception, deterministic target resolution and explicit authorization before Computer Control delivery.",
+    "Computer Control CLICK_POSTED remains delivery evidence only and semanticConsequenceVerified remains false at the delivery boundary.",
+    "A fresh independent post-action visual observation using the selected product provider must satisfy the exact deterministic postcondition before VERIFIED_SUCCESS.",
+    "The normal agent loop reports the OPEN intent as successful only from that independently verified P5A result.",
+    "The built-in perception provider remains local and optional; no mandatory network, account or cloud API dependency is introduced.",
+    "Screenshot bytes, OCR payload text and target/action coordinates are not written to session evidence or normal agent-loop logs.",
+    "Computer Use and Computer Control working trees remain clean after the session."
+  ],
+  "nonClaims": [
+    "P5E does not make visual fallback implicit for ordinary CLI tasks that have no explicit caller/skill visual fallback contract.",
+    "P5E does not add visual fallback fields to the LLM planner schema or allow the planner to invent success criteria.",
+    "P5E does not claim general OCR accuracy, fuzzy matching, icon/object/VLM understanding, multi-display support or arbitrary gestures.",
+    "P5E does not introduce provider selection into Computer Control.",
+    "P5E does not make semantic action-delivery failure, semantic verification failure, readiness failure, permission failure or internal exception visually eligible.",
+    "P1-P4 physical sessions are not rerun; their immutable evidence remains authoritative.",
+    "P5A, P5B, P5C and P5D prior evidence is not rewritten or replaced.",
+    "Historical P5C s01-s07 FAIL evidence remains immutable."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact failed boundary, fix forward only, and create s02 only if required.",
+    "sensitiveData": "Only test-owned fixture content is used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and are not persisted or logged by session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p5eAgentLoopState": "PHYSICALLY_VALIDATED",
+      "p5State": "COMPLETE_FOR_INITIAL_NARROW_SCOPE",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "post-P5 hardening or first product skill/caller integration without weakening the validated contracts"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "state": "CONTRACT_VALIDATED"
+    },
+    "P5C": {
+      "sessionId": "cu-perception-p5c-open-semantic-first-public-s08",
+      "evidenceCommit": "9195ae930f87f9804052e5024cb406b1488a747b",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5D": {
+      "sessionId": "cu-perception-p5d-provider-selection-public-s01",
+      "evidenceCommit": "3d48e86a09f70d37fad9765d0694294cdc13f2ba",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
