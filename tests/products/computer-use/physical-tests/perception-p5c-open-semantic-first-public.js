@@ -4,7 +4,7 @@
 const fs=require("node:fs");
 const os=require("node:os");
 const path=require("node:path");
-const {spawnSync}=require("node:child_process");
+const {spawn,spawnSync}=require("node:child_process");
 
 const productRoot=process.env.RUMIAI_COMPUTER_USE_ROOT;
 if(!productRoot){console.error("physical-computer-use-perception-p5c=BLOCKED missing RUMIAI_COMPUTER_USE_ROOT");process.exit(2);}
@@ -16,68 +16,19 @@ const semanticUi=require(path.join(productRoot,"app","semantic-ui.js"));
 const {SEMANTIC_RESULT_CODES}=require(path.join(productRoot,"app","semantic-visual-fallback-eligibility.js"));
 const computerControl=require(path.join(productRoot,"app","computer-control-external.js"));
 
-const fixtureSource=path.join(__dirname,"helpers","macos-perception-p5c-open-fixture.swift");
+const fixtureSource=path.join(__dirname,"helpers","macos-perception-p4-click-fixture.swift");
 const ocrSource=path.join(__dirname,"helpers","macos-perception-p2a-vision-ocr.swift");
-const FIXTURE_APP_NAME="RumiAI P5C Fixture";
-const FIXTURE_EXECUTABLE="RumiAIP5CFixture";
-const FIXTURE_BUNDLE_ID="ai.rumiai.computer-use.p5c-fixture";
+const SYSTEM_SETTINGS="System Settings";
+const SYSTEM_SETTINGS_BUNDLE="com.apple.systempreferences";
+const SEMANTIC_TARGET="Wi-Fi";
+const VISUAL_TARGET="RUMIAI CLICK 517";
+const VISUAL_POSTCONDITION="RUMIAI DONE 864";
 
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
-function normalized(s){return String(s||"").toUpperCase().replace(/\s+/g," ").trim();}
-function waitForReadyFile(file,timeoutMs=9000){
-  const deadline=Date.now()+timeoutMs;
-  while(Date.now()<deadline){
-    if(fs.existsSync(file)){
-      try{return JSON.parse(fs.readFileSync(file,"utf8"));}
-      catch(error){fail(`FIXTURE_READY_INVALID_${error.message}`);}
-    }
-    sleep(50);
-  }
-  fail("FIXTURE_READY_TIMEOUT");
-}
-function fixtureRunning(){return (spawnSync("/usr/bin/pgrep",["-x",FIXTURE_EXECUTABLE],{encoding:"utf8"}).status??1)===0;}
-function stopFixture(){
-  if(!fixtureRunning())return true;
-  spawnSync("/usr/bin/pkill",["-TERM","-x",FIXTURE_EXECUTABLE],{encoding:"utf8"});
-  const termDeadline=Date.now()+1600;
-  while(Date.now()<termDeadline&&!fixtureRunning())return true;
-  while(Date.now()<termDeadline){if(!fixtureRunning())return true;sleep(50);}
-  spawnSync("/usr/bin/pkill",["-KILL","-x",FIXTURE_EXECUTABLE],{encoding:"utf8"});
-  const killDeadline=Date.now()+800;
-  while(Date.now()<killDeadline){if(!fixtureRunning())return true;sleep(50);}
-  return !fixtureRunning();
-}
-
-function prepareFixtureApplication(tmp){
-  const appBundle=path.join(tmp,`${FIXTURE_APP_NAME}.app`);
-  const contents=path.join(appBundle,"Contents");
-  const macosDir=path.join(contents,"MacOS");
-  const providerDir=path.join(tmp,"computer-control-providers");
-  const fixtureBin=path.join(macosDir,FIXTURE_EXECUTABLE);
-  fs.mkdirSync(macosDir,{recursive:true});
-  fs.mkdirSync(providerDir,{recursive:true});
-
-  const plist=`<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n  <key>CFBundleDevelopmentRegion</key><string>en</string>\n  <key>CFBundleExecutable</key><string>${FIXTURE_EXECUTABLE}</string>\n  <key>CFBundleIdentifier</key><string>${FIXTURE_BUNDLE_ID}</string>\n  <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>\n  <key>CFBundleName</key><string>${FIXTURE_APP_NAME}</string>\n  <key>CFBundleDisplayName</key><string>${FIXTURE_APP_NAME}</string>\n  <key>CFBundlePackageType</key><string>APPL</string>\n  <key>CFBundleVersion</key><string>1</string>\n  <key>CFBundleShortVersionString</key><string>1.0</string>\n  <key>NSHighResolutionCapable</key><true/>\n</dict>\n</plist>\n`;
-  fs.writeFileSync(path.join(contents,"Info.plist"),plist);
-
-  const fc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library",fixtureSource,"-o",fixtureBin],{encoding:"utf8",maxBuffer:8*1024*1024});
-  if((fc.status??1)!==0)fail("FIXTURE_COMPILE_FAILED");
-
-  const provider={
-    id:"rumiai-p5c-fixture",
-    name:FIXTURE_APP_NAME,
-    kind:"application",
-    aliases:[FIXTURE_APP_NAME],
-    activation:{application:FIXTURE_APP_NAME},
-    availability:{type:"paths",paths:[appBundle]},
-    contexts:[],
-    capabilities:{},
-    identity:{process:FIXTURE_EXECUTABLE,bundle:FIXTURE_BUNDLE_ID},
-  };
-  fs.writeFileSync(path.join(providerDir,"rumiai-p5c-fixture.json"),JSON.stringify(provider,null,2)+"\n");
-  return {appBundle,fixtureBin,providerDir};
-}
+function normalized(s){return String(s||"").normalize("NFKC").toUpperCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
+function waitForReady(child,timeoutMs=8000){return new Promise((resolve,reject)=>{let out="",err="";const timer=setTimeout(()=>reject(new Error("FIXTURE_READY_TIMEOUT")),timeoutMs);child.stdout.setEncoding("utf8");child.stderr.setEncoding("utf8");child.stdout.on("data",chunk=>{out+=chunk;const nl=out.indexOf("\n");if(nl>=0){clearTimeout(timer);try{resolve(JSON.parse(out.slice(0,nl)))}catch(e){reject(new Error(`FIXTURE_READY_INVALID:${e.message}`));}}});child.stderr.on("data",chunk=>{err+=chunk;});child.on("exit",code=>{if(code!==null){clearTimeout(timer);reject(new Error(`FIXTURE_EXITED:${code}:${err.trim()}`));}});});}
+function stopChild(child){return new Promise(resolve=>{if(!child||child.exitCode!=null)return resolve();const timer=setTimeout(()=>{try{child.kill("SIGKILL");}catch{}},1200);child.once("exit",()=>{clearTimeout(timer);resolve();});try{child.kill("SIGTERM");}catch{clearTimeout(timer);resolve();}});}
 
 function makeProvider(ocrBin,onObserve){
   return {
@@ -117,52 +68,52 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
 }
 
 (async()=>{
-  let tmp=null,ready=null;
-  let pointerRestored=false,runtimeCleanup=false,fixtureStopped=false;
+  let fixture=null,tmp=null,ready=null;
+  let systemSettingsWasRunning=true;
+  let pointerRestored=false,fixtureStopped=false,applicationCleanup=false,runtimeCleanup=false;
   let outcome={code:1,marker:"physical-computer-use-perception-p5c=FAIL code=UNEXPECTED"};
   try{
     tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p5c-"));
-    const prepared=prepareFixtureApplication(tmp);
-    const readyFile=path.join(tmp,"fixture-ready.json");
-    const ocrBin=path.join(tmp,"vision-ocr");
+    const fixtureBin=path.join(tmp,"click-fixture"),ocrBin=path.join(tmp,"vision-ocr");
+    const fc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library",fixtureSource,"-o",fixtureBin],{encoding:"utf8",maxBuffer:8*1024*1024});
+    if((fc.status??1)!==0)fail("FIXTURE_COMPILE_FAILED");
     const oc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library","-framework","Vision","-framework","AppKit",ocrSource,"-o",ocrBin],{encoding:"utf8",maxBuffer:8*1024*1024});
     if((oc.status??1)!==0)fail("OCR_HELPER_COMPILE_FAILED");
 
-    // Computer Control loads its application provider registry inside the
-    // child runtime. Set the test-owned registry before the first CC call.
-    process.env.RUMIAI_PROVIDER_DIR=prepared.providerDir;
+    const inventory=computerControl.listApplications({availableOnly:true});
+    const systemSettingsEntry=Array.isArray(inventory?.applications)
+      ? inventory.applications.find(item=>item?.name===SYSTEM_SETTINGS)
+      : null;
+    if(!systemSettingsEntry?.available)fail("SYSTEM_SETTINGS_PROVIDER_UNAVAILABLE");
+    systemSettingsWasRunning=systemSettingsEntry.running===true;
 
-    // Launch the actual temporary .app through LaunchServices. AX semantics
-    // must be validated against an application process, not a directly spawned
-    // executable that merely happens to live inside a bundle directory.
-    const launched=spawnSync("/usr/bin/open",["-n",prepared.appBundle,"--args","--ready-file",readyFile],{encoding:"utf8",maxBuffer:1024*1024});
-    if((launched.status??1)!==0)fail("FIXTURE_LAUNCHSERVICES_FAILED");
-    ready=waitForReadyFile(readyFile);
-    if(ready?.state!=="READY"||!ready.initialPointer)fail("FIXTURE_READY_INVALID");
-    sleep(500);
-
+    const launched=computerControl.launchApplication({app:SYSTEM_SETTINGS,timeoutMs:10000});
+    if(!launched?.ok)fail(`SYSTEM_SETTINGS_LAUNCH_FAILED_${launched?.error||launched?.state||"UNKNOWN"}`);
+    const activated=computerControl.activateApplication({app:SYSTEM_SETTINGS,timeoutMs:10000});
+    if(!activated?.ok)fail(`SYSTEM_SETTINGS_ACTIVATE_FAILED_${activated?.error||activated?.state||"UNKNOWN"}`);
     const foreground=computerControl.getForeground();
-    if(!foreground?.ok||foreground.bundle!==FIXTURE_BUNDLE_ID)fail("FIXTURE_NOT_FOREGROUND");
-    const initial=computerControl.snapshot({app:FIXTURE_APP_NAME});
-    if(!initial?.ok||!initial.snapshot)fail(`FIXTURE_SEMANTIC_SNAPSHOT_FAILED_${initial?.error||initial?.state||"UNKNOWN"}`);
-    let state={currentApp:FIXTURE_APP_NAME,snapshot:initial.snapshot,changed:false};
+    if(!foreground?.ok||foreground.bundle!==SYSTEM_SETTINGS_BUNDLE)fail("SYSTEM_SETTINGS_NOT_FOREGROUND");
+
+    const initial=computerControl.snapshot({app:SYSTEM_SETTINGS});
+    if(!initial?.ok||!initial.snapshot)fail(`SYSTEM_SETTINGS_SNAPSHOT_FAILED_${initial?.error||initial?.state||"UNKNOWN"}`);
+    let state={currentApp:SYSTEM_SETTINGS,snapshot:initial.snapshot,changed:false};
 
     let semanticVisualProviderCalls=0;
-    const semanticTarget="RUMIAI SEMANTIC 731";
-    const semanticPreflight=semanticUi.resolveSemanticTarget(state.snapshot,semanticTarget,null,"CLICK",state.currentApp);
-    if(!semanticPreflight?.ok)fail(`FIXTURE_SEMANTIC_TARGET_UNRESOLVED_${semanticPreflight?.code||"UNKNOWN"}`);
+    const semanticPreflight=semanticUi.resolveSemanticTarget(state.snapshot,SEMANTIC_TARGET,null,"CLICK",state.currentApp);
+    if(!semanticPreflight?.ok)fail(`SYSTEM_SETTINGS_SEMANTIC_TARGET_UNRESOLVED_${semanticPreflight?.code||"UNKNOWN"}`);
     const semanticProvider={
       id:"p5c.semantic-path-visual-must-not-run",
       locality:"local",
       capabilities:["text-region"],
       observe:()=>{semanticVisualProviderCalls++;fail("SEMANTIC_PATH_RAN_VISUAL_PROVIDER");},
     };
+
     const semanticResult=await executors.executeOpenIntent(
-      {intent:"OPEN",target:semanticTarget},
+      {intent:"OPEN",target:SEMANTIC_TARGET},
       state,
       explicitVisualContext({
         provider:semanticProvider,
-        target:semanticTarget,
+        target:SEMANTIC_TARGET,
         postcondition:"UNUSED POSTCONDITION",
         observeAfterDelivery:()=>fail("SEMANTIC_PATH_RAN_POST_OBSERVER"),
       })
@@ -171,29 +122,35 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     if(!semanticResult?.ok||semanticResult.executionPath!=="semantic")fail(semanticResult?.error||"SEMANTIC_OPEN_NOT_VERIFIED");
     if(semanticVisualProviderCalls!==0)fail("SEMANTIC_PATH_VISUAL_PROVIDER_CALLED");
     if(semanticResult.visualFallback?.state!=="NOT_RUN"||semanticResult.visualFallback?.reason!=="SEMANTIC_PATH_SUCCEEDED")fail("SEMANTIC_PATH_VISUAL_BYPASS_INVALID");
-    const semanticWindow=computerControl.getCurrentWindow({app:state.currentApp});
-    if(!semanticWindow?.ok||!normalized(semanticWindow.window?.title).includes(normalized(semanticTarget)))fail("SEMANTIC_OPEN_POSTCONDITION_INVALID");
+
+    const semanticWindow=computerControl.getCurrentWindow({app:SYSTEM_SETTINGS});
+    const independentlySelected=semanticUi.semanticTargetSelected(semanticResult.snapshot,SEMANTIC_TARGET);
+    const independentlyTitled=semanticWindow?.ok&&semanticUi.normText(semanticWindow.window?.title).includes(semanticUi.normText(SEMANTIC_TARGET));
+    if(!independentlySelected&&!independentlyTitled)fail("SEMANTIC_OPEN_POSTCONDITION_INVALID");
+
     state={
-      currentApp:semanticResult.currentApp||state.currentApp,
+      currentApp:semanticResult.currentApp||SYSTEM_SETTINGS,
       snapshot:semanticResult.snapshot||state.snapshot,
       changed:semanticResult.changed,
     };
 
-    sleep(650);
-    const visualTarget="RUMIAI VISUAL 517";
-    const semanticGap=semanticUi.resolveSemanticTarget(state.snapshot,visualTarget,null,"CLICK",state.currentApp);
-    if(semanticGap?.ok||semanticGap?.code!==SEMANTIC_RESULT_CODES.NO_SEMANTIC_TARGET)fail("VISUAL_TARGET_NOT_A_SEMANTIC_GAP");
+    const gapBeforeFixture=semanticUi.resolveSemanticTarget(state.snapshot,VISUAL_TARGET,null,"CLICK",state.currentApp);
+    if(gapBeforeFixture?.ok||gapBeforeFixture?.code!==SEMANTIC_RESULT_CODES.NO_SEMANTIC_TARGET)fail("VISUAL_TARGET_NOT_A_SEMANTIC_GAP");
+
+    fixture=spawn(fixtureBin,[],{stdio:["ignore","pipe","pipe"]});
+    ready=await waitForReady(fixture);
+    if(ready?.state!=="READY"||!ready.target||!ready.initialPointer)fail("FIXTURE_READY_INVALID");
 
     let providerCalls=0,postObserveCalls=0;
     let postMapped=null,postInterpreted=null;
     const provider=makeProvider(ocrBin,()=>{providerCalls++;});
     const visualResult=await executors.executeOpenIntent(
-      {intent:"OPEN",target:visualTarget},
+      {intent:"OPEN",target:VISUAL_TARGET},
       state,
       explicitVisualContext({
         provider,
-        target:visualTarget,
-        postcondition:"RUMIAI VISUAL DONE 864",
+        target:VISUAL_TARGET,
+        postcondition:VISUAL_POSTCONDITION,
         observeAfterDelivery:()=>{
           postObserveCalls++;
           sleep(450);
@@ -215,29 +172,45 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     if(!postMapped?.ok||!postInterpreted?.ok)fail("VISUAL_POST_ACTION_OBSERVATION_INVALID");
 
     const postTexts=postInterpreted.interpretation.observations.map(v=>normalized(v.text));
-    const doneCount=postTexts.filter(v=>v==="RUMIAI VISUAL DONE 864").length;
-    const initialCount=postTexts.filter(v=>v==="RUMIAI VISUAL 517").length;
+    const doneCount=postTexts.filter(v=>v===normalized(VISUAL_POSTCONDITION)).length;
+    const initialCount=postTexts.filter(v=>v===normalized(VISUAL_TARGET)).length;
     if(doneCount!==1||initialCount!==0)fail("VISUAL_INDEPENDENT_POSTCONDITION_ORACLE_MISMATCH");
 
-    console.log("p5c-semantic-first=PASS semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 providerRegistered=true launchServices=true");
-    console.log("p5c-eligible-gap=PASS structuredCode=NO_SEMANTIC_TARGET freeFormParsing=false");
-    console.log("p5c-visual-fallback=PASS explicitPolicy=true providerInjected=true deterministicTarget=true deterministicPostcondition=true");
+    console.log("p5c-semantic-first=PASS supportedApplication=true semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 independentSemanticPostcondition=true");
+    console.log("p5c-eligible-gap=PASS structuredCode=NO_SEMANTIC_TARGET freeFormParsing=false semanticApplicationSeparateFromVisualFixture=true");
+    console.log("p5c-visual-fallback=PASS provenFixture=true explicitPolicy=true providerInjected=true deterministicTarget=true deterministicPostcondition=true");
     console.log("p5c-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true independentPostActionObservation=true");
     console.log("p5c-payload-policy=PASS persisted=false payloadLogged=false ocrTextLogged=false coordinatesLogged=false");
     outcome={code:0,marker:"physical-computer-use-perception-p5c=PASS"};
-  }catch(error){outcome={code:1,marker:`physical-computer-use-perception-p5c=FAIL code=${error.code||error.message||"UNEXPECTED"}`};}
-  finally{
+  }catch(error){
+    outcome={code:1,marker:`physical-computer-use-perception-p5c=FAIL code=${error.code||error.message||"UNEXPECTED"}`};
+  }finally{
     if(ready?.initialPointer){
       try{
         const restored=computerControl.movePointer({display:"primary",x:Number(ready.initialPointer.x),y:Number(ready.initialPointer.y)});
         pointerRestored=restored?.ok!==false&&restored?.state==="MOVED";
       }catch{pointerRestored=false;}
+    }else{
+      pointerRestored=true;
     }
-    fixtureStopped=stopFixture();
+
+    await stopChild(fixture);fixtureStopped=true;
+
+    if(systemSettingsWasRunning){
+      applicationCleanup=true;
+    }else{
+      try{
+        const terminated=computerControl.terminateApplication({app:SYSTEM_SETTINGS,timeoutMs:10000});
+        applicationCleanup=terminated?.ok===true;
+      }catch{applicationCleanup=false;}
+    }
+
     try{const shutdown=computerControl.shutdownRuntime();runtimeCleanup=shutdown?.ok!==false;}catch{runtimeCleanup=false;}
     if(tmp){try{fs.rmSync(tmp,{recursive:true,force:true});}catch{}}
-    console.log(`p5c-test-cleanup=${pointerRestored&&fixtureStopped&&runtimeCleanup?"PASS":"FAIL"} pointerRestored=${pointerRestored} fixtureStopped=${fixtureStopped} runtimeCleanup=${runtimeCleanup}`);
-    if((!pointerRestored||!fixtureStopped||!runtimeCleanup)&&outcome.code===0)outcome={code:1,marker:"physical-computer-use-perception-p5c=FAIL code=TEST_CLEANUP_FAILED"};
+
+    const cleanupOk=pointerRestored&&fixtureStopped&&applicationCleanup&&runtimeCleanup;
+    console.log(`p5c-test-cleanup=${cleanupOk?"PASS":"FAIL"} pointerRestored=${pointerRestored} fixtureStopped=${fixtureStopped} applicationCleanup=${applicationCleanup} runtimeCleanup=${runtimeCleanup}`);
+    if(!cleanupOk&&outcome.code===0)outcome={code:1,marker:"physical-computer-use-perception-p5c=FAIL code=TEST_CLEANUP_FAILED"};
     console.log(outcome.marker);process.exitCode=outcome.code;
   }
 })();
