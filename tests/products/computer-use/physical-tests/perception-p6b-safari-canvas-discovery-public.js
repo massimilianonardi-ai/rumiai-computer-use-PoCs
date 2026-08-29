@@ -18,6 +18,8 @@ function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms)
 function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1024*1024,...options});}
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
 function normalized(value){return String(value||"").normalize("NFKC").toUpperCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
+function exactResolved(result){return Boolean(result?.ok===true&&result?.state==="VISUAL_TARGET_RESOLVED"&&result?.semanticTarget?.state==="RESOLVED"&&result?.semanticTarget?.resolution?.policy==="exact-text-single-match");}
+function exactUnresolved(result){return Boolean(result?.ok===true&&result?.state==="VISUAL_TARGET_UNRESOLVED"&&result?.semanticTarget?.state==="UNRESOLVED"&&result?.semanticTarget?.reason==="NO_EXACT_TEXT_MATCH"&&result?.semanticTarget?.matchCount===0);}
 
 function pageHtml(){return `<!doctype html>
 <html><head><meta charset="utf-8"><title>RumiAI P6B Canvas Discovery</title>
@@ -106,14 +108,14 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
         preInterpreted=providerContract.interpretMappedVisualFrame(preMapped,provider);
         if(preInterpreted?.ok){
           preResolved=resolveExactTextTarget(preInterpreted,{kind:"text",match:"exact",text:TARGET});
-          if(preResolved?.ok)break;
+          if(exactResolved(preResolved))break;
         }
       }
       sleep(300);
     }
-    if(!preResolved?.ok)fail("SAFARI_CANVAS_VISUAL_TARGET_NOT_RESOLVED");
+    if(!exactResolved(preResolved))fail("SAFARI_CANVAS_VISUAL_TARGET_NOT_RESOLVED");
     const prePost=resolveExactTextTarget(preInterpreted,{kind:"text",match:"exact",text:POSTCONDITION});
-    if(prePost?.ok)fail("SAFARI_CANVAS_POSTCONDITION_PRESENT_BEFORE_ACTION");
+    if(!exactUnresolved(prePost))fail("SAFARI_CANVAS_POSTCONDITION_PRESTATE_INVALID");
 
     const semantic=computerControl.snapshot({app:"Safari"});
     if(!semantic?.ok||!semantic.snapshot)fail(`SAFARI_SEMANTIC_SNAPSHOT_FAILED_${semantic?.error||semantic?.state||"UNKNOWN"}`);
@@ -149,7 +151,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
 
     console.log("p6b-real-application=PASS application=Safari providerBoundary=existing-product-provider localPage=true externalNetwork=false");
     console.log("p6b-semantic-gap=PASS code=NO_SEMANTIC_TARGET canvasTextSemanticTarget=false");
-    console.log("p6b-visual-target=PASS provider=rumiai.local.macos-vision-text-region exactSingleMatch=true");
+    console.log("p6b-visual-target=PASS provider=rumiai.local.macos-vision-text-region exactSingleMatch=true prePostcondition=ABSENT");
     console.log("p6b-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true taskOutcome=VERIFIED_SUCCESS independentPostActionObservation=true");
     console.log("p6b-contract-promotion=NOT_RUN builtInSafariContract=false discoveryOnly=true");
     console.log("p6b-payload-policy=PASS screenshotLogged=false ocrPayloadLogged=false coordinatesLogged=false");
