@@ -11,6 +11,26 @@ struct Ready: Codable {
     let initialPointer: LogicalPoint?
 }
 
+func readyFilePath() -> String? {
+    let args = CommandLine.arguments
+    guard let index = args.firstIndex(of: "--ready-file"), index + 1 < args.count else {
+        return nil
+    }
+    let value = args[index + 1].trimmingCharacters(in: .whitespacesAndNewlines)
+    return value.isEmpty ? nil : value
+}
+
+func publishReady(_ ready: Ready) {
+    guard let data = try? JSONEncoder().encode(ready) else { return }
+    if let path = readyFilePath() {
+        try? data.write(to: URL(fileURLWithPath: path), options: .atomic)
+        return
+    }
+    FileHandle.standardOutput.write(data)
+    FileHandle.standardOutput.write(Data([0x0a]))
+    fflush(stdout)
+}
+
 final class VisualOnlySurface: NSView {
     private var text = "RUMIAI VISUAL 517"
 
@@ -143,12 +163,7 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
         ) ? LogicalPoint(x: pointerX, y: pointerY) : nil
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            let ready = Ready(state: "READY", initialPointer: pointer)
-            if let data = try? JSONEncoder().encode(ready) {
-                FileHandle.standardOutput.write(data)
-                FileHandle.standardOutput.write(Data([0x0a]))
-                fflush(stdout)
-            }
+            publishReady(Ready(state: "READY", initialPointer: pointer))
         }
     }
 }
