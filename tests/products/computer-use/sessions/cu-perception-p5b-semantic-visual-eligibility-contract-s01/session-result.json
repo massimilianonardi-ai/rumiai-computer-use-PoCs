@@ -1,0 +1,54 @@
+{
+  "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s01",
+  "validationKind": "contract-only",
+  "startedAt": "2026-08-29T09:03:11Z",
+  "endedAt": "2026-08-29T09:03:12Z",
+  "durationMs": 610,
+  "productShaExpected": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+  "productShaObserved": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+  "dependencies": {
+    "computerControl": {
+      "shaExpected": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "shaObserved": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003"
+    }
+  },
+  "testSourceSha": "013f841930e284dc7ff3f833eeb12a42d7a5aab6",
+  "pocShaTested": "b461df320d6d2a3c625677c3b5bfe8d8c2798598",
+  "tests": [
+    {
+      "id": "contract:external-computer-control-boundary-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'",
+      "exitCode": 0,
+      "durationMs": 252,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5a-visual-fallback-coordinator.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js'",
+      "exitCode": 0,
+      "durationMs": 58,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5b-semantic-visual-eligibility.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js'",
+      "exitCode": 1,
+      "durationMs": 56,
+      "result": "FAIL"
+    },
+    {
+      "id": "post:product-trees-clean",
+      "command": "test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)\" && test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)\"",
+      "exitCode": 0,
+      "durationMs": 47,
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "pass": 3,
+    "fail": 1,
+    "blocked": 0,
+    "total": 4,
+    "overall": "FAIL"
+  }
+}

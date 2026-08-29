@@ -1,0 +1,182 @@
+RumiAI Computer Use contract-only session
+session_id=cu-perception-p5b-semantic-visual-eligibility-contract-s01
+validation_kind=contract-only
+started_at=2026-08-29T09:03:11Z
+computer_use_root=/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use
+computer_use_expected_sha=28c654d51c1014ee826dcf24f42b6758dc67a721
+computer_use_observed_sha=28c654d51c1014ee826dcf24f42b6758dc67a721
+computer_control_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+computer_control_expected_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+computer_control_observed_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=013f841930e284dc7ff3f833eeb12a42d7a5aab6
+poc_tested_sha=b461df320d6d2a3c625677c3b5bfe8d8c2798598
+poc_origin_main=b461df320d6d2a3c625677c3b5bfe8d8c2798598
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+node=v26.7.0
+
+================================================================================
+TEST: contract:external-computer-control-boundary-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'
+START: 2026-08-29T09:03:12Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+external wrapper syntax: PASS
+external adapter environment override: PASS
+external installation home override: PASS
+external wrapper has no development-volume path: PASS
+external wrapper has no user-profile install: PASS
+external wrapper has no bundled fallback: PASS
+bundled Computer Control source absent: PASS
+direct backend facade absent: PASS
+agent-loop.js syntax: PASS
+agent-loop.js uses external boundary: PASS
+agent-loop.js no direct internal facade: PASS
+agent-loop.js no direct agent-ctrl: PASS
+agent-loop.js no backend module paths: PASS
+executors.js syntax: PASS
+executors.js uses external boundary: PASS
+executors.js no direct internal facade: PASS
+executors.js no direct agent-ctrl: PASS
+executors.js no backend module paths: PASS
+recovery.js syntax: PASS
+recovery.js uses external boundary: PASS
+recovery.js no direct internal facade: PASS
+recovery.js no direct agent-ctrl: PASS
+recovery.js no backend module paths: PASS
+semantic-ui.js syntax: PASS
+semantic-ui.js uses external boundary: PASS
+semantic-ui.js no direct internal facade: PASS
+semantic-ui.js no direct agent-ctrl: PASS
+semantic-ui.js no backend module paths: PASS
+perception.js syntax: PASS
+perception.js uses external boundary: PASS
+perception.js no direct internal facade: PASS
+perception.js no direct agent-ctrl: PASS
+perception.js no backend module paths: PASS
+perception-action-execution.js syntax: PASS
+perception-action-execution.js uses external boundary: PASS
+perception-action-execution.js no direct internal facade: PASS
+perception-action-execution.js no direct agent-ctrl: PASS
+perception-action-execution.js no backend module paths: PASS
+perception-provider.js syntax: PASS
+perception-provider.js does not call Computer Control directly: PASS
+perception-provider.js no direct internal facade: PASS
+perception-provider.js no direct agent-ctrl: PASS
+perception-provider.js no backend module paths: PASS
+perception-target.js syntax: PASS
+perception-target.js does not call Computer Control directly: PASS
+perception-target.js no direct internal facade: PASS
+perception-target.js no direct agent-ctrl: PASS
+perception-target.js no backend module paths: PASS
+perception-action-policy.js syntax: PASS
+perception-action-policy.js does not call Computer Control directly: PASS
+perception-action-policy.js no direct internal facade: PASS
+perception-action-policy.js no direct agent-ctrl: PASS
+perception-action-policy.js no backend module paths: PASS
+external-computer-control-boundary=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 252
+RESULT: PASS
+END: 2026-08-29T09:03:12Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p5a-visual-fallback-coordinator.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js'
+START: 2026-08-29T09:03:12Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P5A composes P1B-P4 and returns verified success only from independent post-action evidence (1.741417ms)
+✔ P5A preserves explicit-policy rejection and never dispatches Computer Control (0.117208ms)
+✔ P5A preserves missing and ambiguous target rejection with no dispatch (0.134959ms)
+✔ P5A does not collapse CLICK_POSTED delivery into task success (0.106167ms)
+✔ P5A preserves delivery failure and never runs post-action verification (0.08975ms)
+✔ P5A coordinator is composition-only: no backend bypass, persistence, planner or provider selection (0.595833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.896708
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 58
+RESULT: PASS
+END: 2026-08-29T09:03:12Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p5b-semantic-visual-eligibility.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js'
+START: 2026-08-29T09:03:12Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use/app/computer-control-external.js:16
+  throw new Error(
+  ^
+
+Error: External Computer Control is not configured. Set RUMIAI_COMPUTER_CONTROL_HOME or RUMIAI_COMPUTER_CONTROL_ADAPTER.
+    at Object.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use/app/computer-control-external.js:16:9)
+    at Module._compile (node:internal/modules/cjs/loader:1934:14)
+    at Object..js (node:internal/modules/cjs/loader:2074:10)
+    at Module.load (node:internal/modules/cjs/loader:1656:32)
+    at Module._load (node:internal/modules/cjs/loader:1448:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1679:12)
+    at require (node:internal/modules/helpers:196:16)
+    at Object.<anonymous> (/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use/app/semantic-ui.js:3:18)
+    at Module._compile (node:internal/modules/cjs/loader:1934:14)
+
+Node.js v26.7.0
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 56
+RESULT: FAIL
+END: 2026-08-29T09:03:12Z
+================================================================================
+
+================================================================================
+TEST: post:product-trees-clean
+COMMAND: test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)" && test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)"
+START: 2026-08-29T09:03:12Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 47
+RESULT: PASS
+END: 2026-08-29T09:03:12Z
+================================================================================
+
+session_ended_at=2026-08-29T09:03:12Z
+session_duration_ms=610
+session_overall=FAIL
