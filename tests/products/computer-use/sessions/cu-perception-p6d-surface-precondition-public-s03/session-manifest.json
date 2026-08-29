@@ -1,0 +1,44 @@
+{
+  "sessionId": "cu-perception-p6d-surface-precondition-public-s03",
+  "checkpoint": "P6D",
+  "validationKind": "physical-integration",
+  "expectedProductSha": "7cb236f4d9af6ed72b1ec0857276fc7050fdcec7",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "b60eb9c96d87f8b867ff0734ade8275c584c2455",
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6d-surface-precondition-public.js",
+  "history": {
+    "s01": {
+      "evidenceCommit": "40dafd8277ba6c015eeba24eb84cdc6c1458d1c7",
+      "result": "FAIL",
+      "finding": "positive setup used a second Safari URL and did not prove the intended page was the current accessibility surface"
+    },
+    "s02": {
+      "evidenceCommit": "68f19a7911d369986d41e2d7ea5bc200b53098fd",
+      "result": "FAIL",
+      "finding": "dynamic BETA to ALPHA DOM text did not become observable in the fresh Safari accessibility snapshot; failure occurred at GOOD_SURFACE_NOT_CURRENT before the positive runTask"
+    }
+  },
+  "requiredClaims": [
+    "Safari is blocked before evidence creation if it is already running.",
+    "The negative BETA surface rejects the ALPHA contract before perception-provider selection and before visual-fallback click delivery.",
+    "The same Safari tab and URL are retained for the positive case.",
+    "After the test-owned mode changes to ALPHA, the same page is reloaded and the server renders ALPHA in initial markup.",
+    "A fresh semantic snapshot verifies ALPHA exactly once and BETA absent before the positive runTask.",
+    "The positive runTask remains semantic-first and reaches visual fallback only after NO_SEMANTIC_TARGET.",
+    "Provider selection remains lazy and Computer Use-owned.",
+    "CLICK_POSTED remains delivery only and VERIFIED_SUCCESS requires independent post-action perception.",
+    "No screenshot bytes, OCR payload strings or coordinates are logged.",
+    "Cleanup and clean product trees are required."
+  ],
+  "nonClaims": [
+    "No generic Safari visual fallback is authorized.",
+    "No built-in PROCEED contract is promoted.",
+    "No P3A matching, P5B eligibility, planner output or Computer Control contract is broadened."
+  ],
+  "promotion": {
+    "onPass": {
+      "p6dState": "PHYSICALLY_VALIDATED",
+      "nextCheckpoint": "P7 real evidence-backed application use case"
+    }
+  }
+}
