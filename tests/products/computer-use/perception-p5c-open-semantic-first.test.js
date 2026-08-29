@@ -176,7 +176,7 @@ test("P5C OPEN preserves delivery != success when P5A delivery is posted but pos
   assert.equal(result.taskOutcome.state,"NOT_VERIFIED_SUCCESS");
 });
 
-test("P5C boundary is executor-owned, planner-coordinate-free, provider-selection-free and agent-loop-not-yet-wired",()=>{
+test("P5C boundary remains executor-owned and planner-coordinate-free after later agent-loop wiring",()=>{
   const openSource=fs.readFileSync(openBoundaryPath,"utf8");
   const executorSource=fs.readFileSync(executorsPath,"utf8");
   const llmSource=fs.readFileSync(llmPath,"utf8");
@@ -199,7 +199,6 @@ test("P5C boundary is executor-owned, planner-coordinate-free, provider-selectio
   assert.doesNotMatch(openSource,/node:fs|writeFile|createWriteStream/);
   assert.doesNotMatch(openSource,/\bx\s*:|\by\s*:/);
 
-  assert.doesNotMatch(llmSource,/visualFallback|allowVisualFallback|targetQuery/);
-  assert.doesNotMatch(agentSource,/visualFallback|allowVisualFallback|targetQuery|runVisualTextFallback/);
-  assert.match(agentSource,/executeIntent\(intent, state\)/);
+  assert.doesNotMatch(llmSource,/visualFallback|allowVisualFallback|targetQuery|postcondition|providerRequest/);
+  assert.match(agentSource,/executeIntent\(intent, state, intentExecutionContext\)/);
 });
