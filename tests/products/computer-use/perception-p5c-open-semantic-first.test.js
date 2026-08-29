@@ -14,6 +14,7 @@ const openBoundaryPath=path.join(productRoot,"app","open-semantic-first.js");
 const llmPath=path.join(productRoot,"app","llm.js");
 const agentLoopPath=path.join(productRoot,"app","agent-loop.js");
 const executors=require(executorsPath);
+const semanticUi=require(path.join(productRoot,"app","semantic-ui.js"));
 const {SEMANTIC_RESULT_CODES}=require(path.join(productRoot,"app","semantic-visual-fallback-eligibility.js"));
 
 const intent={intent:"OPEN",target:"OPEN ME"};
@@ -59,6 +60,29 @@ test("P5C OPEN stays semantic-first and never invokes visual fallback after sema
   assert.equal(result.executionPath,"semantic");
   assert.equal(result.visualFallback.state,"NOT_RUN");
   assert.equal(result.visualFallback.reason,"SEMANTIC_PATH_SUCCEEDED");
+});
+
+test("P5C semantic postcondition normalizes checked selectable controls without treating focus as success",()=>{
+  assert.equal(
+    semanticUi.semanticTargetSelected('@e1 radio "OPEN ME" [checked] [focused]',"OPEN ME"),
+    true
+  );
+  assert.equal(
+    semanticUi.semanticTargetSelected('@e1 radio-button "OPEN ME" [checked]',"OPEN ME"),
+    true
+  );
+  assert.equal(
+    semanticUi.semanticTargetSelected('@e1 checkbox "OPEN ME" [checked]',"OPEN ME"),
+    true
+  );
+  assert.equal(
+    semanticUi.semanticTargetSelected('@e1 radio "OPEN ME" [focused]',"OPEN ME"),
+    false
+  );
+  assert.equal(
+    semanticUi.semanticTargetSelected('@e1 button "OPEN ME" [checked]',"OPEN ME"),
+    false
+  );
 });
 
 test("P5C OPEN invokes P5A only for a structured eligible gap plus explicit deterministic context",async()=>{
