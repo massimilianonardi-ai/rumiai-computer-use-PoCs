@@ -22,18 +22,21 @@ function asyncSleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1024*1024,...options});}
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
 
-function pageHtml(){return `<!doctype html>
+function pageHtml(initialMode="bad"){
+  const initialMarker=initialMode==="good"?SURFACE_GOOD:SURFACE_BAD;
+  return `<!doctype html>
 <html><head><meta charset="utf-8"><title>P6D</title>
 <style>html,body{margin:0;width:100%;height:100%;background:#fff}body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}h1{font:600 24px Arial,sans-serif}canvas{width:min(1000px,92vw);height:auto;background:#fff}</style></head>
-<body><h1 id="marker">${SURFACE_BAD}</h1><canvas id="surface" width="1000" height="360"></canvas>
+<body><h1 id="marker">${initialMarker}</h1><canvas id="surface" width="1000" height="360"></canvas>
 <script>
 const c=document.getElementById('surface');const x=c.getContext('2d');const marker=document.getElementById('marker');
-let text=${JSON.stringify(TARGET)};let surfaceMode='bad';
+let text=${JSON.stringify(TARGET)};let surfaceMode=${JSON.stringify(initialMode)};
 function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 128px Arial, Helvetica, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
 async function syncMode(){try{const r=await fetch('/surface-mode',{cache:'no-store'});const mode=(await r.text()).trim();if(mode==='good'||mode==='bad'){surfaceMode=mode;marker.textContent=mode==='good'?${JSON.stringify(SURFACE_GOOD)}:${JSON.stringify(SURFACE_BAD)};}}catch{}}
 setInterval(syncMode,100);syncMode();
 c.addEventListener('pointerdown',()=>{text=${JSON.stringify(POSTCONDITION)};draw();fetch(surfaceMode==='good'?'/clicked-good':'/clicked-bad',{method:'POST'}).catch(()=>{});});draw();
-</script></body></html>`;}
+</script></body></html>`;
+}
 
 async function listenLocal(server){
   await new Promise((resolve,reject)=>{server.once("error",reject);server.listen(0,"127.0.0.1",resolve);});
@@ -96,7 +99,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       if(req.method==="POST"&&req.url==="/clicked-good"){goodClicks++;res.writeHead(204);res.end();return;}
       if(req.url!=="/p6d"){res.writeHead(404,{"Content-Type":"text/plain"});res.end("not found");return;}
       pageRequests++;
-      const body=pageHtml();
+      const body=pageHtml(surfaceMode);
       res.writeHead(200,{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","Content-Length":Buffer.byteLength(body)});
       res.end(body);
     });
@@ -154,6 +157,13 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     if(badClicks!==0||goodClicks!==0)fail("WRONG_SURFACE_CLICK_DELIVERED");
 
     surfaceMode="good";
+    const requestsBeforeReload=pageRequests;
+    const reloaded=computerControl.press({app:"Safari",keys:"Cmd+R",settle:false});
+    if(!reloaded?.ok)fail("GOOD_SURFACE_RELOAD_FAILED");
+    for(let i=0;i<50&&pageRequests<=requestsBeforeReload;i++)await asyncSleep(100);
+    if(pageRequests<=requestsBeforeReload)fail("GOOD_SURFACE_RELOAD_NOT_REQUESTED");
+    await asyncSleep(350);
+
     let freshGood=null,goodPreflight=null,badPreflight=null;
     for(let i=0;i<40;i++){
       freshGood=computerControl.snapshot({app:"Safari"});
@@ -208,7 +218,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
 
     console.log(`p6d-real-surfaces=PASS application=Safari pageRequests=${pageRequests} modePolls=${modePolls} sameDocument=true sameVisualTarget=true`);
     console.log("p6d-negative-surface=PASS precondition=SURFACE_PRECONDITION_NOT_MET providerSelectionCalls=0 visualFallbackClickDeliveries=0 failClosed=true");
-    console.log("p6d-surface-transition=PASS from=BETA to=ALPHA currentSurfaceFreshlyObserved=true browserTabAmbiguity=false");
+    console.log("p6d-surface-transition=PASS from=BETA to=ALPHA currentSurfaceFreshlyObserved=true sameTabReload=true browserTabAmbiguity=false");
     console.log("p6d-positive-surface=PASS precondition=SURFACE_PRECONDITION_VERIFIED providerSelectionCalls=1 executionPath=visual-fallback");
     console.log("p6d-planner-boundary=PASS semanticOnly=true surfacePreconditionOutsidePlanner=true scopeOutsidePlanner=true coordinates=false providerObject=false");
     console.log("p6d-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true taskOutcome=VERIFIED_SUCCESS independentPostActionObservation=true");
