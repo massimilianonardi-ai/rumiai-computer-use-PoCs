@@ -1,0 +1,63 @@
+{
+  "sessionId": "cu-perception-p6a-caller-contract-registry-public-s01",
+  "checkpoint": "P6A",
+  "validationKind": "physical",
+  "purpose": "Validate a product-owned local caller-contract registry that supplies deterministic OPEN visual-fallback contracts to the already validated P5E agent loop without adding visual data to planner output or selecting a perception provider before the P5B-eligible semantic gap.",
+  "expectedProductSha": "5e4daf5ebf352535653bfb21a559026238966a20",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "66455683f3088b6cfb7fa9e1a49274a9c08269f5",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6a-caller-contract-registry-public.js",
+  "requiredClaims": [
+    "The product runtime and Computer Control dependency exactly match the frozen SHAs.",
+    "The local JSON caller-contract registry is product-owned and separate from competence skill status and Computer Control.",
+    "A contract is matched exactly by application, OPEN intent and semantic target; missing matches produce no fallback contract and duplicate matches fail closed.",
+    "The caller contract contains deterministic target/postcondition and declarative perception requirements but no perception-provider object and no coordinates.",
+    "The planner output remains ordinary ACTIVATE_APP and OPEN semantic intents and contains no visual fallback metadata, provider identity, postcondition or coordinates.",
+    "Loading/selecting the caller contract does not select or execute a perception provider.",
+    "The selected caller contract is passed through the existing normal P5E runTask path.",
+    "OPEN still executes semantic-first and only a structured P5B-eligible NO_SEMANTIC_TARGET gap may resolve the lazy visual context.",
+    "Only after that eligible gap, P5D selects the optional local macOS Vision text-region provider.",
+    "P5A performs the real mapped visual fallback with explicit primary-display left-click authorization.",
+    "Computer Control CLICK_POSTED remains delivery only and semanticConsequenceVerified remains false at delivery.",
+    "A fresh independent post-action observation must satisfy the exact caller-contract postcondition before VERIFIED_SUCCESS.",
+    "Screenshot bytes, OCR payload text and coordinates are not persisted to session evidence.",
+    "Computer Use and Computer Control trees remain clean."
+  ],
+  "nonClaims": [
+    "P6A does not claim a built-in application-specific visual OPEN skill is already available.",
+    "P6A does not modify the LLM planner schema.",
+    "P6A does not make visual fallback implicit when no caller contract matches.",
+    "P6A does not merge caller contracts with competence skill validation status.",
+    "P6A does not broaden P5B eligibility or weaken delivery != success.",
+    "P6A does not claim general OCR accuracy, fuzzy matching, VLM understanding, arbitrary gestures or arbitrary applications.",
+    "P1-P5 physical evidence is not rerun or rewritten."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact failed boundary, fix forward only, and create s02 only if required.",
+    "sensitiveData": "Only test-owned fixture content is used; frame bytes, OCR payloads and coordinates remain ephemeral."
+  },
+  "promotion": {
+    "onPass": {
+      "p6aCallerContractRegistry": "PHYSICALLY_VALIDATED",
+      "nextCheckpoint": "first built-in real application/task contract or skill integration chosen only from separately evidenced deterministic UI knowledge"
+    }
+  },
+  "prerequisites": {
+    "P5E": {
+      "sessionId": "cu-perception-p5e-agent-loop-visual-fallback-public-s01",
+      "evidenceCommit": "d18e82d06456438f289eb0bf6c6f630973b5a99f",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
