@@ -10,8 +10,8 @@ const {spawnSync}=require("node:child_process");
 const productRoot=process.env.RUMIAI_COMPUTER_USE_ROOT;
 if(!productRoot){console.error("physical-computer-use-perception-p6b=BLOCKED code=MISSING_PRODUCT_ROOT");process.exit(2);}
 
-const TARGET="RUMIAI CLICK 641";
-const POSTCONDITION="RUMIAI DONE 902";
+const TARGET="RUMIAI CANVAS OPEN";
+const POSTCONDITION="RUMIAI CANVAS DONE";
 
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
@@ -23,11 +23,11 @@ function exactUnresolved(result){return Boolean(result?.ok===true&&result?.state
 
 function pageHtml(){return `<!doctype html>
 <html><head><meta charset="utf-8"><title>RumiAI P6B Canvas Discovery</title>
-<style>html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden}body{display:flex;align-items:center;justify-content:center}canvas{width:1000px;height:320px;background:#fff}</style></head>
-<body><canvas id="surface" width="1000" height="320"></canvas>
+<style>html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden}body{display:flex;align-items:center;justify-content:center}canvas{width:min(1200px,94vw);height:auto;background:#fff}</style></head>
+<body><canvas id="surface" width="1200" height="420"></canvas>
 <script>
 const c=document.getElementById('surface');const x=c.getContext('2d');let text=${JSON.stringify(TARGET)};
-function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 52px Menlo, monospace';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
+function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 80px Arial, Helvetica, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
 c.addEventListener('pointerdown',()=>{text=${JSON.stringify(POSTCONDITION)};draw();});draw();
 </script></body></html>`;}
 
@@ -101,8 +101,9 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     if(!selected?.ok||selected.descriptor?.id!=="rumiai.local.macos-vision-text-region")fail("LOCAL_VISION_PROVIDER_NOT_SELECTED");
     const provider=selected.provider;
 
-    let preMapped=null,preInterpreted=null,preResolved=null;
-    for(let attempt=0;attempt<16;attempt++){
+    let preMapped=null,preInterpreted=null,preResolved=null,preAttempts=0;
+    for(let attempt=0;attempt<20;attempt++){
+      preAttempts=attempt+1;
       preMapped=perception.acquireMappedPrimaryVisualFrame();
       if(preMapped?.ok){
         preInterpreted=providerContract.interpretMappedVisualFrame(preMapped,provider);
@@ -111,9 +112,19 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
           if(exactResolved(preResolved))break;
         }
       }
-      sleep(300);
+      sleep(350);
     }
-    if(!exactResolved(preResolved))fail("SAFARI_CANVAS_VISUAL_TARGET_NOT_RESOLVED");
+    if(!exactResolved(preResolved)){
+      console.log(
+        `p6b-pre-target-diagnostic=FAIL attempts=${preAttempts}`+
+        ` resolutionState=${preResolved?.state||"NONE"}`+
+        ` semanticTargetState=${preResolved?.semanticTarget?.state||"NONE"}`+
+        ` reason=${preResolved?.semanticTarget?.reason||preResolved?.error||"NONE"}`+
+        ` matchCount=${preResolved?.semanticTarget?.matchCount??-1}`+
+        ` observationCount=${preInterpreted?.interpretation?.observations?.length??-1}`
+      );
+      fail("SAFARI_CANVAS_VISUAL_TARGET_NOT_RESOLVED");
+    }
     const prePost=resolveExactTextTarget(preInterpreted,{kind:"text",match:"exact",text:POSTCONDITION});
     if(!exactUnresolved(prePost))fail("SAFARI_CANVAS_POSTCONDITION_PRESTATE_INVALID");
 
@@ -131,7 +142,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       postcondition:{kind:"text",match:"exact",text:POSTCONDITION},
       observeAfterDelivery:()=>{
         postObserveCalls++;
-        sleep(450);
+        sleep(500);
         postMapped=perception.acquireMappedPrimaryVisualFrame();
         if(!postMapped?.ok)return postMapped;
         postInterpreted=providerContract.interpretMappedVisualFrame(postMapped,provider);
