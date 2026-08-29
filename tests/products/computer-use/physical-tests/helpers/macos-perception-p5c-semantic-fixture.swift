@@ -2,6 +2,7 @@ import AppKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
+    var targetButton: NSButton!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         window = NSWindow(
@@ -17,17 +18,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         label.alignment = .center
         window.contentView?.addSubview(label)
 
-        let button = NSButton(title: "RUMIAI SEMANTIC 731", target: self, action: #selector(openSemanticTarget))
+        let button = NSButton(radioButtonWithTitle: "RUMIAI SEMANTIC 731", target: self, action: #selector(openSemanticTarget(_:)))
         button.frame = NSRect(x: 125, y: 65, width: 210, height: 36)
+        button.state = .off
         button.setAccessibilityLabel("RUMIAI SEMANTIC 731")
         window.contentView?.addSubview(button)
+        targetButton = button
 
         window.center()
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    @objc func openSemanticTarget() {
+    @objc func openSemanticTarget(_ sender: NSButton) {
+        sender.state = .on
         window.title = "RUMIAI SEMANTIC 731"
         window.makeKeyAndOrderFront(nil)
     }
