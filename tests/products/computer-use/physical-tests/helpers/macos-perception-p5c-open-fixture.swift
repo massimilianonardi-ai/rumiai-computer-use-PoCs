@@ -47,9 +47,46 @@ final class VisualOnlySurface: NSView {
 final class FixtureDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow?
     var visualPanel: NSPanel?
+    var primaryScreen: NSScreen?
+
+    func showVisualOnlyPanel() {
+        guard visualPanel == nil, let screen = primaryScreen else { return }
+        let screenFrame = screen.frame
+        let visualWidth: CGFloat = 500
+        let visualHeight: CGFloat = 130
+        let logicalX: CGFloat = floor(screenFrame.width * 0.58)
+        let logicalY: CGFloat = floor(screenFrame.height * 0.43)
+        let visualRect = NSRect(
+            x: screenFrame.minX + logicalX,
+            y: screenFrame.maxY - logicalY - visualHeight,
+            width: visualWidth,
+            height: visualHeight
+        )
+        let panel = NSPanel(
+            contentRect: visualRect,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: false,
+            screen: screen
+        )
+        panel.isOpaque = true
+        panel.backgroundColor = .white
+        panel.hasShadow = false
+        panel.level = .screenSaver
+        panel.hidesOnDeactivate = false
+        panel.isFloatingPanel = true
+        panel.becomesKeyOnlyIfNeeded = true
+        panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        panel.ignoresMouseEvents = false
+        panel.contentView = VisualOnlySurface(frame: NSRect(x: 0, y: 0, width: visualWidth, height: visualHeight))
+        panel.orderFrontRegardless()
+        visualPanel = panel
+        window?.makeKeyAndOrderFront(nil)
+    }
 
     @objc func semanticOpen(_ sender: Any?) {
         window?.title = "RUMIAI SEMANTIC 731"
+        showVisualOnlyPanel()
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -60,9 +97,9 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
             NSApp.terminate(nil)
             return
         }
+        primaryScreen = screen
 
         let screenFrame = screen.frame
-
         let windowWidth: CGFloat = 560
         let windowHeight: CGFloat = 260
         let windowRect = NSRect(
@@ -93,36 +130,6 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
         window.contentView = content
         window.makeKeyAndOrderFront(nil)
         self.window = window
-
-        let visualWidth: CGFloat = 500
-        let visualHeight: CGFloat = 130
-        let logicalX: CGFloat = floor(screenFrame.width * 0.58)
-        let logicalY: CGFloat = floor(screenFrame.height * 0.43)
-        let visualRect = NSRect(
-            x: screenFrame.minX + logicalX,
-            y: screenFrame.maxY - logicalY - visualHeight,
-            width: visualWidth,
-            height: visualHeight
-        )
-        let panel = NSPanel(
-            contentRect: visualRect,
-            styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered,
-            defer: false,
-            screen: screen
-        )
-        panel.isOpaque = true
-        panel.backgroundColor = .white
-        panel.hasShadow = false
-        panel.level = .screenSaver
-        panel.hidesOnDeactivate = false
-        panel.isFloatingPanel = true
-        panel.becomesKeyOnlyIfNeeded = true
-        panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
-        panel.ignoresMouseEvents = false
-        panel.contentView = VisualOnlySurface(frame: NSRect(x: 0, y: 0, width: visualWidth, height: visualHeight))
-        panel.orderFrontRegardless()
-        self.visualPanel = panel
 
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
