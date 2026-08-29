@@ -79,12 +79,15 @@ try{
   console.log(`direct-snapshot-bytes=${Buffer.byteLength(direct.stdout||"")}`);
   console.log(`direct-snapshot-stderr=${oneLine(direct.stderr) || "<empty>"}`);
 
+  const combined=`${summary.detail} ${direct.stderr||""}`;
   if(actualSha!==expectedAgentSha){
     console.log("p5c-snapshot-diagnostic=FAIL class=AGENT_CTRL_BINARY_MISMATCH");
   }else if(summary.ok && (direct.status??1)===0 && Buffer.byteLength(direct.stdout||"")>0){
     console.log("p5c-snapshot-diagnostic=PASS class=SNAPSHOT_AVAILABLE");
     exitCode=0;
-  }else if(/permission|accessibility|not trusted|denied|ax/i.test(`${summary.detail} ${direct.stderr||""}`)){
+  }else if(/no AX window found|no target process produced|process name/i.test(combined)){
+    console.log("p5c-snapshot-diagnostic=FAIL class=AX_WINDOW_OR_PROCESS_TARGETING");
+  }else if(/permission|accessibility permission|not trusted|permission denied|access denied|tcc/i.test(combined)){
     console.log("p5c-snapshot-diagnostic=BLOCKED class=AX_PERMISSION_OR_TRUST");
     exitCode=2;
   }else{
