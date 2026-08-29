@@ -1,0 +1,31 @@
+{
+  "sessionId": "cu-perception-p6d-safari-surface-identity-diagnostic-public-s07",
+  "checkpoint": "P6D Safari surface identity diagnostic",
+  "expectedProductSha": "a90ab782d85e1283e76b4b64aa9bdbe54a7e4e0e",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "4f53b6f65ea476937691191ccf90252ebddc5b2b",
+  "purpose": "Characterize the real Safari current-window title and semantic snapshot using only aggregate relations to test-owned title and loopback URL data. A PASS is diagnostic only and does not promote P6D.",
+  "lineage": [
+    {"session":"cu-perception-p6d-surface-precondition-public-s01","evidence":"40dafd8277ba6c015eeba24eb84cdc6c1458d1c7","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s02","evidence":"68f19a7911d369986d41e2d7ea5bc200b53098fd","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s03","evidence":"aff7a1771a8b159f0b74289e6cdf6280cfb5f4ab","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s04","evidence":"dbc816c746737304d90dd4d45e3672951fa95148","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s05","evidence":"59c0e1c5b5b530fe9fdf3147a34caba3a16bcb5a","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s06","evidence":"e8edb4b40ea9015e2a8fe5a43e510acd2232f049","result":"FAIL","finding":"Safari current-window title starts with the exact test-owned HTML title but has an additional 21 normalized characters."}
+  ],
+  "diagnosticProperties": [
+    "no product behavior changes",
+    "no visual action delivery",
+    "no screenshot or OCR payload",
+    "no coordinates",
+    "raw current-window title is never logged",
+    "raw semantic snapshot is never logged",
+    "only boolean relations and lengths against test-owned title and loopback URL data are persisted",
+    "Safari is closed before the session and terminated during cleanup",
+    "loopback HTTP only; no external network"
+  ],
+  "onPass": {
+    "state": "DIAGNOSTIC_OBSERVED",
+    "next": "choose the narrowest deterministic P6D surface identity supported by the observed Safari boundary; do not weaken exact matching without explicit evidence"
+  }
+}
