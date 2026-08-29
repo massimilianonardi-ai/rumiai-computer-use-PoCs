@@ -1,0 +1,87 @@
+{
+  "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s03",
+  "checkpoint": "P6B",
+  "validationKind": "physical-discovery",
+  "purpose": "Repeat the real Safari canvas discovery with an OCR-hardened test-owned canvas fixture while preserving exact-text-single-match semantics. The prior s01 failed because the PoC oracle misread a successful UNRESOLVED result as a found postcondition; s02 corrected that oracle and then showed that the original numeric/monospace canvas target was not exactly resolved by local Vision. s03 changes only the PoC fixture presentation and adds non-sensitive resolution diagnostics; product runtime remains unchanged.",
+  "expectedProductSha": "3a3148cdf89735d2d46d208bbe69dc1d26722e3b",
+  "behaviorRuntimeBase": "5e4daf5ebf352535653bfb21a559026238966a20",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "3229152ef1ed4e43c867e15ea56b426df302a67f",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6b-safari-canvas-discovery-public.js",
+  "requiredClaims": [
+    "If Safari is already running, session execution is blocked before immutable evidence is created so user browser state is protected.",
+    "The discovery uses the existing product Safari application Provider and real Safari process/bundle identity.",
+    "The tested page is served only from loopback and requires no external network service.",
+    "The target and postcondition are rendered only into an HTML canvas with no accessible fallback text.",
+    "The s03 canvas uses alphabetic-only, large, high-contrast text solely to improve OCR observability; P3A exact-text-single-match policy is unchanged.",
+    "After the canvas target is exactly visually resolved, a fresh Safari Computer Control snapshot does not resolve that target semantically and produces structured NO_SEMANTIC_TARGET.",
+    "The real product macOS Vision text-region provider is selected locally through P5D.",
+    "The initial visual observation resolves exactly one target and explicitly reports the deterministic postcondition as VISUAL_TARGET_UNRESOLVED / NO_EXACT_TEXT_MATCH / matchCount=0.",
+    "The visual action is authorized only through the existing explicit primary-display left-click policy.",
+    "Real Computer Control delivery returns canonical CLICK_POSTED with semanticConsequenceVerified=false.",
+    "A fresh independent post-action visual observation must see exactly the deterministic postcondition and no longer see the original target before VERIFIED_SUCCESS is accepted.",
+    "No built-in Safari visual fallback contract exists during this discovery and none is created by the session.",
+    "If exact pre-action target resolution still fails, evidence may log only resolution state, semantic-target state, reason, match count, attempt count and total observation count; OCR text payloads remain unlogged.",
+    "Screenshot bytes, OCR payload text and coordinates are not persisted or printed to evidence.",
+    "Pointer, Safari process, loopback server, perception cache/runtime and temporary resources are cleaned up; Computer Use and Computer Control trees remain clean."
+  ],
+  "nonClaims": [
+    "P6B does not validate a generic Safari visual fallback policy.",
+    "P6B does not ship or enable a built-in Safari registry contract.",
+    "P6B does not claim that arbitrary web canvas content is safe to click.",
+    "P6B does not introduce fuzzy, normalized or approximate matching into P3A.",
+    "P6B does not broaden action types, display topology or provider capabilities.",
+    "P6B does not rerun historical P1-P4 physical sessions or rewrite P5/P6A evidence.",
+    "P6B does not claim external-network browser automation or general browser competence."
+  ],
+  "history": {
+    "s01": {
+      "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s01",
+      "evidenceCommit": "af5497f239a587a32551dcb38ac1fdb84db0e1da",
+      "result": "FAIL",
+      "cause": "PoC oracle treated resolveExactTextTarget ok=true / VISUAL_TARGET_UNRESOLVED as if the postcondition had already been found."
+    },
+    "s02": {
+      "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s02",
+      "evidenceCommit": "23d486abcd053d837d0e9a39c7082f93f10786f7",
+      "result": "FAIL",
+      "cause": "With the oracle corrected, local Vision did not exactly resolve the original RUMIAI CLICK 641 numeric/monospace canvas target before any semantic/action boundary was reached."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "safariUserState": "Preflight blocks before session creation when Safari is already running. The physical test repeats the guard for races.",
+    "onFailure": "Preserve s03 unchanged, use only the non-sensitive resolution diagnostics to classify the exact discovery boundary, fix forward only and create s04 only when justified.",
+    "sensitiveData": "Only test-owned page content is used. Screenshot bytes, OCR observation text payloads and coordinates remain ephemeral and are not logged."
+  },
+  "promotion": {
+    "onPass": {
+      "p6bState": "PHYSICALLY_OBSERVED",
+      "builtInSafariContract": false,
+      "nextCheckpoint": "P6C bounded registry integration/promotion only from evidence-backed caller knowledge"
+    }
+  },
+  "prerequisites": {
+    "P5E": {
+      "sessionId": "cu-perception-p5e-agent-loop-visual-fallback-public-s01",
+      "evidenceCommit": "d18e82d06456438f289eb0bf6c6f630973b5a99f",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P6A": {
+      "sessionId": "cu-perception-p6a-caller-contract-registry-public-s01",
+      "evidenceCommit": "21ad01e93a5de4e5276b49c193269a26ad66b164",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
