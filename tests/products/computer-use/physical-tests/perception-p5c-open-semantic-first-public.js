@@ -166,9 +166,15 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     if(semanticResult.visualFallback?.state!=="NOT_RUN"||semanticResult.visualFallback?.reason!=="SEMANTIC_PATH_SUCCEEDED")fail("SEMANTIC_PATH_VISUAL_BYPASS_INVALID");
 
     const semanticWindow=computerControl.getCurrentWindow({app:SEMANTIC_APP});
-    const independentlySelected=semanticUi.semanticTargetSelected(semanticResult.snapshot,SEMANTIC_TARGET);
+    const semanticPostResolved=semanticUi.resolveSemanticTarget(semanticResult.snapshot,SEMANTIC_TARGET,null,"CLICK",SEMANTIC_APP);
+    const semanticDescription=semanticPostResolved?.ok
+      ? computerControl.describe({app:SEMANTIC_APP,element:{ref:semanticPostResolved.ref}})
+      : null;
+    const independentlySnapshotSelected=semanticUi.semanticTargetSelected(semanticResult.snapshot,SEMANTIC_TARGET);
+    const independentlyDescribedSelected=semanticDescription?.ok===true&&semanticDescription.selected===true;
     const independentlyTitled=semanticWindow?.ok&&semanticUi.normText(semanticWindow.window?.title).includes(semanticUi.normText(SEMANTIC_TARGET));
-    if(!independentlySelected&&!independentlyTitled)fail("SEMANTIC_OPEN_POSTCONDITION_INVALID");
+    if(!semanticDescription?.ok||semanticDescription.role!=="radio-button"||semanticDescription.checked!==true||semanticDescription.selected!==true)fail("SEMANTIC_OPEN_NORMALIZED_SELECTION_INVALID");
+    if(!independentlySnapshotSelected&&!independentlyDescribedSelected&&!independentlyTitled)fail("SEMANTIC_OPEN_POSTCONDITION_INVALID");
 
     state={
       currentApp:semanticResult.currentApp||SEMANTIC_APP,
@@ -218,7 +224,7 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     const initialCount=postTexts.filter(v=>v===normalized(VISUAL_TARGET)).length;
     if(doneCount!==1||initialCount!==0)fail("VISUAL_INDEPENDENT_POSTCONDITION_ORACLE_MISMATCH");
 
-    console.log("p5c-semantic-first=PASS knownGoodAppKitProviderPattern=true semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 independentSemanticPostcondition=true");
+    console.log("p5c-semantic-first=PASS knownGoodAppKitProviderPattern=true semanticDelivery=true normalizedControlSelection=true visualCoordinatorNotRun=true visualProviderCalls=0 independentSemanticPostcondition=true");
     console.log("p5c-eligible-gap=PASS structuredCode=NO_SEMANTIC_TARGET freeFormParsing=false semanticApplicationSeparateFromVisualFixture=true");
     console.log("p5c-visual-fallback=PASS provenFixture=true explicitPolicy=true providerInjected=true deterministicTarget=true deterministicPostcondition=true");
     console.log("p5c-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true independentPostActionObservation=true");
