@@ -23,16 +23,16 @@ function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",max
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
 
 function pageHtml(initialMode="bad"){
-  const initialMarker=initialMode==="good"?SURFACE_GOOD:SURFACE_BAD;
+  const initialTitle=initialMode==="good"?SURFACE_GOOD:SURFACE_BAD;
   return `<!doctype html>
-<html><head><meta charset="utf-8"><title>P6D</title>
-<style>html,body{margin:0;width:100%;height:100%;background:#fff}body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}h1{font:600 24px Arial,sans-serif}canvas{width:min(1000px,92vw);height:auto;background:#fff}</style></head>
-<body><h1 id="marker">${initialMarker}</h1><canvas id="surface" width="1000" height="360"></canvas>
+<html><head><meta charset="utf-8"><title>${initialTitle}</title>
+<style>html,body{margin:0;width:100%;height:100%;background:#fff}body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}p{font:500 18px Arial,sans-serif}canvas{width:min(1000px,92vw);height:auto;background:#fff}</style></head>
+<body><p>RumiAI P6D local test surface</p><canvas id="surface" width="1000" height="360"></canvas>
 <script>
-const c=document.getElementById('surface');const x=c.getContext('2d');const marker=document.getElementById('marker');
+const c=document.getElementById('surface');const x=c.getContext('2d');
 let text=${JSON.stringify(TARGET)};let surfaceMode=${JSON.stringify(initialMode)};
 function draw(){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';x.font='bold 128px Arial, Helvetica, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);}
-async function syncMode(){try{const r=await fetch('/surface-mode',{cache:'no-store'});const mode=(await r.text()).trim();if(mode==='good'||mode==='bad'){surfaceMode=mode;marker.textContent=mode==='good'?${JSON.stringify(SURFACE_GOOD)}:${JSON.stringify(SURFACE_BAD)};}}catch{}}
+async function syncMode(){try{const r=await fetch('/surface-mode',{cache:'no-store'});const mode=(await r.text()).trim();if(mode==='good'||mode==='bad')surfaceMode=mode;}catch{}}
 setInterval(syncMode,100);syncMode();
 c.addEventListener('pointerdown',()=>{text=${JSON.stringify(POSTCONDITION)};draw();fetch(surfaceMode==='good'?'/clicked-good':'/clicked-bad',{method:'POST'}).catch(()=>{});});draw();
 </script></body></html>`;
@@ -82,7 +82,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       intent:"OPEN",
       target:TARGET,
       postcondition:POSTCONDITION,
-      surfacePrecondition:{kind:"semantic-text",match:"exact",text:SURFACE_GOOD},
+      surfacePrecondition:{kind:"window-title",match:"exact",text:SURFACE_GOOD},
       providerRequest:{capabilities:["text-region"],locality:"local"},
     },null,2));
 
@@ -132,14 +132,26 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       directory:contractDir,
     });
     if(!selected?.ok||selected.state!=="VISUAL_FALLBACK_PLAN_CONTRACTS_SELECTED"||selected.contracts?.length!==1)fail(selected?.error||"SCOPED_CONTRACT_NOT_SELECTED");
-    if(selected.contracts[0]?.surfacePrecondition?.text!==SURFACE_GOOD)fail("SURFACE_PRECONDITION_NOT_MATERIALIZED");
+    if(selected.contracts[0]?.surfacePrecondition?.kind!=="window-title"||selected.contracts[0]?.surfacePrecondition?.text!==SURFACE_GOOD)fail("SURFACE_PRECONDITION_NOT_MATERIALIZED");
 
-    let badSurfaceResult=null,badProviderSelectCalls=0;
+    const badWindowPreflight=computerControl.getCurrentWindow({app:"Safari"});
+    if(!badWindowPreflight?.ok||!badWindowPreflight.window)fail("BAD_SURFACE_WINDOW_NOT_OBSERVED");
+    const badPreflight=surface.evaluateSemanticSurfacePrecondition(
+      {kind:"window-title",match:"exact",text:SURFACE_BAD},
+      {currentWindow:badWindowPreflight.window}
+    );
+    if(!badPreflight?.ok)fail("BAD_SURFACE_TITLE_NOT_CURRENT");
+
+    let badSurfaceResult=null,badWindowObserveCalls=0,badProviderSelectCalls=0;
     const badTask=await agentLoop.runTask("P6D wrong Safari surface must fail closed",{
       executionMode:()=>"EXACT",
       planTask:async task=>({steps:plannerSteps,seconds:0,metrics:null,prefixChars:0,taskChars:String(task).length,literalPayload:null}),
       visualFallbackContracts:selected.contracts,
       visualFallbackDependencies:{
+        observeCurrentWindow:({app})=>{
+          badWindowObserveCalls++;
+          return computerControl.getCurrentWindow({app});
+        },
         verifySurfacePrecondition:(precondition,context)=>{
           badSurfaceResult=surface.evaluateSemanticSurfacePrecondition(precondition,context);
           return badSurfaceResult;
@@ -152,6 +164,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     });
     if(badTask?.ok===true)fail("WRONG_SURFACE_TASK_UNEXPECTEDLY_SUCCEEDED");
     if(badSurfaceResult?.reason!=="SURFACE_PRECONDITION_NOT_MET")fail("WRONG_SURFACE_PRECONDITION_NOT_REJECTED");
+    if(badWindowObserveCalls!==1)fail("WRONG_SURFACE_WINDOW_OBSERVATION_COUNT_INVALID");
     if(badProviderSelectCalls!==0)fail("WRONG_SURFACE_SELECTED_PERCEPTION_PROVIDER");
     await asyncSleep(200);
     if(badClicks!==0||goodClicks!==0)fail("WRONG_SURFACE_CLICK_DELIVERED");
@@ -164,31 +177,35 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     if(pageRequests<=requestsBeforeReload)fail("GOOD_SURFACE_RELOAD_NOT_REQUESTED");
     await asyncSleep(350);
 
-    let freshGood=null,goodPreflight=null,badPreflight=null;
+    let freshGood=null,goodPreflight=null,badAfterReload=null;
     for(let i=0;i<40;i++){
-      freshGood=computerControl.snapshot({app:"Safari"});
-      if(freshGood?.ok){
+      freshGood=computerControl.getCurrentWindow({app:"Safari"});
+      if(freshGood?.ok&&freshGood.window){
         goodPreflight=surface.evaluateSemanticSurfacePrecondition(
-          {kind:"semantic-text",match:"exact",text:SURFACE_GOOD},
-          {state:{snapshot:freshGood.snapshot}}
+          {kind:"window-title",match:"exact",text:SURFACE_GOOD},
+          {currentWindow:freshGood.window}
         );
-        badPreflight=surface.evaluateSemanticSurfacePrecondition(
-          {kind:"semantic-text",match:"exact",text:SURFACE_BAD},
-          {state:{snapshot:freshGood.snapshot}}
+        badAfterReload=surface.evaluateSemanticSurfacePrecondition(
+          {kind:"window-title",match:"exact",text:SURFACE_BAD},
+          {currentWindow:freshGood.window}
         );
-        if(goodPreflight?.ok&&badPreflight?.reason==="SURFACE_PRECONDITION_NOT_MET")break;
+        if(goodPreflight?.ok&&badAfterReload?.reason==="SURFACE_PRECONDITION_NOT_MET")break;
       }
       await asyncSleep(100);
     }
     if(!goodPreflight?.ok||goodPreflight.state!=="SURFACE_PRECONDITION_VERIFIED")fail("GOOD_SURFACE_NOT_CURRENT");
-    if(badPreflight?.reason!=="SURFACE_PRECONDITION_NOT_MET")fail("BAD_SURFACE_STILL_CURRENT");
+    if(badAfterReload?.reason!=="SURFACE_PRECONDITION_NOT_MET")fail("BAD_SURFACE_STILL_CURRENT");
 
-    let goodSurfaceResult=null,goodProviderSelectCalls=0;
+    let goodSurfaceResult=null,goodWindowObserveCalls=0,goodProviderSelectCalls=0;
     const goodTask=await agentLoop.runTask("P6D verified Safari surface bounded visual OPEN",{
       executionMode:()=>"EXACT",
       planTask:async task=>({steps:plannerSteps,seconds:0,metrics:null,prefixChars:0,taskChars:String(task).length,literalPayload:null}),
       visualFallbackContracts:selected.contracts,
       visualFallbackDependencies:{
+        observeCurrentWindow:({app})=>{
+          goodWindowObserveCalls++;
+          return computerControl.getCurrentWindow({app});
+        },
         verifySurfacePrecondition:(precondition,context)=>{
           goodSurfaceResult=surface.evaluateSemanticSurfacePrecondition(precondition,context);
           return goodSurfaceResult;
@@ -208,18 +225,19 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     if(!openedVisual?.ok||openedVisual.executionPath!=="visual-fallback")fail("GOOD_SURFACE_VISUAL_OPEN_NOT_VERIFIED");
     if(openedVisual.visualFallbackEligibility?.code!=="NO_SEMANTIC_TARGET"||openedVisual.visualFallbackEligibility?.eligible!==true)fail("GOOD_SURFACE_ELIGIBILITY_INVALID");
     if(goodSurfaceResult?.state!=="SURFACE_PRECONDITION_VERIFIED")fail("GOOD_SURFACE_PRECONDITION_NOT_VERIFIED");
+    if(goodWindowObserveCalls!==1)fail("GOOD_SURFACE_WINDOW_OBSERVATION_COUNT_INVALID");
     if(goodProviderSelectCalls!==1)fail("GOOD_SURFACE_PROVIDER_SELECTION_COUNT_INVALID");
-    if(openedVisual.visualFallbackProviderSelection?.surfacePrecondition?.state!=="VERIFIED")fail("GOOD_SURFACE_METADATA_MISSING");
+    if(openedVisual.visualFallbackProviderSelection?.surfacePrecondition?.state!=="VERIFIED"||openedVisual.visualFallbackProviderSelection?.surfacePrecondition?.kind!=="window-title")fail("GOOD_SURFACE_METADATA_MISSING");
     if(openedVisual.visualFallbackProviderSelection?.provider?.id!=="rumiai.local.macos-vision-text-region")fail("GOOD_SURFACE_PROVIDER_INVALID");
     if(openedVisual.delivery?.state!=="POSTED"||openedVisual.delivery?.controlState!=="CLICK_POSTED"||openedVisual.delivery?.semanticConsequenceVerified!==false)fail("GOOD_SURFACE_DELIVERY_INVALID");
     if(openedVisual.taskOutcome?.state!=="VERIFIED_SUCCESS"||openedVisual.taskOutcome?.basis!=="post-action-independent-observation")fail("GOOD_SURFACE_SUCCESS_INVALID");
     for(let i=0;i<20&&goodClicks===0;i++)await asyncSleep(50);
     if(goodClicks!==1||badClicks!==0)fail("GOOD_SURFACE_CLICK_ORACLE_INVALID");
 
-    console.log(`p6d-real-surfaces=PASS application=Safari pageRequests=${pageRequests} modePolls=${modePolls} sameDocument=true sameVisualTarget=true`);
-    console.log("p6d-negative-surface=PASS precondition=SURFACE_PRECONDITION_NOT_MET providerSelectionCalls=0 visualFallbackClickDeliveries=0 failClosed=true");
-    console.log("p6d-surface-transition=PASS from=BETA to=ALPHA currentSurfaceFreshlyObserved=true sameTabReload=true browserTabAmbiguity=false");
-    console.log("p6d-positive-surface=PASS precondition=SURFACE_PRECONDITION_VERIFIED providerSelectionCalls=1 executionPath=visual-fallback");
+    console.log(`p6d-real-surfaces=PASS application=Safari pageRequests=${pageRequests} modePolls=${modePolls} sameDocument=true sameVisualTarget=true surfaceIdentity=window-title`);
+    console.log("p6d-negative-surface=PASS precondition=SURFACE_PRECONDITION_NOT_MET windowObservationCalls=1 providerSelectionCalls=0 visualFallbackClickDeliveries=0 failClosed=true");
+    console.log("p6d-surface-transition=PASS from=BETA to=ALPHA currentSurfaceFreshlyObserved=true observation=window.getCurrent sameTabReload=true browserTabAmbiguity=false");
+    console.log("p6d-positive-surface=PASS precondition=SURFACE_PRECONDITION_VERIFIED windowObservationCalls=1 providerSelectionCalls=1 executionPath=visual-fallback");
     console.log("p6d-planner-boundary=PASS semanticOnly=true surfacePreconditionOutsidePlanner=true scopeOutsidePlanner=true coordinates=false providerObject=false");
     console.log("p6d-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true taskOutcome=VERIFIED_SUCCESS independentPostActionObservation=true");
     console.log("p6d-payload-policy=PASS screenshotLogged=false ocrPayloadLogged=false coordinatesLogged=false externalNetwork=false");
