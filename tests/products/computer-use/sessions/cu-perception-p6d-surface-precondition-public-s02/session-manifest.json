@@ -1,0 +1,49 @@
+{
+  "sessionId": "cu-perception-p6d-surface-precondition-public-s02",
+  "checkpoint": "P6D",
+  "validationKind": "physical-integration",
+  "expectedProductSha": "7cb236f4d9af6ed72b1ec0857276fc7050fdcec7",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "b5281a868e15b747bbeb1d8f0c246af76f952268",
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6d-surface-precondition-public.js",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js"
+  ],
+  "purpose": "Validate P6D on one real Safari document. The test-owned semantic marker changes from BETA to ALPHA while the visual canvas target stays unchanged. A fresh semantic observation establishes ALPHA before the positive runTask.",
+  "requiredClaims": [
+    "BETA rejects the ALPHA surface precondition before perception-provider selection.",
+    "The same Safari document transitions from BETA to ALPHA with the same canvas target.",
+    "A fresh Computer Control snapshot establishes ALPHA before positive execution.",
+    "ALPHA verifies the surface precondition before lazy provider selection.",
+    "Planner output remains semantic only.",
+    "The positive path reaches visual fallback only after NO_SEMANTIC_TARGET.",
+    "CLICK_POSTED remains delivery only and VERIFIED_SUCCESS requires independent post-action observation.",
+    "Screenshot bytes, OCR payloads and coordinates remain outside session evidence.",
+    "Test resources and product trees are clean after execution."
+  ],
+  "nonClaims": [
+    "No generic Safari visual fallback is enabled.",
+    "No test-owned PROCEED or FINISHED contract is promoted as built-in Safari knowledge.",
+    "No planner coordinates or provider objects are introduced."
+  ],
+  "lineage": {
+    "priorSession": "cu-perception-p6d-surface-precondition-public-s01",
+    "priorEvidence": "40dafd8277ba6c015eeba24eb84cdc6c1458d1c7",
+    "priorResult": "FAIL",
+    "change": "Replace the second Safari URL navigation with a deterministic semantic marker transition in the already active document."
+  },
+  "promotionOnPass": {
+    "p6d": "PHYSICALLY_VALIDATED",
+    "phase6": "INITIAL_SAFETY_ARCHITECTURE_COMPLETE",
+    "next": "P7 real-use-case discovery"
+  }
+}
