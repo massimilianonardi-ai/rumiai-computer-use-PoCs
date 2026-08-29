@@ -15,6 +15,7 @@ const POSTCONDITION="FINISHED";
 
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
+function asyncSleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1024*1024,...options});}
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
 function normalized(value){return String(value||"").normalize("NFKC").toUpperCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
@@ -99,7 +100,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     const opened=run("/usr/bin/open",["-a","Safari",url]);
     if((opened.status??1)!==0)fail("SAFARI_LAUNCH_FAILED");
     safariLaunched=true;
-    for(let i=0;i<40&&!safariRunning();i++)sleep(100);
+    for(let i=0;i<40&&!safariRunning();i++)await asyncSleep(100);
     if(!safariRunning())fail("SAFARI_PROCESS_NOT_RUNNING");
 
     const inventory=computerControl.listApplications({availableOnly:true});
@@ -111,8 +112,10 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     const foreground=computerControl.getForeground();
     if(!foreground?.ok||foreground.bundle!=="com.apple.Safari")fail("SAFARI_NOT_FOREGROUND");
 
-    for(let i=0;i<20&&pageRequests===0;i++)sleep(100);
+    for(let i=0;i<50&&pageRequests===0;i++)await asyncSleep(100);
     if(pageRequests===0)fail("SAFARI_LOCAL_PAGE_NOT_REQUESTED");
+    await asyncSleep(350);
+    console.log(`p6b-local-page=PASS requests=${pageRequests} eventLoopServed=true`);
 
     const semantic=computerControl.snapshot({app:"Safari"});
     if(!semantic?.ok||!semantic.snapshot)fail(`SAFARI_SEMANTIC_SNAPSHOT_FAILED_${semantic?.error||semantic?.state||"UNKNOWN"}`);
@@ -139,9 +142,10 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     }
     if(!exactResolved(preResolved)){
       const observations=preInterpreted?.interpretation?.observations||[];
-      const normalizedExactCount=observations.filter(item=>item?.kind==="text-region"&&normalized(item.text)===normalized(TARGET)).length;
-      const minimumNormalizedEditDistance=observations.length
-        ? Math.min(...observations.filter(item=>item?.kind==="text-region").map(item=>editDistance(item.text,TARGET)))
+      const textRegions=observations.filter(item=>item?.kind==="text-region");
+      const normalizedExactCount=textRegions.filter(item=>normalized(item.text)===normalized(TARGET)).length;
+      const minimumNormalizedEditDistance=textRegions.length
+        ? Math.min(...textRegions.map(item=>editDistance(item.text,TARGET)))
         : -1;
       console.log(
         `p6b-pre-target-diagnostic=FAIL attempts=${preAttempts}`+
