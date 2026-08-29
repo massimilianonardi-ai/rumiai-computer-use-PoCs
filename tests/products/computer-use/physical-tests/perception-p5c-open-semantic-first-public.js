@@ -18,12 +18,45 @@ const computerControl=require(path.join(productRoot,"app","computer-control-exte
 
 const fixtureSource=path.join(__dirname,"helpers","macos-perception-p5c-open-fixture.swift");
 const ocrSource=path.join(__dirname,"helpers","macos-perception-p2a-vision-ocr.swift");
+const FIXTURE_APP_NAME="RumiAI P5C Fixture";
+const FIXTURE_EXECUTABLE="RumiAIP5CFixture";
+const FIXTURE_BUNDLE_ID="ai.rumiai.computer-use.p5c-fixture";
 
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
 function normalized(s){return String(s||"").toUpperCase().replace(/\s+/g," ").trim();}
 function waitForReady(child,timeoutMs=9000){return new Promise((resolve,reject)=>{let out="",err="";const timer=setTimeout(()=>reject(new Error("FIXTURE_READY_TIMEOUT")),timeoutMs);child.stdout.setEncoding("utf8");child.stderr.setEncoding("utf8");child.stdout.on("data",chunk=>{out+=chunk;const nl=out.indexOf("\n");if(nl>=0){clearTimeout(timer);try{resolve(JSON.parse(out.slice(0,nl)))}catch(e){reject(new Error(`FIXTURE_READY_INVALID:${e.message}`));}}});child.stderr.on("data",chunk=>{err+=chunk;});child.on("exit",code=>{if(code!==null){clearTimeout(timer);reject(new Error(`FIXTURE_EXITED:${code}:${err.trim()}`));}});});}
 function stopChild(child){return new Promise(resolve=>{if(!child||child.exitCode!=null)return resolve();const timer=setTimeout(()=>{try{child.kill("SIGKILL");}catch{}},1200);child.once("exit",()=>{clearTimeout(timer);resolve();});try{child.kill("SIGTERM");}catch{clearTimeout(timer);resolve();}});}
+
+function prepareFixtureApplication(tmp){
+  const appBundle=path.join(tmp,`${FIXTURE_APP_NAME}.app`);
+  const contents=path.join(appBundle,"Contents");
+  const macosDir=path.join(contents,"MacOS");
+  const providerDir=path.join(tmp,"computer-control-providers");
+  const fixtureBin=path.join(macosDir,FIXTURE_EXECUTABLE);
+  fs.mkdirSync(macosDir,{recursive:true});
+  fs.mkdirSync(providerDir,{recursive:true});
+
+  const plist=`<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n  <key>CFBundleDevelopmentRegion</key><string>en</string>\n  <key>CFBundleExecutable</key><string>${FIXTURE_EXECUTABLE}</string>\n  <key>CFBundleIdentifier</key><string>${FIXTURE_BUNDLE_ID}</string>\n  <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>\n  <key>CFBundleName</key><string>${FIXTURE_APP_NAME}</string>\n  <key>CFBundleDisplayName</key><string>${FIXTURE_APP_NAME}</string>\n  <key>CFBundlePackageType</key><string>APPL</string>\n  <key>CFBundleVersion</key><string>1</string>\n  <key>CFBundleShortVersionString</key><string>1.0</string>\n  <key>NSHighResolutionCapable</key><true/>\n</dict>\n</plist>\n`;
+  fs.writeFileSync(path.join(contents,"Info.plist"),plist);
+
+  const fc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library",fixtureSource,"-o",fixtureBin],{encoding:"utf8",maxBuffer:8*1024*1024});
+  if((fc.status??1)!==0)fail("FIXTURE_COMPILE_FAILED");
+
+  const provider={
+    id:"rumiai-p5c-fixture",
+    name:FIXTURE_APP_NAME,
+    kind:"application",
+    aliases:[FIXTURE_APP_NAME],
+    activation:{application:FIXTURE_APP_NAME},
+    availability:{type:"paths",paths:[appBundle]},
+    contexts:[],
+    capabilities:{},
+    identity:{process:FIXTURE_EXECUTABLE,bundle:FIXTURE_BUNDLE_ID},
+  };
+  fs.writeFileSync(path.join(providerDir,"rumiai-p5c-fixture.json"),JSON.stringify(provider,null,2)+"\n");
+  return {appBundle,fixtureBin,providerDir};
+}
 
 function makeProvider(ocrBin,onObserve){
   return {
@@ -68,25 +101,30 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
   let outcome={code:1,marker:"physical-computer-use-perception-p5c=FAIL code=UNEXPECTED"};
   try{
     tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p5c-"));
-    const fixtureBin=path.join(tmp,"p5c-open-fixture"),ocrBin=path.join(tmp,"vision-ocr");
-    const fc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library",fixtureSource,"-o",fixtureBin],{encoding:"utf8",maxBuffer:8*1024*1024});
-    if((fc.status??1)!==0)fail("FIXTURE_COMPILE_FAILED");
+    const prepared=prepareFixtureApplication(tmp);
+    const ocrBin=path.join(tmp,"vision-ocr");
     const oc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library","-framework","Vision","-framework","AppKit",ocrSource,"-o",ocrBin],{encoding:"utf8",maxBuffer:8*1024*1024});
     if((oc.status??1)!==0)fail("OCR_HELPER_COMPILE_FAILED");
 
-    fixture=spawn(fixtureBin,[],{stdio:["ignore","pipe","pipe"]});
+    // Computer Control loads its application provider registry inside the
+    // child runtime. Set the test-owned registry before the first CC call.
+    process.env.RUMIAI_PROVIDER_DIR=prepared.providerDir;
+
+    fixture=spawn(prepared.fixtureBin,[],{stdio:["ignore","pipe","pipe"]});
     ready=await waitForReady(fixture);
     if(ready?.state!=="READY"||!ready.initialPointer)fail("FIXTURE_READY_INVALID");
-    sleep(350);
+    sleep(500);
 
     const foreground=computerControl.getForeground();
-    if(!foreground?.ok||!foreground.name)fail("FIXTURE_NOT_FOREGROUND");
-    const initial=computerControl.snapshot({app:foreground.name});
-    if(!initial?.ok||!initial.snapshot)fail("FIXTURE_SEMANTIC_SNAPSHOT_FAILED");
-    let state={currentApp:foreground.name,snapshot:initial.snapshot,changed:false};
+    if(!foreground?.ok||foreground.bundle!==FIXTURE_BUNDLE_ID)fail("FIXTURE_NOT_FOREGROUND");
+    const initial=computerControl.snapshot({app:FIXTURE_APP_NAME});
+    if(!initial?.ok||!initial.snapshot)fail(`FIXTURE_SEMANTIC_SNAPSHOT_FAILED_${initial?.error||initial?.state||"UNKNOWN"}`);
+    let state={currentApp:FIXTURE_APP_NAME,snapshot:initial.snapshot,changed:false};
 
     let semanticVisualProviderCalls=0;
     const semanticTarget="RUMIAI SEMANTIC 731";
+    const semanticPreflight=semanticUi.resolveSemanticTarget(state.snapshot,semanticTarget,null,"CLICK",state.currentApp);
+    if(!semanticPreflight?.ok)fail(`FIXTURE_SEMANTIC_TARGET_UNRESOLVED_${semanticPreflight?.code||"UNKNOWN"}`);
     const semanticProvider={
       id:"p5c.semantic-path-visual-must-not-run",
       locality:"local",
@@ -155,7 +193,7 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     const initialCount=postTexts.filter(v=>v==="RUMIAI VISUAL 517").length;
     if(doneCount!==1||initialCount!==0)fail("VISUAL_INDEPENDENT_POSTCONDITION_ORACLE_MISMATCH");
 
-    console.log("p5c-semantic-first=PASS semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0");
+    console.log("p5c-semantic-first=PASS semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 providerRegistered=true");
     console.log("p5c-eligible-gap=PASS structuredCode=NO_SEMANTIC_TARGET freeFormParsing=false");
     console.log("p5c-visual-fallback=PASS explicitPolicy=true providerInjected=true deterministicTarget=true deterministicPostcondition=true");
     console.log("p5c-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true independentPostActionObservation=true");
