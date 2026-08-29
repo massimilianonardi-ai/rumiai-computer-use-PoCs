@@ -1,0 +1,71 @@
+{
+  "sessionId": "cu-perception-p5c-open-semantic-first-public-s06",
+  "checkpoint": "P5C",
+  "validationKind": "physical",
+  "purpose": "Validate the unchanged P5C OPEN semantic-first runtime after replacing the fragile semantic window-title-only fixture postcondition with a deterministic test-owned AppKit radio control whose selected accessibility state is directly consumable by the existing semanticTargetSelected verification path.",
+  "expectedProductSha": "7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "e82e23562c190048c3f2622b271c653a99d429a6",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5c-open-semantic-first-public.js",
+  "requiredClaims": [
+    "The Computer Use and Computer Control product runtimes are unchanged from the P5C frozen SHAs.",
+    "The semantic branch uses the same isolated test-owned AppKit application Provider pattern that became physically snapshotable in s05.",
+    "The deterministic target RUMIAI SEMANTIC 731 is now an AppKit radio button initially off; the delivered semantic click turns it on and also changes the test-owned window title as secondary evidence.",
+    "The primary semantic OPEN success oracle is the existing semanticTargetSelected post-action accessibility verification, not fixture-specific test logic and not visual perception.",
+    "OPEN attempts semantic execution before any visual perception and semantic success must prevent P5A, the visual provider and the post-action visual observer from running.",
+    "The visual target RUMIAI CLICK 517 is absent from the semantic fixture accessibility representation and therefore yields structured NO_SEMANTIC_TARGET.",
+    "Only that P5B-eligible structured semantic observability gap can reach the explicit P5C visual fallback handoff.",
+    "The visual branch reuses the already physically validated P4/P5A visual-only fixture and local macOS Vision helper only as an injected PoC provider; provider selection is not introduced in P5C.",
+    "A real Computer Control click may prove CLICK_POSTED delivery but delivery alone is never task success.",
+    "Visual OPEN succeeds only after a fresh independent post-action visual observation satisfies the exact RUMIAI DONE 864 postcondition and returns VERIFIED_SUCCESS.",
+    "Planner output remains semantic and contains no provider, visual target query, postcondition or screen coordinates.",
+    "Screenshot bytes, OCR payload text and action coordinates remain ephemeral and are not persisted in session evidence.",
+    "Computer Use and Computer Control working trees remain clean after the session."
+  ],
+  "nonClaims": [
+    "P5C does not wire provider selection or visual fallback configuration into the normal agent loop; that remains P5E after P5D.",
+    "P5C does not define concrete perception-provider discovery or selection; that remains P5D.",
+    "The AppKit radio fixture is test infrastructure only and creates no product dependency or application-specific product behavior.",
+    "P5C does not make semantic action-delivery failure or semantic postcondition-verification failure visually eligible.",
+    "P5C does not claim general OCR accuracy, fuzzy matching, VLM/object/icon targeting or arbitrary coordinate planning.",
+    "The P1-P4 physical sessions and P5A/P5B evidence remain immutable and are not rerun or rewritten.",
+    "P5C s01 evidence commit 15976727c6b6a09b09b428c415c5daf74e6c0258 remains immutable as the unregistered custom-fixture failure.",
+    "P5C s02 evidence commit 86793f0077d0926554c71422e4394b3bf3c62b9a remains immutable as the registered but unsnapshotable direct-executable fixture failure.",
+    "P5C s03 evidence commit 26be209cfcdb9fa5ab81a2a23d823344c598a6d8 remains immutable as the LaunchServices custom-fixture snapshot failure.",
+    "P5C s04 evidence commit 630ac6c68cc7c960c01455a85dadbfb9f51abca8 remains immutable as the System Settings no-AX-window surface mismatch.",
+    "P5C s05 evidence commit 4c20c9bc2425829a26207f46a7c99fab54be1a9d remains immutable: the AppKit Provider became snapshotable and target resolution/click execution progressed into the real OPEN executor, but the title-based semantic postcondition returned OPEN verification failed."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s06 unchanged, use its exact failure to diagnose forward, and create s07 only if required.",
+    "sensitiveData": "Only test-owned semantic and visual fixture content is used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and are not persisted or logged by session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p5cOpenExecutorState": "PHYSICALLY_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P5D concrete perception-provider delivery and selection boundary"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "validatedProductSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "validatedProductSha": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+      "state": "CONTRACT_VALIDATED"
+    }
+  }
+}
