@@ -17,6 +17,7 @@ function run(cmd,args){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function killFixture(){run("/usr/bin/pkill",["-x",SEMANTIC_PROCESS]);}
+function oneLine(value,limit=1200){return String(value||"").replace(/\s+/g," ").trim().slice(0,limit);}
 function prepare(tmp){
   const appBundle=path.join(tmp,`${SEMANTIC_PROCESS}.app`);
   const contents=path.join(appBundle,"Contents");
@@ -61,8 +62,23 @@ function detailBool(detail,key){
     const launch=run("/usr/bin/open",[prepared.appBundle]);
     if((launch.status??1)!==0)fail("SEMANTIC_FIXTURE_LAUNCH_FAILED");
     opened=true;sleep(650);
+
+    const inventory=cc.listApplications({availableOnly:true});
+    console.log(`provider-list-ok=${inventory?.ok!==false}`);
+    const semanticEntry=Array.isArray(inventory?.applications)
+      ? inventory.applications.find(item=>item?.name===SEMANTIC_APP)
+      : null;
+    console.log(`provider-available=${semanticEntry?.available===true}`);
+    console.log(`provider-running=${semanticEntry?.running===true}`);
+    if(!semanticEntry?.available)fail("SEMANTIC_FIXTURE_PROVIDER_UNAVAILABLE");
+
     const activated=cc.activateApplication({app:SEMANTIC_APP,timeoutMs:10000});
-    if(!activated?.ok)fail(`SEMANTIC_FIXTURE_ACTIVATE_FAILED_${activated?.error||"UNKNOWN"}`);
+    console.log(`activate-ok=${activated?.ok===true}`);
+    if(!activated?.ok){
+      console.log(`activate-error=${activated?.error||"UNKNOWN"}`);
+      console.log(`activate-detail=${oneLine(activated?.detail)||"<empty>"}`);
+      fail(`SEMANTIC_FIXTURE_ACTIVATE_FAILED_${activated?.error||"UNKNOWN"}`);
+    }
     const initial=cc.snapshot({app:SEMANTIC_APP});
     if(!initial?.ok||!initial.snapshot)fail(`INITIAL_SNAPSHOT_FAILED_${initial?.error||"UNKNOWN"}`);
     const resolved=semanticUi.resolveSemanticTarget(initial.snapshot,SEMANTIC_TARGET,null,"CLICK",SEMANTIC_APP);
