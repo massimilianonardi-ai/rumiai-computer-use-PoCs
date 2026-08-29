@@ -1,0 +1,237 @@
+RumiAI Computer Use physical session
+session_id=cu-perception-p5c-open-semantic-first-public-s04
+started_at=2026-08-29T10:00:30Z
+computer_use_root=/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use
+computer_use_expected_sha=7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b
+computer_use_observed_sha=7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b
+computer_control_root=/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control
+computer_control_expected_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+computer_control_observed_sha=e3a3f13d66546cf8f0fca50075bd4607c2c3d003
+poc_root=/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc
+test_source_sha=f84b5a4f365196f959a0abc8ef186e296401b3b2
+poc_tested_sha=a4451d5ea1a1a485a6554f879c78d8b13b63e258
+poc_origin_main=a4451d5ea1a1a485a6554f879c78d8b13b63e258
+host=MacBook-Air-di-Massimiliano.local
+uname=Darwin MacBook-Air-di-Massimiliano.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:22 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8132 arm64
+macos_version=26.5.2
+macos_build=25F84
+node=v26.7.0
+agent_ctrl_present=true
+physical_timeout_ms=45000
+
+================================================================================
+TEST: contract:external-computer-control-boundary-test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'
+START: 2026-08-29T10:00:30Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+external wrapper syntax: PASS
+external adapter environment override: PASS
+external installation home override: PASS
+external wrapper has no development-volume path: PASS
+external wrapper has no user-profile install: PASS
+external wrapper has no bundled fallback: PASS
+bundled Computer Control source absent: PASS
+direct backend facade absent: PASS
+agent-loop.js syntax: PASS
+agent-loop.js uses external boundary: PASS
+agent-loop.js no direct internal facade: PASS
+agent-loop.js no direct agent-ctrl: PASS
+agent-loop.js no backend module paths: PASS
+executors.js syntax: PASS
+executors.js uses external boundary: PASS
+executors.js no direct internal facade: PASS
+executors.js no direct agent-ctrl: PASS
+executors.js no backend module paths: PASS
+recovery.js syntax: PASS
+recovery.js uses external boundary: PASS
+recovery.js no direct internal facade: PASS
+recovery.js no direct agent-ctrl: PASS
+recovery.js no backend module paths: PASS
+semantic-ui.js syntax: PASS
+semantic-ui.js uses external boundary: PASS
+semantic-ui.js no direct internal facade: PASS
+semantic-ui.js no direct agent-ctrl: PASS
+semantic-ui.js no backend module paths: PASS
+perception.js syntax: PASS
+perception.js uses external boundary: PASS
+perception.js no direct internal facade: PASS
+perception.js no direct agent-ctrl: PASS
+perception.js no backend module paths: PASS
+perception-action-execution.js syntax: PASS
+perception-action-execution.js uses external boundary: PASS
+perception-action-execution.js no direct internal facade: PASS
+perception-action-execution.js no direct agent-ctrl: PASS
+perception-action-execution.js no backend module paths: PASS
+perception-provider.js syntax: PASS
+perception-provider.js does not call Computer Control directly: PASS
+perception-provider.js no direct internal facade: PASS
+perception-provider.js no direct agent-ctrl: PASS
+perception-provider.js no backend module paths: PASS
+perception-target.js syntax: PASS
+perception-target.js does not call Computer Control directly: PASS
+perception-target.js no direct internal facade: PASS
+perception-target.js no direct agent-ctrl: PASS
+perception-target.js no backend module paths: PASS
+perception-action-policy.js syntax: PASS
+perception-action-policy.js does not call Computer Control directly: PASS
+perception-action-policy.js no direct internal facade: PASS
+perception-action-policy.js no direct agent-ctrl: PASS
+perception-action-policy.js no backend module paths: PASS
+external-computer-control-boundary=PASS
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 256
+RESULT: PASS
+END: 2026-08-29T10:00:30Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p5a-visual-fallback-coordinator.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js'
+START: 2026-08-29T10:00:30Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P5A composes P1B-P4 and returns verified success only from independent post-action evidence (1.61075ms)
+✔ P5A preserves explicit-policy rejection and never dispatches Computer Control (0.127084ms)
+✔ P5A preserves missing and ambiguous target rejection with no dispatch (0.143083ms)
+✔ P5A does not collapse CLICK_POSTED delivery into task success (0.117208ms)
+✔ P5A preserves delivery failure and never runs post-action verification (0.100125ms)
+✔ P5A coordinator is composition-only: no backend bypass, persistence, planner or provider selection (0.568959ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.885292
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 59
+RESULT: PASS
+END: 2026-08-29T10:00:30Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p5b-semantic-visual-eligibility.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js'
+START: 2026-08-29T10:00:30Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P5B makes only semantic observability/resolution gaps visually eligible (0.648459ms)
+✔ P5B keeps action, verification, readiness, backend, internal and invalid-input failures ineligible (0.071375ms)
+✔ P5B never parses free-form error text to decide visual eligibility (0.050625ms)
+✔ P5B fails closed for missing or unknown structured failure codes (0.052708ms)
+✔ P5B never considers an already successful semantic path eligible (0.04375ms)
+✔ P5B semantic target resolution emits structured codes without changing successful semantic resolution (0.309209ms)
+✔ P5B remains classification-only and does not invoke P5A, perception, Computer Control or persistence (0.305459ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3.699209
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 57
+RESULT: PASS
+END: 2026-08-29T10:00:31Z
+================================================================================
+
+================================================================================
+TEST: contract:perception-p5c-open-semantic-first.test.js
+COMMAND: RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5c-open-semantic-first.test.js'
+START: 2026-08-29T10:00:31Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+✔ P5C OPEN stays semantic-first and never invokes visual fallback after semantic success (0.388542ms)
+✔ P5C OPEN invokes P5A only for a structured eligible gap plus explicit deterministic context (0.352375ms)
+✔ P5C OPEN does not perceive visually without explicit visual-fallback consent/context (0.109208ms)
+✔ P5C OPEN never turns semantic delivery/verification failures into visual retries (0.117416ms)
+✔ P5C OPEN preserves delivery != success when P5A delivery is posted but postcondition is not verified (0.089708ms)
+✔ P5C boundary is executor-owned, planner-coordinate-free, provider-selection-free and agent-loop-not-yet-wired (0.951083ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.396
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 61
+RESULT: PASS
+END: 2026-08-29T10:00:31Z
+================================================================================
+
+================================================================================
+TEST: physical:computer-use-perception-p5c-open-semantic-first-public
+COMMAND: AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/run-with-timeout.js' '45000' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/physical-tests/perception-p5c-open-semantic-first-public.js'
+START: 2026-08-29T10:00:31Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+p5c-test-cleanup=PASS pointerRestored=true fixtureStopped=true applicationCleanup=true runtimeCleanup=true
+physical-computer-use-perception-p5c=FAIL code=SYSTEM_SETTINGS_SNAPSHOT_FAILED_SNAPSHOT_FAILED
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 1
+DURATION_MS: 3004
+RESULT: FAIL
+END: 2026-08-29T10:00:34Z
+================================================================================
+
+================================================================================
+TEST: post:product-trees-clean
+COMMAND: test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)" && test -z "$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)"
+START: 2026-08-29T10:00:34Z
+--------------------------------------------------------------------------------
+STDOUT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+STDERR
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+EXIT_CODE: 0
+DURATION_MS: 51
+RESULT: PASS
+END: 2026-08-29T10:00:34Z
+================================================================================
+
+session_ended_at=2026-08-29T10:00:34Z
+session_duration_ms=3775
+session_overall=FAIL
