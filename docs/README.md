@@ -9,6 +9,14 @@ Questa cartella conserva documentazione progettuale che non viene caricata dal r
 - `promotions/` — documentazione relativa alle promozioni di capability/prodotto;
 - `workflows/` — procedure operative stabili per sviluppo, test e validazione.
 
+Checkpoint corrente della catena visuale Computer Use:
+
+```text
+checkpoints/perception-p1-p4-physical-validation.md
+```
+
+Il checkpoint registra sessioni/evidence autorevoli, failure storiche preservate e il passaggio al prossimo programma P5. L'handoff architetturale e il piano P5 sono nel repository `rumiai-computer-use`, rispettivamente in `docs/handoff.md` e `docs/orchestration-visual-fallback.md`.
+
 Workflow operativo corrente per Computer Control:
 
 ```text
