@@ -1,0 +1,73 @@
+{
+  "sessionId": "cu-perception-p6d-surface-precondition-public-s01",
+  "checkpoint": "P6D",
+  "validationKind": "physical-integration",
+  "purpose": "Validate a deterministic runtime surface precondition for scoped visual-fallback contracts: the same Safari canvas target must be rejected on the wrong semantic surface before provider selection or click delivery, while the matching surface may proceed through the existing semantic-first P5/P6 path.",
+  "expectedProductSha": "7cb236f4d9af6ed72b1ec0857276fc7050fdcec7",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "15c06fe284c487d399957bc068b757bbb97198ed",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6d-surface-precondition-public.js",
+  "requiredClaims": [
+    "If Safari is already running, execution is blocked before immutable evidence is created.",
+    "Two loopback-only Safari surfaces expose the same visual target PROCEED but different deterministic semantic surface markers.",
+    "The scoped caller contract includes an exact semantic-text surface precondition outside planner output.",
+    "On the wrong surface, the runtime returns SURFACE_PRECONDITION_NOT_MET before perception-provider selection.",
+    "On the wrong surface, perception-provider selection count remains zero and no pointer click is delivered.",
+    "The wrong-surface page therefore remains action-free even though the same visual target text is present.",
+    "On the matching surface, the surface precondition is verified before provider selection.",
+    "The planner remains semantic-only and contains no scope, surface precondition, postcondition, provider identity or coordinates.",
+    "The normal runTask path remains semantic-first and visual fallback becomes eligible only after structured NO_SEMANTIC_TARGET.",
+    "P5D provider selection remains lazy and selects the local macOS Vision text-region provider only after the surface precondition and eligible semantic gap are satisfied.",
+    "Real Computer Control delivery returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "CLICK_POSTED is delivery only; VERIFIED_SUCCESS requires independent post-action observation.",
+    "No screenshot bytes, OCR payload strings or coordinates are logged in session evidence.",
+    "Pointer, Safari, loopback server, runtime/cache and temporary resources are cleaned up and product trees remain clean."
+  ],
+  "nonClaims": [
+    "P6D does not enable generic Safari or arbitrary web visual fallback.",
+    "P6D does not infer surface identity from application name or target text alone.",
+    "P6D does not make a surface precondition mandatory for historical P6C contracts; it is an additive guard for contracts that declare one.",
+    "P6D does not put surface identity, scope, provider selection, coordinates or postconditions in planner output.",
+    "P6D does not broaden exact matching, gestures, displays or provider capabilities.",
+    "P6D does not alter Computer Control runtime contracts or move provider ownership out of Computer Use.",
+    "The P6D Safari pages and strings remain test-owned and are not shipped as generic application knowledge."
+  ],
+  "prerequisites": {
+    "P6B": {
+      "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s06",
+      "evidenceCommit": "e8a2899c58c5e6d3725d4457af18aefc25923580",
+      "state": "PHYSICALLY_OBSERVED"
+    },
+    "P6C": {
+      "sessionId": "cu-perception-p6c-scoped-caller-integration-public-s01",
+      "evidenceCommit": "c66eb5ba69d9e0435cb894731b1d1cea832c31e1",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "safariUserState": "Preflight blocks before session creation if Safari is running; the physical test repeats the guard for races.",
+    "onFailure": "Preserve s01 unchanged, diagnose the exact boundary and create s02 only after a forward-only change justified by evidence.",
+    "sensitiveData": "Only test-owned local surfaces are used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and out of session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p6dState": "PHYSICALLY_VALIDATED",
+      "p6InitialSafetyArchitecture": "COMPLETE",
+      "nextCheckpoint": "P7 evidence-backed real-use-case discovery before shipping any built-in application visual-fallback knowledge"
+    }
+  }
+}
