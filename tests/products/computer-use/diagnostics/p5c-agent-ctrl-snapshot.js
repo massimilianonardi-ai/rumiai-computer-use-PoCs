@@ -7,7 +7,7 @@ const crypto=require("node:crypto");
 const {spawnSync}=require("node:child_process");
 
 const controlRoot=process.env.RUMIAI_COMPUTER_CONTROL_HOME || "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control";
-const agent=path.join(controlRoot,"backends","macos","runtime","bin","agent-ctrl");
+const agent=process.env.AGENT_CTRL || "/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl";
 const adapter=path.join(controlRoot,"adapters","rumiai","compat.js");
 const expectedAgentSha="68b3a6a17b068d2a5ddbc39a422c84fdb21cd620059ed913b0469ada61bc3378";
 const app="System Settings";
@@ -37,6 +37,7 @@ let wasRunning=true;
 let exitCode=1;
 try{
   console.log("p5c-snapshot-diagnostic=START");
+  console.log(`agent-ctrl-source=${process.env.AGENT_CTRL?"environment":"portable-default"}`);
   const exists=fs.existsSync(agent);
   console.log(`agent-ctrl-exists=${exists?"PASS":"FAIL"}`);
   if(!exists)throw new Error("AGENT_CTRL_MISSING");
@@ -52,6 +53,7 @@ try{
   console.log(`agent-ctrl-list-exit=${listed.status??1}`);
   console.log(`agent-ctrl-list-stderr=${oneLine(listed.stderr) || "<empty>"}`);
 
+  process.env.AGENT_CTRL=agent;
   process.env.RUMIAI_COMPUTER_CONTROL_HOME=controlRoot;
   cc=require(adapter);
 
