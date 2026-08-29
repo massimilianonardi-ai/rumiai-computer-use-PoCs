@@ -65,6 +65,11 @@ function detailBool(detail,key){
 
     const inventory=cc.listApplications({availableOnly:true});
     console.log(`provider-list-ok=${inventory?.ok!==false}`);
+    if(inventory?.ok===false){
+      console.log(`provider-list-error=${inventory?.error||"UNKNOWN"}`);
+      console.log(`provider-list-detail=${oneLine(inventory?.detail)||"<empty>"}`);
+      console.log(`provider-list-state=${inventory?.state||"UNKNOWN"}`);
+    }
     const semanticEntry=Array.isArray(inventory?.applications)
       ? inventory.applications.find(item=>item?.name===SEMANTIC_APP)
       : null;
