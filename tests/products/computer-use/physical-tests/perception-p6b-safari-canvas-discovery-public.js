@@ -20,6 +20,19 @@ function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1
 function normalized(value){return String(value||"").normalize("NFKC").toUpperCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
 function exactResolved(result){return Boolean(result?.ok===true&&result?.state==="VISUAL_TARGET_RESOLVED"&&result?.semanticTarget?.state==="RESOLVED"&&result?.semanticTarget?.resolution?.policy==="exact-text-single-match");}
 function exactUnresolved(result){return Boolean(result?.ok===true&&result?.state==="VISUAL_TARGET_UNRESOLVED"&&result?.semanticTarget?.state==="UNRESOLVED"&&result?.semanticTarget?.reason==="NO_EXACT_TEXT_MATCH"&&result?.semanticTarget?.matchCount===0);}
+function editDistance(a,b){
+  const left=normalized(a),right=normalized(b);
+  const prev=Array.from({length:right.length+1},(_,i)=>i);
+  for(let i=1;i<=left.length;i++){
+    let diagonal=prev[0];prev[0]=i;
+    for(let j=1;j<=right.length;j++){
+      const old=prev[j];
+      prev[j]=Math.min(prev[j]+1,prev[j-1]+1,diagonal+(left[i-1]===right[j-1]?0:1));
+      diagonal=old;
+    }
+  }
+  return prev[right.length];
+}
 
 function pageHtml(){return `<!doctype html>
 <html><head><meta charset="utf-8"><title>P6B</title>
@@ -50,7 +63,7 @@ function compilePointerProbe(tmp){
 async function closeServer(server){if(!server)return;await new Promise(resolve=>server.close(()=>resolve()));}
 
 (async()=>{
-  let tmp=null,server=null,computerControl=null,safariLaunched=false,initialPointer=null;
+  let tmp=null,server=null,computerControl=null,safariLaunched=false,initialPointer=null,pageRequests=0;
   let pointerRestored=false,safariCleanup=false,runtimeCleanup=false,serverCleanup=false;
   let outcome={code:1,marker:"physical-computer-use-perception-p6b=FAIL code=UNEXPECTED"};
   try{
@@ -77,6 +90,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     server=http.createServer((req,res)=>{
       if(req.url==="/favicon.ico"){res.writeHead(204);res.end();return;}
       if(req.url!=="/p6b"){res.writeHead(404,{"Content-Type":"text/plain"});res.end("not found");return;}
+      pageRequests++;
       const body=pageHtml();res.writeHead(200,{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","Content-Length":Buffer.byteLength(body)});res.end(body);
     });
     const port=await listenLocal(server);
@@ -97,6 +111,15 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     const foreground=computerControl.getForeground();
     if(!foreground?.ok||foreground.bundle!=="com.apple.Safari")fail("SAFARI_NOT_FOREGROUND");
 
+    for(let i=0;i<20&&pageRequests===0;i++)sleep(100);
+    if(pageRequests===0)fail("SAFARI_LOCAL_PAGE_NOT_REQUESTED");
+
+    const semantic=computerControl.snapshot({app:"Safari"});
+    if(!semantic?.ok||!semantic.snapshot)fail(`SAFARI_SEMANTIC_SNAPSHOT_FAILED_${semantic?.error||semantic?.state||"UNKNOWN"}`);
+    const semanticTarget=semanticUi.resolveSemanticTarget(semantic.snapshot,TARGET,null,"CLICK","Safari");
+    if(semanticTarget?.ok||semanticTarget?.code!==SEMANTIC_RESULT_CODES.NO_SEMANTIC_TARGET)fail("SAFARI_CANVAS_NOT_A_SEMANTIC_GAP");
+    console.log(`p6b-semantic-gap-preflight=PASS code=NO_SEMANTIC_TARGET localPageRequests=${pageRequests}`);
+
     const selected=selectPerceptionProvider({capabilities:["text-region"],locality:"local"});
     if(!selected?.ok||selected.descriptor?.id!=="rumiai.local.macos-vision-text-region")fail("LOCAL_VISION_PROVIDER_NOT_SELECTED");
     const provider=selected.provider;
@@ -115,23 +138,26 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       sleep(350);
     }
     if(!exactResolved(preResolved)){
+      const observations=preInterpreted?.interpretation?.observations||[];
+      const normalizedExactCount=observations.filter(item=>item?.kind==="text-region"&&normalized(item.text)===normalized(TARGET)).length;
+      const minimumNormalizedEditDistance=observations.length
+        ? Math.min(...observations.filter(item=>item?.kind==="text-region").map(item=>editDistance(item.text,TARGET)))
+        : -1;
       console.log(
         `p6b-pre-target-diagnostic=FAIL attempts=${preAttempts}`+
         ` resolutionState=${preResolved?.state||"NONE"}`+
         ` semanticTargetState=${preResolved?.semanticTarget?.state||"NONE"}`+
         ` reason=${preResolved?.semanticTarget?.reason||preResolved?.error||"NONE"}`+
         ` matchCount=${preResolved?.semanticTarget?.matchCount??-1}`+
-        ` observationCount=${preInterpreted?.interpretation?.observations?.length??-1}`
+        ` observationCount=${observations.length}`+
+        ` normalizedExactCount=${normalizedExactCount}`+
+        ` minimumNormalizedEditDistance=${minimumNormalizedEditDistance}`
       );
+      if(normalizedExactCount===1)fail("SAFARI_CANVAS_EXACT_NORMALIZATION_MISMATCH");
       fail("SAFARI_CANVAS_VISUAL_TARGET_NOT_RESOLVED");
     }
     const prePost=resolveExactTextTarget(preInterpreted,{kind:"text",match:"exact",text:POSTCONDITION});
     if(!exactUnresolved(prePost))fail("SAFARI_CANVAS_POSTCONDITION_PRESTATE_INVALID");
-
-    const semantic=computerControl.snapshot({app:"Safari"});
-    if(!semantic?.ok||!semantic.snapshot)fail(`SAFARI_SEMANTIC_SNAPSHOT_FAILED_${semantic?.error||semantic?.state||"UNKNOWN"}`);
-    const semanticTarget=semanticUi.resolveSemanticTarget(semantic.snapshot,TARGET,null,"CLICK","Safari");
-    if(semanticTarget?.ok||semanticTarget?.code!==SEMANTIC_RESULT_CODES.NO_SEMANTIC_TARGET)fail("SAFARI_CANVAS_NOT_A_SEMANTIC_GAP");
 
     let postMapped=null,postInterpreted=null,postObserveCalls=0;
     const result=runVisualTextFallback({
