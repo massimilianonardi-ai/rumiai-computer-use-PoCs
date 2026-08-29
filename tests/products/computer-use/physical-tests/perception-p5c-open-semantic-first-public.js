@@ -4,7 +4,7 @@
 const fs=require("node:fs");
 const os=require("node:os");
 const path=require("node:path");
-const {spawn,spawnSync}=require("node:child_process");
+const {spawnSync}=require("node:child_process");
 
 const productRoot=process.env.RUMIAI_COMPUTER_USE_ROOT;
 if(!productRoot){console.error("physical-computer-use-perception-p5c=BLOCKED missing RUMIAI_COMPUTER_USE_ROOT");process.exit(2);}
@@ -25,8 +25,29 @@ const FIXTURE_BUNDLE_ID="ai.rumiai.computer-use.p5c-fixture";
 function fail(code){const e=new Error(code);e.code=code;throw e;}
 function sleep(ms){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,ms);}
 function normalized(s){return String(s||"").toUpperCase().replace(/\s+/g," ").trim();}
-function waitForReady(child,timeoutMs=9000){return new Promise((resolve,reject)=>{let out="",err="";const timer=setTimeout(()=>reject(new Error("FIXTURE_READY_TIMEOUT")),timeoutMs);child.stdout.setEncoding("utf8");child.stderr.setEncoding("utf8");child.stdout.on("data",chunk=>{out+=chunk;const nl=out.indexOf("\n");if(nl>=0){clearTimeout(timer);try{resolve(JSON.parse(out.slice(0,nl)))}catch(e){reject(new Error(`FIXTURE_READY_INVALID:${e.message}`));}}});child.stderr.on("data",chunk=>{err+=chunk;});child.on("exit",code=>{if(code!==null){clearTimeout(timer);reject(new Error(`FIXTURE_EXITED:${code}:${err.trim()}`));}});});}
-function stopChild(child){return new Promise(resolve=>{if(!child||child.exitCode!=null)return resolve();const timer=setTimeout(()=>{try{child.kill("SIGKILL");}catch{}},1200);child.once("exit",()=>{clearTimeout(timer);resolve();});try{child.kill("SIGTERM");}catch{clearTimeout(timer);resolve();}});}
+function waitForReadyFile(file,timeoutMs=9000){
+  const deadline=Date.now()+timeoutMs;
+  while(Date.now()<deadline){
+    if(fs.existsSync(file)){
+      try{return JSON.parse(fs.readFileSync(file,"utf8"));}
+      catch(error){fail(`FIXTURE_READY_INVALID_${error.message}`);}
+    }
+    sleep(50);
+  }
+  fail("FIXTURE_READY_TIMEOUT");
+}
+function fixtureRunning(){return (spawnSync("/usr/bin/pgrep",["-x",FIXTURE_EXECUTABLE],{encoding:"utf8"}).status??1)===0;}
+function stopFixture(){
+  if(!fixtureRunning())return true;
+  spawnSync("/usr/bin/pkill",["-TERM","-x",FIXTURE_EXECUTABLE],{encoding:"utf8"});
+  const termDeadline=Date.now()+1600;
+  while(Date.now()<termDeadline&&!fixtureRunning())return true;
+  while(Date.now()<termDeadline){if(!fixtureRunning())return true;sleep(50);}
+  spawnSync("/usr/bin/pkill",["-KILL","-x",FIXTURE_EXECUTABLE],{encoding:"utf8"});
+  const killDeadline=Date.now()+800;
+  while(Date.now()<killDeadline){if(!fixtureRunning())return true;sleep(50);}
+  return !fixtureRunning();
+}
 
 function prepareFixtureApplication(tmp){
   const appBundle=path.join(tmp,`${FIXTURE_APP_NAME}.app`);
@@ -96,12 +117,13 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
 }
 
 (async()=>{
-  let fixture=null,tmp=null,ready=null;
+  let tmp=null,ready=null;
   let pointerRestored=false,runtimeCleanup=false,fixtureStopped=false;
   let outcome={code:1,marker:"physical-computer-use-perception-p5c=FAIL code=UNEXPECTED"};
   try{
     tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p5c-"));
     const prepared=prepareFixtureApplication(tmp);
+    const readyFile=path.join(tmp,"fixture-ready.json");
     const ocrBin=path.join(tmp,"vision-ocr");
     const oc=spawnSync("/usr/bin/xcrun",["swiftc","-parse-as-library","-framework","Vision","-framework","AppKit",ocrSource,"-o",ocrBin],{encoding:"utf8",maxBuffer:8*1024*1024});
     if((oc.status??1)!==0)fail("OCR_HELPER_COMPILE_FAILED");
@@ -110,8 +132,12 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     // child runtime. Set the test-owned registry before the first CC call.
     process.env.RUMIAI_PROVIDER_DIR=prepared.providerDir;
 
-    fixture=spawn(prepared.fixtureBin,[],{stdio:["ignore","pipe","pipe"]});
-    ready=await waitForReady(fixture);
+    // Launch the actual temporary .app through LaunchServices. AX semantics
+    // must be validated against an application process, not a directly spawned
+    // executable that merely happens to live inside a bundle directory.
+    const launched=spawnSync("/usr/bin/open",["-n",prepared.appBundle,"--args","--ready-file",readyFile],{encoding:"utf8",maxBuffer:1024*1024});
+    if((launched.status??1)!==0)fail("FIXTURE_LAUNCHSERVICES_FAILED");
+    ready=waitForReadyFile(readyFile);
     if(ready?.state!=="READY"||!ready.initialPointer)fail("FIXTURE_READY_INVALID");
     sleep(500);
 
@@ -193,7 +219,7 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
     const initialCount=postTexts.filter(v=>v==="RUMIAI VISUAL 517").length;
     if(doneCount!==1||initialCount!==0)fail("VISUAL_INDEPENDENT_POSTCONDITION_ORACLE_MISMATCH");
 
-    console.log("p5c-semantic-first=PASS semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 providerRegistered=true");
+    console.log("p5c-semantic-first=PASS semanticDelivery=true visualCoordinatorNotRun=true visualProviderCalls=0 providerRegistered=true launchServices=true");
     console.log("p5c-eligible-gap=PASS structuredCode=NO_SEMANTIC_TARGET freeFormParsing=false");
     console.log("p5c-visual-fallback=PASS explicitPolicy=true providerInjected=true deterministicTarget=true deterministicPostcondition=true");
     console.log("p5c-delivery-success-separation=PASS controlState=CLICK_POSTED deliveryIsNotSuccess=true independentPostActionObservation=true");
@@ -207,7 +233,7 @@ function explicitVisualContext({provider,target,postcondition,observeAfterDelive
         pointerRestored=restored?.ok!==false&&restored?.state==="MOVED";
       }catch{pointerRestored=false;}
     }
-    await stopChild(fixture);fixtureStopped=true;
+    fixtureStopped=stopFixture();
     try{const shutdown=computerControl.shutdownRuntime();runtimeCleanup=shutdown?.ok!==false;}catch{runtimeCleanup=false;}
     if(tmp){try{fs.rmSync(tmp,{recursive:true,force:true});}catch{}}
     console.log(`p5c-test-cleanup=${pointerRestored&&fixtureStopped&&runtimeCleanup?"PASS":"FAIL"} pointerRestored=${pointerRestored} fixtureStopped=${fixtureStopped} runtimeCleanup=${runtimeCleanup}`);
