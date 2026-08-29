@@ -1,0 +1,84 @@
+{
+  "sessionId": "cu-perception-p6b-safari-canvas-discovery-public-s04",
+  "checkpoint": "P6B",
+  "validationKind": "physical-discovery",
+  "purpose": "Continue the Safari canvas discovery with OCR-stable single-word UI labels while preserving exact-text matching. Prove a real Safari semantic gap, exact local Vision resolution, real Computer Control click delivery and an independent visual postcondition before any built-in Safari contract is promoted.",
+  "expectedProductSha": "3a3148cdf89735d2d46d208bbe69dc1d26722e3b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "d4704a2cc30461a6f48e159fd3ed16155808fdb6",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p6b-safari-canvas-discovery-public.js",
+  "requiredClaims": [
+    "If Safari is already running, execution is blocked before immutable evidence is created.",
+    "The existing real Safari application Provider and real Safari process/bundle are used.",
+    "The page is loopback-only and the visible target is rendered only into HTML canvas with no accessible fallback text.",
+    "The test-owned visual target is the single UI-like word PROCEED and the independent postcondition is FINISHED, rendered at large high-contrast size for OCR stability.",
+    "P3A remains exact-text-single-match; no fuzzy, normalized or approximate product matching is introduced.",
+    "The initial local Vision observation resolves exactly one PROCEED target and confirms FINISHED is absent.",
+    "A fresh Safari semantic snapshot cannot resolve PROCEED and yields structured NO_SEMANTIC_TARGET.",
+    "Real Computer Control delivery returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "Only a fresh independent post-action Vision observation containing exactly FINISHED and no PROCEED may produce VERIFIED_SUCCESS.",
+    "No built-in Safari visual-fallback contract exists or is created by this discovery.",
+    "Screenshot bytes, OCR payload strings and coordinates are not persisted or printed; diagnostics are limited to state, reason, match count and observation count.",
+    "Pointer, Safari, loopback server, runtime/cache and temporary resources are cleaned up and product trees remain clean."
+  ],
+  "nonClaims": [
+    "P6B does not validate generic Safari or arbitrary web automation.",
+    "P6B does not ship a Safari visual-fallback caller contract.",
+    "P6B does not broaden matching policy, gestures, displays or provider capabilities.",
+    "P6B does not alter P1-P5, P6A or Computer Control runtime contracts.",
+    "P6B does not claim external-network browser automation."
+  ],
+  "history": {
+    "s01": {
+      "evidenceCommit": "af5497f239a587a32551dcb38ac1fdb84db0e1da",
+      "result": "FAIL",
+      "reason": "PoC oracle incorrectly treated successful unresolved target-resolution processing as presence of the postcondition."
+    },
+    "s02": {
+      "evidenceCommit": "23d486abcd053d837d0e9a39c7082f93f10786f7",
+      "result": "FAIL",
+      "reason": "Correct oracle reached the visual boundary but the synthetic multi-token canvas target produced no exact Vision match."
+    },
+    "s03": {
+      "evidenceCommit": "08ebc0f508ca80e000880183b615eded1de01b4e",
+      "result": "FAIL",
+      "reason": "Vision observed the frame with 49 text observations but still returned NO_EXACT_TEXT_MATCH for the multi-token target; no click was performed."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "safariUserState": "Preflight blocks before session creation if Safari is running; the physical test repeats the guard for races.",
+    "onFailure": "Preserve s04 unchanged, diagnose the exact remaining boundary and create s05 only after a forward-only test or product change justified by evidence.",
+    "sensitiveData": "Only test-owned canvas content is used. Screenshot bytes, OCR payloads and coordinates remain ephemeral and out of session evidence."
+  },
+  "promotion": {
+    "onPass": {
+      "p6bState": "PHYSICALLY_OBSERVED",
+      "builtInSafariContract": false,
+      "nextCheckpoint": "P6C evidence-backed bounded caller-contract integration for the discovered Safari canvas case"
+    }
+  },
+  "prerequisites": {
+    "P5E": {
+      "sessionId": "cu-perception-p5e-agent-loop-visual-fallback-public-s01",
+      "evidenceCommit": "d18e82d06456438f289eb0bf6c6f630973b5a99f",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P6A": {
+      "sessionId": "cu-perception-p6a-caller-contract-registry-public-s01",
+      "evidenceCommit": "21ad01e93a5de4e5276b49c193269a26ad66b164",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
