@@ -1,0 +1,99 @@
+{
+  "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+  "product": {
+    "repository": "massimilianonardi-ai/rumiai-computer-use",
+    "expectedSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+    "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use"
+  },
+  "dependencies": {
+    "computerControl": {
+      "repository": "massimilianonardi-ai/rumiai-computer-control",
+      "expectedSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "defaultMacPath": "/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control"
+    }
+  },
+  "testSourceSha": "aaa88a862cba2f42fcecc4b21619c5b10eceeb85",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/visual-frame-acquisition-test.js",
+    "tests/products/computer-use/perception-session-runner-test.js",
+    "tests/products/computer-use/perception-physical-lifecycle-test.js",
+    "tests/products/computer-use/perception-p1b-mapped-frame.test.js",
+    "tests/products/computer-use/perception-p2a-local-ocr-discovery.test.js",
+    "tests/products/computer-use/perception-p2b-provider-contract.test.js",
+    "tests/products/computer-use/perception-p3a-target-resolution.test.js",
+    "tests/products/computer-use/perception-p3b-action-policy.test.js",
+    "tests/products/computer-use/perception-p4-action-execution.test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js"
+  ],
+  "physicalTest": {
+    "id": "physical:computer-use-perception-p5a-visual-fallback-coordinator-public",
+    "path": "tests/products/computer-use/physical-tests/perception-p5a-visual-fallback-coordinator-public.js",
+    "timeoutMs": 45000
+  },
+  "authoritativePrerequisites": [
+    {
+      "sessionId": "cu-perception-p1b-mapped-frame-public-s02",
+      "evidence": "09692cd9b16eb36a10bb0ee294162b901afcfd17",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p2b-provider-contract-public-s02",
+      "evidence": "82ca0c0d1fb383a3102d19238cfe885cd0b8d8a4",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p3a-target-resolution-public-s01",
+      "evidence": "c2a1e704f99b5cf528fb15287a785875c454a400",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p3b-action-policy-public-s01",
+      "evidence": "3ba45950619a9e3cf9249b830609e7ca9ccd9faf",
+      "result": "PASS"
+    },
+    {
+      "sessionId": "cu-perception-p4-action-execution-public-s01",
+      "evidence": "cd86381d05bb7fcbda91ebe77ff8d8806ee827fa",
+      "result": "PASS"
+    }
+  ],
+  "purpose": "Physically validate P5A as one Computer Use coordinator call that composes the already validated P1B/P2B/P3A/P3B/P4 visual fallback path with an injected local perception provider and explicit deterministic target/action/policy/postcondition inputs, without changing semantic-first executor behavior or treating delivery as success.",
+  "requiredClaims": [
+    "the product-owned P5A coordinator composes P1B mapped capture, P2B provider-neutral interpretation, P3A deterministic exact-text resolution, P3B explicit fallback authorization and P4 verified execution behind one explicit call",
+    "the coordinator receives the perception provider, target query, action request, fallback policy, postcondition and post-action observer explicitly and does not select or invent them",
+    "the coordinator does not directly import Computer Control, persist screen data, wire agent-loop/executors or implement semantic fallback eligibility",
+    "P3B rejection prevents P4/Computer Control dispatch",
+    "missing or ambiguous exact-text targets remain fail-closed and dispatch no input",
+    "the physical probe invokes exactly one real Computer Control left click through the existing P4 boundary",
+    "Computer Control CLICK_POSTED remains delivery only with semanticConsequenceVerified false",
+    "post-action observation is invoked only after posted delivery and performs a fresh mapped capture plus provider-neutral local OCR interpretation",
+    "VERIFIED_SUCCESS is returned only from the independent post-action exact-text postcondition",
+    "contract coverage proves CLICK_POSTED with an unmet postcondition returns NOT_VERIFIED_SUCCESS",
+    "frame payloads, recognized text and coordinates are not persisted or logged",
+    "fixture, pointer position and Computer Control runtime cleanup complete successfully",
+    "product working trees remain clean"
+  ],
+  "nonClaims": [
+    "P5A does not decide whether a semantic failure is eligible for visual fallback; that is P5B",
+    "P5A is not yet integrated into OPEN or any other semantic executor; that is P5C",
+    "P5A does not select or package a concrete runtime perception provider; that is P5D",
+    "P5A is not yet a normal agent-loop end-to-end capability; that is P5E",
+    "the P1-P4 physical checkpoint sessions are not rerun or rewritten",
+    "CLICK_POSTED alone is not task success",
+    "no fuzzy target ranking, object/icon/VLM resolution, right click, drag, wheel or keyboard fallback is validated"
+  ],
+  "promotionOnPass": {
+    "p5aCoordinatorState": "PHYSICALLY_VALIDATED",
+    "runtimeBehaviorChangesAfterValidation": false,
+    "nextCheckpoint": "P5B semantic-to-visual eligibility classification"
+  },
+  "evidencePolicy": {
+    "sessionDirectoryImmutable": true,
+    "payloadPersistenceForbidden": true,
+    "payloadLoggingForbidden": true,
+    "recognizedTextLoggingForbidden": true,
+    "coordinateLoggingForbidden": true,
+    "fastForwardOnly": true
+  }
+}
