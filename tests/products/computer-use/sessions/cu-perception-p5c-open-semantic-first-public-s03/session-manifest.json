@@ -1,0 +1,72 @@
+{
+  "sessionId": "cu-perception-p5c-open-semantic-first-public-s03",
+  "checkpoint": "P5C",
+  "validationKind": "physical",
+  "purpose": "Re-run P5C physical validation after fixing only the test-owned macOS application launch boundary: the temporary fixture is now launched as a real .app through LaunchServices and reports readiness through a temporary file. The P5C product runtime remains unchanged.",
+  "expectedProductSha": "7a03bf5d1ada22ebd1193ae7f492e0a1e24e2d8b",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "11c87830b0ac5077a7c3682afaad96c5d080abb2",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5c-open-semantic-first-public.js",
+  "requiredClaims": [
+    "The test-owned macOS fixture is packaged as a temporary .app bundle and launched through macOS LaunchServices rather than by directly spawning its inner executable.",
+    "The fixture is registered through a temporary Computer Control application Provider registry before the first Computer Control call.",
+    "No Computer Control product file or installed provider registry is modified by the test.",
+    "OPEN attempts the existing semantic operation before visual perception.",
+    "A real test-owned accessibility button is opened semantically through the existing Computer Control semantic path and independently verified without invoking P5A or the visual provider.",
+    "The visual-only test-owned target is absent from the semantic representation and produces structured NO_SEMANTIC_TARGET before any visual fallback.",
+    "Only a P5B-eligible structured semantic gap can reach the P5C visual handoff.",
+    "Visual fallback requires an execution-context object separate from planner intent with explicit allowVisualFallback=true, an injected provider, an exact visual target matching the OPEN target, a primary-display left-click request, an exact deterministic postcondition and a post-action observer.",
+    "The planner/LLM schema remains semantic and contains no visualFallback, targetQuery, provider selection or screen-coordinate fields.",
+    "A real P5A-coordinated Computer Control click returns CLICK_POSTED with semanticConsequenceVerified=false.",
+    "OPEN returns task success on the visual path only when the fresh independent post-action visual observation satisfies the deterministic exact-text postcondition and P4 returns VERIFIED_SUCCESS.",
+    "Posted delivery without verified postcondition remains NOT_VERIFIED_SUCCESS in contract coverage.",
+    "Semantic delivery failure, semantic verification failure, readiness/backend/internal/invalid failures do not become visual retries.",
+    "The physical test uses the local macOS Vision PoC only as an injected provider; P5C does not select or package a perception provider for product runtime.",
+    "Computer Use and Computer Control product trees remain clean and no screenshot bytes, OCR text or coordinates are persisted/logged by the test evidence."
+  ],
+  "nonClaims": [
+    "P5C does not wire visual configuration or provider selection into the normal agent loop; that remains P5E after P5D.",
+    "P5C does not define concrete perception-provider discovery/selection; that is P5D.",
+    "The temporary application Provider exists only to let Computer Control address the test fixture semantically; it is not a P5D perception provider.",
+    "P5C does not add coordinates, native identifiers, visual queries or postconditions to planner output.",
+    "P5C does not make arbitrary OPEN failures visually eligible.",
+    "P5C does not claim general OCR accuracy, fuzzy target matching, VLM/object/icon targeting, secondary/rotated display support or richer pointer actions.",
+    "The P1-P4 physical sessions are not rerun or rewritten; their contract regressions may execute but their immutable physical evidence remains authoritative.",
+    "P5A and P5B evidence is not rewritten by this session.",
+    "P5C s01 evidence commit 15976727c6b6a09b09b428c415c5daf74e6c0258 remains immutable as the historical unregistered-fixture failure.",
+    "P5C s02 evidence commit 86793f0077d0926554c71422e4394b3bf3c62b9a remains immutable as the historical direct-executable AX snapshot failure."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s03 unchanged, fix forward, and create s04.",
+    "sensitiveData": "Fixture text and coordinates are test-owned and remain ephemeral; session output records only boolean/state claims, not screenshot bytes, OCR payloads or target/action coordinates."
+  },
+  "promotion": {
+    "onPass": {
+      "p5cOpenExecutorState": "PHYSICALLY_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P5D concrete perception-provider delivery and selection boundary"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "validatedProductSha": "cc9e26e87aa83239378d466d64879229fe2302bc",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "validatedProductSha": "28c654d51c1014ee826dcf24f42b6758dc67a721",
+      "state": "CONTRACT_VALIDATED"
+    }
+  }
+}
