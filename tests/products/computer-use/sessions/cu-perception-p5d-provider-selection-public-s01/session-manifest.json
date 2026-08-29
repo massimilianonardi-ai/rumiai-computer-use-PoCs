@@ -1,0 +1,71 @@
+{
+  "sessionId": "cu-perception-p5d-provider-selection-public-s01",
+  "checkpoint": "P5D",
+  "validationKind": "physical",
+  "purpose": "Validate the Computer Use-owned concrete perception-provider delivery/selection boundary independently from OCR correctness, target resolution and action execution, using the optional local macOS Vision text-region provider on the reference Mac.",
+  "expectedProductSha": "2262237e92965d9e5171a9688694f13d2bc183aa",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "42305c85cbec46d7e43fcf429715b1d583f4018c",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p5d-provider-selection-public.js",
+  "requiredClaims": [
+    "Computer Use owns perception-provider description, availability and selection through a dedicated perception-provider manager separate from application Provider management.",
+    "The selected concrete provider declares id, locality, text-region capability and explicit runtime availability.",
+    "The first concrete provider is optional and local: rumiai.local.macos-vision-text-region.",
+    "The provider declares network=false, account=false and cloudApi=false; no network/account/cloud dependency is required for selection.",
+    "Default provider selection requests locality=local and does not silently fall back to a remote provider when local capability is unavailable.",
+    "Selection is deterministic by required capability, requested locality and provider id ordering.",
+    "Provider selection does not invoke observe(), does not capture a frame and does not execute OCR.",
+    "Physical validation establishes real macOS local-provider availability/selection only; OCR correctness is deliberately outside this checkpoint.",
+    "P2B remains provider-neutral and contains no macOS Vision or Swift-specific assumptions.",
+    "Computer Control remains unchanged and provider-free at e3a3f13d66546cf8f0fca50075bd4607c2c3d003.",
+    "P5A/P5B/P5C contract regressions remain passing and P1-P4 physical validations are not rerun.",
+    "Computer Use and Computer Control working trees remain clean after the session."
+  ],
+  "nonClaims": [
+    "P5D does not claim OCR accuracy for arbitrary screenshots or applications.",
+    "P5D does not run a visual capture, target resolver, fallback policy, pointer action or postcondition verifier in its physical selection test.",
+    "P5D does not wire provider selection into the normal agent loop; that remains P5E.",
+    "P5D does not introduce implicit remote-provider fallback or require any remote provider.",
+    "P5D does not broaden the P2B observation schema beyond the already validated text-region contract.",
+    "P5D does not move provider code into Computer Control.",
+    "P5D does not rerun or rewrite P1-P4, P5A or P5C physical evidence.",
+    "P5D does not rewrite any failed P5C session; s01-s07 remain immutable historical evidence."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact product/test/toolchain failure and fix forward in a new session.",
+    "sensitiveData": "The P5D physical selection test captures no screenshot, executes no OCR, persists no recognized text and performs no input action."
+  },
+  "promotion": {
+    "onPass": {
+      "p5dProviderSelectionState": "PHYSICALLY_VALIDATED",
+      "nextCheckpoint": "P5E first normal agent-loop end-to-end semantic-first visual fallback task"
+    }
+  },
+  "prerequisites": {
+    "P5A": {
+      "sessionId": "cu-perception-p5a-visual-fallback-coordinator-public-s01",
+      "evidenceCommit": "8076ddeaa3ac061e5cc1fb745aa97e1f9badb0c3",
+      "state": "PHYSICALLY_VALIDATED"
+    },
+    "P5B": {
+      "sessionId": "cu-perception-p5b-semantic-visual-eligibility-contract-s02",
+      "evidenceCommit": "cbc88158c4cefd7a32ee3acec6e0424eb1a8f1ec",
+      "state": "CONTRACT_VALIDATED"
+    },
+    "P5C": {
+      "sessionId": "cu-perception-p5c-open-semantic-first-public-s08",
+      "evidenceCommit": "9195ae930f87f9804052e5024cb406b1488a747b",
+      "validatedProductSha": "8f21dd520356fc30e147e17adfff2c7567f36b83",
+      "state": "PHYSICALLY_VALIDATED"
+    }
+  }
+}
