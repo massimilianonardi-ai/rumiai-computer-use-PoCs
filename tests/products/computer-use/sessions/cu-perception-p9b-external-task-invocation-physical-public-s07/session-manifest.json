@@ -1,0 +1,76 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-physical-public-s07",
+  "validationKind": "physical",
+  "purpose": "Physically validate the bounded external stdin task-invocation path after preserving distinct Computer Control runtime/socket ownership for the parent physical fixture and the child task-invocation process. This corrects a multi-process fixture ownership collision without changing Computer Use, Computer Control, task provenance, planner semantics, perception selection, delivery semantics, or success verification.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "b6d688863f5456414361d9c1d84d70b43025dc07",
+    "pass": 20,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "s01FailedEvidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "s02DiagnosticEvidence": "cc584e723d5eae1943c31ff9bd02787f4a8c339b",
+    "s03FailedEvidence": "837c3418ac2958fc4606a919a1fc38c04ae2538a",
+    "s04LifecycleDiagnosticEvidence": "00d1fb0342a90f5d736cacada58207711848d3b4",
+    "s05LifecycleContractEvidence": "a820771e0f6448505277eb0ebfceb7b910328a84",
+    "s06FailedEvidence": "e728bc61009227103e7542c27bb900d948e17b2a",
+    "historicalBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "s07FixtureCorrections": [
+      "verify exact historical s01 physical source blob before transformation",
+      "correct only the already diagnosed generated-preload newline escaping defect",
+      "assign the task-invocation child its own RUMIAI_CC_SOCKET so parent and child own separate Computer Control runtimes"
+    ]
+  },
+  "p9b": {
+    "application": "Pulsar",
+    "task": "Open the encoding selector for the current Pulsar document",
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "externalTransport": "stdin JSON to app/task-invocation.js in a real child process",
+    "resourceOwner": "external caller",
+    "productInvocationOwner": "task-invocation",
+    "resource": "one explicit temporary Pulsar current-document file",
+    "runtimeOwnership": "parent physical fixture and child task-invocation use distinct Computer Control sockets/runtimes",
+    "assertions": [
+      "real child process executes app/task-invocation.js and exits successfully",
+      "task bytes and one taskResourceContext are preserved across stdin/process boundary",
+      "no visualFallbackContracts visualFallbackCallerContext or documentPath shortcut crosses the invocation envelope",
+      "taskResourceContext derives exactly one pulsar-document caller context and one bounded P7D contract",
+      "planner remains semantic-only",
+      "semantic OPEN reaches structured NO_SEMANTIC_TARGET before visual provider selection",
+      "exact current-document window-title surface guard verifies before provider selection",
+      "local macOS Vision provider is selected exactly once",
+      "Computer Control CLICK_POSTED remains delivery only",
+      "independent post-action exact UTF-16 LE observation yields VERIFIED_SUCCESS",
+      "task-invocation child closes its own Computer Control runtime and exits",
+      "parent fixture retains and closes its own independent Computer Control runtime",
+      "temporary document hash remains unchanged and encoding selection is not confirmed",
+      "selector pointer Pulsar runtimes and temp state are cleaned up"
+    ]
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "PHYSICALLY_VALIDATED",
+    "p9": "COMPLETE at the bounded external stdin task-invocation process boundary for the single Pulsar UTF-8 real-use case",
+    "next": "Record P9B evidence and update orchestration/handoff without extending the claim to the default interactive CLI, generic Pulsar behavior, UI-derived provenance, or arbitrary external protocols."
+  },
+  "nonClaims": [
+    "P9B does not validate the default interactive CLI",
+    "P9B does not authorize generic Pulsar status-bar clicking or arbitrary targets",
+    "P9B does not authorize UI-derived resource provenance",
+    "P9B does not validate generic external protocols beyond the versioned stdin task-invocation envelope",
+    "P9B does not authorize generic browser or application visual fallback"
+  ]
+}
