@@ -1,0 +1,71 @@
+{
+  "sessionId": "cu-perception-p8c-agent-loop-task-resource-context-public-s01",
+  "checkpoint": "P8C agent-loop task resource context wiring",
+  "validationKind": "contract-only",
+  "expectedProductSha": "9088b0c2371852265b6334197f97ac13fd574070",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "c357af64eac92783e487a9169403f0eb437a5877",
+  "purpose": "Validate the narrow wiring from explicit caller-owned taskResourceContext into the existing P7E visual-fallback caller-context path. Prove that runTask accepts task resources only as one of three mutually exclusive explicit visual-knowledge sources, resolves them after the semantic plan, keeps documentPath out of agent-loop and planner knowledge, preserves the default CLI with no task resources, and performs no UI/filesystem provenance discovery.",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js",
+    "tests/products/computer-use/perception-p8a-caller-context-provenance-gap.test.js",
+    "tests/products/computer-use/perception-p8b-task-resource-context.test.js",
+    "tests/products/computer-use/perception-p8c-agent-loop-task-resource-context.test.js"
+  ],
+  "requiredClaims": [
+    "without any explicit visual knowledge source runTask retains no visual-fallback knowledge",
+    "taskResourceContext is accepted as an explicit third source after semantic planning",
+    "one exact Pulsar current-document resource derives the bounded P7E pulsar-document caller context and P7D UTF-8 contract",
+    "wrong application, wrong OPEN target or non-Pulsar resources do not authorize the Pulsar visual contract",
+    "invalid or ambiguous task resources fail closed before visual execution",
+    "visualFallbackContracts, visualFallbackCallerContext and taskResourceContext are pairwise and jointly mutually exclusive",
+    "existing explicit-contract and explicit-caller-context sources remain compatible",
+    "agent-loop contains no documentPath knowledge and task-resource-context performs no UI, perception, planner or filesystem discovery",
+    "task resource resolution occurs after the semantic plan and before intent execution",
+    "the default interactive CLI still invokes runTask(task) without taskResourceContext",
+    "planner output remains free of taskResourceContext, documentPath, visual fallback surface/postcondition/provider knowledge and coordinates",
+    "P5A-P8B regression contracts remain passing",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is contract-only and makes no new physical UI claim.",
+    "This session does not say the default CLI owns a document path; it explicitly does not provide taskResourceContext.",
+    "This session does not derive resource provenance from current window title, semantic snapshots, OCR, Vision, coordinates, filesystem inspection or planner text.",
+    "This session does not add document.open or any new Computer Control mechanic.",
+    "This session does not authorize generic Pulsar visual fallback beyond the bounded UTF-8 case already physically validated through P7E.",
+    "P7E remains PHYSICALLY_VALIDATED; this session validates only the task-resource invocation wiring."
+  ],
+  "lineage": {
+    "p7ePhysicalEvidence": "6af4a606eb71418cde61eddd3cdd1fade9b083d2",
+    "p8aEvidence": "fde64d9aab6cc14f8583864222b7581f177b86f7",
+    "p8aState": "PROVENANCE_GAP_CONFIRMED",
+    "p8bEvidence": "d08f48dee5fd7c14e3000821bb516dcafeca9da7",
+    "p8bState": "CONTRACT_VALIDATED",
+    "p8bHistoricalTestSource": "d9d5834f583d81683aac8a1791bc12889bd355a2",
+    "p8bRegressionEvolution": "3dc7b2cbd25747250fde6e78b5e0f4346d65302c"
+  },
+  "promotion": {
+    "onPass": {
+      "p8cState": "CONTRACT_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P8D physical validation of the same Pulsar UTF-8 real-use path using only taskResourceContext as the runTask knowledge source. No visualFallbackContracts or visualFallbackCallerContext may be passed."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact product or contract assumption, fix forward without weakening semantic-first, provenance or delivery-success separation, and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR payload, document contents, coordinates or user file paths are required by this contract-only session."
+  }
+}
