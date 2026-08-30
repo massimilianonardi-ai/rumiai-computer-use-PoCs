@@ -1,0 +1,94 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-physical-public-s15",
+  "validationKind": "physical",
+  "purpose": "Physically validate the bounded external stdin task-invocation path while correcting only fixture teardown semantics: selector absence is proven by verified Pulsar termination plus independent process absence, rather than inferred from keyboard delivery.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "683211e731310124e34ca4a3957ddca1eb7ea76d",
+    "pass": 20,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "p9aEvidence": "30744df93ed16e0c61d67eb53718d145a8a453b5",
+    "p9aState": "CONTRACT_VALIDATED",
+    "lifecycleFixProduct": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "s05Evidence": "a820771e0f6448505277eb0ebfceb7b910328a84",
+    "s05State": "CONTRACT_VALIDATED",
+    "s08Evidence": "7828e6cd4225f03620454eefc5032610aba56a50",
+    "s08State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s09Evidence": "b5e5f3e6f14592e0b7aae0e563f8b432d1f96960",
+    "s09State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s10Evidence": "6ed8d891900debae7a0103a38d3ddbefe2134527",
+    "s10State": "IMMUTABLE_FAIL_WITH_CLEANUP_DIAGNOSTIC",
+    "s11Evidence": "588f828766585b6ad5282c394637ccd236d2fa90",
+    "s11State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s12Evidence": "7389ab86a8b9426906d0fa6689748a9158d6d986",
+    "s12State": "IMMUTABLE_DIAGNOSTIC_FIXTURE_FAIL",
+    "s13Evidence": "99502055bdf87fbe3b7464ae73f6fcfd17f296cc",
+    "s13State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s13Observation": "Core P9B path passed through VERIFIED_SUCCESS. Parent Pulsar activation succeeded, but ui.press Escape returned PRESS_ACTION_FAILED; cleanup-only delivery was not a valid proof of selector absence.",
+    "s14Evidence": "b01a5eb8ad6e4231f8b847c2037b19a405463d69",
+    "s14State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s14Observation": "Re-ensuring the parent runtime did not make Escape cleanup succeed. All P9B core markers still passed; only selectorDismissed remained false.",
+    "historicalBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "s15Corrections": [
+      "verify exact historical base physical blob before patching",
+      "retain the generated-preload newline escaping correction",
+      "retain distinct Computer Control sockets for fixture parent and product child",
+      "remove the cleanup-only assumption that successful Escape delivery proves selector dismissal",
+      "use the existing verified Pulsar termination path and require independent pgrep process absence before selectorDismissed can be true",
+      "change no Computer Use or Computer Control product code"
+    ]
+  },
+  "p9b": {
+    "application": "Pulsar",
+    "task": "Open the encoding selector for the current Pulsar document",
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "transport": "real external child process stdin JSON to app/task-invocation.js",
+    "resourceOwner": "external caller",
+    "productInvocationOwner": "task-invocation",
+    "resource": "one explicit temporary Pulsar current-document file",
+    "cleanupPostcondition": "temporary selector state cannot remain once verified application termination has completed and the Pulsar process is independently absent",
+    "assertions": [
+      "real child process executes app/task-invocation.js and exits successfully",
+      "task bytes and one taskResourceContext are preserved across stdin/process boundary",
+      "no visualFallbackContracts visualFallbackCallerContext or documentPath shortcut crosses the invocation envelope",
+      "taskResourceContext derives exactly one pulsar-document caller context and one bounded P7D contract",
+      "planner remains semantic-only",
+      "semantic OPEN reaches structured NO_SEMANTIC_TARGET before visual provider selection",
+      "exact current-document window-title surface guard verifies before provider selection",
+      "local macOS Vision provider is selected exactly once",
+      "Computer Control CLICK_POSTED remains delivery only",
+      "independent post-action exact UTF-16 LE observation yields VERIFIED_SUCCESS",
+      "temporary document hash remains unchanged and encoding selection is not confirmed",
+      "selector absence is not inferred from keyboard delivery",
+      "Pulsar termination is verified and independent process absence is required",
+      "pointer runtime and temp state are cleaned up"
+    ]
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "PHYSICALLY_VALIDATED",
+    "p9": "COMPLETE at bounded external stdin task-invocation process boundary for the single controlled Pulsar UTF-8 real-use case",
+    "next": "Record P9B evidence and update orchestration/handoff without extending the claim to the default interactive CLI, generic Pulsar behavior, or generic external protocols."
+  },
+  "nonClaims": [
+    "P9B does not validate the default interactive CLI",
+    "P9B does not authorize generic Pulsar status-bar clicking or arbitrary targets",
+    "P9B does not authorize UI-derived resource provenance",
+    "P9B does not validate generic external protocols beyond the versioned stdin task-invocation envelope",
+    "P9B does not authorize generic browser or application visual fallback"
+  ]
+}
