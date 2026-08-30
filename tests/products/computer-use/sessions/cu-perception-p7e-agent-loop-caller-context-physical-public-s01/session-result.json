@@ -1,0 +1,123 @@
+{
+  "sessionId": "cu-perception-p7e-agent-loop-caller-context-physical-public-s01",
+  "startedAt": "2026-08-30T16:06:23Z",
+  "endedAt": "2026-08-30T16:06:47Z",
+  "durationMs": 23513,
+  "productShaExpected": "158cc475c209ade1c3260f0f2d6d4d4bc97f2f4a",
+  "productShaObserved": "158cc475c209ade1c3260f0f2d6d4d4bc97f2f4a",
+  "dependencies": {
+    "computerControl": {
+      "shaExpected": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+      "shaObserved": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003"
+    }
+  },
+  "testSourceSha": "540abac1a7f534f36a809b0f8bb1036ceb57eb3f",
+  "pocShaTested": "5d10f4af586e1ec9e02e78ab90a8ae19eaa12823",
+  "tests": [
+    {
+      "id": "contract:external-computer-control-boundary-test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/external-computer-control-boundary-test.js'",
+      "exitCode": 0,
+      "durationMs": 250,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5a-visual-fallback-coordinator.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js'",
+      "exitCode": 0,
+      "durationMs": 56,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5b-semantic-visual-eligibility.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js'",
+      "exitCode": 0,
+      "durationMs": 58,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5c-open-semantic-first.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5c-open-semantic-first.test.js'",
+      "exitCode": 0,
+      "durationMs": 58,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5d-provider-selection.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5d-provider-selection.test.js'",
+      "exitCode": 0,
+      "durationMs": 62,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p5e-agent-loop-visual-fallback.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js'",
+      "exitCode": 0,
+      "durationMs": 58,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p6a-caller-contract-registry.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p6a-caller-contract-registry.test.js'",
+      "exitCode": 0,
+      "durationMs": 57,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p6b-safari-canvas-discovery.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js'",
+      "exitCode": 0,
+      "durationMs": 55,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p6c-scoped-caller-integration.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js'",
+      "exitCode": 0,
+      "durationMs": 56,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p6d-surface-precondition.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p6d-surface-precondition.test.js'",
+      "exitCode": 0,
+      "durationMs": 58,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p7d-pulsar-utf8-caller-contract.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js'",
+      "exitCode": 0,
+      "durationMs": 54,
+      "result": "PASS"
+    },
+    {
+      "id": "contract:perception-p7e-agent-loop-caller-context.test.js",
+      "command": "RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js'",
+      "exitCode": 0,
+      "durationMs": 60,
+      "result": "PASS"
+    },
+    {
+      "id": "physical:computer-use-perception-p7e-pulsar-caller-context-public",
+      "command": "AGENT_CTRL='/Volumes/RumiAI/rumiai-portable-runtime/bin/agent-ctrl' RUMIAI_COMPUTER_USE_ROOT='/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' RUMIAI_COMPUTER_CONTROL_HOME='/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' RUMIAI_CC_NODE='/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/run-with-timeout.js' '90000' '/Volumes/RumiAI/rumiai-portable-runtime/bin/nodejs/bin/node' '/Volumes/RumiAI/rumiai-portable-runtime/test/computer-use-poc/tests/products/computer-use/physical-tests/perception-p7e-pulsar-caller-context-public.js'",
+      "exitCode": 0,
+      "durationMs": 21991,
+      "result": "PASS"
+    },
+    {
+      "id": "post:product-trees-clean",
+      "command": "test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/app/computer-use' status --porcelain)\" && test -z \"$(git -C '/Volumes/RumiAI/rumiai-portable-runtime/lib/computer-control' status --porcelain)\"",
+      "exitCode": 0,
+      "durationMs": 53,
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "pass": 14,
+    "fail": 0,
+    "blocked": 0,
+    "total": 14,
+    "overall": "PASS"
+  }
+}
