@@ -16,6 +16,7 @@ function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",max
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
 function norm(value){return String(value||"").normalize("NFKC").toLocaleLowerCase().replace(/[\u2010-\u2015\u2212]/g,"-").replace(/\s+/g," ").trim();}
 function currentTitle(result){const candidate=result?.window;const descriptor=candidate?.field==="window"&&candidate?.value&&typeof candidate.value==="object"?candidate.value:candidate;return String(descriptor?.title||"").trim();}
+function isSafariForeground(result){return result?.ok===true&&(result?.name==="Safari"||result?.process==="Safari"||result?.bundle==="com.apple.Safari"||result?.bundleId==="com.apple.Safari");}
 async function closeServer(server){if(!server)return;await new Promise(resolve=>server.close(()=>resolve()));}
 
 (async()=>{
@@ -51,10 +52,20 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     safariLaunched=true;
     for(let i=0;i<50&&(pageRequests===0||!safariRunning());i++)await asyncSleep(100);
     if(pageRequests===0)throw Object.assign(new Error("SURFACE_PAGE_NOT_REQUESTED"),{code:"SURFACE_PAGE_NOT_REQUESTED"});
-    await asyncSleep(350);
+
+    const activated=computerControl.activateApplication({app:"Safari",timeoutMs:10000});
+    if(!activated?.ok)throw Object.assign(new Error("SAFARI_ACTIVATION_FAILED"),{code:"SAFARI_ACTIVATION_FAILED"});
+    let foreground=null;
+    for(let i=0;i<30;i++){
+      foreground=computerControl.getForeground();
+      if(isSafariForeground(foreground))break;
+      await asyncSleep(100);
+    }
+    if(!isSafariForeground(foreground))throw Object.assign(new Error("SAFARI_NOT_FOREGROUND"),{code:"SAFARI_NOT_FOREGROUND"});
+    await asyncSleep(250);
 
     let observed=null;
-    for(let i=0;i<20;i++){
+    for(let i=0;i<30;i++){
       observed=computerControl.getCurrentWindow({app:"Safari"});
       if(observed?.ok&&currentTitle(observed))break;
       await asyncSleep(100);
@@ -104,6 +115,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       listedPrefixCount,
     };
 
+    console.log("p6d-safari-frontmost-precondition=PASS explicitActivation=true foregroundVerified=true");
     console.log(`p6d-safari-title-shape=PASS titlePresent=${diag.titlePresent} titleLength=${diag.titleLength} expectedLength=${diag.expectedLength} startsWithExpected=${diag.startsWithExpected} suffixLength=${diag.suffixLength}`);
     console.log(`p6d-safari-title-owned-data=PASS suffixContainsHostname=${diag.suffixContainsHostname} suffixContainsPort=${diag.suffixContainsPort} suffixContainsOrigin=${diag.suffixContainsOrigin} suffixContainsPath=${diag.suffixContainsPath} suffixContainsHttp=${diag.suffixContainsHttp} suffixContainsSafari=${diag.suffixContainsSafari} suffixContainsPrivate=${diag.suffixContainsPrivate}`);
     console.log(`p6d-safari-title-candidates=PASS hostname=${diag.exactCandidateHostname} hostPort=${diag.exactCandidateHostPort} origin=${diag.exactCandidateOrigin} url=${diag.exactCandidateUrl} path=${diag.exactCandidatePath}`);
