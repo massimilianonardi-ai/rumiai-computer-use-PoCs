@@ -1,0 +1,75 @@
+{
+  "sessionId": "cu-perception-p8d-task-resource-context-physical-public-s01",
+  "checkpoint": "P8D physical task-resource provenance validation",
+  "validationKind": "public physical",
+  "expectedProductSha": "9088b0c2371852265b6334197f97ac13fd574070",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "66542db8413ea28e42a36332f680b1fc83348271",
+  "purpose": "Physically validate the P8B/P8C provenance-bearing taskResourceContext path through normal agentLoop.runTask on the already validated real Pulsar UTF-8 selector use case. The caller supplies only an explicit current-document file resource. The product must derive the bounded P7E pulsar-document context, preserve semantic-first execution, verify the exact current-document surface before local visual perception, keep provider selection lazy, preserve CLICK_POSTED as delivery only, and require an independent post-action observation before VERIFIED_SUCCESS.",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js",
+    "tests/products/computer-use/perception-p8a-caller-context-provenance-gap.test.js",
+    "tests/products/computer-use/perception-p8b-task-resource-context.test.js",
+    "tests/products/computer-use/perception-p8c-agent-loop-task-resource-context.test.js"
+  ],
+  "physicalTest": "tests/products/computer-use/physical-tests/perception-p8d-pulsar-task-resource-context-public.js",
+  "requiredClaims": [
+    "the physical caller supplies taskResourceContext and does not supply visualFallbackContracts or visualFallbackCallerContext",
+    "the resource is one explicit absolute file with role current-document and application Pulsar",
+    "the effective visual source resolves as task-resource-context and derives the bounded pulsar-document caller context",
+    "the semantic planner remains ACTIVATE_APP Pulsar plus OPEN UTF-8 only and contains no resource path, caller context, scope, surface precondition, postcondition, provider identity or coordinates",
+    "the semantic OPEN attempt produces structured NO_SEMANTIC_TARGET before any visual provider selection",
+    "the exact current-document window-title surface precondition is materialized from the resource-owned path and verified before provider selection",
+    "the local macOS Vision text-region provider is selected exactly once after the eligible semantic gap",
+    "the visual target is exact UTF-8 and the action delivery state is CLICK_POSTED with semanticConsequenceVerified=false",
+    "CLICK_POSTED is not task success",
+    "VERIFIED_SUCCESS is produced only after an independent post-action observation verifies exact UTF-16 LE",
+    "the temporary document content hash remains unchanged and no encoding selection is confirmed",
+    "no screenshot bytes, OCR payloads, visual coordinates or external-network dependency are persisted by the test",
+    "pointer, modal, Pulsar process, Computer Control runtime and temporary files are cleaned up",
+    "P5A-P8C regression contracts remain passing and Computer Use/Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This does not make the default interactive CLI a provenance owner; the CLI still invokes runTask(task) without taskResourceContext.",
+    "This does not infer document identity from window title, semantic snapshots, OCR, Vision, coordinates or planner output.",
+    "This does not promote generic Pulsar status-bar clicking or generic encoding-selector behavior.",
+    "This validates only the bounded Pulsar current-document UTF-8 selector path already physically established by P7C/P7E.",
+    "The postcondition UTF-16 LE proves the selector modal opened; it does not mean a UTF-16 LE encoding change was selected.",
+    "No mandatory network, account, cloud API or remote perception provider is introduced."
+  ],
+  "lineage": {
+    "p7cPhysicalEvidence": "77fd94bd6b765a56182822cf2a43297b6baa1537",
+    "p7dContractEvidence": "31f10c01244d98eee1c8f309e46b0578d2d60337",
+    "p7eContractEvidence": "e1bb360188c3713653b09b0c2320fe45d4261f2d",
+    "p7ePhysicalEvidence": "6af4a606eb71418cde61eddd3cdd1fade9b083d2",
+    "p8aEvidence": "fde64d9aab6cc14f8583864222b7581f177b86f7",
+    "p8bEvidence": "d08f48dee5fd7c14e3000821bb516dcafeca9da7",
+    "p8cEvidence": "aabe4a69a4a4b4c0ef86ebb3cfd659300aa103d8"
+  },
+  "promotion": {
+    "onPass": {
+      "p8cState": "CONTRACT_VALIDATED",
+      "p8dState": "PHYSICALLY_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P8E identify or introduce a real deterministic product caller that owns taskResourceContext before runTask. The default CLI must not fabricate resources or infer them from UI state."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "protectUserState": "Pulsar must be closed before the session; otherwise the session BLOCKS before physical evidence creation.",
+    "onFailure": "Preserve s01 unchanged, diagnose the exact product or physical-fixture failure, fix forward without weakening semantic-first, exact surface matching, provider laziness or delivery != success, then create s02.",
+    "sensitiveData": "Use only a generated temporary document. Do not persist screenshot bytes, OCR payload, raw snapshots, coordinates or user document paths in evidence markers."
+  }
+}
