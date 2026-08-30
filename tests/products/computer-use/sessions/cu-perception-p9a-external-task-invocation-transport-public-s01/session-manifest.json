@@ -1,0 +1,50 @@
+{
+  "sessionId": "cu-perception-p9a-external-task-invocation-transport-public-s01",
+  "validationKind": "contract-only",
+  "purpose": "Validate the real external stdin/process boundary of app/task-invocation.js without changing P8 resource semantics or adding product test hooks.",
+  "expected": {
+    "computerUseSha": "c1a6d41b0c1ce16fa9b6beed93621f303a5aa72b",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "87b8e0b9deb980c649f0ee365a17a29068be754f",
+    "pass": 18,
+    "fail": 0,
+    "blocked": 0
+  },
+  "p9a": {
+    "boundary": "external-process-stdin-to-task-invocation",
+    "productChanged": false,
+    "realChildProcess": true,
+    "realStdin": true,
+    "deterministicSuccessHarness": "fixture-only Node preload replaces agent-loop export inside the child process; no product hook/backdoor is added",
+    "assertions": [
+      "valid versioned invocation crosses stdin/main and preserves task bytes",
+      "only taskResourceContext reaches runTask",
+      "empty malformed and oversized stdin fail before runTask",
+      "unsupported hidden visual fields fail closed",
+      "failed runTask propagates once with no retry",
+      "task-invocation product source contains no test/preload hook"
+    ]
+  },
+  "invariants": [
+    "semantic-first architecture unchanged",
+    "task-invocation schema remains version + task + resources only",
+    "no documentPath or visual contract shortcut crosses the external envelope",
+    "resource provenance remains explicit and task/run bounded",
+    "planner remains semantic-only",
+    "Computer Control remains delivery-only",
+    "CLICK_POSTED remains delivery and not success",
+    "no mandatory network/account/cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "p9a": "CONTRACT_VALIDATED",
+    "p9": "ACTIVE",
+    "next": "P9B physical external-process validation: parent fixture prepares the real Pulsar surface, then spawns task-invocation.js with invocation JSON while a fixture-only preload wraps the real agent-loop runTask with the frozen deterministic planner/perception dependencies. No Computer Use test hook."
+  },
+  "nonClaims": [
+    "P9A does not physically validate a real visual action through the external process",
+    "P9A does not validate the default interactive CLI",
+    "P9A does not authorize UI-derived resource provenance",
+    "P9A does not authorize generic Pulsar or browser behavior"
+  ]
+}
