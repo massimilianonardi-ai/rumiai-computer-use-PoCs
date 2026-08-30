@@ -1,0 +1,28 @@
+{
+  "sessionId": "cu-perception-p6d-safari-surface-identity-diagnostic-public-s08",
+  "checkpoint": "P6D Safari surface identity diagnostic",
+  "expectedProductSha": "a90ab782d85e1283e76b4b64aa9bdbe54a7e4e0e",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "03c7264cfdc18f29533d444d33f8185ed6cdd943",
+  "purpose": "Repeat the Safari surface-identity diagnostic after explicitly activating Safari and verifying it is the foreground application before observing the current window. A PASS is diagnostic only and does not promote P6D.",
+  "lineage": [
+    {"session":"cu-perception-p6d-surface-precondition-public-s06","evidence":"e8edb4b40ea9015e2a8fe5a43e510acd2232f049","result":"FAIL","finding":"Safari current-window title begins with the exact test-owned HTML title and adds 21 normalized characters."},
+    {"session":"cu-perception-p6d-safari-surface-identity-diagnostic-public-s07","evidence":"091592162f2c6bab12596764326be7cde09cfb99","result":"FAIL","reason":"CURRENT_WINDOW_NOT_OBSERVED before Safari foreground was explicitly established"}
+  ],
+  "diagnosticProperties": [
+    "Safari is explicitly activated before current-window observation",
+    "foreground Safari is verified before window.getCurrent",
+    "no product behavior changes",
+    "no visual action delivery",
+    "no screenshot or OCR payload",
+    "no coordinates",
+    "raw current-window title is never logged",
+    "raw semantic snapshot is never logged",
+    "only boolean relations and lengths against test-owned title and loopback URL data are persisted",
+    "loopback HTTP only; no external network"
+  ],
+  "onPass": {
+    "state": "DIAGNOSTIC_OBSERVED",
+    "next": "choose the narrowest exact P6D surface identity supported by observed Safari title/snapshot data; do not weaken matching based only on browser decoration"
+  }
+}
