@@ -1,0 +1,64 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-semantic-cleanup-diagnostic-public-s13",
+  "validationKind": "diagnostic",
+  "purpose": "Correct only the s12 diagnostic-fixture temp-path defect and observe the exact semantic ui.press(Escape) teardown result without changing the already-proven P9B core path or any product source.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "e9cf9bf85942c6a47d8c546f4a8c3d43d1f9c4ee",
+    "pass": 20,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "p9aEvidence": "30744df93ed16e0c61d67eb53718d145a8a453b5",
+    "p9aState": "CONTRACT_VALIDATED",
+    "lifecycleFixProduct": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "s08Evidence": "7828e6cd4225f03620454eefc5032610aba56a50",
+    "s08State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s09Evidence": "b5e5f3e6f14592e0b7aae0e563f8b432d1f96960",
+    "s09State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s10Evidence": "6ed8d891900debae7a0103a38d3ddbefe2134527",
+    "s10State": "IMMUTABLE_FAIL_WITH_CLEANUP_DIAGNOSTIC",
+    "s10Observation": "Pulsar foreground reassertion succeeded; low-level pressKey Escape failed with KEYBOARD_COMBINATION_UNSUPPORTED, outside the frozen low-level keyboard contract.",
+    "s11Evidence": "588f828766585b6ad5282c394637ccd236d2fa90",
+    "s11State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s11Observation": "Foreground reassertion plus semantic ui.press(Escape) still left selectorDismissed=false; s11 did not expose the ui.press return or thrown error.",
+    "s11SourceBlob": "c731f1d693fa823cd17a43b5270d6ec7cb7373a4",
+    "s12Evidence": "7389ab86a8b9426906d0fa6689748a9158d6d986",
+    "s12State": "IMMUTABLE_FAIL_BEFORE_PHYSICAL_PATH",
+    "s12Observation": "The diagnostic wrapper relocated the patched s11 source to a temporary directory without preserving s11's verified base source beside it; s11 therefore failed immediately with BASE_SOURCE_MISSING and no semantic cleanup diagnostic was observed.",
+    "s13Change": "Keep the exact s11 and original P9B base-source blobs verified, copy the original verified base source into the temporary execution directory, and otherwise preserve the s12 bounded semantic ui.press(Escape) diagnostic."
+  },
+  "diagnosticAssertions": [
+    "the exact s11 source blob is verified before instrumentation",
+    "the exact original P9B base-source blob is verified and copied unchanged into the temporary execution directory expected by s11",
+    "the real external child process and stdin task-invocation path remain unchanged",
+    "the core P9B path must show provenance, semantic-first, exact surface, local Vision, CLICK_POSTED delivery-only, independent UTF-16 LE postcondition, VERIFIED_SUCCESS and unchanged document hash",
+    "semantic ui.press(Escape) teardown records activate result plus press ok/state/error or a bounded thrown error",
+    "no document path, raw snapshot, screenshot, OCR payload or coordinates are added to diagnostic evidence",
+    "product sources are unchanged"
+  ],
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and not inferred from UI state",
+    "planner contains no coordinates or provider identity",
+    "provider selection remains Computer Use-owned",
+    "Computer Control remains delivery mechanics only",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "s13": "DIAGNOSTIC_OBSERVED",
+    "p9b": "REMAINS_NOT_PROMOTED",
+    "p9": "REMAINS_ACTIVE",
+    "next": "Use the observed semantic ui.press cleanup result to prepare the smallest forward-only final P9B physical cleanup correction without changing the already-proven core path."
+  },
+  "nonClaims": [
+    "A PASS does not make P9B PHYSICALLY_VALIDATED",
+    "A PASS does not close P9",
+    "This diagnostic does not validate the default interactive CLI",
+    "This diagnostic does not authorize generic Pulsar visual behavior",
+    "This diagnostic does not extend the low-level keyboard contract"
+  ]
+}
