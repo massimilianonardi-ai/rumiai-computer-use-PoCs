@@ -1,0 +1,60 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-child-diagnostic-public-s08",
+  "validationKind": "physical-diagnostic",
+  "purpose": "Diagnose the remaining P9B child-process failure after immutable s07 proved distinct parent/child Computer Control sockets remove the prior outer timeout. The diagnostic preserves the same physical Pulsar case and only exposes bounded child stderr classification plus the already-existing redacted preload capture before cleanup.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "e5d16070afb4f6462ddef4c57f37ceb560d21afe",
+    "pass": 20,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "s01Evidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "s02DiagnosticEvidence": "cc584e723d5eae1943c31ff9bd02787f4a8c339b",
+    "s03Evidence": "837c3418ac2958fc4606a919a1fc38c04ae2538a",
+    "s04LifecycleDiagnosticEvidence": "00d1fb0342a90f5d736cacada58207711848d3b4",
+    "s05LifecycleContractEvidence": "a820771e0f6448505277eb0ebfceb7b910328a84",
+    "s06Evidence": "e728bc61009227103e7542c27bb900d948e17b2a",
+    "s07Evidence": "43768d6fda9a454fe252c8e56ee4e833e1e868db",
+    "s07Result": "19 PASS / 1 FAIL / 0 BLOCKED",
+    "s07Failure": "P9B_CHILD_PROCESS_FAILED after distinct parent/child Computer Control sockets; no outer timeout",
+    "historicalBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950"
+  },
+  "diagnostic": {
+    "application": "Pulsar",
+    "task": "Open the encoding selector for the current Pulsar document",
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "changesRelativeToHistoricalBase": [
+      "verify the exact immutable historical base physical source blob",
+      "correct only the already-diagnosed generated-preload newline escaping",
+      "give the child task-invocation process its own Computer Control socket while the parent keeps its own runtime socket",
+      "replace only the opaque child failure gate with bounded diagnostic classification and the existing redacted capture summary"
+    ],
+    "capturePolicy": [
+      "do not persist screenshot or OCR payloads",
+      "do not persist click coordinates",
+      "do not print task resource path",
+      "record only call counts, source kind, surface state, delivery/outcome state and a bounded structured exception message"
+    ],
+    "promotionOnPass": "DIAGNOSTIC_OBSERVED only; P9B remains not physically validated until a later non-diagnostic physical session passes"
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "nonClaims": [
+    "A PASS does not validate P9B physically",
+    "The diagnostic does not validate the default interactive CLI",
+    "The diagnostic does not authorize generic Pulsar fallback or arbitrary visual targets",
+    "The diagnostic does not authorize UI-derived resource provenance"
+  ]
+}
