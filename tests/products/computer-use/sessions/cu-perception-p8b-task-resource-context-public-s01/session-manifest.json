@@ -1,0 +1,63 @@
+{
+  "sessionId": "cu-perception-p8b-task-resource-context-public-s01",
+  "checkpoint": "P8B provenance-bearing task resource context boundary",
+  "validationKind": "contract-only",
+  "expectedProductSha": "e55e038bdb5ffd5fc5c846cd74d8f69d872a73b3",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "d9d5834f583d81683aac8a1791bc12889bd355a2",
+  "purpose": "Validate the smallest product boundary that can carry trusted task resource provenance after P8A. The boundary accepts an explicit versioned list of caller-owned file resources, supports only an exact current-document role in this initial scope, requires absolute paths, fails closed on unsupported or ambiguous input, performs no UI/filesystem/perception discovery, and can derive the already validated P7E pulsar-document caller context from one explicit Pulsar current-document resource. This session does not wire taskResourceContext into runTask yet.",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js",
+    "tests/products/computer-use/perception-p8a-caller-context-provenance-gap.test.js",
+    "tests/products/computer-use/perception-p8b-task-resource-context.test.js"
+  ],
+  "requiredClaims": [
+    "task resource context is explicitly versioned and bounded",
+    "the initial supported resource shape is kind=file + role=current-document + application + absolute path",
+    "relative paths, unsupported resource kinds/roles, unsupported versions and oversized contexts fail closed",
+    "more than one current-document resource for the same requested application is ambiguous and fails closed",
+    "one explicit Pulsar current-document resource derives exactly one pulsar-document caller context with the same caller-owned path",
+    "a current-document resource owned by another application does not derive Pulsar caller context",
+    "the resource provenance boundary performs no Computer Control, semantic snapshot, OCR, Vision or filesystem discovery",
+    "taskResourceContext is not yet wired implicitly into the default agent loop or CLI",
+    "P5A-P8A regression contracts remain passing",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is not a physical UI validation.",
+    "This session does not prove the path refers to an existing file or current UI document; runtime surface preconditions remain responsible for binding execution to the actual surface.",
+    "This session does not infer provenance from window title, semantic snapshot, OCR, Vision, filesystem probing, planner output or coordinates.",
+    "This session does not wire taskResourceContext into runTask or the default CLI.",
+    "This session does not add a generic file-open capability or generic Pulsar fallback.",
+    "P7E remains PHYSICALLY_VALIDATED at the explicit pulsar-document caller-context boundary."
+  ],
+  "lineage": {
+    "p7ePhysicalEvidence": "6af4a606eb71418cde61eddd3cdd1fade9b083d2",
+    "p8aEvidence": "fde64d9aab6cc14f8583864222b7581f177b86f7",
+    "p8aState": "PROVENANCE_GAP_CONFIRMED"
+  },
+  "promotion": {
+    "onPass": {
+      "p8bState": "CONTRACT_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P8C wire explicit taskResourceContext into normal runTask as a third mutually exclusive caller source, derive the already validated P7E caller context only from explicit resources, preserve default CLI no-context behavior, and contract-test before physical validation."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact product/test contract mismatch, fix forward, and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR payload, document contents, visual coordinates or user file paths are required by this contract-only session."
+  }
+}
