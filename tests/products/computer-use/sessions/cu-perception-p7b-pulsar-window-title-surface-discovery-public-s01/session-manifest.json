@@ -1,0 +1,45 @@
+{
+  "sessionId": "cu-perception-p7b-pulsar-window-title-surface-discovery-public-s01",
+  "checkpoint": "P7B Pulsar caller-owned window-title surface discovery",
+  "expectedProductSha": "99c058ad9c89e666b471b20aafe214dc5b339ce6",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "3d65df4db08dc5bf5f7d5a42c15f06e58cabee4f",
+  "application": "Pulsar",
+  "purpose": "Determine whether Pulsar exposes an exact current-window title that is discriminating between two temporary caller-owned JavaScript documents and can be reconstructed deterministically from caller-owned file identity, while rechecking the P7A JavaScript and UTF-8 semantic-gap plus local-Vision exact-match observations. Discovery-only; no visual action and no promotion.",
+  "p7aAuthoritativeEvidence": "65c7a674984638529ee8be603a6df09445f68deb",
+  "p7aObserved": {
+    "surfaceSemanticTextFilename": "NOT_VERIFIED",
+    "gapCandidates": ["JavaScript", "UTF-8"],
+    "nonCandidates": ["LF", "Spaces: 2"]
+  },
+  "requiredObservations": [
+    "two distinct temporary JavaScript documents are opened in one clean Pulsar session",
+    "Computer Control window.getCurrent returns a non-empty current-window title for both documents",
+    "the title change is characterized without assuming a title format in advance",
+    "a stable template may use only caller-owned FILE_PATH, FILE_NAME, PARENT_PATH or PARENT_NAME substitutions",
+    "if caller-derivable, materializing the same template for each document reproduces both exact titles",
+    "window-title exact verifies the positive current title and rejects the prior document title",
+    "JavaScript and UTF-8 remain structured NO_SEMANTIC_TARGET CLICK gaps before local Vision selection",
+    "local Vision is selected at most once and only after semantic gap classification",
+    "no click, keyboard editing or visual action delivery occurs"
+  ],
+  "safety": [
+    "Pulsar must not already be running; otherwise the session is BLOCKED",
+    "both documents are created under one temporary directory and contain test-owned data only",
+    "no user document is read or modified",
+    "no pointer or keyboard action is delivered after app launch/activation",
+    "no raw semantic snapshot, screenshot, OCR payload or coordinates are persisted",
+    "the test initiates no external network request",
+    "Pulsar, Computer Control runtime and temporary files are cleaned up",
+    "PASS means DIAGNOSTIC_OBSERVED only and does not ship a built-in contract or skill"
+  ],
+  "lineage": {
+    "p6dAuthoritativeEvidence": "ec7e9757dada06ca313e585c09a42fcf7202e90d",
+    "p6Status": "COMPLETE",
+    "p7Status": "ACTIVE"
+  },
+  "onPass": {
+    "state": "DIAGNOSTIC_OBSERVED",
+    "next": "If the Pulsar title is caller-derivable, exact, discriminating and JavaScript or UTF-8 remains an exact visual gap, choose at most one target and run a separate non-destructive action/postcondition discovery before any normal-agent-loop validation or promotion. If title identity is not suitable, do not weaken exact matching; search for another deterministic Pulsar editor-surface identity or another supported application."
+  }
+}
