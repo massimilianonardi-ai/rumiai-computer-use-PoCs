@@ -1,0 +1,53 @@
+{
+  "sessionId": "cu-perception-p9b-task-invocation-lifecycle-fix-public-s05",
+  "validationKind": "contract-only",
+  "purpose": "Validate the localized external task-invocation process lifecycle fix derived from P9B s04 diagnostic evidence before any new physical Pulsar validation.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "ea05f17b5a090c206b81d9cc4b467ff72c192d6a",
+    "pass": 19,
+    "fail": 0,
+    "blocked": 0
+  },
+  "p9bLifecycleFix": {
+    "diagnosticEvidence": "00d1fb0342a90f5d736cacada58207711848d3b4",
+    "diagnosticClassification": "TASK_COMPLETED_PROCESS_DID_NOT_EXIT",
+    "failedPhysicalEvidence": [
+      "557ba3445e107a668ef7453821c19ab319a458c9",
+      "837c3418ac2958fc4606a919a1fc38c04ae2538a"
+    ],
+    "productFix": "Only the executable task-invocation main() owns cleanup of the Computer Control runtime used by its real agent-loop execution; programmatic runTaskInvocation callers retain reusable caller-owned lifecycle semantics.",
+    "assertions": [
+      "executable invocation exits after success and cleanup is called exactly once",
+      "executable invocation exits after runTask failure and cleanup is called exactly once",
+      "executable invocation exits after runTask exception and cleanup is called exactly once",
+      "programmatic runTaskInvocation performs no implicit Computer Control cleanup",
+      "unsupported invocation envelopes still fail before agent-loop loading",
+      "existing P5-P9A semantic-first provenance and delivery/success contracts remain green"
+    ]
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance remains explicit and is not inferred from UI state",
+    "planner remains semantic-only",
+    "provider selection remains Computer Use-owned and lazy",
+    "Computer Control remains delivery mechanics only",
+    "default interactive CLI behavior is unchanged",
+    "no mandatory network account or cloud dependency",
+    "P9B s01 s02 s03 s04 evidence remains immutable",
+    "Git advances forward-only"
+  ],
+  "promotionOnPass": {
+    "p9bLifecycleFix": "CONTRACT_VALIDATED",
+    "p9b": "NOT_YET_PHYSICALLY_VALIDATED",
+    "next": "Prepare a new immutable P9B physical session on the fixed Computer Use SHA and validate the real external stdin process end-to-end."
+  },
+  "nonClaims": [
+    "This contract session is not physical validation of P9B",
+    "It does not validate the default interactive CLI",
+    "It does not authorize generic Pulsar visual fallback",
+    "It does not weaken CLICK_POSTED != success"
+  ]
+}
