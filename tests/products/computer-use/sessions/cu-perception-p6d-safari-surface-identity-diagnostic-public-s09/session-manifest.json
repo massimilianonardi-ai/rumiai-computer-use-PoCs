@@ -1,0 +1,29 @@
+{
+  "sessionId": "cu-perception-p6d-safari-surface-identity-diagnostic-public-s09",
+  "checkpoint": "P6D Safari semantic title exact diagnostic",
+  "expectedProductSha": "a90ab782d85e1283e76b4b64aa9bdbe54a7e4e0e",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "d598907427d86b8ad0478ea26601a93b63ae6881",
+  "purpose": "Determine whether Safari exposes the test-owned HTML document title as one exact semantic-text node in the compact snapshot, while a different title is rejected. A PASS is diagnostic only and does not promote P6D.",
+  "lineage": [
+    {"session":"cu-perception-p6d-surface-precondition-public-s06","evidence":"e8edb4b40ea9015e2a8fe5a43e510acd2232f049","result":"FAIL","finding":"Safari current-window title starts with exact HTML title but adds a browser-owned suffix."},
+    {"session":"cu-perception-p6d-safari-surface-identity-diagnostic-public-s07","evidence":"091592162f2c6bab12596764326be7cde09cfb99","result":"FAIL","finding":"Diagnostic fixture did not establish Safari foreground before current-window observation."},
+    {"session":"cu-perception-p6d-safari-surface-identity-diagnostic-public-s08","evidence":"ce1ee1873174cdf63b9994dd9b832c9ad7f36058","result":"PASS","state":"DIAGNOSTIC_OBSERVED","finding":"Compact Safari snapshot contains the test-owned title, host:port, hostname and path; current-window suffix is not derived from tested URL data."}
+  ],
+  "diagnosticProperties": [
+    "no product behavior changes",
+    "no visual action delivery",
+    "semantic-text exact evaluator reused unchanged",
+    "wrong title must be rejected independently",
+    "no screenshot or OCR payload",
+    "no coordinates",
+    "raw current-window title is never logged",
+    "raw semantic snapshot is never logged",
+    "Safari is explicitly activated and foreground verified before observation",
+    "loopback HTTP only; no external network"
+  ],
+  "onPass": {
+    "state": "DIAGNOSTIC_OBSERVED",
+    "next": "if semantic title is exactly one match and wrong title is rejected, use existing semantic-text exact document-title precondition in the next full P6D physical session; do not add fuzzy title matching"
+  }
+}
