@@ -1,0 +1,35 @@
+{
+  "sessionId": "cu-perception-p7a-pulsar-real-use-gap-discovery-public-s01",
+  "checkpoint": "P7A evidence-backed real-use-case gap discovery",
+  "expectedProductSha": "99c058ad9c89e666b471b20aafe214dc5b339ce6",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "9ae06dc1c81cf587b880dd47de84e3b87d97ea9e",
+  "application": "Pulsar",
+  "purpose": "Observe a real already-supported Pulsar editing surface using a temporary JavaScript file and determine whether a bounded set of useful status-bar targets are exact-visible to local Vision while remaining unavailable as semantic CLICK targets. This session is discovery-only and does not promote any built-in caller contract or skill.",
+  "candidateTargets": [
+    {"id": "grammar", "testOwnedText": "JavaScript"},
+    {"id": "encoding", "testOwnedText": "UTF-8"},
+    {"id": "line-ending", "testOwnedText": "LF"},
+    {"id": "indentation", "testOwnedText": "Spaces: 2"}
+  ],
+  "safety": [
+    "Pulsar must not already be running; otherwise the session is BLOCKED",
+    "the opened file is created under a temporary directory and is never modified by the test",
+    "no pointer or keyboard action is delivered after launch/activation",
+    "semantic candidate classification happens before local Vision provider selection",
+    "local Vision is selected only if at least one predefined candidate is a structured semantic CLICK gap",
+    "no raw semantic snapshot, screenshot, OCR payload or coordinates are persisted",
+    "the test initiates no external network request",
+    "Pulsar, Computer Control runtime and temporary files are cleaned up",
+    "PASS means DIAGNOSTIC_OBSERVED only; it does not validate or ship a visual fallback contract"
+  ],
+  "lineage": {
+    "p6dAuthoritativeEvidence": "ec7e9757dada06ca313e585c09a42fcf7202e90d",
+    "p6Status": "COMPLETE",
+    "p7Status": "ACTIVE"
+  },
+  "onPass": {
+    "state": "DIAGNOSTIC_OBSERVED",
+    "next": "Select at most one candidate with exact Vision single-match plus structured semantic CLICK gap and a deterministic surface identity; then design an independently verifiable postcondition before any action-delivery validation or built-in promotion. If no candidate qualifies, do not weaken matching; inspect the next supported application."
+  }
+}
