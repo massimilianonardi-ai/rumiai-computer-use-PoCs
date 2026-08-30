@@ -1,0 +1,67 @@
+{
+  "sessionId": "cu-perception-p7e-agent-loop-caller-context-physical-public-s01",
+  "checkpoint": "P7E explicit caller-context physical validation",
+  "expectedProductSha": "158cc475c209ade1c3260f0f2d6d4d4bc97f2f4a",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "540abac1a7f534f36a809b0f8bb1036ceb57eb3f",
+  "application": "Pulsar",
+  "callerContextKind": "pulsar-document",
+  "target": "UTF-8",
+  "postcondition": "UTF-16 LE",
+  "purpose": "Physically validate the shipped P7D/P7E promotion path through the normal agent-loop using only an explicit caller-owned Pulsar document context. The physical task must not inject visualFallbackContracts. runTask must materialize the bounded UTF-8 contract from {kind:pulsar-document, documentPath}, preserve a semantic-only planner, encounter structured NO_SEMANTIC_TARGET before local Vision selection, verify the exact caller-derived window-title surface, deliver CLICK_POSTED, and report VERIFIED_SUCCESS only after an independent exact UTF-16 LE post-action observation.",
+  "callerBoundary": {
+    "input": "visualFallbackCallerContext:{kind:'pulsar-document',documentPath:<absolute caller-owned path>}",
+    "forbiddenInput": "visualFallbackContracts",
+    "materializer": "app/pulsar-encoding-selector-visual-contract.js",
+    "resolver": "app/visual-fallback-caller-context.js",
+    "agentLoop": "app/agent-loop.js",
+    "rule": "The caller provides document identity explicitly. Computer Use must not infer documentPath from foreground state, semantic snapshots, current-window title, Vision or Computer Control."
+  },
+  "surfaceIdentity": {
+    "kind": "window-title",
+    "match": "exact",
+    "callerDerivedTemplate": "{FILE_NAME} — <canonical /private parent path>",
+    "basis": "P7B authoritative evidence 5f5045693400f8957e98baea6ba76fc428011e7f and P7D contract evidence 31f10c01244d98eee1c8f309e46b0578d2d60337",
+    "runtimeRule": "The exact surface precondition is observed after the P5B-eligible semantic gap and before provider selection."
+  },
+  "safety": [
+    "Pulsar must not already be running; otherwise the session is BLOCKED and creates no physical evidence run against user editor state",
+    "the opened JavaScript document is created in a temporary directory and its SHA-256 content hash must remain unchanged",
+    "the encoding selector is opened but no encoding choice is confirmed",
+    "the planner contains only ACTIVATE_APP Pulsar and OPEN UTF-8; documentPath, scope, surface precondition, postcondition, provider request and coordinates remain outside planner output",
+    "runTask receives visualFallbackCallerContext only; explicit visualFallbackContracts are forbidden by this physical proof",
+    "semantic-first execution must produce structured NO_SEMANTIC_TARGET before visual provider selection",
+    "only local rumiai.local.macos-vision-text-region perception is accepted",
+    "CLICK_POSTED is delivery evidence only and semanticConsequenceVerified remains false at delivery",
+    "VERIFIED_SUCCESS requires an independent post-action Vision observation of exact UTF-16 LE",
+    "no raw semantic snapshot, screenshot, OCR payload or coordinates are persisted",
+    "the test initiates no external network request",
+    "cleanup sends application-scoped Escape after a task attempt, restores the pointer, terminates Pulsar and Computer Control, and removes temporary files",
+    "no generic Pulsar status-bar clicking, arbitrary encoding selection or implicit caller-context inference is authorized by this session"
+  ],
+  "lineage": {
+    "p6dAuthoritativeEvidence": "ec7e9757dada06ca313e585c09a42fcf7202e90d",
+    "p7aEvidence": "65c7a674984638529ee8be603a6df09445f68deb",
+    "p7bEvidence": "5f5045693400f8957e98baea6ba76fc428011e7f",
+    "p7cPhysicalEvidence": "77fd94bd6b765a56182822cf2a43297b6baa1537",
+    "p7cState": "REAL_USE_CANDIDATE_PHYSICALLY_VALIDATED",
+    "p7dContractEvidence": "31f10c01244d98eee1c8f309e46b0578d2d60337",
+    "p7dState": "CONTRACT_VALIDATED",
+    "p7eContractEvidence": "e1bb360188c3713653b09b0c2320fe45d4261f2d",
+    "p7eContractState": "CONTRACT_VALIDATED"
+  },
+  "expectedSessionShape": {
+    "contractTests": 12,
+    "physicalTests": 1,
+    "postChecks": 1,
+    "expectedTotal": 14
+  },
+  "onPass": {
+    "state": "PHYSICALLY_VALIDATED",
+    "claim": "The first shipped evidence-backed real-use Pulsar UTF-8 visual fallback path is physically validated through explicit caller context, without injected contracts.",
+    "next": "Record immutable P7E evidence and update orchestration/handoff. Then decide the next caller-facing expansion without adding implicit document inference or generic Pulsar visual behavior."
+  },
+  "onFailure": {
+    "policy": "Preserve this session immutably, diagnose the exact failing boundary, fix forward only, and do not weaken semantic-first eligibility, exact surface identity, local provider selection, delivery-success separation or independent verification."
+  }
+}
