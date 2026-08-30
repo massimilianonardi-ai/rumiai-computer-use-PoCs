@@ -11,6 +11,7 @@ const productRoot=process.env.RUMIAI_COMPUTER_USE_ROOT;
 if(!productRoot){console.error("physical-computer-use-perception-p6d-surface-identity-diagnostic=BLOCKED code=MISSING_PRODUCT_ROOT");process.exit(2);}
 
 const TITLE="P6D SURFACE BETA";
+const WRONG_TITLE="P6D SURFACE ALPHA";
 function asyncSleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function run(cmd,args,options={}){return spawnSync(cmd,args,{encoding:"utf8",maxBuffer:16*1024*1024,...options});}
 function safariRunning(){return (run("/usr/bin/pgrep",["-x","Safari"]).status??1)===0;}
@@ -32,6 +33,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     tmp=fs.mkdtempSync(path.join(os.tmpdir(),"rumiai-p6d-title-diag-"));
     process.env.RUMIAI_CC_SOCKET=path.join(tmp,"cc.sock");
     computerControl=require(path.join(productRoot,"app","computer-control-external.js"));
+    const surface=require(path.join(productRoot,"app","visual-fallback-surface-precondition.js"));
 
     server=http.createServer((req,res)=>{
       if(req.url==="/favicon.ico"){res.writeHead(204);res.end();return;}
@@ -88,6 +90,15 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       candidates[label]=separators.some(sep=>title===norm(`${TITLE}${sep}${value}`));
     }
 
+    const semanticExact=surface.evaluateSemanticSurfacePrecondition(
+      {kind:"semantic-text",match:"exact",text:TITLE},
+      {state:{snapshot:snapshotResult.snapshot}}
+    );
+    const semanticWrong=surface.evaluateSemanticSurfacePrecondition(
+      {kind:"semantic-text",match:"exact",text:WRONG_TITLE},
+      {state:{snapshot:snapshotResult.snapshot}}
+    );
+
     const diag={
       titlePresent:Boolean(title),
       titleLength:title.length,
@@ -113,6 +124,10 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
       snapshotContainsHostname:snapshot.includes(norm(hostname)),
       snapshotContainsPath:snapshot.includes("/p6d"),
       listedPrefixCount,
+      semanticTitleExactVerified:semanticExact?.ok===true&&semanticExact?.state==="SURFACE_PRECONDITION_VERIFIED",
+      semanticTitleMatchCount:Number(semanticExact?.metadata?.matchCount??-1),
+      semanticWrongRejected:semanticWrong?.ok===false&&semanticWrong?.reason==="SURFACE_PRECONDITION_NOT_MET",
+      semanticWrongMatchCount:Number(semanticWrong?.metadata?.matchCount??-1),
     };
 
     console.log("p6d-safari-frontmost-precondition=PASS explicitActivation=true foregroundVerified=true");
@@ -120,6 +135,7 @@ async function closeServer(server){if(!server)return;await new Promise(resolve=>
     console.log(`p6d-safari-title-owned-data=PASS suffixContainsHostname=${diag.suffixContainsHostname} suffixContainsPort=${diag.suffixContainsPort} suffixContainsOrigin=${diag.suffixContainsOrigin} suffixContainsPath=${diag.suffixContainsPath} suffixContainsHttp=${diag.suffixContainsHttp} suffixContainsSafari=${diag.suffixContainsSafari} suffixContainsPrivate=${diag.suffixContainsPrivate}`);
     console.log(`p6d-safari-title-candidates=PASS hostname=${diag.exactCandidateHostname} hostPort=${diag.exactCandidateHostPort} origin=${diag.exactCandidateOrigin} url=${diag.exactCandidateUrl} path=${diag.exactCandidatePath}`);
     console.log(`p6d-safari-semantic-identity=PASS snapshotContainsTitle=${diag.snapshotContainsTitle} snapshotContainsFullUrl=${diag.snapshotContainsFullUrl} snapshotContainsOrigin=${diag.snapshotContainsOrigin} snapshotContainsHostPort=${diag.snapshotContainsHostPort} snapshotContainsHostname=${diag.snapshotContainsHostname} snapshotContainsPath=${diag.snapshotContainsPath} listedWindowPrefixCount=${diag.listedPrefixCount}`);
+    console.log(`p6d-safari-semantic-title-exact=PASS verified=${diag.semanticTitleExactVerified} matchCount=${diag.semanticTitleMatchCount} wrongTitleRejected=${diag.semanticWrongRejected} wrongTitleMatchCount=${diag.semanticWrongMatchCount}`);
     console.log("p6d-safari-diagnostic-payload=PASS rawWindowTitleLogged=false snapshotLogged=false screenshotLogged=false ocrPayloadLogged=false coordinatesLogged=false externalNetwork=false");
     outcome={code:0,marker:"physical-computer-use-perception-p6d-surface-identity-diagnostic=PASS"};
   }catch(error){outcome={code:1,marker:`physical-computer-use-perception-p6d-surface-identity-diagnostic=FAIL code=${error.code||error.message||"UNEXPECTED"}`};}
