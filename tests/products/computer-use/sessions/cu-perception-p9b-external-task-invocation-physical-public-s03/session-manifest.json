@@ -1,0 +1,69 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-physical-public-s03",
+  "validationKind": "physical",
+  "purpose": "Physically validate the real external-process stdin transport into app/task-invocation.js after correcting only the generated-preload newline escaping defect identified by immutable P9B s01 and diagnostic s02 evidence.",
+  "expected": {
+    "computerUseSha": "c1a6d41b0c1ce16fa9b6beed93621f303a5aa72b",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "f4aa97e3783593a129b8206e1d7955f44ab2cae2",
+    "pass": 19,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "s01Evidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "s01Result": "18 PASS / 1 FAIL / 0 BLOCKED",
+    "s01Failure": "P9B_CHILD_PROCESS_FAILED",
+    "s02DiagnosticEvidence": "cc584e723d5eae1943c31ff9bd02787f4a8c339b",
+    "s02DiagnosticResult": "DIAGNOSTIC_OBSERVED",
+    "s02RootCause": "fixture-only generated preload contained an unescaped newline inside a JavaScript string literal and failed with SyntaxError before loading the real agent-loop",
+    "historicalBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "s03Correction": "runtime wrapper verifies the exact historical base blob and changes exactly one generated-preload newline escape from one backslash to two backslashes; no product or behavioral contract is changed"
+  },
+  "p9b": {
+    "application": "Pulsar",
+    "task": "Open the encoding selector for the current Pulsar document",
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "externalTransport": "stdin JSON to app/task-invocation.js in a real child process",
+    "resourceOwner": "external caller",
+    "productInvocationOwner": "task-invocation",
+    "resource": "one explicit temporary Pulsar current-document file",
+    "assertions": [
+      "real child process executes app/task-invocation.js and exits successfully",
+      "task bytes and one taskResourceContext are preserved across stdin/process boundary",
+      "no visualFallbackContracts visualFallbackCallerContext or documentPath shortcut crosses the invocation envelope",
+      "taskResourceContext derives exactly one pulsar-document caller context and one bounded P7D contract",
+      "planner remains semantic-only",
+      "semantic OPEN reaches structured NO_SEMANTIC_TARGET before visual provider selection",
+      "exact current-document window-title surface guard verifies before provider selection",
+      "local macOS Vision provider is selected exactly once",
+      "Computer Control CLICK_POSTED remains delivery only",
+      "independent post-action exact UTF-16 LE observation yields VERIFIED_SUCCESS",
+      "temporary document hash remains unchanged and encoding selection is not confirmed",
+      "selector pointer Pulsar runtime and temp state are cleaned up"
+    ]
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "PHYSICALLY_VALIDATED",
+    "p9": "external stdin task-invocation path physically validated for the single bounded Pulsar UTF-8 real-use case",
+    "next": "Record P9B evidence and update orchestration/handoff without extending the claim to the default interactive CLI or generic Pulsar behavior."
+  },
+  "nonClaims": [
+    "P9B does not validate the default interactive CLI",
+    "P9B does not authorize generic Pulsar status-bar clicking or arbitrary targets",
+    "P9B does not authorize UI-derived resource provenance",
+    "P9B does not validate generic external protocols beyond the versioned stdin task-invocation envelope",
+    "P9B does not authorize generic browser or application visual fallback"
+  ]
+}
