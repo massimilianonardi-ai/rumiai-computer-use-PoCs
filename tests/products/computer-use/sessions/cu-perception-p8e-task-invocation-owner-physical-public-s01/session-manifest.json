@@ -1,0 +1,65 @@
+{
+  "sessionId": "cu-perception-p8e-task-invocation-owner-physical-public-s01",
+  "validationKind": "physical",
+  "purpose": "Physically validate the explicit product task-invocation ownership boundary end-to-end through the already validated Pulsar UTF-8 visual fallback, without direct fixture ownership of visualFallbackContracts or visualFallbackCallerContext.",
+  "frozen": {
+    "computerUseSha": "e045791532c981e844df8e7b1bb21dd723b6f72c",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "6caa5ac44ef05604310c4e792b085309db44c472"
+  },
+  "prerequisites": {
+    "p8eContractEvidence": "9ee985d84bd8aaf0f187783afdb20bdaf9c255da",
+    "p8dPhysicalEvidence": "56439d05268b67427b901d686bac94ede4c12eb9",
+    "p7ePhysicalEvidence": "6af4a606eb71418cde61eddd3cdd1fade9b083d2"
+  },
+  "fixture": {
+    "application": "Pulsar",
+    "applicationInitiallyClosed": true,
+    "temporaryDocument": true,
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "invocation": {
+      "version": 1,
+      "task": "Open the encoding selector for the current Pulsar document",
+      "resourceKind": "file",
+      "resourceRole": "current-document",
+      "resourceApplication": "Pulsar",
+      "resourcePath": "temporary absolute caller-owned path"
+    }
+  },
+  "requiredClaims": [
+    "task-invocation normalizes explicit pre-planner resources and preserves task text",
+    "task-invocation invokes runTask exactly once with taskResourceContext as its only forwarded option",
+    "no documentPath, visualFallbackCallerContext, visualFallbackContracts or other hidden visual source crosses the invocation boundary",
+    "taskResourceContext derives the bounded pulsar-document caller context and exact P7D contract",
+    "planner remains semantic-only",
+    "semantic OPEN UTF-8 fails with structured NO_SEMANTIC_TARGET before visual perception",
+    "exact current-document window-title surface precondition verifies before provider selection",
+    "local macOS Vision text-region provider is selected exactly once after the eligible semantic gap",
+    "Computer Control CLICK_POSTED is delivery only",
+    "fresh independent post-action observation of exact UTF-16 LE is required for VERIFIED_SUCCESS",
+    "temporary document content hash remains unchanged",
+    "no screenshot, OCR payload or coordinates are persisted in ordinary evidence",
+    "selector, pointer, Pulsar, runtime and temporary resources are cleaned up"
+  ],
+  "nonClaims": [
+    "default interactive CLI automatically owns or discovers a document path",
+    "generic Pulsar status-bar clicking",
+    "arbitrary Pulsar OPEN targets",
+    "UI/window/OCR/Vision based resource provenance",
+    "prefix, contains or fuzzy surface matching"
+  ],
+  "expected": {
+    "contractTests": 16,
+    "physicalTests": 1,
+    "postChecks": 1,
+    "pass": 18,
+    "fail": 0,
+    "blocked": 0
+  },
+  "onPass": {
+    "p8e": "PHYSICALLY_VALIDATED",
+    "p8": "COMPLETE at explicit task-invocation owner boundary",
+    "next": "Define the next program without weakening explicit provenance or delivery != success. The default interactive CLI remains unproven for resource ownership unless separately designed and validated."
+  }
+}
