@@ -37,10 +37,14 @@ function unwrapWindow(candidate){
   if(candidate?.field==="window"&&candidate.value&&typeof candidate.value==="object")return candidate.value;
   return candidate&&typeof candidate==="object"?candidate:null;
 }
+function pulsarDisplayedParentPath(parentPath){
+  return String(parentPath||"").startsWith("/private/")?String(parentPath):`/private${parentPath}`;
+}
 
 (async()=>{
   let tmp=null,computerControl=null,pulsarLaunched=false,initialPointer=null,filePath=null;
   let pointerRestored=false,pulsarCleanup=false,runtimeCleanup=false,tempCleanup=false,selectorDismissed=false;
+  let taskAttempted=false;
   let outcome={code:1,marker:"physical-computer-use-perception-p7c=FAIL code=UNEXPECTED"};
   try{
     if(process.platform!=="darwin")fail("MACOS_REQUIRED");
@@ -87,21 +91,23 @@ function unwrapWindow(candidate){
     }
     if(!isPulsarForeground(foreground))fail("PULSAR_NOT_FOREGROUND");
 
-    let currentWindow=null,currentTitle="";
-    for(let i=0;i<40;i++){
+    const parentPath=path.dirname(filePath);
+    const expectedWindowTitle=`${FILE_NAME} — ${pulsarDisplayedParentPath(parentPath)}`;
+    let currentWindow=null,currentTitle="",titlePrecondition=null,titlePollAttempts=0;
+    for(let i=0;i<60;i++){
+      titlePollAttempts=i+1;
       currentWindow=computerControl.getCurrentWindow({app:"Pulsar"});
       currentTitle=String(unwrapWindow(currentWindow?.window)?.title||"").trim();
-      if(currentWindow?.ok&&currentTitle)break;
+      if(currentWindow?.ok&&currentTitle){
+        titlePrecondition=surface.evaluateSemanticSurfacePrecondition(
+          {kind:"window-title",match:"exact",text:expectedWindowTitle},
+          {currentWindow:currentWindow.window}
+        );
+        if(titlePrecondition?.ok&&titlePrecondition.state==="SURFACE_PRECONDITION_VERIFIED"&&titlePrecondition.metadata?.matchCount===1)break;
+      }
       await asyncSleep(100);
     }
     if(!currentWindow?.ok||!currentTitle)fail("PULSAR_CURRENT_WINDOW_NOT_OBSERVED");
-
-    const parentPath=path.dirname(filePath);
-    const expectedWindowTitle=`${FILE_NAME} — /private${parentPath}`;
-    const titlePrecondition=surface.evaluateSemanticSurfacePrecondition(
-      {kind:"window-title",match:"exact",text:expectedWindowTitle},
-      {currentWindow:currentWindow.window}
-    );
     if(!titlePrecondition?.ok||titlePrecondition.state!=="SURFACE_PRECONDITION_VERIFIED"||titlePrecondition.metadata?.matchCount!==1)fail("PULSAR_CALLER_DERIVED_WINDOW_TITLE_NOT_VERIFIED");
 
     const plannerSteps=[
@@ -131,6 +137,7 @@ function unwrapWindow(candidate){
     if(materialized?.postcondition?.text!==POSTCONDITION)fail("P7C_POSTCONDITION_NOT_MATERIALIZED");
 
     let verifyCalls=0,providerSelectCalls=0,windowObserveCalls=0,lastSurface=null;
+    taskAttempted=true;
     const task=await agentLoop.runTask("Open the encoding selector for the current Pulsar document",{
       executionMode:()=>"EXACT",
       planTask:async input=>({steps:plannerSteps,seconds:0,metrics:null,prefixChars:0,taskChars:String(input).length,literalPayload:null}),
@@ -172,7 +179,7 @@ function unwrapWindow(candidate){
     if(fileHashAfter!==fileHashBefore)fail("P7C_DOCUMENT_MODIFIED_BY_SELECTOR_OPEN");
 
     console.log("p7c-real-use-case=PASS application=Pulsar target=UTF-8 temporaryDocument=true userDataModified=false");
-    console.log("p7c-surface-identity=PASS kind=window-title match=exact callerDerivable=true template=FILE_NAME+PRIVATE_PARENT_PATH matchCount=1");
+    console.log(`p7c-surface-identity=PASS kind=window-title match=exact callerDerivable=true template=FILE_NAME+CANONICAL_PRIVATE_PARENT_PATH matchCount=1 preflightAttempts=${titlePollAttempts}`);
     console.log("p7c-planner-boundary=PASS semanticOnly=true scopeOutsidePlanner=true surfacePreconditionOutsidePlanner=true postconditionOutsidePlanner=true coordinates=false providerObject=false");
     console.log("p7c-semantic-first=PASS semanticCode=NO_SEMANTIC_TARGET visualEligible=true providerSelectionAfterGap=true");
     console.log(`p7c-provider=PASS provider=rumiai.local.macos-vision-text-region selectionCalls=${providerSelectCalls} windowObservationCalls=${windowObserveCalls} surfaceVerifyCalls=${verifyCalls}`);
@@ -185,9 +192,9 @@ function unwrapWindow(candidate){
   }catch(error){
     outcome={code:1,marker:`physical-computer-use-perception-p7c=FAIL code=${error.code||error.message||"UNEXPECTED"}`};
   }finally{
-    if(computerControl&&pulsarLaunched){
+    if(computerControl&&pulsarLaunched&&taskAttempted){
       try{
-        const dismissed=computerControl.pressKey({key:"ESCAPE",modifiers:[]});
+        const dismissed=computerControl.press({app:"Pulsar",keys:"Escape",settle:false});
         selectorDismissed=dismissed?.ok!==false;
       }catch{selectorDismissed=false;}
     }else selectorDismissed=true;
