@@ -1,0 +1,61 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-physical-public-s01",
+  "validationKind": "physical",
+  "purpose": "Physically validate the real external-process stdin transport into app/task-invocation.js and through the real agent-loop visual fallback path without adding a Computer Use test hook.",
+  "expected": {
+    "computerUseSha": "c1a6d41b0c1ce16fa9b6beed93621f303a5aa72b",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "b20e71fdf18ca715017c9b16e9ae460f01573a58",
+    "pass": 19,
+    "fail": 0,
+    "blocked": 0
+  },
+  "p9b": {
+    "application": "Pulsar",
+    "task": "Open the encoding selector for the current Pulsar document",
+    "target": "UTF-8",
+    "postcondition": "UTF-16 LE",
+    "externalTransport": "stdin JSON to app/task-invocation.js in a real child process",
+    "resourceOwner": "external caller",
+    "productInvocationOwner": "task-invocation",
+    "resource": "one explicit temporary Pulsar current-document file",
+    "fixturePreload": "fixture-only preload wraps the real agent-loop runTask export, adds only the frozen semantic planner and physical dependencies, and captures bounded result metadata in an ephemeral temp file",
+    "assertions": [
+      "real child process executes app/task-invocation.js and exits successfully",
+      "task bytes and one taskResourceContext are preserved across stdin/process boundary",
+      "no visualFallbackContracts visualFallbackCallerContext or documentPath shortcut crosses the invocation envelope",
+      "taskResourceContext derives exactly one pulsar-document caller context and one bounded P7D contract",
+      "planner remains semantic-only",
+      "semantic OPEN reaches structured NO_SEMANTIC_TARGET before visual provider selection",
+      "exact current-document window-title surface guard verifies before provider selection",
+      "local macOS Vision provider is selected exactly once",
+      "Computer Control CLICK_POSTED remains delivery only",
+      "independent post-action exact UTF-16 LE observation yields VERIFIED_SUCCESS",
+      "temporary document hash remains unchanged and encoding selection is not confirmed",
+      "child capture is ephemeral and no screenshot OCR payload or coordinates are logged",
+      "selector pointer Pulsar runtime and temp state are cleaned up"
+    ]
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "PHYSICALLY_VALIDATED",
+    "p9": "external stdin task-invocation path validated for the single bounded Pulsar UTF-8 real-use case",
+    "next": "Update evidence orchestration and handoff; then decide the next integration boundary without extending the claim to the default interactive CLI or generic Pulsar behavior."
+  },
+  "nonClaims": [
+    "P9B does not validate the default interactive CLI",
+    "P9B does not authorize generic Pulsar status-bar clicking or arbitrary targets",
+    "P9B does not authorize UI-derived resource provenance",
+    "P9B does not validate generic external protocols beyond the versioned stdin task-invocation envelope",
+    "P9B does not authorize generic browser or application visual fallback"
+  ]
+}
