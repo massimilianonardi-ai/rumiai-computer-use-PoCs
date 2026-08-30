@@ -113,8 +113,11 @@ test("P8B resource provenance boundary performs no UI, perception, planner or fi
   assert.doesNotMatch(resourceSource,/require\("node:fs"\)/);
 });
 
-test("P8B is not yet implicitly wired into the default agent loop or CLI",()=>{
-  assert.doesNotMatch(agentSource,/taskResourceContext/);
+test("P8B remains explicit after later runTask wiring and the default CLI still supplies no resource context",()=>{
+  assert.match(agentSource,/task-resource-context/);
+  assert.match(agentSource,/taskResourceContext/);
   assert.match(agentSource,/await runTask\(task\);/);
+  assert.doesNotMatch(agentSource,/await runTask\(task,\s*\{[^}]*taskResourceContext/s);
   assert.match(agentSource,/visualFallbackCallerContext/);
+  assert.doesNotMatch(agentSource,/\bdocumentPath\b/);
 });
