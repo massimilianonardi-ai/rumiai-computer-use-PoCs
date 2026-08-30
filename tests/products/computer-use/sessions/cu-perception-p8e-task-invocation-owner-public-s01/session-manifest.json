@@ -1,0 +1,69 @@
+{
+  "sessionId": "cu-perception-p8e-task-invocation-owner-public-s01",
+  "checkpoint": "P8E explicit task invocation resource owner",
+  "validationKind": "contract-only",
+  "expectedProductSha": "e045791532c981e844df8e7b1bb21dd723b6f72c",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "620b3101e556a37150560758dfcbed6f728e6102",
+  "purpose": "Validate the smallest explicit product invocation boundary that receives task plus caller-owned resources before planning, normalizes them through the P8B task resource contract, and invokes normal runTask with taskResourceContext as its only visual-knowledge option. The default interactive CLI remains unchanged and receives no implicit resource context.",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js",
+    "tests/products/computer-use/perception-p8a-caller-context-provenance-gap.test.js",
+    "tests/products/computer-use/perception-p8b-task-resource-context.test.js",
+    "tests/products/computer-use/perception-p8c-agent-loop-task-resource-context.test.js",
+    "tests/products/computer-use/perception-p8e-task-invocation-owner.test.js"
+  ],
+  "requiredClaims": [
+    "task-invocation.js accepts only version, task and resources at the product invocation boundary",
+    "task text is preserved exactly rather than normalized into planner/resource metadata",
+    "resources are normalized by the already validated P8B task-resource-context boundary",
+    "relative/invalid resource identity fails closed before runTask",
+    "alternate visual knowledge fields including documentPath, taskResourceContext, visualFallbackCallerContext, visualFallbackContracts and visualFallbackDependencies are rejected at the invocation schema",
+    "runTask is invoked exactly once with taskResourceContext as its only option",
+    "invalid invocation never reaches runTask and failed runTask is not retried by the invocation boundary",
+    "task-invocation.js performs no UI, Computer Control, semantic snapshot, OCR, Vision or filesystem path discovery",
+    "agent-loop.js does not import task-invocation.js and the default interactive CLI still calls runTask(task) without taskResourceContext",
+    "agent-loop.js remains documentPath-free and planner output remains resource/provenance-free",
+    "P5A-P8C regression contracts remain passing",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This contract-only session is not a physical UI validation.",
+    "The invocation boundary preserves explicit resource provenance supplied by its caller; it does not independently prove filesystem ownership or freshness by inspecting the UI or filesystem.",
+    "This session does not make taskResourceContext implicit in the interactive CLI.",
+    "This session does not add document.open or a new Computer Control mechanic.",
+    "This session does not authorize generic Pulsar visual fallback or any target other than the already bounded P7D/P7E knowledge when later resolved by runTask.",
+    "P8D remains the authoritative physical validation until the invocation boundary itself is physically exercised."
+  ],
+  "lineage": {
+    "p8aEvidence": "fde64d9aab6cc14f8583864222b7581f177b86f7",
+    "p8bEvidence": "d08f48dee5fd7c14e3000821bb516dcafeca9da7",
+    "p8cEvidence": "aabe4a69a4a4b4c0ef86ebb3cfd659300aa103d8",
+    "p8dPhysicalEvidence": "56439d05268b67427b901d686bac94ede4c12eb9",
+    "p8dState": "PHYSICALLY_VALIDATED"
+  },
+  "promotion": {
+    "onPass": {
+      "p8eState": "CONTRACT_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P8E physical validation: exercise the real task-invocation product boundary with an explicit temporary Pulsar current-document resource and prove the same semantic-first visual fallback path without direct fixture invocation of runTask."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact product/test contract failure, fix forward, and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR payload, visual coordinates, user file contents or user file paths are required by this contract-only session."
+  }
+}
