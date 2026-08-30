@@ -1,0 +1,83 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-cleanup-diagnostic-public-s10",
+  "validationKind": "diagnostic-only",
+  "purpose": "Observe the exact cross-process fixture teardown failure after P9B core physical success has already been demonstrated, without changing Computer Use, Computer Control, provenance, planner, perception, delivery, verification, or promotion criteria.",
+  "expected": {
+    "computerUseSha": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "c06651bc47324c16145e19a632fb34c288fb7888",
+    "pass": 20,
+    "fail": 0,
+    "blocked": 0
+  },
+  "lineage": {
+    "p9aEvidence": "30744df93ed16e0c61d67eb53718d145a8a453b5",
+    "p9aState": "CONTRACT_VALIDATED",
+    "s01Evidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "s01State": "IMMUTABLE_FAIL",
+    "s02Evidence": "cc584e723d5eae1943c31ff9bd02787f4a8c339b",
+    "s02State": "DIAGNOSTIC_OBSERVED",
+    "s03Evidence": "837c3418ac2958fc4606a919a1fc38c04ae2538a",
+    "s03State": "IMMUTABLE_FAIL",
+    "s04Evidence": "00d1fb0342a90f5d736cacada58207711848d3b4",
+    "s04State": "DIAGNOSTIC_OBSERVED",
+    "lifecycleFixProduct": "cd1d189776e96d7f8625b367eaa76a2572de394a",
+    "s05Evidence": "a820771e0f6448505277eb0ebfceb7b910328a84",
+    "s05State": "CONTRACT_VALIDATED",
+    "s06Evidence": "e728bc61009227103e7542c27bb900d948e17b2a",
+    "s06State": "IMMUTABLE_FAIL",
+    "s07Evidence": "43768d6fda9a454fe252c8e56ee4e833e1e868db",
+    "s07State": "IMMUTABLE_FAIL",
+    "s08Evidence": "7828e6cd4225f03620454eefc5032610aba56a50",
+    "s08State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s09Evidence": "b5e5f3e6f14592e0b7aae0e563f8b432d1f96960",
+    "s09State": "IMMUTABLE_FAIL_WITH_CORE_PHYSICAL_SUCCESS",
+    "s09Observation": "All P9B core physical markers passed again. Failure remained limited to selectorDismissed=false after parent foreground reassertion plus low-level pressKey Escape; pointer, Pulsar, parent runtime, child runtime and temp cleanup otherwise completed.",
+    "historicalBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "s10DiagnosticChanges": [
+      "verify exact historical base physical blob before patching",
+      "preserve corrected generated-preload newline escaping",
+      "preserve distinct Computer Control sockets for parent and child fixture processes",
+      "retain foreground reassertion plus pressKey Escape teardown attempt",
+      "record only bounded teardown result fields: activate ok/state/error, observed foreground ok/name, press ok/state/error",
+      "require the full core P9B physical marker set before classifying the diagnostic as observed"
+    ]
+  },
+  "diagnostic": {
+    "target": "selector teardown only",
+    "successMeaning": "DIAGNOSTIC_OBSERVED only; does not promote P9B",
+    "expectedMarker": "p9b-s10-cleanup-detail=OBSERVED",
+    "coreMarkersRequired": [
+      "p9b-external-process=PASS",
+      "p9b-provenance-chain=PASS",
+      "p9b-semantic-first=PASS",
+      "p9b-provider=PASS",
+      "p9b-postcondition=PASS",
+      "p9b-delivery-success-separation=PASS",
+      "p9b-document-integrity=PASS"
+    ],
+    "redaction": "No resource path, raw snapshot, screenshot, OCR payload or coordinates are added to evidence."
+  },
+  "invariants": [
+    "semantic-first",
+    "delivery != success",
+    "caller/resource provenance is explicit and is not inferred from UI state",
+    "planner contains no coordinates provider identity caller context resource identity scope surface identity or fabricated postcondition",
+    "provider selection remains Computer Use-owned and lazy after an eligible semantic gap and verified surface guard",
+    "Computer Control remains delivery mechanics only",
+    "no mandatory network account or cloud dependency",
+    "evidence immutable and Git forward-only"
+  ],
+  "promotionOnPass": {
+    "s10": "DIAGNOSTIC_OBSERVED",
+    "p9b": "UNCHANGED pending a fully green physical session including teardown",
+    "p9": "ACTIVE"
+  },
+  "nonClaims": [
+    "S10 does not validate P9B by itself",
+    "S10 does not validate the default interactive CLI",
+    "S10 does not authorize generic Pulsar status-bar clicking or arbitrary targets",
+    "S10 does not authorize UI-derived resource provenance",
+    "S10 does not validate generic external protocols beyond the versioned stdin task-invocation envelope"
+  ]
+}
