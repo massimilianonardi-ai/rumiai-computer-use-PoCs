@@ -1,0 +1,68 @@
+{
+  "sessionId": "cu-perception-p7e-agent-loop-caller-context-public-s01",
+  "checkpoint": "P7E explicit caller context wiring into normal agent loop",
+  "validationKind": "contract-only",
+  "purpose": "Validate that normal runTask can consume explicit caller-owned visual fallback context after semantic planning without inferring document identity from the GUI. The initial supported caller context is bounded to a Pulsar document path and may materialize only the physically validated UTF-8 encoding-selector contract from P7D. No physical UI behavior is claimed by this session.",
+  "expectedProductSha": "158cc475c209ade1c3260f0f2d6d4d4bc97f2f4a",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "2c3bf087b3e893f791a80d445f35c2a19e02580e",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js"
+  ],
+  "requiredClaims": [
+    "without visualFallbackCallerContext or explicit visualFallbackContracts, runTask resolves no visual fallback knowledge",
+    "the initial explicit caller-context kind is bounded to pulsar-document and requires a caller-supplied absolute documentPath",
+    "runTask itself contains no documentPath-specific logic; the path is interpreted only by the dedicated caller-context/materializer modules outside the planner",
+    "a valid pulsar-document context plus semantic Pulsar + OPEN UTF-8 plan materializes exactly one P7D execution contract",
+    "wrong application or wrong OPEN target materializes no contract",
+    "relative/invalid paths and unsupported caller-context kinds fail closed with recoveryPolicy NONE",
+    "explicit visualFallbackContracts remain compatible",
+    "supplying both explicit contracts and caller context is ambiguous and fails closed",
+    "the materialized contract keeps exact target, exact window-title surface precondition, exact UTF-16 LE postcondition and local text-region provider requirements",
+    "no coordinates or concrete perception provider identity are introduced",
+    "caller-context resolution happens after semantic planning but before the intent execution loop",
+    "planner source remains free of caller context, scope, visual fallback, postcondition, provider request and coordinates",
+    "caller-context/materializer modules do not invoke Computer Control, perception provider selection or visual action execution",
+    "P5A-P6D and P7D regression contracts still pass",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is contract-only and does not claim physical Pulsar behavior.",
+    "This session does not add a generic Pulsar status-bar capability.",
+    "This session does not auto-discover a document path from foreground state, semantic snapshots, window titles or filesystem heuristics.",
+    "This session does not select a perception provider; provider selection remains lazy after a P5B-eligible semantic gap.",
+    "This session does not claim success from CLICK_POSTED; physical success semantics remain those established by P7C.",
+    "This session does not add JavaScript, LF, Spaces: 2, arbitrary encoding actions, or arbitrary Pulsar visual targets."
+  ],
+  "lineage": {
+    "p7cPhysicalEvidence": "77fd94bd6b765a56182822cf2a43297b6baa1537",
+    "p7cState": "REAL_USE_CANDIDATE_PHYSICALLY_VALIDATED",
+    "p7dContractEvidence": "31f10c01244d98eee1c8f309e46b0578d2d60337",
+    "p7dState": "CONTRACT_VALIDATED",
+    "p7dProductSha": "d1ca1c61affbe3aef5c477a4e0093f442765330a"
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose exact product/test defect, fix forward and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR payload, target coordinates, action coordinates or real user document paths are required by this contract-only session."
+  },
+  "promotion": {
+    "onPass": {
+      "p7eState": "CONTRACT_VALIDATED",
+      "runtimeBehaviorChangesAfterValidation": true,
+      "nextCheckpoint": "P7E physical validation through normal runTask using only explicit visualFallbackCallerContext {kind:pulsar-document, documentPath}, with no injected visualFallbackContracts"
+    }
+  }
+}
