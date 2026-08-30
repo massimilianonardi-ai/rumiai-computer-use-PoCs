@@ -1,0 +1,67 @@
+{
+  "sessionId": "cu-perception-p7d-pulsar-utf8-caller-contract-public-s01",
+  "checkpoint": "P7D bounded real-use promotion boundary",
+  "validationKind": "contract-only",
+  "purpose": "Validate the smallest shipped caller-owned materialization boundary for the physically validated Pulsar UTF-8 real-use candidate. This session does not repeat P7C physical UI behavior. It validates only path canonicalization, exact current-document surface derivation, bounded contract materialization, exact plan selection and separation from planner, perception and Computer Control.",
+  "expectedProductSha": "d1ca1c61affbe3aef5c477a4e0093f442765330a",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "6e4532604f182371bd9c9efa2650ab71a9c0b010",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js"
+  ],
+  "authoritativePhysicalPrerequisite": {
+    "sessionId": "cu-perception-p7c-pulsar-utf8-postcondition-validation-public-s02",
+    "evidenceCommit": "77fd94bd6b765a56182822cf2a43297b6baa1537",
+    "state": "REAL_USE_CANDIDATE_PHYSICALLY_VALIDATED",
+    "result": "12 PASS / 0 FAIL / 0 BLOCKED"
+  },
+  "requiredClaims": [
+    "only absolute caller-owned document paths are accepted",
+    "macOS /var paths are canonicalized only to the bounded /private/var alias and other absolute paths are preserved",
+    "the Pulsar current-document window title is derived exactly from caller-owned filename and canonical parent path",
+    "the only promoted target is UTF-8",
+    "the exact postcondition remains UTF-16 LE",
+    "the scope is pulsar.encoding-selector.current-document.v1",
+    "the raw caller contract contains no coordinates and no concrete provider identity",
+    "provider requirements remain declarative local text-region only",
+    "selection reuses the P6C scoped exact application + OPEN + target boundary",
+    "TextEdit, JavaScript and other app/target combinations receive no contract",
+    "missing or invalid document context fails closed before selection",
+    "planner data is not mutated and contains no scope, surface precondition, postcondition, provider request or coordinates",
+    "the new materializer does not invoke perception, Computer Control, agent-loop execution or pointer delivery",
+    "P5A-P6D regression contracts remain green",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is contract-only and is not a new physical UI validation.",
+    "P7D does not authorize generic Pulsar status-bar clicking.",
+    "P7D does not authorize the JavaScript target discovered by P7A/P7B.",
+    "P7D does not select an encoding from the modal; the validated action only opens the selector.",
+    "P7D does not infer the caller document path from the current window or from Vision; the caller must supply it.",
+    "P7D does not place provider identity, scope, postcondition, surface identity or coordinates in planner output.",
+    "P7D does not change Computer Control.",
+    "P7D does not yet auto-wire normal runTask calls; a later checkpoint must define the explicit caller-context ingress before automatic use."
+  ],
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose exactly, fix forward and create s02. Do not weaken exact title/target/postcondition matching.",
+    "sensitiveData": "No screenshot, OCR payload, semantic snapshot or coordinates are required by this contract-only session. Synthetic absolute paths only are used by the P7D tests."
+  },
+  "promotion": {
+    "onPass": {
+      "p7dState": "CONTRACT_VALIDATED",
+      "nextCheckpoint": "P7E explicit caller-context ingress and normal runTask integration for the single Pulsar UTF-8 candidate"
+    }
+  }
+}
