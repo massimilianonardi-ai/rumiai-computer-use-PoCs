@@ -1,0 +1,40 @@
+{
+  "sessionId": "cu-perception-p6d-semantic-title-surface-precondition-public-s10",
+  "checkpoint": "P6D runtime surface precondition physical validation",
+  "expectedProductSha": "a90ab782d85e1283e76b4b64aa9bdbe54a7e4e0e",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "d5b6d9561b98409d52a84f4c1a45aa59de489357",
+  "surfaceIdentity": {
+    "kind": "semantic-text",
+    "match": "exact",
+    "evidenceBasis": "Safari compact semantic snapshot exposes the controlled document title as one exact semantic match; diagnostic s09 evidence 7ee7ec5c9b86c02fdb7a1eec625b7777e8b0cca3"
+  },
+  "purpose": "Physically validate that a scoped visual fallback is rejected on the wrong Safari semantic surface before perception-provider selection and succeeds on the exact intended surface only after an eligible semantic gap, local visual perception, click delivery, and independent post-action verification.",
+  "invariants": [
+    "semantic-first",
+    "P5B eligibility before visual perception",
+    "surface precondition outside planner",
+    "surface mismatch fails closed before provider selection",
+    "provider selection remains Computer Use-owned and lazy",
+    "planner contains no coordinates, provider identity, scope, surface precondition or postcondition",
+    "CLICK_POSTED is delivery only",
+    "VERIFIED_SUCCESS requires independent post-action evidence",
+    "no external network, account or cloud API",
+    "no screenshot, OCR payload or coordinates persisted"
+  ],
+  "lineage": [
+    {"session":"cu-perception-p6d-surface-precondition-public-s01","evidence":"40dafd8277ba6c015eeba24eb84cdc6c1458d1c7","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s02","evidence":"68f19a7911d369986d41e2d7ea5bc200b53098fd","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s03","evidence":"aff7a1771a8b159f0b74289e6cdf6280cfb5f4ab","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s04","evidence":"dbc816c746737304d90dd4d45e3672951fa95148","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s05","evidence":"59c0e1c5b5b530fe9fdf3147a34caba3a16bcb5a","result":"FAIL"},
+    {"session":"cu-perception-p6d-surface-precondition-public-s06","evidence":"e8edb4b40ea9015e2a8fe5a43e510acd2232f049","result":"FAIL"},
+    {"session":"cu-perception-p6d-safari-surface-identity-diagnostic-public-s08","evidence":"ce1ee1873174cdf63b9994dd9b832c9ad7f36058","result":"PASS","state":"DIAGNOSTIC_OBSERVED"},
+    {"session":"cu-perception-p6d-safari-surface-identity-diagnostic-public-s09","evidence":"7ee7ec5c9b86c02fdb7a1eec625b7777e8b0cca3","result":"PASS","state":"DIAGNOSTIC_OBSERVED","finding":"document title is one exact semantic match and wrong title is rejected"}
+  ],
+  "onPass": {
+    "p6d": "PHYSICALLY_VALIDATED",
+    "p6InitialSafetyArchitecture": "COMPLETE",
+    "next": "P7 evidence-backed real-use-case discovery before shipping built-in application visual-fallback knowledge"
+  }
+}
