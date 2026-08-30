@@ -1,0 +1,53 @@
+{
+  "sessionId": "cu-perception-p7c-pulsar-utf8-postcondition-validation-public-s02",
+  "checkpoint": "P7C real-use-case end-to-end candidate validation",
+  "expectedProductSha": "99c058ad9c89e666b471b20aafe214dc5b339ce6",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "17e565405002e216f249c8b8a1886fd0e496296c",
+  "application": "Pulsar",
+  "target": "UTF-8",
+  "postcondition": "UTF-16 LE",
+  "scopeId": "p7.pulsar.encoding-selector.temporary-document.v1",
+  "purpose": "Repeat the evidence-backed Pulsar UTF-8 visual fallback validation after correcting only the physical fixture's document-title readiness check. The test now waits for the exact caller-derived current-window title proven by P7B instead of accepting the first non-empty Pulsar title. The normal agent loop, semantic-first eligibility, lazy local Vision selection, exact target, CLICK_POSTED delivery contract and independently observed exact postcondition remain unchanged.",
+  "surfaceIdentity": {
+    "kind": "window-title",
+    "match": "exact",
+    "callerDerivedTemplate": "{FILE_NAME} — <canonical /private parent path>",
+    "basis": "P7B authoritative physical discovery evidence 5f5045693400f8957e98baea6ba76fc428011e7f",
+    "readinessRule": "poll fresh window.getCurrent until the exact caller-derived title verifies; do not use prefix, contains, fuzzy matching or a stale title"
+  },
+  "postconditionBasis": {
+    "upstreamRepository": "pulsar-edit/pulsar",
+    "path": "packages/encoding-selector/lib/main.js",
+    "blobSha": "c8c506684ad1346c6f21d7d3776ea5f8034e956a",
+    "relatedPath": "packages/encoding-selector/lib/encoding-list-view.js",
+    "relatedBlobSha": "124316c575023211fe9e716eb0b0e3fdb29cc8f3",
+    "claim": "The encoding selector populates modal items from the declared encoding list; UTF-16 LE is a declared list label fixed before physical delivery."
+  },
+  "safety": [
+    "Pulsar must not already be running; otherwise the session is BLOCKED",
+    "the document is created in a temporary directory and its SHA-256 content hash must remain unchanged",
+    "the encoding selector may be opened but no encoding selection is confirmed",
+    "caller scope, exact surface identity, postcondition and provider request remain outside the planner",
+    "semantic-first eligibility must be structured NO_SEMANTIC_TARGET before provider selection",
+    "only local rumiai.local.macos-vision-text-region perception is allowed",
+    "CLICK_POSTED is delivery evidence only and semanticConsequenceVerified remains false at delivery",
+    "VERIFIED_SUCCESS requires exact UTF-16 LE from an independent post-action Vision observation",
+    "no raw semantic snapshot, screenshot, OCR payload or coordinates are persisted",
+    "the test initiates no external network request",
+    "cleanup sends application-scoped Escape only after a task attempt, restores the pointer, terminates Pulsar and Computer Control, and removes temporary files",
+    "no built-in contract or skill is promoted by this session"
+  ],
+  "lineage": {
+    "p6dAuthoritativeEvidence": "ec7e9757dada06ca313e585c09a42fcf7202e90d",
+    "p7aEvidence": "65c7a674984638529ee8be603a6df09445f68deb",
+    "p7bEvidence": "5f5045693400f8957e98baea6ba76fc428011e7f",
+    "p7cS01Evidence": "6d73c69ecac5e44d84bb12975c6020fa7fde0304",
+    "p7cS01Result": "IMMUTABLE_FAIL",
+    "p7cS01Finding": "The session failed before any visual click with PULSAR_CALLER_DERIVED_WINDOW_TITLE_NOT_VERIFIED because the fixture stopped at the first non-empty Pulsar window title instead of waiting for the document-bound exact title. This is fixture readiness evidence, not a Computer Use or Computer Control product defect."
+  },
+  "onPass": {
+    "state": "REAL_USE_CANDIDATE_PHYSICALLY_VALIDATED",
+    "next": "Design P7D promotion boundaries: materialize the scoped dynamic contract from caller-owned document context, add only the smallest competence/skill integration needed for the UTF-8 encoding-selector action, preserve semantic-only planning and exact surface identity, and contract-test before shipping any knowledge. Do not promote generic Pulsar status-bar clicking."
+  }
+}
