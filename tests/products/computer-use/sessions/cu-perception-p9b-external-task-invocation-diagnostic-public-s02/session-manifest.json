@@ -1,0 +1,58 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-diagnostic-public-s02",
+  "validationKind": "diagnostic-physical",
+  "purpose": "Diagnose the immutable P9B s01 child-process failure without changing Computer Use or weakening the external stdin/task-resource architecture. The diagnostic replays the frozen s01 physical source with fixture-only instrumentation that reads the existing ephemeral child capture before the s01 source converts a nonzero child exit into the generic P9B_CHILD_PROCESS_FAILED code.",
+  "expected": {
+    "computerUseSha": "c1a6d41b0c1ce16fa9b6beed93621f303a5aa72b",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "7827a82ba0de08d265c657441e306bd05c9fe8c0",
+    "pass": 19,
+    "fail": 0,
+    "blocked": 0
+  },
+  "p9bDiagnostic": {
+    "immutableFailedEvidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "immutableFailedPhysicalSource": "b20e71fdf18ca715017c9b16e9ae460f01573a58",
+    "immutableFailedPhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "knownFailureClass": "P9B_CHILD_PROCESS_FAILED",
+    "diagnosticMethod": "fixture-only runtime copy of the frozen s01 physical source adds bounded redacted child-capture reporting before the generic child-exit failure; the product and frozen s01 source are not modified",
+    "successMeaning": "The diagnostic itself successfully observes and classifies the P9B s01 failure, or observes that the same physical path passes under the diagnostic replay. A diagnostic PASS is not P9B physical validation.",
+    "boundedFields": [
+      "child exit status and bounded stderr",
+      "real agent-loop wrapper call count",
+      "input option keys",
+      "task-resource source preflight",
+      "surface/provider call counts",
+      "surface state",
+      "task-level structured error",
+      "bounded intent summaries",
+      "opened visual delivery/outcome summary",
+      "thrown exception name/message with temp/product paths redacted"
+    ]
+  },
+  "invariants": [
+    "P9B s01 evidence remains immutable",
+    "Computer Use product remains unchanged",
+    "Computer Control remains unchanged",
+    "semantic-first remains unchanged",
+    "delivery != success remains unchanged",
+    "external invocation carries only version task resources",
+    "resource provenance is explicit and not inferred from UI state",
+    "planner remains semantic-only",
+    "no screenshot OCR payload or coordinates are persisted",
+    "diagnostic capture remains ephemeral and temp paths are redacted",
+    "Git advances forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "NOT_PROMOTED",
+    "p9bDiagnostic": "DIAGNOSTIC_OBSERVED",
+    "next": "Inspect the exact diagnostic marker from immutable evidence, then either fix only the fixture and prepare P9B s03 physical validation or fix a localized product defect forward-only before a new physical session."
+  },
+  "nonClaims": [
+    "A diagnostic PASS does not make P9B PHYSICALLY_VALIDATED",
+    "The diagnostic does not validate the default interactive CLI",
+    "The diagnostic does not authorize generic Pulsar behavior",
+    "The diagnostic does not authorize UI-derived resource provenance",
+    "The diagnostic does not weaken CLICK_POSTED != success"
+  ]
+}
