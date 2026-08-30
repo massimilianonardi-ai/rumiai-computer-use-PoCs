@@ -1,0 +1,54 @@
+{
+  "sessionId": "cu-perception-p9b-external-task-invocation-lifecycle-diagnostic-public-s04",
+  "validationKind": "diagnostic-physical",
+  "purpose": "Diagnose the immutable P9B s03 90-second timeout after the s02 fixture syntax defect was corrected. The diagnostic bounds only the external task-invocation child process, reads the existing ephemeral capture after a child timeout, and classifies whether the real task completed before the process failed to terminate or whether execution stalled earlier.",
+  "expected": {
+    "computerUseSha": "c1a6d41b0c1ce16fa9b6beed93621f303a5aa72b",
+    "computerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+    "testSourceSha": "b77231eb9547fd00909c9d40152b12ee6ae9b481",
+    "pass": 19,
+    "fail": 0,
+    "blocked": 0
+  },
+  "p9bLifecycleDiagnostic": {
+    "immutableS01FailureEvidence": "557ba3445e107a668ef7453821c19ab319a458c9",
+    "s02DiagnosticEvidence": "cc584e723d5eae1943c31ff9bd02787f4a8c339b",
+    "immutableS03FailureEvidence": "837c3418ac2958fc4606a919a1fc38c04ae2538a",
+    "immutableBasePhysicalBlob": "9d794aaf8e61018c8d7f71b2e5dba3ebfbbf7950",
+    "s03FailureClass": "outer physical timeout at 90000ms",
+    "diagnosticMethod": "fixture-only replay of the frozen base physical source with the already-diagnosed generated-preload newline escaping correction plus a 45000ms timeout on only the child task-invocation process; after timeout the pre-existing ephemeral capture is classified before cleanup",
+    "classifications": [
+      "TASK_COMPLETED_PROCESS_DID_NOT_EXIT",
+      "CHILD_TIMEOUT_WITH_CAPTURE_BEFORE_VERIFIED_SUCCESS",
+      "CHILD_TIMEOUT_WITHOUT_CAPTURE"
+    ],
+    "successMeaning": "The diagnostic successfully bounds and classifies the child lifecycle state with clean physical cleanup. A diagnostic PASS is not P9B physical validation and does not by itself authorize a product change."
+  },
+  "invariants": [
+    "P9B s01 s02 and s03 evidence remain immutable",
+    "Computer Use product remains unchanged during diagnosis",
+    "Computer Control remains unchanged during diagnosis",
+    "semantic-first remains unchanged",
+    "delivery != success remains unchanged",
+    "external invocation carries only version task resources",
+    "resource provenance is explicit and is not inferred from UI state",
+    "planner remains semantic-only",
+    "provider selection remains Computer Use-owned and lazy",
+    "no screenshot OCR payload or coordinates are persisted",
+    "diagnostic child capture remains ephemeral",
+    "Git advances forward-only"
+  ],
+  "promotionOnPass": {
+    "p9b": "NOT_PROMOTED",
+    "p9bLifecycleDiagnostic": "DIAGNOSTIC_OBSERVED",
+    "next": "If the task reached VERIFIED_SUCCESS before child timeout, localize and fix the task-invocation process lifecycle forward-only, then contract-test the cleanup boundary before a new physical session. Otherwise diagnose the last observed execution stage without weakening the physical contract."
+  },
+  "nonClaims": [
+    "A diagnostic PASS does not make P9B PHYSICALLY_VALIDATED",
+    "The diagnostic does not validate the default interactive CLI",
+    "The diagnostic does not authorize generic Pulsar behavior",
+    "The diagnostic does not authorize UI-derived resource provenance",
+    "The diagnostic does not change Computer Control ownership of delivery mechanics",
+    "The diagnostic does not weaken CLICK_POSTED != success"
+  ]
+}
