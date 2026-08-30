@@ -1,0 +1,67 @@
+{
+  "sessionId": "cu-perception-p8a-caller-context-provenance-gap-public-s01",
+  "checkpoint": "P8A trusted caller-context provenance discovery",
+  "validationKind": "contract-only",
+  "expectedProductSha": "e22a4657e6284f5e4e61bfeddd0bb5b80c2a0473",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "139862b8e4ac24c953548b0ca1e78644eb9f3fe5",
+  "purpose": "Freeze the provenance gap that remains after P7E. Prove that the current product has a physically validated explicit runTask caller-context API but no existing production Pulsar skill, executor, session context or default interactive entrypoint that legitimately owns and supplies a current document path before the planner. This session must not infer a path from UI state and makes no physical UI claim.",
+  "contractTests": [
+    "tests/products/computer-use/external-computer-control-boundary-test.js",
+    "tests/products/computer-use/perception-p5a-visual-fallback-coordinator.test.js",
+    "tests/products/computer-use/perception-p5b-semantic-visual-eligibility.test.js",
+    "tests/products/computer-use/perception-p5c-open-semantic-first.test.js",
+    "tests/products/computer-use/perception-p5d-provider-selection.test.js",
+    "tests/products/computer-use/perception-p5e-agent-loop-visual-fallback.test.js",
+    "tests/products/computer-use/perception-p6a-caller-contract-registry.test.js",
+    "tests/products/computer-use/perception-p6b-safari-canvas-discovery.test.js",
+    "tests/products/computer-use/perception-p6c-scoped-caller-integration.test.js",
+    "tests/products/computer-use/perception-p6d-surface-precondition.test.js",
+    "tests/products/computer-use/perception-p7d-pulsar-utf8-caller-contract.test.js",
+    "tests/products/computer-use/perception-p7e-agent-loop-caller-context.test.js",
+    "tests/products/computer-use/perception-p8a-caller-context-provenance-gap.test.js"
+  ],
+  "requiredClaims": [
+    "the current Pulsar provider exposes text.edit but no document.open capability",
+    "the current Pulsar skill set contains no document.open skill and no documentPath/filePath binding",
+    "validated pulsar.document.new creates an untitled/new document skill contract and does not own a path",
+    "the context session tracks application context but no documentPath/filePath resource identity",
+    "the default interactive agent-loop entrypoint invokes runTask(task) without visualFallbackCallerContext",
+    "P7E remains available as an explicit runTask caller-context API",
+    "pulsar-document caller context fails closed when documentPath is absent",
+    "the caller-context boundary does not inspect Computer Control, semantic snapshots, OCR, Vision or current-window state to discover a path",
+    "the current executor/planner boundary has no OPEN_DOCUMENT/documentPath provenance path",
+    "without explicit caller context no Pulsar UTF-8 visual contract is materialized",
+    "with explicit pulsar-document + documentPath exactly one bounded P7D contract may be resolved while the planner remains path-free",
+    "P5A-P7E regression contracts remain passing",
+    "Computer Use and Computer Control product trees remain clean"
+  ],
+  "nonClaims": [
+    "This session is not a physical UI validation.",
+    "This session does not say a trusted document-path owner is impossible; it says none exists in the current production workflow graph.",
+    "This session does not authorize deriving documentPath from a window title, semantic snapshot, OCR, Vision, coordinates or free-form planner output.",
+    "This session does not add document.open, a file opener, a new Computer Control mechanic, or a default CLI caller context.",
+    "P7E remains PHYSICALLY_VALIDATED at the explicit runTask caller-context boundary.",
+    "No generic Pulsar visual fallback is promoted."
+  ],
+  "lineage": {
+    "p7cPhysicalEvidence": "77fd94bd6b765a56182822cf2a43297b6baa1537",
+    "p7dContractEvidence": "31f10c01244d98eee1c8f309e46b0578d2d60337",
+    "p7eContractEvidence": "e1bb360188c3713653b09b0c2320fe45d4261f2d",
+    "p7ePhysicalEvidence": "6af4a606eb71418cde61eddd3cdd1fade9b083d2",
+    "p7eState": "PHYSICALLY_VALIDATED"
+  },
+  "promotion": {
+    "onPass": {
+      "p8aState": "PROVENANCE_GAP_CONFIRMED",
+      "runtimeBehaviorChangesAfterValidation": false,
+      "nextCheckpoint": "P8B define the smallest provenance-bearing product invocation/resource boundary. It must accept document identity from a deterministic owning caller, keep it out of planner/UI inference, and contract-test provenance/fail-closed semantics before any physical validation."
+    }
+  },
+  "evidencePolicy": {
+    "immutableSession": true,
+    "forwardOnly": true,
+    "onFailure": "Preserve s01 unchanged, diagnose the exact contract/test assumption that is wrong, fix forward, and create s02.",
+    "sensitiveData": "No screenshot bytes, OCR payload, document contents, visual coordinates or user file paths are required by this contract-only session."
+  }
+}
