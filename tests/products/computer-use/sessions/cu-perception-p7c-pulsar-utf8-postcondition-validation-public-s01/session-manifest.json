@@ -1,0 +1,51 @@
+{
+  "sessionId": "cu-perception-p7c-pulsar-utf8-postcondition-validation-public-s01",
+  "checkpoint": "P7C real-use-case end-to-end candidate validation",
+  "expectedProductSha": "99c058ad9c89e666b471b20aafe214dc5b339ce6",
+  "expectedComputerControlSha": "e3a3f13d66546cf8f0fca50075bd4607c2c3d003",
+  "testSourceSha": "368d826a7865c200ffef0a7b84bddea3c4f95b39",
+  "application": "Pulsar",
+  "target": "UTF-8",
+  "postcondition": "UTF-16 LE",
+  "scopeId": "p7.pulsar.encoding-selector.temporary-document.v1",
+  "purpose": "Validate one evidence-backed real-use visual fallback candidate through the normal agent loop without shipping a built-in contract. The caller materializes a scoped exact contract for the current temporary Pulsar document. Semantic OPEN must fail with NO_SEMANTIC_TARGET before local Vision selection; the exact UTF-8 status target is clicked only after an exact caller-derived window-title surface precondition; CLICK_POSTED is delivery only; verified success requires an independent post-action local Vision observation of UTF-16 LE in Pulsar's encoding selector.",
+  "surfaceIdentity": {
+    "kind": "window-title",
+    "match": "exact",
+    "callerDerivedTemplate": "{FILE_NAME} — /private{PARENT_PATH}",
+    "basis": "P7B authoritative physical discovery evidence 5f5045693400f8957e98baea6ba76fc428011e7f"
+  },
+  "postconditionBasis": {
+    "upstreamRepository": "pulsar-edit/pulsar",
+    "path": "packages/encoding-selector/lib/main.js",
+    "blobSha": "c8c506684ad1346c6f21d7d3776ea5f8034e956a",
+    "relatedPath": "packages/encoding-selector/lib/encoding-list-view.js",
+    "relatedBlobSha": "124316c575023211fe9e716eb0b0e3fdb29cc8f3",
+    "claim": "The encoding selector populates modal items from the declared encoding list; UTF-16 LE is a declared list label. This fixes the exact postcondition before physical delivery rather than deriving success from the observed result."
+  },
+  "safety": [
+    "Pulsar must not already be running; otherwise the session is BLOCKED",
+    "the document is created in a temporary directory and its SHA-256 content hash must remain unchanged",
+    "the encoding selector is opened but no encoding selection is confirmed",
+    "caller scope, surface identity, postcondition and provider request remain outside the planner",
+    "semantic-first eligibility must be structured NO_SEMANTIC_TARGET before provider selection",
+    "only local rumiai.local.macos-vision-text-region perception is allowed",
+    "CLICK_POSTED is delivery evidence only and has semanticConsequenceVerified=false",
+    "VERIFIED_SUCCESS requires exact UTF-16 LE from an independent post-action Vision observation",
+    "no raw semantic snapshot, screenshot, OCR payload or coordinates are persisted",
+    "the test initiates no external network request",
+    "Escape dismisses the selector, the original pointer position is restored, Pulsar and Computer Control are terminated, and temporary files are removed",
+    "no built-in contract or skill is promoted by this session"
+  ],
+  "lineage": {
+    "p6dAuthoritativeEvidence": "ec7e9757dada06ca313e585c09a42fcf7202e90d",
+    "p7aEvidence": "65c7a674984638529ee8be603a6df09445f68deb",
+    "p7bEvidence": "5f5045693400f8957e98baea6ba76fc428011e7f",
+    "p7aFinding": "JavaScript and UTF-8 are structured semantic CLICK gaps and local Vision exact targets on a real temporary Pulsar JavaScript document.",
+    "p7bFinding": "The Pulsar current-window title is exact, discriminating, and reconstructible from caller-owned filename and parent path information."
+  },
+  "onPass": {
+    "state": "REAL_USE_CANDIDATE_PHYSICALLY_VALIDATED",
+    "next": "Design P7D promotion boundaries: decide where caller-owned document context materializes the scoped dynamic contract, add the smallest competence/skill integration needed for the UTF-8 encoding-selector action, preserve semantic-only planning and dynamic exact surface identity, then contract-test before any shipped registry knowledge. Do not promote generic Pulsar status-bar clicking."
+  }
+}
